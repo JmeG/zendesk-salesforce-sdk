@@ -1,6 +1,6 @@
 # Force.com Toolkit for Zendesk
 
-The Force.com Toolkit for Zendesk allows your Force.com apps to manipulate the Zendesk [ API](https://developer.zendesk.com/rest_api). The toolkit provides a set of Apex classes, such as `ZendeskUsers `ZendeskTickets`, that model Zendesk API Objects such as `Users` and `Tickets`.
+The Force.com Toolkit for Zendesk allows your Force.com apps to manipulate the Zendesk [ API](https://developer.zendesk.com/rest_api). The toolkit provides a set of Apex classes, such as `ZendeskUsers` and `ZendeskTickets`, that model Zendesk API Objects such as `Users` and `Tickets`.
 
 ## Installation
 
@@ -10,7 +10,7 @@ There are two mechanisms for installing the toolkit: as an unmanaged package, or
 
 1. Create a new Developer Edition (DE) account at http://developer.force.com/join. You will receive an activation email - click the enclosed link to complete setup of your DE environment. This will also log you in to your new DE environment.
 2. Install the unmanaged package into your new DE org via this URL: https://login.salesforce.com/packaging/installPackage.apexp?p0=XXXXXXXXXXXXXX
-4. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://<yoursubdomain>.zendesk.com as a new remote site.
+4. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://yoursubdomain.zendesk.com as a new remote site.
 
 ### Installing from GitHub
 
@@ -26,4 +26,4 @@ There are two mechanisms for installing the toolkit: as an unmanaged package, or
 
 4. In Eclipse, right click your project in the project explorer and click 'Refresh'. This causes Eclipse to scan the project directory tree for changes, and the plugin syncs changes to Force.com.
 5. In your DE environment, go to **Setup | App Setup | Create | Apps**, click 'Edit' next to the Facebook Toolkit 3 app, scroll down, click the 'Visible' box next to System Administrator and hit 'Save'. Now go to **Setup | Administration Setup | Manage Users | Profiles**, click on 'Edit' next to System Administrator, scroll down to Custom Tab Settings, set 'Facebook Apps', 'Facebook Social Samples', 'Facebook Sessions' and 'Facebook User Connections Test' to 'Default On' and hit 'Save'. 'Facebook Toolkit 3' should now be available in the dropdown list of apps (top right).
-6. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://<yoursubdomain>.zendesk.com as a new remote site.
+6. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://yoursubdomain.zendesk.com as a new remote site.
