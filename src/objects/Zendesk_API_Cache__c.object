@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <customSettingsVisibility>Protected</customSettingsVisibility>
+    <description>Used for caching Id&apos;s needed when calling the Zendesk API</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Item_ID__c</fullName>
+        <externalId>false</externalId>
+        <label>Item ID</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Item_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Item Name</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Item_Type__c</fullName>
+        <description>TicketField, TicketForm, UserField, etc.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>TicketField, TicketForm, UserField, etc.</inlineHelpText>
+        <label>Item Type</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Subdomain__c</fullName>
+        <description>The Zendesk instance subdomain</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Zendesk instance subdomain</inlineHelpText>
+        <label>Subdomain</label>
+        <length>50</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Zendesk API Cache</label>
+</CustomObject>
