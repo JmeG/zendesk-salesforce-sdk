@@ -23,7 +23,7 @@ private class ZendeskAPITest {
 
 	static testmethod void testUploadTicketAttachment() {
         ZendeskAPI zapi = new ZendeskAPI('subdomain', 'username', 'password', ZendeskAPI.AuthType.Password);
-		ZendeskAtachments zattach = new ZendeskAtachments(zapi);
+		ZendeskAttachments zattach = new ZendeskAttachments(zapi);
 
 		String attachId = zattach.uploadAttachment('filename.txt', 'fileContentType', Blob.valueOf('asdfasfdasdfasdfasdf'));
 

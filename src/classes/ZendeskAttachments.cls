@@ -1,9 +1,9 @@
 // This class provides common functionality to call the Zendesk API to interact with Attachment records
-public with sharing class ZendeskAtachments {
+public with sharing class ZendeskAttachments {
 
     private final ZendeskAPI zapi;
 
-    public ZendeskAtachments(ZendeskAPI zapi) {
+    public ZendeskAttachments(ZendeskAPI zapi) {
         this.zapi = zapi;
     }
 
