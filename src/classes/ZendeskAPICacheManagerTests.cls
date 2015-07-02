@@ -5,16 +5,16 @@ private class ZendeskAPICacheManagerTests {
 	// https://success.salesforce.com/issues_view?id=a1p300000008Xx7AAE
 	/*
 	@testSetup static void setup() {
-        Zendesk_API_Cache__c newObj = new Zendesk_API_Cache__c(
-            Name='uniqueName1',
-            Subdomain__c='unittestdomain',
-            Item_Type__c='testtype',
-            Item_Name__c='name1',
-            Item_ID__c=12345
-        );
-        insert newObj;
-    }
-    */
+		Zendesk_API_Cache__c newObj = new Zendesk_API_Cache__c(
+			Name='uniqueName1',
+			Subdomain__c='unittestdomain',
+			Item_Type__c='testtype',
+			Item_Name__c='name1',
+			Item_ID__c=12345
+		);
+		insert newObj;
+	}
+	*/
 
 	@isTest
 	static void testGetIDNotFound() {
@@ -31,13 +31,13 @@ private class ZendeskAPICacheManagerTests {
 	@isTest
 	static void testGetIDFound() {
 		Zendesk_API_Cache__c newObj = new Zendesk_API_Cache__c(
-            Name='uniqueName1',
-            Subdomain__c='unittestdomain',
-            Item_Type__c='testtype',
-            Item_Name__c='name1',
-            Item_ID__c=12345
-        );
-        insert newObj;
+			Name='uniqueName1',
+			Subdomain__c='unittestdomain',
+			Item_Type__c='testtype',
+			Item_Name__c='name1',
+			Item_ID__c=12345
+		);
+		insert newObj;
 
 		Test.startTest();
 
@@ -52,13 +52,13 @@ private class ZendeskAPICacheManagerTests {
 	@isTest
 	static void testDeleteCache() {
 		Zendesk_API_Cache__c newObj = new Zendesk_API_Cache__c(
-            Name='uniqueName1',
-            Subdomain__c='unittestdomain',
-            Item_Type__c='testtype',
-            Item_Name__c='name1',
-            Item_ID__c=12345
-        );
-        insert newObj;
+			Name='uniqueName1',
+			Subdomain__c='unittestdomain',
+			Item_Type__c='testtype',
+			Item_Name__c='name1',
+			Item_ID__c=12345
+		);
+		insert newObj;
 
 		Test.startTest();
 
@@ -75,13 +75,13 @@ private class ZendeskAPICacheManagerTests {
 	@isTest
 	static void testAddToCache() {
 		Zendesk_API_Cache__c newObj = new Zendesk_API_Cache__c(
-            Name='uniqueName1',
-            Subdomain__c='unittestdomain',
-            Item_Type__c='testtype',
-            Item_Name__c='name1',
-            Item_ID__c=12345
-        );
-        insert newObj;
+			Name='uniqueName1',
+			Subdomain__c='unittestdomain',
+			Item_Type__c='testtype',
+			Item_Name__c='name1',
+			Item_ID__c=12345
+		);
+		insert newObj;
 
 		Test.startTest();
 

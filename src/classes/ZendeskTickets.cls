@@ -3,14 +3,14 @@ public with sharing class ZendeskTickets {
 
 	private final ZendeskAPI zapi;
 
-    // Used to deserialize the result of a individual Ticket create/read/update API call
+	// Used to deserialize the result of a individual Ticket create/read/update API call
 	private class SingleTicketWrapper {
-    	public ZendeskAPISchema.ZTicket ticket {get;set;}
-    }
+		public ZendeskAPISchema.ZTicket ticket {get;set;}
+	}
 
 	public ZendeskTickets(ZendeskAPI zapi) {
-        this.zapi = zapi;
-    }
+		this.zapi = zapi;
+	}
 
 	public ZendeskAPISchema.ZTicket getTicket(Integer ticketId) {
 		Http h = new Http();
@@ -28,7 +28,7 @@ public with sharing class ZendeskTickets {
 		}
 
 		System.debug('getTicket res: ' + res);
-        String resBody = res.getBody();
+		String resBody = res.getBody();
 		System.debug('getTicket res body: ' + resBody);
 
 		ZendeskAPISchema.ZTicket zticket = null;
@@ -100,7 +100,7 @@ public with sharing class ZendeskTickets {
 		}
 
 		System.debug('createTicket res: ' + res);
-        String resBody = res.getBody();
+		String resBody = res.getBody();
 		System.debug('**** res = ' + resBody);
 
 		if (res.getStatusCode() != 201) {
@@ -129,7 +129,7 @@ public with sharing class ZendeskTickets {
 		}
 
 		System.debug('deleteTicket res: ' + res);
-        String resBody = res.getBody();
+		String resBody = res.getBody();
 		System.debug('**** res = ' + resBody);
 
 		if (res.getStatusCode() != 200) {
@@ -159,7 +159,7 @@ public with sharing class ZendeskTickets {
 		}
 
 		System.debug('updateTicket res: ' + res);
-        String resBody = res.getBody();
+		String resBody = res.getBody();
 		System.debug('**** res = ' + resBody);
 
 		if (res.getStatusCode() != 200) {
@@ -197,7 +197,7 @@ public with sharing class ZendeskTickets {
 		}
 
 		System.debug('updateTicket res: ' + res);
-        String resBody = res.getBody();
+		String resBody = res.getBody();
 		System.debug('**** res = ' + resBody);
 
 		if (res.getStatusCode() != 200) {
