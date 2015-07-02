@@ -23,9 +23,9 @@ private class ZendeskAPITest {
 
 	static testmethod void testUploadTicketAttachment() {
         ZendeskAPI zapi = new ZendeskAPI('subdomain', 'username', 'password', ZendeskAPI.AuthType.Password);
-		ZendeskTickets ztickets = new ZendeskTickets(zapi);
+		ZendeskAtachments zattach = new ZendeskAtachments(zapi);
 
-		String attachId = ztickets.uploadAttachmentToZendesk('filename.txt', 'fileContentType', Blob.valueOf('asdfasfdasdfasdfasdf'));
+		String attachId = zattach.uploadAttachment('filename.txt', 'fileContentType', Blob.valueOf('asdfasfdasdfasdfasdf'));
 
 		System.assertNotEquals(null, attachId);
 	}
@@ -177,4 +177,3 @@ private class ZendeskAPITest {
 	}
 
 }
-
