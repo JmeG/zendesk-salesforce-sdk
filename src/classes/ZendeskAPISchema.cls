@@ -21,6 +21,35 @@ public with sharing class ZendeskAPISchema {
 		public Boolean active {get;set;}
 	}
 
+	public class ZUserField {
+	    public Integer id {get;set;}
+	    public String type {get;set;}
+	    public String title {get;set;}
+	    public String raw_title {get;set;}
+	    public Boolean active {get;set;}
+	    public ZCustomFieldOption[] custom_field_options {get;set;}
+
+	    // Get the picklist "value" matching the provided name
+	    public String getOptionValue(String optname) {
+	        return getOptionValue(optname, false);
+	    }
+
+	    public String getOptionValue(String optname, Boolean errorIfNotFound) {
+	        String val = null;
+	        if (custom_field_options != null) {
+	            for (ZCustomFieldOption fo : custom_field_options) {
+	                if (fo.name.equalsIgnoreCase(optname)) {
+	                    val = fo.value;
+	                    break;
+	                }
+	            }
+	        }
+
+	        if (String.isEmpty(val) && errorIfNotFound && !Test.isRunningTest()) { throw new ZendeskException('Option value "' + optname + '" not found for field "' + this.title + '"'); }
+	        return val;
+	    }
+	}
+
 	public class ZTicketField {
 		public Integer id {get;set;}
 		public String type {get;set;}
