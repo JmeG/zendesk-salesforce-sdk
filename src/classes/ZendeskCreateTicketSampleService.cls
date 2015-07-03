@@ -30,7 +30,7 @@ global with sharing class ZendeskCreateTicketSampleService {
 			Integer requesterId = zUsers.getUserIdFromEmail(UserInfo.getUserEmail());
 			if (requesterId == null) {
 				requesterId = zUsers.createUser(UserInfo.getName(), UserInfo.getUserEmail());
-				if (requesterId == null) { throw new MyException('Error creating user in ' + zendeskSubdomain); }
+				if (requesterId == null) { throw new ZendeskException('Error creating user in ' + zendeskSubdomain); }
 			}
 
 			// Retrieve the Zendesk ID of two different custom ticket fields
@@ -101,6 +101,3 @@ global with sharing class ZendeskCreateTicketSampleService {
 	}
 	*/
 }
-
-
-
