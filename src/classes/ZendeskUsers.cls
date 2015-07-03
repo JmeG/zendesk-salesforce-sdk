@@ -6,7 +6,7 @@ public with sharing class ZendeskUsers {
 	private class MultipleUsersWrapper {
 		public ZendeskAPISchema.ZUser[] users {get;set;}
 
-		// "https://support.zendesk.com/api/v2/users.json?page=2"
+		// "https://test.zendesk.com/api/v2/users.json?page=2"
 		public String next_page {get;set;}
 		public Integer nextPageNumber {
 			public get { return (String.isEmpty(next_page) ? null : Integer.valueOf(next_page.substringAfterLast('page=').substringBefore('&'))); }

@@ -7,7 +7,7 @@ public with sharing class ZendeskTicketForms {
 	private class ResultsWrapper {
 		public ZendeskAPISchema.ZTicketForm[] ticket_forms {get;set;}
 
-		// "https://support.zendesk.com/api/v2/ticket_forms.json?page=2"
+		// "https://test.zendesk.com/api/v2/ticket_forms.json?page=2"
 		public String next_page {get;set;}
 		public Integer nextPageNumber {
 			public get { return (String.isEmpty(next_page) ? null : Integer.valueOf(next_page.substringAfterLast('page=').substringBefore('&'))); }
@@ -72,9 +72,9 @@ public with sharing class ZendeskTicketForms {
 			res.setStatusCode(200);
 			res.setStatus('OK');
 			if (page == null) {
-				res.setBody('{ "ticket_forms": [ { "url": "https://support.zendesk.com/api/v2/ticket_forms/466.json", "id": 466, "name": "Test", "raw_name": "Test", "display_name": "Test", "raw_display_name": "Test", "end_user_visible": true, "position": 0, "active": true, "default": true, "created_at": "2013-04-23T01:24:04Z", "updated_at": "2013-08-07T21:29:47Z" } ], "next_page": "https://support.zendesk.com/api/v2/ticket_forms.json?page=2", "previous_page": null, "count": 1 }');
+				res.setBody('{ "ticket_forms": [ { "url": "https://test.zendesk.com/api/v2/ticket_forms/466.json", "id": 466, "name": "Test", "raw_name": "Test", "display_name": "Test", "raw_display_name": "Test", "end_user_visible": true, "position": 0, "active": true, "default": true, "created_at": "2013-04-23T01:24:04Z", "updated_at": "2013-08-07T21:29:47Z" } ], "next_page": "https://test.zendesk.com/api/v2/ticket_forms.json?page=2", "previous_page": null, "count": 1 }');
 			} else {
-				res.setBody('{ "ticket_forms": [ { "url": "https://support.zendesk.com/api/v2/ticket_forms/466.json", "id": 466, "name": "Test", "raw_name": "Test", "display_name": "Test", "raw_display_name": "Test", "end_user_visible": true, "position": 0, "active": true, "default": true, "created_at": "2013-04-23T01:24:04Z", "updated_at": "2013-08-07T21:29:47Z" } ], "next_page": null, "previous_page": null, "count": 1 }');
+				res.setBody('{ "ticket_forms": [ { "url": "https://test.zendesk.com/api/v2/ticket_forms/466.json", "id": 466, "name": "Test", "raw_name": "Test", "display_name": "Test", "raw_display_name": "Test", "end_user_visible": true, "position": 0, "active": true, "default": true, "created_at": "2013-04-23T01:24:04Z", "updated_at": "2013-08-07T21:29:47Z" } ], "next_page": null, "previous_page": null, "count": 1 }');
 			}
 		}
 		System.debug('getTicketForms res: ' + res);

@@ -7,7 +7,7 @@ public with sharing class ZendeskGroups {
     private class ResultsWrapper {
         public ZendeskAPISchema.ZGroup[] groups {get;set;}
 
-        // "https://support.zendesk.com/api/v2/groups.json?page=2"
+        // "https://test.zendesk.com/api/v2/groups.json?page=2"
         public String next_page {get;set;}
         public Integer nextPageNumber {
             public get { return (String.isEmpty(next_page) ? null : Integer.valueOf(next_page.substringAfterLast('page=').substringBefore('&'))); }
@@ -72,9 +72,9 @@ public with sharing class ZendeskGroups {
             res.setStatusCode(200);
             res.setStatus('OK');
             if (page == null) {
-                res.setBody('{ "groups": [ { "url": "https://support.zendesk.com/api/v2/groups/21641528.json", "id": 21641528, "name": "Test", "deleted": false, "created_at": "2014-03-07T22:59:22Z", "updated_at": "2014-03-07T22:59:22Z" } ], "next_page": "https://support.zendesk.com/api/v2/groups.json?page=2", "previous_page": null, "count": 1 }');
+                res.setBody('{ "groups": [ { "url": "https://test.zendesk.com/api/v2/groups/21641528.json", "id": 21641528, "name": "Test", "deleted": false, "created_at": "2014-03-07T22:59:22Z", "updated_at": "2014-03-07T22:59:22Z" } ], "next_page": "https://test.zendesk.com/api/v2/groups.json?page=2", "previous_page": null, "count": 1 }');
             } else {
-                res.setBody('{ "groups": [ { "url": "https://support.zendesk.com/api/v2/groups/21641528.json", "id": 21641528, "name": "Test", "deleted": false, "created_at": "2014-03-07T22:59:22Z", "updated_at": "2014-03-07T22:59:22Z" } ], "next_page": null, "previous_page": null, "count": 1 }');
+                res.setBody('{ "groups": [ { "url": "https://test.zendesk.com/api/v2/groups/21641528.json", "id": 21641528, "name": "Test", "deleted": false, "created_at": "2014-03-07T22:59:22Z", "updated_at": "2014-03-07T22:59:22Z" } ], "next_page": null, "previous_page": null, "count": 1 }');
             }
         }
         System.debug('getGroups res: ' + res);
