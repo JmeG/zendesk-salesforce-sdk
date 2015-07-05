@@ -1,7 +1,7 @@
 // This class provides common functionality for creating requests to interact with the Zendesk API
 public with sharing class ZendeskAPI {
 
-	public final static String BASE_PATH = '/api/v2/';
+	public final static String BASE_PATH =  '/api/v2';
 
 	private String subdomain {get;set;}
 	private String username {get;set;}

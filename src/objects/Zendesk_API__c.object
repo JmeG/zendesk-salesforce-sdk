@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <description>Used for saving login credentials for the Zendesk API</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Authentication_Type__c</fullName>
+        <defaultValue>&quot;Token&quot;</defaultValue>
+        <description>The authentication type used for logging in to the Zendesk API. Values can be &quot;Password&quot; or &quot;Token&quot;</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The authentication type used for logging in to the Zendesk API. Values can be &quot;Password&quot; or &quot;Token&quot;</inlineHelpText>
+        <label>Authentication Type</label>
+        <length>10</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Password_or_Token__c</fullName>
+        <description>The password or token to log in to the Zendesk API with</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The password or token to log in to the Zendesk API with</inlineHelpText>
+        <label>Password or Token</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Subdomain__c</fullName>
+        <description>The Zendesk subdomain you will be connecting to via the API</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Zendesk subdomain you will be connecting to via the API</inlineHelpText>
+        <label>Subdomain</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Username__c</fullName>
+        <description>The username to log in to the Zendesk API with</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The username to log in to the Zendesk API with</inlineHelpText>
+        <label>Username</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Zendesk API</label>
+    <visibility>Protected</visibility>
+</CustomObject>

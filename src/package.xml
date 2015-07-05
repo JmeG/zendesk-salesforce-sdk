@@ -18,7 +18,7 @@
     </types>
     <types>
         <members>*</members>
-        <name>StaticResource</name>
+        <name>CustomObject</name>
     </types>
-    <version>33.0</version>
+    <version>34.0</version>
 </Package>

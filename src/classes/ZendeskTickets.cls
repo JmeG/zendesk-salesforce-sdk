@@ -3,67 +3,117 @@ public with sharing class ZendeskTickets {
 
 	private final ZendeskAPI zapi;
 
+	public enum TicketType { question, incident, problem, task }
+	//public enum TicketPriority { low, normal, high, urgent }
+	// TODO: we can't use "new" since it's a reserved keyword
+	//public enum TicketStatus { new, open, pending, hold, solved, closed }
+
+	public class ZTicket {
+		public Integer id {get; set;}
+		public String url {get; set;}
+		public String external_id {get; set;}
+		public String type {get; set;}
+		public String subject {get; set;}
+		public String description {get; set;}
+		public String priority {get; set;}
+		public String status {get; set;}
+		public String recipient {get; set;}
+		public Integer requester_id {get; set;}
+		public Integer submitter_id {get; set;}
+		public Integer assignee_id {get; set;}
+		public Integer organization_id {get; set;}
+		public Integer group_id {get; set;}
+		public List<Integer> collaborator_ids {get; set;}
+		public Integer forum_topic_id {get; set;}
+		public Integer problem_id {get; set;}
+		public Boolean has_incidents {get; set;}
+		public DateTime due_at {get; set;}
+		public List<String> tags {get; set;}
+		public ZTicketVia via {get; set;}
+		public List<ZTicketCustomField> custom_fields {get; set;}
+		public ZTicketSatisfactionRating satisfaction_rating {get; set;}
+		public List<Integer> sharing_agreement_ids {get; set;}
+		public Integer ticket_form_id {get; set;}
+		public DateTime created_at {get; set;}
+		public DateTime updated_at {get; set;}
+		public ZTicketComment comment {get; set;}
+	}
+
+	public class ZTicketCustomField {
+		public Integer id {get; set;}
+		public String value {get; set;}
+
+		public ZTicketCustomField() {}
+		public ZTicketCustomField(Integer id, String value) { this.id = id; this.value = value; }
+	}
+
+	public class ZTicketVia {
+		public String channel {get; set;}
+		//public String source {get; set;}
+	}
+
+	public class ZTicketSatisfactionRating {
+		public Integer id {get; set;}
+		public String score {get; set;}
+		public String comment {get; set;}
+	}
+
+	public class ZTicketComment {
+		public String body {get; set;}
+		public String uploads {get; set;}
+	}
+
 	// Used to deserialize the result of a individual Ticket create/read/update API call
-	private class SingleTicketWrapper {
-		public ZendeskAPISchema.ZTicket ticket {get;set;}
+	private class TicketWrapper {
+		public ZTicket ticket {get;set;}
 	}
 
 	public ZendeskTickets(ZendeskAPI zapi) {
 		this.zapi = zapi;
 	}
 
-	public ZendeskAPISchema.ZTicket getTicket(Integer ticketId) {
+	public ZTicket getTicket(Integer ticketId) {
 		Http h = new Http();
-		HttpRequest req = zapi.setupRequest('GET', '/api/v2/tickets/' + String.valueOf(ticketId) + '.json');
+		HttpRequest req = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
 
-		HttpResponse res;
-		if (!Test.isRunningTest()) {
-			res = h.send(req);
-		} else {
-			// fake response
-			res = new HttpResponse();
-			res.setStatusCode(200);
-			res.setStatus('OK');
-			res.setBody('{"ticket":{"url":"https://zendeskit.zendesk.com/api/v2/tickets/7675.json","id":7675,"external_id":null,"via":{"channel":"web","source":{"from":{},"to":{},"rel":null}},"created_at":"2013-07-24T23:19:49Z","updated_at":"2013-07-29T23:04:57Z","type":null,"subject":"testing api","description":"test","priority":null,"status":"closed","recipient":null,"requester_id":372418401,"submitter_id":372418401,"assignee_id":372418401,"organization_id":null,"group_id":20153691,"forum_topic_id":null,"problem_id":null,"has_incidents":false,"due_at":null,"ticket_form_id":null}}');
-		}
-
+		HttpResponse res = h.send(req);
 		System.debug('getTicket res: ' + res);
 		String resBody = res.getBody();
 		System.debug('getTicket res body: ' + resBody);
 
-		ZendeskAPISchema.ZTicket zticket = null;
+		ZTicket zticket = null;
 		if (res.getStatusCode() == 200) {
-			SingleTicketWrapper resultWrapper = (SingleTicketWrapper)JSON.deserialize(resBody, SingleTicketWrapper.class);
+			TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
 			zticket = resultWrapper.ticket;
 		}
 
 		return zticket;
 	}
 
-	public Integer createTicket(String type, String subject, String commentText, Integer requesterId) {
+	public Integer createTicket(TicketType type, String subject, String commentText, Integer requesterId) {
 		return createTicket(type, subject, commentText, null, requesterId, null, null, null, null);
 	}
 
-	public Integer createTicket(String type, String subject, String commentText, String attachmentToken, Integer requesterId) {
+	public Integer createTicket(TicketType type, String subject, String commentText, String attachmentToken, Integer requesterId) {
 		return createTicket(type, subject, commentText, attachmentToken, requesterId, null, null, null, null);
 	}
 
-	public Integer createTicket(String type, String subject, String commentText, Integer requesterId, List<ZendeskAPISchema.ZTicketCustomField> zcfList) {
+	public Integer createTicket(TicketType type, String subject, String commentText, Integer requesterId, List<ZTicketCustomField> zcfList) {
 		return createTicket(type, subject, commentText, null, requesterId, null, null, null, zcfList);
 	}
 
-	public Integer createTicket(String type, String subject, String commentText, String attachmentToken, Integer requesterId, List<ZendeskAPISchema.ZTicketCustomField> zcfList) {
+	public Integer createTicket(TicketType type, String subject, String commentText, String attachmentToken, Integer requesterId, List<ZTicketCustomField> zcfList) {
 		return createTicket(type, subject, commentText, attachmentToken, requesterId, null, null, null, zcfList);
 	}
 
-	public Integer createTicket(String type, String subject, String commentText, Integer requesterId, Integer groupId, Integer assigneeId, Integer ticketFormId, List<ZendeskAPISchema.ZTicketCustomField> zcfList) {
+	public Integer createTicket(TicketType type, String subject, String commentText, Integer requesterId, Integer groupId, Integer assigneeId, Integer ticketFormId, List<ZTicketCustomField> zcfList) {
 		return createTicket(type, subject, commentText, null, requesterId, groupId, assigneeId, ticketFormId, zcfList);
 	}
 
 	// Type can be one of: question, incident, problem, task
-	public Integer createTicket(String type, String subject, String commentText, String attachmentToken, Integer requesterId, Integer groupId, Integer assigneeId, Integer ticketFormId, List<ZendeskAPISchema.ZTicketCustomField> zcfList) {
-		ZendeskAPISchema.ZTicket zt = new ZendeskAPISchema.ZTicket();
-		zt.type = type;
+	public Integer createTicket(TicketType type, String subject, String commentText, String attachmentToken, Integer requesterId, Integer groupId, Integer assigneeId, Integer ticketFormId, List<ZTicketCustomField> zcfList) {
+		ZTicket zt = new ZTicket();
+		zt.type = type.name();
 		zt.subject = subject;
 		zt.custom_fields = zcfList;
 		zt.requester_id = requesterId;
@@ -71,43 +121,32 @@ public with sharing class ZendeskTickets {
 		zt.ticket_form_id = ticketFormId;
 		zt.group_id = groupId;
 
-		zt.comment = new ZendeskAPISchema.ZTicketComment();
+		zt.comment = new ZTicketComment();
 		zt.comment.body = commentText;
 		zt.comment.uploads = attachmentToken;
 
 		return createTicket(zt);
 	}
 
-	public Integer createTicket(ZendeskAPISchema.ZTicket zticket) {
+	public Integer createTicket(ZTicket zticket) {
 		Http h = new Http();
-		HttpRequest req = zapi.setupRequest('POST', '/api/v2/tickets.json');
+		HttpRequest req = zapi.setupRequest('POST', ZendeskAPI.BASE_PATH + '/tickets.json');
 
-		SingleTicketWrapper ticketWrapper = new SingleTicketWrapper();
-		ticketWrapper.ticket = zticket;
-		String reqBody = JSON.serialize(ticketWrapper);
-		System.debug('**** json string = ' + reqBody);
+		TicketWrapper newTicketWrapper = new TicketWrapper();
+		newTicketWrapper.ticket = zticket;
+		String reqBody = JSON.serialize(newTicketWrapper);
+		//System.debug('**** json string = ' + reqBody);
 		req.setBody(reqBody);
-
-		HttpResponse res;
-		if (!Test.isRunningTest()) {
-			res = h.send(req);
-		} else {
-			// fake response
-			res = new HttpResponse();
-			res.setStatusCode(201);
-			res.setStatus('OK');
-			res.setBody('{"ticket":{"url":"https://zendeskit.zendesk.com/api/v2/tickets/7675.json","id":7675,"external_id":null,"via":{"channel":"web","source":{"from":{},"to":{},"rel":null}},"created_at":"2013-07-24T23:19:49Z","updated_at":"2013-07-29T23:04:57Z","type":null,"subject":"testing api","description":"test","priority":null,"status":"closed","recipient":null,"requester_id":372418401,"submitter_id":372418401,"assignee_id":372418401,"organization_id":null,"group_id":20153691,"forum_topic_id":null,"problem_id":null,"has_incidents":false,"due_at":null,"ticket_form_id":null}}');
-		}
-
-		System.debug('createTicket res: ' + res);
+		HttpResponse res = h.send(req);
+		//System.debug('createTicket res: ' + res);
 		String resBody = res.getBody();
-		System.debug('**** res = ' + resBody);
+		//System.debug('**** res = ' + resBody);
 
 		if (res.getStatusCode() != 201) {
 			throw new ZendeskException('Error occurred trying to create ticket');
 		}
 
-		SingleTicketWrapper resultWrapper = (SingleTicketWrapper)JSON.deserialize(resBody, SingleTicketWrapper.class);
+		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
 		System.debug('zticketResult=' + resultWrapper);
 
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
@@ -116,18 +155,9 @@ public with sharing class ZendeskTickets {
 	// NOTE: You must use Admin credentials to use this method
 	public void deleteTicket(Integer ticketId) {
 		Http h = new Http();
-		HttpRequest req = zapi.setupRequest('DELETE', '/api/v2/tickets/' + String.valueOf(ticketId) + '.json');
+		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
 
-		HttpResponse res;
-		if (!Test.isRunningTest()) {
-			res = h.send(req);
-		} else {
-			// fake response
-			res = new HttpResponse();
-			res.setStatusCode(200);
-			res.setStatus('OK');
-		}
-
+		HttpResponse res = h.send(req);
 		System.debug('deleteTicket res: ' + res);
 		String resBody = res.getBody();
 		System.debug('**** res = ' + resBody);
@@ -141,23 +171,13 @@ public with sharing class ZendeskTickets {
 /*
 	public void addTicketComment(Integer ticketId, String commentText) {
 		Http h = new Http();
-		HttpRequest req = zapi.setupRequest('PUT', '/api/v2/tickets/' + String.valueOf(zticket.id) + '.json');
+		HttpRequest req = zapi.setupRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(zticket.id) + '.json');
 
 		// TODO: encode the commentText
 		String ticketJson = '{ "ticket": { "id": ' + String.valueOf(ticketId) + ', "comment": { "body": "' + commentText + '" } } }';
 		req.setBody(ticketJson);
 
-		HttpResponse res;
-		if (!Test.isRunningTest()) {
-			res = h.send(req);
-		} else {
-			// fake response
-			res = new HttpResponse();
-			res.setStatusCode(200);
-			res.setStatus('OK');
-			res.setBody('{"ticket":{"url":"https://zendeskit.zendesk.com/api/v2/tickets/7675.json","id":7675,"external_id":null,"via":{"channel":"web","source":{"from":{},"to":{},"rel":null}},"created_at":"2013-07-24T23:19:49Z","updated_at":"2013-07-29T23:04:57Z","type":null,"subject":"testing api","description":"test","priority":null,"status":"closed","recipient":null,"requester_id":372418401,"submitter_id":372418401,"assignee_id":372418401,"organization_id":null,"group_id":20153691,"forum_topic_id":null,"problem_id":null,"has_incidents":false,"due_at":null,"ticket_form_id":null}}');
-		}
-
+		HttpResponse res = h.send(req);
 		System.debug('updateTicket res: ' + res);
 		String resBody = res.getBody();
 		System.debug('**** res = ' + resBody);
@@ -174,28 +194,18 @@ public with sharing class ZendeskTickets {
 	// those fields to NULL instead of ignore them.
 	// We only want the JSON to include fields we are trying to update
 
-	public void updateTicket(ZendeskAPISchema.ZTicket zticket) {
+	public void updateTicket(ZTicket zticket) {
 		Http h = new Http();
-		HttpRequest req = zapi.setupRequest('PUT', '/api/v2/tickets/' + String.valueOf(zticket.id) + '.json');
+		HttpRequest req = zapi.setupRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(zticket.id) + '.json');
 
-		SingleTicketWrapper ticketWrapper = new SingleTicketWrapper();
+		TicketWrapper ticketWrapper = new TicketWrapper();
 		ticketWrapper.ticket = zticket;
 		String reqBody = JSON.serialize(ticketWrapper);
 		System.debug('**** json string = ' + reqBody);
 		//req.setBody(reqBody);
 		req.setBody('{ "ticket": { "id": 24, "comment": { "body": "new comment" } } } ');
 
-		HttpResponse res;
-		if (!Test.isRunningTest()) {
-			res = h.send(req);
-		} else {
-			// fake response
-			res = new HttpResponse();
-			res.setStatusCode(200);
-			res.setStatus('OK');
-			res.setBody('{"ticket":{"url":"https://zendeskit.zendesk.com/api/v2/tickets/7675.json","id":7675,"external_id":null,"via":{"channel":"web","source":{"from":{},"to":{},"rel":null}},"created_at":"2013-07-24T23:19:49Z","updated_at":"2013-07-29T23:04:57Z","type":null,"subject":"testing api","description":"test","priority":null,"status":"closed","recipient":null,"requester_id":372418401,"submitter_id":372418401,"assignee_id":372418401,"organization_id":null,"group_id":20153691,"forum_topic_id":null,"problem_id":null,"has_incidents":false,"due_at":null,"ticket_form_id":null}}');
-		}
-
+		HttpResponse res = h.send(req);
 		System.debug('updateTicket res: ' + res);
 		String resBody = res.getBody();
 		System.debug('**** res = ' + resBody);
@@ -212,7 +222,7 @@ public with sharing class ZendeskTickets {
 
 		// Accepts a comma-separated list of up to 100 ticket ids.
 		if (ticketIds.length() > 100) { throw new ZendeskException('More than 100 ticketIds is not supported'); }
-		String endpoint = '/api/v2/tickets/update_many.json?ids=';
+		String endpoint = ZendeskAPI.BASE_PATH + '/tickets/update_many.json?ids=';
 		for (String cur : ticketIds) {
 			endpoint += cur + ',';
 		}
@@ -229,17 +239,7 @@ public with sharing class ZendeskTickets {
 		req.setBody(reqBody);
 		System.debug('**** json string = ' + reqBody);
 
-		HttpResponse res;
-		if (!Test.isRunningTest()) {
-			res = h.send(req);
-		} else {
-			// insert fake test response here.
-			res = new HttpResponse();
-			res.setStatusCode(200);
-			res.setStatus('OK');
-			res.setBody('test');
-		}
-
+		HttpResponse res = h.send(req);
 		System.debug('**** res = ' + res.getBody());
 
 		if (res.getStatusCode() != 200) {

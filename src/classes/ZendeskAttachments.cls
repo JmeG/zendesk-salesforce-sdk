@@ -11,7 +11,7 @@ public with sharing class ZendeskAttachments {
 		String zendeskAttachmentToken = null;
 		try {
 			Http h = new Http();
-			HttpRequest req = zapi.setupRequest('POST', '/api/v2/uploads.json?filename=' + EncodingUtil.urlEncode(fileName, 'UTF-8'));
+			HttpRequest req = zapi.setupRequest('POST', ZendeskAPI.BASE_PATH + '/uploads.json?filename=' + EncodingUtil.urlEncode(fileName, 'UTF-8'));
 
 			// Set headers
 			req.setHeader('Accept', 'application/json');
@@ -20,16 +20,7 @@ public with sharing class ZendeskAttachments {
 			// Set body
 			req.setBodyAsBlob(fileBody);
 
-			HttpResponse res;
-			if (!Test.isRunningTest()) {
-				res = h.send(req);
-			} else {
-				// fake response
-				res = new HttpResponse();
-				res.setStatusCode(201);
-				res.setStatus('OK');
-				res.setBody('{"upload":{"token":"xXiRHUu3pQrV72Gr7uQ3O7HZo","expires_at":"2014-07-06T22:09:45Z","attachments":[{"url":"https://test.zendesk.com/api/v2/attachments/513041274.json","id":513041274,"file_name":"Archive.zip","content_url":"https://test.zendesk.com/attachments/token/qziILyOZaxTM5ywhUmePdtbJC/?name=Archive.zip","mapped_content_url":"https://test.zendesk.com/attachments/token/qziILyOZaxTM5ywhUmePdtbJC/?name=Archive.zip","content_type":"application/zip","size":41870,"thumbnails":[]}]}}');
-			}
+			HttpResponse res = h.send(req);
 			System.debug('upload res: ' + res);
 			System.debug('upload res body: ' + res.getBody());
 
@@ -57,18 +48,9 @@ public with sharing class ZendeskAttachments {
 	// NOTE: You must use Admin credentials to use this method
 	public void deleteAttachment(Integer attachmentId) {
 		Http h = new Http();
-		HttpRequest req = zapi.setupRequest('DELETE', '/api/v2/attachments/' + String.valueOf(attachmentId) + '.json');
+		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + String.valueOf(attachmentId) + '.json');
 
-		HttpResponse res;
-		if (!Test.isRunningTest()) {
-			res = h.send(req);
-		} else {
-			// fake response
-			res = new HttpResponse();
-			res.setStatusCode(200);
-			res.setStatus('OK');
-		}
-
+		HttpResponse res = h.send(req);
 		System.debug('deleteAttachment res: ' + res);
 		String resBody = res.getBody();
 		System.debug('**** res = ' + resBody);

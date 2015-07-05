@@ -2,10 +2,17 @@
 public with sharing class ZendeskTicketForms {
 
 	private final ZendeskAPI zapi;
-	private Map<String, ZendeskAPISchema.ZTicketForm> resultsMap;
+	private Map<String, ZTicketForm> ticketFormsMap;
 
-	private class ResultsWrapper {
-		public ZendeskAPISchema.ZTicketForm[] ticket_forms {get;set;}
+	public class ZTicketForm {
+		public Integer id {get;set;}
+		public String name {get;set;}
+		public String raw_name {get;set;}
+		public Boolean active {get;set;}
+	}
+
+	public class PagedTicketFormsWrapper {
+		public ZTicketForm[] ticket_forms {get;set;}
 
 		// "https://test.zendesk.com/api/v2/ticket_forms.json?page=2"
 		public String next_page {get;set;}
@@ -17,73 +24,64 @@ public with sharing class ZendeskTicketForms {
 
 	public ZendeskTicketForms(ZendeskAPI zapi) {
 		this.zapi = zapi;
-		resultsMap = new Map<String, ZendeskAPISchema.ZTicketForm>();
+		ticketFormsMap = new Map<String, ZTicketForm>();
 	}
 
-	public ZendeskAPISchema.ZTicketForm getTicketForm(String name) {
-		if (resultsMap.isEmpty()) {
+	// Retrieves all the ticket forms. Uses the field "raw_name" as the map key
+	public Map<String, ZTicketForm> getAllTicketForms() {
+        if (ticketFormsMap.isEmpty()) {
+            loadAll();
+        }
+        return ticketFormsMap;
+    }
+
+	public ZTicketForm getTicketForm(String name) {
+		// TODO: should we fetch all forms?
+		if (ticketFormsMap.isEmpty()) {
 			loadAll();
 		}
 
-		ZendeskAPISchema.ZTicketForm obj = null;
-		if (resultsMap.containsKey(name)) {
-			obj = resultsMap.get(name);
-		}
-
-		// Testing support
-		if (Test.isRunningTest() && obj == null) {
-			obj = resultsMap.get('Test');
+		ZTicketForm obj = null;
+		if (ticketFormsMap.containsKey(name)) {
+			obj = ticketFormsMap.get(name);
 		}
 
 		return obj;
 	}
 
 	private void loadAll() {
-		ResultsWrapper wrapper = getTicketForms();
+		PagedTicketFormsWrapper wrapper = getTicketForms();
 		System.debug('**wrapper=' + wrapper);
 		if (wrapper != null && wrapper.ticket_forms != null) {
-			for (ZendeskAPISchema.ZTicketForm obj : wrapper.ticket_forms) {
-				resultsMap.put(obj.raw_name, obj);
+			for (ZTicketForm obj : wrapper.ticket_forms) {
+				ticketFormsMap.put(obj.raw_name, obj);
 			}
 
 			while (!String.isEmpty(wrapper.next_page)) {
 				System.debug('**wrapper.next_page=' + wrapper.next_page);
 				wrapper = getTicketForms(wrapper.nextPageNumber);
-				for (ZendeskAPISchema.ZTicketForm obj : wrapper.ticket_forms) {
-					resultsMap.put(obj.raw_name, obj);
+				for (ZTicketForm obj : wrapper.ticket_forms) {
+					ticketFormsMap.put(obj.raw_name, obj);
 				}
 			}
 		}
 	}
 
-	private ResultsWrapper getTicketForms() {
+	public PagedTicketFormsWrapper getTicketForms() {
 		return getTicketForms(null);
 	}
 
-	private ResultsWrapper getTicketForms(Integer page) {
+	public PagedTicketFormsWrapper getTicketForms(Integer page) {
 		Http h = new Http();
-		HttpRequest queryReq = zapi.setupRequest('GET', '/api/v2/ticket_forms.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
-		HttpResponse res = new HttpResponse();
-		if (!Test.isRunningTest()) {
-			res = h.send(queryReq);
-		} else {
-			// fake response
-			res = new HttpResponse();
-			res.setStatusCode(200);
-			res.setStatus('OK');
-			if (page == null) {
-				res.setBody('{ "ticket_forms": [ { "url": "https://test.zendesk.com/api/v2/ticket_forms/466.json", "id": 466, "name": "Test", "raw_name": "Test", "display_name": "Test", "raw_display_name": "Test", "end_user_visible": true, "position": 0, "active": true, "default": true, "created_at": "2013-04-23T01:24:04Z", "updated_at": "2013-08-07T21:29:47Z" } ], "next_page": "https://test.zendesk.com/api/v2/ticket_forms.json?page=2", "previous_page": null, "count": 1 }');
-			} else {
-				res.setBody('{ "ticket_forms": [ { "url": "https://test.zendesk.com/api/v2/ticket_forms/466.json", "id": 466, "name": "Test", "raw_name": "Test", "display_name": "Test", "raw_display_name": "Test", "end_user_visible": true, "position": 0, "active": true, "default": true, "created_at": "2013-04-23T01:24:04Z", "updated_at": "2013-08-07T21:29:47Z" } ], "next_page": null, "previous_page": null, "count": 1 }');
-			}
-		}
+		HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+		HttpResponse res = h.send(queryReq);
 		System.debug('getTicketForms res: ' + res);
 		String resBody = res.getBody();
 		System.debug('resBody: ' + resBody);
 
-		ResultsWrapper wrapper = null;
+		PagedTicketFormsWrapper wrapper = null;
 		if (res.getStatusCode() == 200) {
-			wrapper = (ResultsWrapper)JSON.deserialize(resBody, ResultsWrapper.class);
+			wrapper = (PagedTicketFormsWrapper)JSON.deserialize(resBody, PagedTicketFormsWrapper.class);
 		}
 
 		return wrapper;

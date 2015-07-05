@@ -2,10 +2,15 @@
 public with sharing class ZendeskGroups {
 
     private final ZendeskAPI zapi;
-    private Map<String, ZendeskAPISchema.ZGroup> resultsMap;
+    private Map<String, ZGroup> groupsMap;
 
-    private class ResultsWrapper {
-        public ZendeskAPISchema.ZGroup[] groups {get;set;}
+    public class ZGroup {
+		public Integer id {get;set;}
+		public String name {get;set;}
+	}
+
+    public class PagedGroupsWrapper {
+        public ZGroup[] groups {get;set;}
 
         // "https://test.zendesk.com/api/v2/groups.json?page=2"
         public String next_page {get;set;}
@@ -17,73 +22,64 @@ public with sharing class ZendeskGroups {
 
     public ZendeskGroups(ZendeskAPI zapi) {
         this.zapi = zapi;
-        resultsMap = new Map<String, ZendeskAPISchema.ZGroup>();
+        groupsMap = new Map<String, ZGroup>();
     }
 
-    public ZendeskAPISchema.ZGroup getGroup(String name) {
-        if (resultsMap.isEmpty()) {
+    // Retrieves all the groups. Uses the field "name" as the map key
+	public Map<String, ZGroup> getAllGroups() {
+        if (groupsMap.isEmpty()) {
+            loadAll();
+        }
+        return groupsMap;
+    }
+
+    public ZGroup getGroup(String name) {
+		// TODO: should we pre-load all ticket field pages?
+        if (groupsMap.isEmpty()) {
             loadAll();
         }
 
-        ZendeskAPISchema.ZGroup obj = null;
-        if (resultsMap.containsKey(name)) {
-            obj = resultsMap.get(name);
-        }
-
-        // Testing support
-        if (Test.isRunningTest() && obj == null) {
-            obj = resultsMap.get('Test');
+        ZGroup obj = null;
+        if (groupsMap.containsKey(name)) {
+            obj = groupsMap.get(name);
         }
 
         return obj;
     }
 
     private void loadAll() {
-        ResultsWrapper wrapper = getGroups();
+        PagedGroupsWrapper wrapper = getGroups();
         System.debug('**wrapper=' + wrapper);
         if (wrapper != null && wrapper.groups != null) {
-            for (ZendeskAPISchema.ZGroup obj : wrapper.groups) {
-                resultsMap.put(obj.name, obj);
+            for (ZGroup obj : wrapper.groups) {
+                groupsMap.put(obj.name, obj);
             }
 
             while (!String.isEmpty(wrapper.next_page)) {
             	System.debug('**wrapper.next_page=' + wrapper.next_page);
                 wrapper = getGroups(wrapper.nextPageNumber);
-                for (ZendeskAPISchema.ZGroup obj : wrapper.groups) {
-                    resultsMap.put(obj.name, obj);
+                for (ZGroup obj : wrapper.groups) {
+                    groupsMap.put(obj.name, obj);
                 }
             }
         }
     }
 
-    private ResultsWrapper getGroups() {
+    public PagedGroupsWrapper getGroups() {
         return getGroups(null);
     }
 
-    private ResultsWrapper getGroups(Integer page) {
+    public PagedGroupsWrapper getGroups(Integer page) {
         Http h = new Http();
-        HttpRequest queryReq = zapi.setupRequest('GET', '/api/v2/groups.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
-        HttpResponse res = new HttpResponse();
-        if (!Test.isRunningTest()) {
-            res = h.send(queryReq);
-        } else {
-            // fake response
-            res = new HttpResponse();
-            res.setStatusCode(200);
-            res.setStatus('OK');
-            if (page == null) {
-                res.setBody('{ "groups": [ { "url": "https://test.zendesk.com/api/v2/groups/21641528.json", "id": 21641528, "name": "Test", "deleted": false, "created_at": "2014-03-07T22:59:22Z", "updated_at": "2014-03-07T22:59:22Z" } ], "next_page": "https://test.zendesk.com/api/v2/groups.json?page=2", "previous_page": null, "count": 1 }');
-            } else {
-                res.setBody('{ "groups": [ { "url": "https://test.zendesk.com/api/v2/groups/21641528.json", "id": 21641528, "name": "Test", "deleted": false, "created_at": "2014-03-07T22:59:22Z", "updated_at": "2014-03-07T22:59:22Z" } ], "next_page": null, "previous_page": null, "count": 1 }');
-            }
-        }
+        HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+        HttpResponse res = h.send(queryReq);
         System.debug('getGroups res: ' + res);
         String resBody = res.getBody();
         System.debug('resBody: ' + resBody);
 
-        ResultsWrapper wrapper = null;
+        PagedGroupsWrapper wrapper = null;
         if (res.getStatusCode() == 200) {
-            wrapper = (ResultsWrapper)JSON.deserialize(resBody, ResultsWrapper.class);
+            wrapper = (PagedGroupsWrapper)JSON.deserialize(resBody, PagedGroupsWrapper.class);
         }
 
         return wrapper;

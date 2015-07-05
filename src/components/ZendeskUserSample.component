@@ -1,0 +1,37 @@
+<apex:component controller="ZendeskUserSampleController">
+    <apex:attribute name="subdomainParam" description="Subdomain" type="String" required="required" assignTo="{!subdomain}"/>
+    <apex:attribute name="usernameParam" description="Username" type="String" required="required" assignTo="{!username}"/>
+    <apex:attribute name="pwdOrTokenParam" description="Password or Token" type="String" required="required" assignTo="{!pwdOrToken}"/>
+    <apex:attribute name="authTypeParam" description="Auth Type" type="String" required="required" assignTo="{!authType}"/>
+
+    <apex:form>
+        <apex:pageBlock title="Users" mode="edit">
+            <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!createUser}" value="Create New User"/>
+                <apex:commandButton action="{!findUserByEmail}" value="Find User by Email"/>
+                <apex:commandButton action="{!findUsersByNameOrEmail}" value="Search Users"/>
+                <apex:commandButton action="{!getUsers}" value="Get Users"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="User Details" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Name" />
+                    <apex:inputText value="{!nameInput}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Email" />
+                    <apex:inputText value="{!emailInput}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="User List" columns="1">
+            	<apex:pageBlockTable value="{!users}" var="user">
+                    <apex:column value="{!user.id}" headerValue="ID"/>
+                    <apex:column value="{!user.name}" headerValue="Name"/>
+                    <apex:column value="{!user.email}" headerValue="Email"/>
+                    <apex:column value="{!user.role}" headerValue="Role"/>
+            	</apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+
+</apex:component>

@@ -15,8 +15,9 @@ alert(retStr);
 */
 global with sharing class ZendeskCreateTicketSampleService {
 
-  private static final String zendeskSubdomain = 'Subdomain';
-  private static final String zendeskUsername = 'Username';
+/*
+  private static final String zendeskSubdomain = 'z3njgibsontest1';
+  private static final String zendeskUsername = 'jgibson@zendesk.com';
   private static final String zendeskToken = 'Token';
   private static final ZendeskAPI.AuthType zendeskAuthType = ZendeskAPI.AuthType.Token;
 
@@ -37,16 +38,16 @@ global with sharing class ZendeskCreateTicketSampleService {
 			// The performance here can be improved by making use of the ZendeskAPICacheManager
 			ZendeskTicketFields zTicketFields = new ZendeskTicketFields(zapi);
 			String customFieldName = 'Custom Field Name 1';
-			ZendeskAPISchema.ZTicketField zticketField1 = zTicketFields.getTicketField(customFieldName);
+			ZendeskTicketFields.ZTicketField zticketField1 = zTicketFields.getTicketField(customFieldName);
 			if (zticketField1 == null) { throw new ZendeskException('Unable to find Ticket Field "' + customFieldName + '"'); }
 			customFieldName = 'Custom Field Name 2';
-			ZendeskAPISchema.ZTicketField zticketField2 = zTicketFields.getTicketField(customFieldName);
+			ZendeskTicketFields.ZTicketField zticketField2 = zTicketFields.getTicketField(customFieldName);
 			if (zticketField2 == null) { throw new ZendeskException('Unable to find Ticket Field "' + customFieldName + '"'); }
 
 			// Build list of custom fields and values
-			List<ZendeskAPISchema.ZTicketCustomField> zcfList = new List<ZendeskAPISchema.ZTicketCustomField>();
-			zcfList.add(new ZendeskAPISchema.ZTicketCustomField(zticketField1.Id, customField1Text));
-			zcfList.add(new ZendeskAPISchema.ZTicketCustomField(zticketField2.Id, customField2Text));
+			List<ZendeskTicketFields.ZTicketCustomField> zcfList = new List<ZendeskTicketFields.ZTicketCustomField>();
+			zcfList.add(new ZendeskTicketFields.ZTicketCustomField(zticketField1.Id, customField1Text));
+			zcfList.add(new ZendeskTicketFields.ZTicketCustomField(zticketField2.Id, customField2Text));
 
 			// Create the request
 			ZendeskTickets zTickets = new ZendeskTickets(zapi);
@@ -59,7 +60,7 @@ global with sharing class ZendeskCreateTicketSampleService {
 			return 'Error creating ticket: ' + e.getMessage();
 		}
 	}
-
+*/
 	/*
 	// Additional sample code that shows how you can cache and reuse the Zendesk ID's of custom fields and forms rather than
 	// having to call the API each time you create a ticket.
@@ -76,7 +77,7 @@ global with sharing class ZendeskCreateTicketSampleService {
 
 		ZendeskTicketForms zTicketForms = new ZendeskTicketForms(zapi);
 		for (String formName : formNames) {
-			ZendeskAPISchema.ZTicketForm zticketForm = zTicketForms.getTicketForm(formName);
+			ZendeskTicketForms.ZTicketForm zticketForm = zTicketForms.getTicketForm(formName);
 			if (zticketForm == null) { throw new ZendeskException('Unable to find Ticket Form "' + formName + '"'); }
 			cache.add(zendeskSubdomain, ZendeskAPICacheManager.TICKET_FORM, formName, zticketForm.id);
 		}
@@ -90,7 +91,7 @@ global with sharing class ZendeskCreateTicketSampleService {
 
 		ZendeskTicketFields zTicketFields = new ZendeskTicketFields(zapi);
 		for (String fieldName : fieldNames) {
-			ZendeskAPISchema.ZTicketField zticketField = zTicketFields.getTicketField(fieldName);
+			ZendeskTickets.ZTicketField zticketField = zTicketFields.getTicketField(fieldName);
 			if (zticketField == null) { throw new ZendeskException('Unable to find Ticket Field "' + fieldName + '"'); }
 			cache.add(zendeskSubdomain, ZendeskAPICacheManager.TICKET_FIELD, fieldName, zticketField.id);
 		}
