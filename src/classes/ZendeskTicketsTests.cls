@@ -12,6 +12,16 @@ private class ZendeskTicketsTests {
         }
     }
 
+    public class MockGetTicketsResponse implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            HttpResponse res = new HttpResponse();
+            res.setStatusCode(200);
+            res.setStatus('OK');
+            res.setBody('{"tickets":[{"url":"https://zendeskit.zendesk.com/api/v2/tickets/1234.json","id":1234,"external_id":null,"via":{"channel":"web","source":{"from":{},"to":{},"rel":null}},"created_at":"2013-07-24T23:19:49Z","updated_at":"2013-07-29T23:04:57Z","type":null,"subject":"testing api","description":"test","priority":null,"status":"closed","recipient":null,"requester_id":372418401,"submitter_id":372418401,"assignee_id":372418401,"organization_id":null,"group_id":20153691,"forum_topic_id":null,"problem_id":null,"has_incidents":false,"due_at":null,"ticket_form_id":null}],"next_page":null,"previous_page":null,"count":1}');
+            return res;
+        }
+    }
+
     public class MockCreateTicketResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
             HttpResponse res = new HttpResponse();
@@ -111,6 +121,21 @@ private class ZendeskTicketsTests {
         Test.stopTest();
 
         System.assertEquals(1234, newTicketId);
+    }
+
+    static testMethod void testGetTickets() {
+        Test.setMock(HttpCalloutMock.class, new MockGetTicketsResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+		ZendeskTickets ztickets = new ZendeskTickets(zapi);
+		ZendeskTickets.PagedTicketsWrapper results = ztickets.getTickets();
+        Test.stopTest();
+
+		System.assertNotEquals(null, results);
+        System.assertNotEquals(null, results.tickets);
+        System.assertNotEquals(0, results.tickets.size());
     }
 
     static testMethod void testZTicket() {

@@ -63,6 +63,17 @@ public with sharing class ZendeskTickets {
 		public String uploads {get; set;}
 	}
 
+	public class PagedTicketsWrapper {
+		public ZTicket[] tickets {get;set;}
+
+		// "https://test.zendesk.com/api/v2/tickets.json?page=2"
+		public String next_page {get;set;}
+		public Integer nextPageNumber {
+			public get { return (String.isEmpty(next_page) ? null : Integer.valueOf(next_page.substringAfterLast('page=').substringBefore('&'))); }
+			private set;
+		}
+	}
+
 	// Used to deserialize the result of a individual Ticket create/read/update API call
 	private class TicketWrapper {
 		public ZTicket ticket {get;set;}
@@ -167,6 +178,23 @@ public with sharing class ZendeskTickets {
 		}
 	}
 
+	public PagedTicketsWrapper getTickets() {
+        return getTickets(null);
+    }
+
+    public PagedTicketsWrapper getTickets(Integer page) {
+        Http h = new Http();
+        HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/tickets.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+        HttpResponse res = h.send(queryReq);
+        String resBody = res.getBody();
+
+        PagedTicketsWrapper wrapper = null;
+        if (res.getStatusCode() == 200) {
+            wrapper = (PagedTicketsWrapper)JSON.deserialize(resBody, PagedTicketsWrapper.class);
+        }
+
+        return wrapper;
+    }
 
 /*
 	public void addTicketComment(Integer ticketId, String commentText) {

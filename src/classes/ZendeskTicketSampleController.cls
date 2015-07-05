@@ -8,6 +8,8 @@ public with sharing class ZendeskTicketSampleController {
 	public Integer requesterId {get;set;}
 	public String newTicketSubject {get;set;}
 	public String newTicketComment {get;set;}
+
+	public ZendeskTickets.ZTicket[] tickets {get;set;}
 	public String pageMessage {get;set;}
 
 	public ZendeskTicketSampleController() {}
@@ -21,6 +23,22 @@ public with sharing class ZendeskTicketSampleController {
 			Integer newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, newTicketSubject, newTicketComment, requesterId);
 
 			pageMessage = 'Ticket created with ID: ' + newTicketId;
+		}
+		catch(Exception e) {
+			pageMessage = e.getMessage();
+		}
+		return null;
+	}
+
+	public PageReference getTickets() {
+		pageMessage = '';
+		tickets = null;
+		try {
+			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
+			ZendeskTickets ztickets = new ZendeskTickets(zapi);
+
+			ZendeskTickets.PagedTicketsWrapper pagedTickets = ztickets.getTickets();
+			tickets = pagedTickets.tickets;
 		}
 		catch(Exception e) {
 			pageMessage = e.getMessage();
