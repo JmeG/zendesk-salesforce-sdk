@@ -28,7 +28,7 @@ public with sharing class ZendeskTicketFields {
 				}
 			}
 
-			if (String.isEmpty(val) && errorIfNotFound && !Test.isRunningTest()) { throw new ZendeskException('Option value "' + optname + '" not found for field "' + this.title + '"'); }
+			if (String.isEmpty(val) && errorIfNotFound) { throw new ZendeskException('Option value "' + optname + '" not found for field "' + this.title + '"'); }
 			return val;
 		}
 	}
