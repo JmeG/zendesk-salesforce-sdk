@@ -18,7 +18,15 @@
     </types>
     <types>
         <members>*</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>*</members>
         <name>CustomObject</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>CustomTab</name>
     </types>
     <version>34.0</version>
 </Package>
