@@ -1,0 +1,29 @@
+<apex:component controller="ZendeskTicketFormsSampleController">
+    <apex:attribute name="subdomainParam" description="Subdomain" type="String" required="required" assignTo="{!subdomain}"/>
+    <apex:attribute name="usernameParam" description="Username" type="String" required="required" assignTo="{!username}"/>
+    <apex:attribute name="pwdOrTokenParam" description="Password or Token" type="String" required="required" assignTo="{!pwdOrToken}"/>
+    <apex:attribute name="authTypeParam" description="Auth Type" type="String" required="required" assignTo="{!authType}"/>
+
+    <apex:form>
+        <apex:pageBlock title="Ticket Forms" mode="edit">
+            <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!findFormByName}" value="Search"/>
+                <apex:commandButton action="{!getForms}" value="Get Forms"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Search" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Name" />
+                    <apex:inputText value="{!searchText}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Forms List" columns="1">
+                <apex:pageBlockTable value="{!formsMap}" var="key">
+                    <apex:column value="{!key}" headerValue="Name"/>
+                    <apex:column value="{!formsMap[key]}" headerValue="Attributes"/>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+
+</apex:component>

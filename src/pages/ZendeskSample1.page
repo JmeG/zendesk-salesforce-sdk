@@ -28,30 +28,9 @@
 
     <c:ZendeskUserSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
     <c:ZendeskTicketSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
-
     <c:ZendeskUserFieldsSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
     <c:ZendeskTicketFieldsSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
+    <c:ZendeskTicketFormsSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
+    <c:ZendeskGroupsSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
 
 </apex:page>
-            <!--
-                Create Ticket
-                Add Ticket Comment
-                Get Ticket by ID
-                Delete Ticket by ID
-
-                **Create User
-                **Get User by Email
-                **Get Users
-
-                Find Group by Name
-                List all Group's
-
-                Find TicketField by Name
-                **List all TicketField's
-
-                Find UserField by Name
-                **List all UserField's
-
-                Find TicketForm by Name
-                List all TicketForm's
-            -->
