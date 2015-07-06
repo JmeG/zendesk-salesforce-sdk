@@ -2,6 +2,6 @@
 <CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
     <label>Zendesk Samples</label>
     <mobileReady>false</mobileReady>
-    <motif>Custom15: People</motif>
+    <motif>Custom33: Desk</motif>
     <page>ZendeskSample1</page>
 </CustomTab>
