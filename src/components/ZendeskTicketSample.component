@@ -32,6 +32,7 @@
                     <apex:column value="{!ticket.status}" headerValue="Status"/>
                     <apex:column value="{!ticket.created_at}" headerValue="Created"/>
                     <apex:column value="{!ticket.subject}" headerValue="Subject"/>
+                    <apex:column value="{!ticket}" headerValue="Attributes"/>
             	</apex:pageBlockTable>
             </apex:pageBlockSection>
         </apex:pageBlock>
