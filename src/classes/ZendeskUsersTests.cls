@@ -98,13 +98,21 @@ private class ZendeskUsersTests {
     }
 
     static testMethod void testZUser() {
-        ZendeskUsers.ZUser zuser = new ZendeskUsers.ZUser();
-        zuser.id = 1;
-        zuser.name = '';
-        zuser.email = '';
-        zuser.role = '';
-        zuser.organization_id = 1;
-
-        System.assert(true);
+        String userJson = '{ "id": 35436, "name": "Johnny Agent", "external_id": "sai989sur98w9", "alias": "Mr. Johnny", "created_at": "2009-07-20T22:55:29Z", "updated_at": "2011-05-05T10:38:52Z", "active": true, "verified": true, "shared": false, "shared_agent": false, "locale": "en-US", "locale_id": 1, "time_zone": "Copenhagen", "last_login_at": "2011-05-05T10:38:52Z", "email": "johnny@example.com", "phone": "555-123-4567", "signature": "Have a nice day, Johnny", "details": "", "notes": "Johnny is a nice guy!", "organization_id": 57542, "role": "agent", "custom_role_id": 9373643, "moderator": true, "ticket_restriction": "assigned", "only_private_comments": false, "tags": ["enterprise", "other_tag"], "restricted_agent": true, "suspended": true, "user_fields": { "user_decimal": 5.1, "user_dropdown": "option_1", "user_date": "2012-07-23T00:00:00Z" } }';
+        ZendeskUsers.ZUser zuser = (ZendeskUsers.ZUser)JSON.deserialize(userJson, ZendeskUsers.ZUser.class);
+        System.assertEquals(35436, zuser.id);
+        System.assertEquals('Johnny Agent', zuser.name);
+        System.assertEquals('johnny@example.com', zuser.email);
+        System.assertEquals('agent', zuser.role);
+        System.assertNotEquals(null, zuser.organization_id);
+        System.assertNotEquals(null, zuser.phone);
+        System.assertNotEquals(null, zuser.external_id);
+        System.assertNotEquals(null, zuser.alias);
+        System.assertNotEquals(null, zuser.active);
+        System.assertNotEquals(null, zuser.verified);
+        System.assertNotEquals(null, zuser.last_login_at);
+        System.assertNotEquals(null, zuser.user_fields);
+        System.assertNotEquals(null, zuser.created_at);
+        System.assertNotEquals(null, zuser.updated_at);
     }
 }

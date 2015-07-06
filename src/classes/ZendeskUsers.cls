@@ -4,11 +4,20 @@ public with sharing class ZendeskUsers {
 	private final ZendeskAPI zapi;
 
 	public class ZUser {
-		public Integer id {get;set;}
-		public String name {get;set;}
-		public String email {get;set;}
-		public String role {get;set;}
-		public Integer organization_id {get;set;}
+		public Integer id {get; private set;}
+		public String name {get; set;}
+		public String email {get; set;}
+		public String phone {get; set;}
+		public String external_id {get; set;}
+		public String alias {get; set;}
+		public Boolean active {get; private set;}
+		public Boolean verified {get; set;}
+		public String role {get; set;}
+		public DateTime last_login_at {get; private set;}
+		public Integer organization_id {get; set;}
+		public DateTime created_at {get; private set;}
+		public DateTime updated_at {get; private set;}
+		public Map<String, String> user_fields {get; set;}
 	}
 
 	public class PagedUsersWrapper {
@@ -128,6 +137,7 @@ public with sharing class ZendeskUsers {
         HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
         HttpResponse res = h.send(queryReq);
         String resBody = res.getBody();
+		System.debug('getUsers response: ' + resBody);
 
         PagedUsersWrapper wrapper = null;
         if (res.getStatusCode() == 200) {
