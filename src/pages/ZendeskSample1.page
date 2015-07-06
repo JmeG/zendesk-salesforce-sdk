@@ -1,5 +1,5 @@
 <apex:page controller="ZendeskSample1Controller" title="Force.com Toolkit for Zendesk Sample Page">
-
+    <apex:sectionHeader title="Zendesk" subtitle="API Samples"/>
     <apex:form id="credsForm">
         <apex:pageBlock title="API Details" mode="edit">
             <apex:pageBlockSection title="Zendesk Credentials" columns="2">
