@@ -7,6 +7,9 @@ public with sharing class ZendeskGroups {
     public class ZGroup {
 		public Integer id {get; private set;}
 		public String name {get; set;}
+        public Boolean deleted {get; private set;}
+		public DateTime created_at {get; private set;}
+		public DateTime updated_at {get; private set;}
 	}
 
     public class PagedGroupsWrapper {
@@ -35,7 +38,7 @@ public with sharing class ZendeskGroups {
     // non-native API method
     // Return the first Group where the name matches the "name" parameter
     public ZGroup getGroup(String name) {
-		// TODO: should we pre-load all ticket field pages?
+		// TODO: should we fetch all pages?
         if (groupsMap.isEmpty()) {
             loadAll();
         }

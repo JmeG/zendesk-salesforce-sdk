@@ -9,6 +9,7 @@ public with sharing class ZendeskTicketForms {
 		public String name {get; set;}
 		public String raw_name {get; set;}
 		public Boolean active {get; set;}
+		public Boolean default {get; set;}
 	}
 
 	public class PagedTicketFormsWrapper {
@@ -36,7 +37,7 @@ public with sharing class ZendeskTicketForms {
 
 	// non-native API method
 	public ZTicketForm getTicketForm(String name) {
-		// TODO: should we fetch all forms?
+		// TODO: should we fetch all pages?
 		if (ticketFormsMap.isEmpty()) {
 			loadAll();
 		}

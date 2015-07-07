@@ -11,6 +11,8 @@ public with sharing class ZendeskUserFields {
 	    public String title {get; set;}
 	    public String raw_title {get; set;}
 	    public Boolean active {get; set;}
+		public DateTime created_at {get; private set;}
+		public DateTime updated_at {get; private set;}
 	    public ZCustomFieldOption[] custom_field_options {get; set;}
 
 	    // Get the picklist "value" matching the provided name
@@ -85,7 +87,7 @@ public with sharing class ZendeskUserFields {
 
     // non-native API method
     public ZUserField getUserFieldByKey(String key) {
-		// TODO: should we pre-load all ticket field pages?
+		// TODO: should we fetch all pages?
         if (userFieldsMap.isEmpty()) {
             loadAll();
         }
