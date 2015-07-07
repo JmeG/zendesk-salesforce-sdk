@@ -17,7 +17,8 @@ public with sharing class ZendeskAttachments {
 			HttpResponse res = new Http().send(req);
 
 			if (res.getStatusCode() != 201) {
-				throw new ZendeskException(res.getBody());
+				throw new ZendeskException('Error uploading Attachment (' + res.getStatusCode() + ')');
+				//throw new ZendeskException(res.getBody());
 			}
 
 			// Extract the token from the response
@@ -39,7 +40,7 @@ public with sharing class ZendeskAttachments {
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
-			throw new ZendeskException('Error occurred trying to delete attachment ' + attachmentId);
+			throw new ZendeskException('Error deleting Attachment ' + attachmentId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 

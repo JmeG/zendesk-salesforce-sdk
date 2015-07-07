@@ -62,7 +62,7 @@ public with sharing class ZendeskUserFields {
         userFieldsMap = new Map<String, ZUserField>();
     }
 
-    // Retrieves all the custom ticket fields. Uses the field "key" as the map key
+    // Retrieves all pages of user fields. Uses the field "key" as the map key
     public Map<String, ZUserField> getAllFields() {
         if (userFieldsMap.isEmpty()) {
             loadAll();
@@ -75,12 +75,13 @@ public with sharing class ZendeskUserFields {
         HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
 
-        ZUserField userField = null;
-        if (res.getStatusCode() == 200) {
-            // Deserialize the response into a typed class
-            UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(resBody, UserFieldWrapper.class);
-            userField = wrapper.user_field;
+        if (res.getStatusCode() != 200) {
+            throw new ZendeskException('Error getting User Field ' + userFieldId + ' (' + res.getStatusCode() + ')');
         }
+
+        // Deserialize the response into a typed class
+        UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(resBody, UserFieldWrapper.class);
+        ZUserField userField = wrapper.user_field;
 
         return userField;
     }
@@ -131,11 +132,12 @@ public with sharing class ZendeskUserFields {
         HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
 
-        PagedUserFieldsWrapper wrapper = null;
-        if (res.getStatusCode() == 200) {
-            // Deserialize the response into a typed class
-            wrapper = (PagedUserFieldsWrapper)JSON.deserialize(resBody, PagedUserFieldsWrapper.class);
+        if (res.getStatusCode() != 200) {
+            throw new ZendeskException('Error getting User Fields (' + res.getStatusCode() + ')');
         }
+
+        // Deserialize the response into a typed class
+        PagedUserFieldsWrapper wrapper = (PagedUserFieldsWrapper)JSON.deserialize(resBody, PagedUserFieldsWrapper.class);
 
         return wrapper;
     }
@@ -146,7 +148,7 @@ public with sharing class ZendeskUserFields {
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
-			throw new ZendeskException('Error occurred trying to delete user field ' + userFieldId);
+			throw new ZendeskException('Error deleting User Field ' + userFieldId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 }

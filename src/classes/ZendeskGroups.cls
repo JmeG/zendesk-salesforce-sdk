@@ -27,7 +27,8 @@ public with sharing class ZendeskGroups {
         groupsMap = new Map<String, ZGroup>();
     }
 
-    // Retrieves all the groups. Uses the field "name" as the map key
+    // TODO: "name" is not unique on Groups. Perhaps just return a List instead
+	// Retrieves all pages of groups. Uses the field "name" as the map key
 	public Map<String, ZGroup> getAllGroups() {
         if (groupsMap.isEmpty()) {
             loadAll();
@@ -36,7 +37,7 @@ public with sharing class ZendeskGroups {
     }
 
     // non-native API method
-    // Return the first Group where the name matches the "name" parameter
+	// TODO: since "name" is not unique should we even have this method?
     public ZGroup getGroup(String name) {
 		// TODO: should we fetch all pages?
         if (groupsMap.isEmpty()) {
@@ -76,11 +77,12 @@ public with sharing class ZendeskGroups {
         HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
 
-        PagedGroupsWrapper wrapper = null;
-        if (res.getStatusCode() == 200) {
-            // Deserialize the response into a typed class
-            wrapper = (PagedGroupsWrapper)JSON.deserialize(resBody, PagedGroupsWrapper.class);
-        }
+        if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting Groups (' + res.getStatusCode() + ')');
+		}
+
+        // Deserialize the response into a typed class
+        PagedGroupsWrapper wrapper = (PagedGroupsWrapper)JSON.deserialize(resBody, PagedGroupsWrapper.class);
 
         return wrapper;
     }
@@ -91,7 +93,7 @@ public with sharing class ZendeskGroups {
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
-			throw new ZendeskException('Error occurred trying to delete group ' + groupId);
+			throw new ZendeskException('Error deleting Group ' + groupId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 }

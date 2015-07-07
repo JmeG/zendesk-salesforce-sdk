@@ -9,7 +9,7 @@ public with sharing class ZendeskTicketForms {
 		public String name {get; set;}
 		public String raw_name {get; set;}
 		public Boolean active {get; set;}
-		public Boolean default {get; set;}
+		//public Boolean default {get; set;} // can't use since "default" is a keyword
 	}
 
 	public class PagedTicketFormsWrapper {
@@ -27,7 +27,8 @@ public with sharing class ZendeskTicketForms {
 		ticketFormsMap = new Map<String, ZTicketForm>();
 	}
 
-	// Retrieves all the ticket forms. Uses the field "name" as the map key
+	// TODO: "name" is not unique on Ticket Forms. Perhaps just return a List instead
+	// Retrieves all pages of ticket forms. Uses the field "name" as the map key
 	public Map<String, ZTicketForm> getAllTicketForms() {
         if (ticketFormsMap.isEmpty()) {
             loadAll();
@@ -35,7 +36,8 @@ public with sharing class ZendeskTicketForms {
         return ticketFormsMap;
     }
 
-	// non-native API method
+	// non-native API method.
+	// TODO: since "name" is not unique should we even have this method?
 	public ZTicketForm getTicketForm(String name) {
 		// TODO: should we fetch all pages?
 		if (ticketFormsMap.isEmpty()) {
@@ -77,11 +79,12 @@ public with sharing class ZendeskTicketForms {
 		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
 
-		PagedTicketFormsWrapper wrapper = null;
-		if (res.getStatusCode() == 200) {
-			// Deserialize the response into a typed class
-			wrapper = (PagedTicketFormsWrapper)JSON.deserialize(resBody, PagedTicketFormsWrapper.class);
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting Ticket Forms (' + res.getStatusCode() + ')');
 		}
+
+		// Deserialize the response into a typed class
+		PagedTicketFormsWrapper wrapper = (PagedTicketFormsWrapper)JSON.deserialize(resBody, PagedTicketFormsWrapper.class);
 
 		return wrapper;
 	}
@@ -92,7 +95,7 @@ public with sharing class ZendeskTicketForms {
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
-			throw new ZendeskException('Error occurred trying to delete ticket form ' + ticketFormId);
+			throw new ZendeskException('Error deleting Ticket Form ' + ticketFormId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 }

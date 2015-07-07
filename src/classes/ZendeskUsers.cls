@@ -57,9 +57,8 @@ public with sharing class ZendeskUsers {
 		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 
-		// Check for expected status code
 		if (res.getStatusCode() != 201) {
-			throw new ZendeskException('Error occurred trying to create user.');
+			throw new ZendeskException('Error creating User (' + res.getStatusCode() + ')');
 		}
 
 		// Deserialize the response into a typed class
@@ -80,7 +79,6 @@ public with sharing class ZendeskUsers {
 		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
 
-		// Check for expected status code
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
@@ -98,17 +96,19 @@ public with sharing class ZendeskUsers {
 		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
 
-		ZUser user = null;
-		if (res.getStatusCode() == 200) {
-			// Deserialize the response into a typed class
-			PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
+		}
 
-			if (wrapper != null && wrapper.users != null) {
-				for (ZUser obj : wrapper.users) {
-					if (obj.email != null && obj.email.equalsIgnoreCase(email)) {
-						user = obj;
-						break;
-					}
+		// Deserialize the response into a typed class
+		PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
+
+		ZUser user = null;
+		if (wrapper != null && wrapper.users != null) {
+			for (ZUser obj : wrapper.users) {
+				if (obj.email != null && obj.email.equalsIgnoreCase(email)) {
+					user = obj;
+					break;
 				}
 			}
 		}
@@ -126,11 +126,12 @@ public with sharing class ZendeskUsers {
         HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
 
-        PagedUsersWrapper wrapper = null;
-        if (res.getStatusCode() == 200) {
-			// Deserialize the response into a typed class
-            wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
-        }
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting users (' + res.getStatusCode() + ')');
+		}
+
+		// Deserialize the response into a typed class
+        PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
 
         return wrapper;
     }

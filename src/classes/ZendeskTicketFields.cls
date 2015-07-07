@@ -61,7 +61,8 @@ public with sharing class ZendeskTicketFields {
 		ticketFieldsMap = new Map<String, ZTicketField>();
 	}
 
-	// Retrieves all the custom ticket fields. Uses the field "title" as the map key
+	// TODO: "title" is not unique on Ticket Forms. Perhaps just return a List instead
+	// Retrieves all pages of ticket fields. Uses the field "title" as the map key
 	public Map<String, ZTicketField> getAllFields() {
         if (ticketFieldsMap.isEmpty()) {
             loadAll();
@@ -85,7 +86,7 @@ public with sharing class ZendeskTicketFields {
 	}
 
 	// non-native API method
-    // Return the first Ticket Field where the name matches the "name" parameter
+	// TODO: since "title" is not unique should we even have this method?
 	public ZTicketField getTicketField(String name) {
 		// TODO: should we fetch all pages?
 		if (ticketFieldsMap.isEmpty()) {
@@ -129,11 +130,12 @@ public with sharing class ZendeskTicketFields {
 		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
 
-		PagedTicketFieldsWrapper wrapper = null;
-		if (res.getStatusCode() == 200) {
-			// Deserialize the response into a typed class
-			wrapper = (PagedTicketFieldsWrapper)JSON.deserialize(resBody, PagedTicketFieldsWrapper.class);
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting Ticket Fields (' + res.getStatusCode() + ')');
 		}
+
+		// Deserialize the response into a typed class
+		PagedTicketFieldsWrapper wrapper = (PagedTicketFieldsWrapper)JSON.deserialize(resBody, PagedTicketFieldsWrapper.class);
 
 		return wrapper;
 	}
@@ -144,7 +146,7 @@ public with sharing class ZendeskTicketFields {
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
-			throw new ZendeskException('Error occurred trying to delete ticket field ' + ticketFieldId);
+			throw new ZendeskException('Error deleting Ticket Field ' + ticketFieldId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 }

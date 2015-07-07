@@ -89,12 +89,13 @@ public with sharing class ZendeskTickets {
 		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 
-		ZTicket zticket = null;
-		if (res.getStatusCode() == 200) {
-			// Deserialize the response into a typed class
-			TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
-			zticket = resultWrapper.ticket;
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting Ticket ' + ticketId + ' (' + res.getStatusCode() + ')');
 		}
+
+		// Deserialize the response into a typed class
+		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
+		ZTicket zticket = resultWrapper.ticket;
 
 		return zticket;
 	}
@@ -149,13 +150,13 @@ public with sharing class ZendeskTickets {
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 201) {
-			throw new ZendeskException('Error occurred trying to create ticket');
+			throw new ZendeskException('Error creating Ticket (' + res.getStatusCode() + ')');
 		}
 
 		// Deserialize the response into a typed class
-		// Find the ID of the new Ticket
 		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
 
+		// Return the ID of the new Ticket
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
 	}
 
@@ -225,11 +226,14 @@ public with sharing class ZendeskTickets {
         HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
 
-        PagedTicketsWrapper wrapper = null;
-        if (res.getStatusCode() == 200) {
-			// Deserialize the response into a typed class
-            wrapper = (PagedTicketsWrapper)JSON.deserialize(resBody, PagedTicketsWrapper.class);
-        }
+        if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting Tickets (' + res.getStatusCode() + ')');
+			// { "error": { "title": "Forbidden", "message": "You do not have access to this page. Please contact the account owner of this help desk for further help." } }
+			//throw new ZendeskException('Error getting Tickets (' + res.getStatusCode() + ') ' + res.getBody());
+		}
+
+		// Deserialize the response into a typed class
+        PagedTicketsWrapper wrapper = (PagedTicketsWrapper)JSON.deserialize(resBody, PagedTicketsWrapper.class);
 
         return wrapper;
     }
@@ -241,7 +245,7 @@ public with sharing class ZendeskTickets {
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
-			throw new ZendeskException('Error occurred trying to delete ticket ' + ticketId);
+			throw new ZendeskException('Error deleting Ticket ' + ticketId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 
