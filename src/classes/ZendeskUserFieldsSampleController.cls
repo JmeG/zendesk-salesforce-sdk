@@ -32,9 +32,9 @@ public with sharing class ZendeskUserFieldsSampleController {
 			ZendeskUserFields zfields = new ZendeskUserFields(zapi);
 
 			fieldsMap = new Map<String, ZendeskUserFields.ZUserField>();
-			ZendeskUserFields.ZUserField field = zfields.getUserField(searchText);
+			ZendeskUserFields.ZUserField field = zfields.getUserFieldByKey(searchText);
 			if (field != null) {
-				fieldsMap.put(field.raw_title, field);
+				fieldsMap.put(field.key, field);
 			}
 			else {
 				throw new ZendeskException('Field "' + searchText + '" not found');

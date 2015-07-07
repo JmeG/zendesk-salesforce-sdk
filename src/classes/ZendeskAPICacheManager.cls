@@ -1,10 +1,5 @@
 public with sharing class ZendeskAPICacheManager {
 
-	//public Enum ItemType {
-	//    TicketField,
-	//    TicketForm
-	//}
-
 	public static final String TICKET_FIELD = 'TicketField';
 	public static final String TICKET_FORM = 'TicketForm';
 

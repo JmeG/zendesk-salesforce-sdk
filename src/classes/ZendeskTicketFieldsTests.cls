@@ -74,7 +74,7 @@ private class ZendeskTicketFieldsTests {
 
     static testMethod void testZTicketField() {
         ZendeskTicketFields.ZTicketField zticketfield = new ZendeskTicketFields.ZTicketField();
-        zticketfield.id = 0;
+        //zticketfield.id = 0;
         zticketfield.type = '';
         zticketfield.title = '';
         zticketfield.raw_title = '';
@@ -82,7 +82,7 @@ private class ZendeskTicketFieldsTests {
         zticketfield.custom_field_options = null;
 
         ZendeskTicketFields.ZCustomFieldOption zcustomfieldoption = new ZendeskTicketFields.ZCustomFieldOption();
-        zcustomfieldoption.id = 0;
+        //zcustomfieldoption.id = 0;
         zcustomfieldoption.name = '';
         zcustomfieldoption.raw_name = '';
         zcustomfieldoption.value = '';

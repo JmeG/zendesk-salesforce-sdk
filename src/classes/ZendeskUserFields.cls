@@ -1,16 +1,17 @@
-// This class provides common functionality to call the Zendesk API to interact with User Field records
+// This class provides functionality to call the Zendesk API to interact with User Field records
 public with sharing class ZendeskUserFields {
 
     private final ZendeskAPI zapi;
     private Map<String, ZUserField> userFieldsMap {get; private set; }
 
     public class ZUserField {
-	    public Integer id {get;set;}
-	    public String type {get;set;}
-	    public String title {get;set;}
-	    public String raw_title {get;set;}
-	    public Boolean active {get;set;}
-	    public ZCustomFieldOption[] custom_field_options {get;set;}
+	    public Integer id {get; private set;}
+        public String key {get; set;}
+	    public String type {get; set;}
+	    public String title {get; set;}
+	    public String raw_title {get; set;}
+	    public Boolean active {get; set;}
+	    public ZCustomFieldOption[] custom_field_options {get; set;}
 
 	    // Get the picklist "value" matching the provided name
 	    public String getOptionValue(String optname) {
@@ -34,17 +35,17 @@ public with sharing class ZendeskUserFields {
 	}
 
     public class ZCustomFieldOption {
-		public Integer id {get;set;}
-		public String name {get;set;}
-		public String raw_name {get;set;}
-		public String value {get;set;}
+		public Integer id {get; set;}
+		public String name {get; set;}
+		public String raw_name {get; set;}
+		public String value {get; set;}
 	}
 
     public class PagedUserFieldsWrapper {
-        public ZUserField[] user_fields {get;set;}
+        public ZUserField[] user_fields {get; set;}
 
         // "https://test.zendesk.com/api/v2/user_fields.json?page=2"
-        public String next_page {get;set;}
+        public String next_page {get; set;}
         public Integer nextPageNumber {
             public get { return (String.isEmpty(next_page) ? null : Integer.valueOf(next_page.substringAfterLast('page=').substringBefore('&'))); }
             private set;
@@ -52,7 +53,7 @@ public with sharing class ZendeskUserFields {
     }
 
     private class UserFieldWrapper {
-        public ZUserField user_field {get;set;}
+        public ZUserField user_field {get; set;}
     }
 
     public ZendeskUserFields(ZendeskAPI zapi) {
@@ -60,7 +61,7 @@ public with sharing class ZendeskUserFields {
         userFieldsMap = new Map<String, ZUserField>();
     }
 
-    // Retrieves all the custom ticket fields. Uses the field "raw_title" as the map key
+    // Retrieves all the custom ticket fields. Uses the field "key" as the map key
     public Map<String, ZUserField> getAllFields() {
         if (userFieldsMap.isEmpty()) {
             loadAll();
@@ -69,15 +70,13 @@ public with sharing class ZendeskUserFields {
     }
 
     public ZUserField getUserField(Integer userFieldId) {
-        Http h = new Http();
         HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + String.valueOf(userFieldId) + '.json');
-        HttpResponse res = h.send(queryReq);
-        System.debug('getUserField res: ' + res);
+        HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
-        System.debug('resBody: ' + resBody);
 
         ZUserField userField = null;
         if (res.getStatusCode() == 200) {
+            // Deserialize the response into a typed class
             UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(resBody, UserFieldWrapper.class);
             userField = wrapper.user_field;
         }
@@ -85,15 +84,16 @@ public with sharing class ZendeskUserFields {
         return userField;
     }
 
-    public ZUserField getUserField(String name) {
+    // non-native API method
+    public ZUserField getUserFieldByKey(String key) {
 		// TODO: should we pre-load all ticket field pages?
         if (userFieldsMap.isEmpty()) {
             loadAll();
         }
 
         ZUserField obj = null;
-        if (userFieldsMap.containsKey(name)) {
-            obj = userFieldsMap.get(name);
+        if (userFieldsMap.containsKey(key)) {
+            obj = userFieldsMap.get(key);
         }
 
         return obj;
@@ -105,36 +105,34 @@ public with sharing class ZendeskUserFields {
     // returned under the user_fields attribute on the User resource.
     private void loadAll() {
         PagedUserFieldsWrapper wrapper = getUserFields();
-        System.debug('**wrapper=' + wrapper);
         if (wrapper != null && wrapper.user_fields != null) {
             for (ZUserField obj : wrapper.user_fields) {
-                userFieldsMap.put(obj.raw_title, obj);
+                userFieldsMap.put(obj.key, obj);
             }
 
             while (!String.isEmpty(wrapper.next_page)) {
-            	System.debug('**wrapper.next_page=' + wrapper.next_page);
                 wrapper = getUserFields(wrapper.nextPageNumber);
                 for (ZUserField obj : wrapper.user_fields) {
-                    userFieldsMap.put(obj.raw_title, obj);
+                    userFieldsMap.put(obj.key, obj);
                 }
             }
         }
     }
 
+    // Get the first page of User Fields
     public PagedUserFieldsWrapper getUserFields() {
         return getUserFields(null);
     }
 
+    // Get a specific page of User Fields
     public PagedUserFieldsWrapper getUserFields(Integer page) {
-        Http h = new Http();
         HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
-        HttpResponse res = h.send(queryReq);
-        System.debug('getUserFields res: ' + res);
+        HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
-        System.debug('resBody: ' + resBody);
 
         PagedUserFieldsWrapper wrapper = null;
         if (res.getStatusCode() == 200) {
+            // Deserialize the response into a typed class
             wrapper = (PagedUserFieldsWrapper)JSON.deserialize(resBody, PagedUserFieldsWrapper.class);
         }
 

@@ -1,4 +1,4 @@
-// This class provides common functionality to call the Zendesk API to interact with Ticket records
+// This class provides functionality to call the Zendesk API to interact with Ticket records
 public with sharing class ZendeskTickets {
 
 	private final ZendeskAPI zapi;
@@ -69,7 +69,7 @@ public with sharing class ZendeskTickets {
 		public ZTicket[] tickets {get;set;}
 
 		// "https://test.zendesk.com/api/v2/tickets.json?page=2"
-		public String next_page {get;set;}
+		public String next_page {get; set;}
 		public Integer nextPageNumber {
 			public get { return (String.isEmpty(next_page) ? null : Integer.valueOf(next_page.substringAfterLast('page=').substringBefore('&'))); }
 			private set;
@@ -78,7 +78,7 @@ public with sharing class ZendeskTickets {
 
 	// Used to deserialize the result of a individual Ticket create/read/update API call
 	private class TicketWrapper {
-		public ZTicket ticket {get;set;}
+		public ZTicket ticket {get; set;}
 	}
 
 	public ZendeskTickets(ZendeskAPI zapi) {
@@ -86,14 +86,13 @@ public with sharing class ZendeskTickets {
 	}
 
 	public ZTicket getTicket(Integer ticketId) {
-		Http h = new Http();
 		HttpRequest req = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
-
-		HttpResponse res = h.send(req);
+		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 
 		ZTicket zticket = null;
 		if (res.getStatusCode() == 200) {
+			// Deserialize the response into a typed class
 			TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
 			zticket = resultWrapper.ticket;
 		}
@@ -141,20 +140,21 @@ public with sharing class ZendeskTickets {
 	}
 
 	public Integer createTicket(ZTicket zticket) {
-		Http h = new Http();
-		HttpRequest req = zapi.setupRequest('POST', ZendeskAPI.BASE_PATH + '/tickets.json');
-
 		TicketWrapper newTicketWrapper = new TicketWrapper();
 		newTicketWrapper.ticket = zticket;
+
+		HttpRequest req = zapi.setupRequest('POST', ZendeskAPI.BASE_PATH + '/tickets.json');
 		String reqBody = JSON.serialize(newTicketWrapper);
 		req.setBody(reqBody);
-		HttpResponse res = h.send(req);
+		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 201) {
 			throw new ZendeskException('Error occurred trying to create ticket');
 		}
 
+		// Deserialize the response into a typed class
+		// Find the ID of the new Ticket
 		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
 
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
@@ -162,10 +162,8 @@ public with sharing class ZendeskTickets {
 
 	// NOTE: You must use Admin credentials to use this method
 	public void deleteTicket(Integer ticketId) {
-		Http h = new Http();
 		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
-
-		HttpResponse res = h.send(req);
+		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
@@ -233,14 +231,15 @@ public with sharing class ZendeskTickets {
         return getTickets(page, '/users/tickets/recent.json');
     }
 
+	// Get a specific page of Tickets
 	private PagedTicketsWrapper getTickets(Integer page, String apiPath) {
-        Http h = new Http();
         HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/tickets.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
-        HttpResponse res = h.send(queryReq);
+        HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
 
         PagedTicketsWrapper wrapper = null;
         if (res.getStatusCode() == 200) {
+			// Deserialize the response into a typed class
             wrapper = (PagedTicketsWrapper)JSON.deserialize(resBody, PagedTicketsWrapper.class);
         }
 
@@ -249,14 +248,13 @@ public with sharing class ZendeskTickets {
 
 /*
 	public void addTicketComment(Integer ticketId, String commentText) {
-		Http h = new Http();
 		HttpRequest req = zapi.setupRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(zticket.id) + '.json');
 
 		// TODO: encode the commentText
 		String ticketJson = '{ "ticket": { "id": ' + String.valueOf(ticketId) + ', "comment": { "body": "' + commentText + '" } } }';
 		req.setBody(ticketJson);
 
-		HttpResponse res = h.send(req);
+		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
@@ -271,7 +269,6 @@ public with sharing class ZendeskTickets {
 	// those fields to NULL instead of ignoring them.
 	// We only want the JSON to include fields we are trying to update
 	public void updateTicket(ZTicket zticket) {
-		Http h = new Http();
 		HttpRequest req = zapi.setupRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(zticket.id) + '.json');
 
 		TicketWrapper ticketWrapper = new TicketWrapper();
@@ -279,7 +276,7 @@ public with sharing class ZendeskTickets {
 		String reqBody = JSON.serialize(ticketWrapper);
 		req.setBody('{ "ticket": { "id": 24, "comment": { "body": "new comment" } } } ');
 
-		HttpResponse res = h.send(req);
+		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
@@ -290,8 +287,6 @@ public with sharing class ZendeskTickets {
 
 	/*
 	public void updateTickets(Set<String> ticketIds, String commentText) {
-		Http h = new Http();
-
 		// Accepts a comma-separated list of up to 100 ticket ids.
 		if (ticketIds.length() > 100) { throw new ZendeskException('More than 100 ticketIds is not supported'); }
 		String endpoint = ZendeskAPI.BASE_PATH + '/tickets/update_many.json?ids=';
@@ -309,7 +304,7 @@ public with sharing class ZendeskTickets {
 		String reqBody = JSON.serialize(zt);
 		reqBody = '{"ticket":' + reqBody + '}';
 		req.setBody(reqBody);
-		HttpResponse res = h.send(req);
+		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {
 			//error handling logic

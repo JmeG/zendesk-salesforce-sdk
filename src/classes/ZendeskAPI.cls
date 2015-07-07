@@ -1,4 +1,4 @@
-// This class provides common functionality for creating requests to interact with the Zendesk API
+// This class provides functionality for creating requests to interact with the Zendesk API
 public with sharing class ZendeskAPI {
 
 	public final static String BASE_PATH =  '/api/v2';
@@ -37,7 +37,6 @@ public with sharing class ZendeskAPI {
 		if (reqMethod == 'POST' || reqMethod == 'PUT') {
 			req.setHeader('Content-Type', 'application/json');
 		}
-		System.debug('**req=' + req);
 
 		return req;
 	}

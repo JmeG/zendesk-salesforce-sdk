@@ -1,12 +1,12 @@
-// This class provides common functionality to call the Zendesk API to interact with Group records
+// This class provides functionality to call the Zendesk API to interact with Group records
 public with sharing class ZendeskGroups {
 
     private final ZendeskAPI zapi;
     private Map<String, ZGroup> groupsMap;
 
     public class ZGroup {
-		public Integer id {get;set;}
-		public String name {get;set;}
+		public Integer id {get; private set;}
+		public String name {get; set;}
 	}
 
     public class PagedGroupsWrapper {
@@ -33,6 +33,8 @@ public with sharing class ZendeskGroups {
         return groupsMap;
     }
 
+    // non-native API method
+    // Return the first Group where the name matches the "name" parameter
     public ZGroup getGroup(String name) {
 		// TODO: should we pre-load all ticket field pages?
         if (groupsMap.isEmpty()) {
@@ -49,14 +51,12 @@ public with sharing class ZendeskGroups {
 
     private void loadAll() {
         PagedGroupsWrapper wrapper = getGroups();
-        System.debug('**wrapper=' + wrapper);
         if (wrapper != null && wrapper.groups != null) {
             for (ZGroup obj : wrapper.groups) {
                 groupsMap.put(obj.name, obj);
             }
 
             while (!String.isEmpty(wrapper.next_page)) {
-            	System.debug('**wrapper.next_page=' + wrapper.next_page);
                 wrapper = getGroups(wrapper.nextPageNumber);
                 for (ZGroup obj : wrapper.groups) {
                     groupsMap.put(obj.name, obj);
@@ -70,15 +70,13 @@ public with sharing class ZendeskGroups {
     }
 
     public PagedGroupsWrapper getGroups(Integer page) {
-        Http h = new Http();
         HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
-        HttpResponse res = h.send(queryReq);
-        System.debug('getGroups res: ' + res);
+        HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
-        System.debug('resBody: ' + resBody);
 
         PagedGroupsWrapper wrapper = null;
         if (res.getStatusCode() == 200) {
+            // Deserialize the response into a typed class
             wrapper = (PagedGroupsWrapper)JSON.deserialize(resBody, PagedGroupsWrapper.class);
         }
 

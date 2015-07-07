@@ -1,4 +1,4 @@
-// This class provides common functionality to call the Zendesk API to interact with User records
+// This class provides functionality to call the Zendesk API to interact with User records
 public with sharing class ZendeskUsers {
 
 	private final ZendeskAPI zapi;
@@ -49,26 +49,22 @@ public with sharing class ZendeskUsers {
 	}
 
 	public Integer createUser(ZUser zuser) {
-		Http h = new Http();
-		HttpRequest req = zapi.setupRequest('POST', ZendeskAPI.BASE_PATH + '/users.json');
-
 		UserWrapper wrapper = new UserWrapper();
 		wrapper.user = zuser;
+
+		HttpRequest req = zapi.setupRequest('POST', ZendeskAPI.BASE_PATH + '/users.json');
 		String reqBody = JSON.serialize(wrapper);
-		System.debug('**** json string = ' + reqBody);
 		req.setBody(reqBody);
-
-		HttpResponse res = h.send(req);
-		System.debug('createUser res: ' + res);
+		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
-		System.debug('createUser res body: ' + resBody);
 
+		// Check for expected status code
 		if (res.getStatusCode() != 201) {
 			throw new ZendeskException('Error occurred trying to create user.');
 		}
 
+		// Deserialize the response into a typed class
 		UserWrapper resultWrapper = (UserWrapper)JSON.deserialize(resBody, UserWrapper.class);
-		System.debug('zuserResult=' + resultWrapper);
 
 		return ((resultWrapper==null || resultWrapper.user == null) ? null : resultWrapper.user.id);
 	}
@@ -80,38 +76,32 @@ public with sharing class ZendeskUsers {
 
 	// This can be a partial or complete Name or Email address
 	public PagedUsersWrapper findUsersByNameOrEmail(String nameOrEmail) {
-		Http h = new Http();
 		String encodedNameOrEmail = EncodingUtil.urlEncode(nameOrEmail, 'UTF-8');
 		HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedNameOrEmail);
-
-		HttpResponse res = h.send(queryReq);
-		System.debug('findUsersByNameOrEmail res: ' + res);
+		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
-		System.debug('findUsersByNameOrEmail res body: ' + resBody);
 
-		PagedUsersWrapper wrapper = null;
-		if (res.getStatusCode() == 200) {
-			wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
-		} else {
+		// Check for expected status code
+		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
+
+		// Deserialize the response into a typed class
+		PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
 
 		return wrapper;
 	}
 
 	public ZUser findUserByEmail(String email) {
-		Http h = new Http();
 		// Make sure to set the email to lowercase because that's the way Zendesk will return it
 		String encodedEmail = EncodingUtil.urlEncode(email.toLowerCase(), 'UTF-8');
 		HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedEmail);
-
-		HttpResponse res = h.send(queryReq);
-		System.debug('findUserByEmail res: ' + res);
+		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
-		System.debug('findUserByEmail res body: ' + resBody);
 
 		ZUser user = null;
 		if (res.getStatusCode() == 200) {
+			// Deserialize the response into a typed class
 			PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
 
 			if (wrapper != null && wrapper.users != null) {
@@ -133,14 +123,13 @@ public with sharing class ZendeskUsers {
     }
 
     public PagedUsersWrapper getUsers(Integer page) {
-        Http h = new Http();
         HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
-        HttpResponse res = h.send(queryReq);
+        HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
-		System.debug('getUsers response: ' + resBody);
 
         PagedUsersWrapper wrapper = null;
         if (res.getStatusCode() == 200) {
+			// Deserialize the response into a typed class
             wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
         }
 

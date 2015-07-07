@@ -34,7 +34,7 @@ public with sharing class ZendeskTicketFieldsSampleController {
 			fieldsMap = new Map<String, ZendeskTicketFields.ZTicketField>();
 			ZendeskTicketFields.ZTicketField field = zfields.getTicketField(searchText);
 			if (field != null) {
-				fieldsMap.put(field.raw_title, field);
+				fieldsMap.put(field.title, field);
 			}
 			else {
 				throw new ZendeskException('Field "' + searchText + '" not found');

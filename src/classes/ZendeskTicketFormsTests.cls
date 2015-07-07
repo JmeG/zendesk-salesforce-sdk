@@ -50,7 +50,7 @@ private class ZendeskTicketFormsTests {
 
     static testMethod void testZTicketForm() {
         ZendeskTicketForms.ZTicketForm zticketform = new ZendeskTicketForms.ZTicketForm();
-        zticketform.id = 0;
+        //zticketform.id = 0;
         zticketform.name = '';
         zticketform.raw_name = '';
         zticketform.active = true;

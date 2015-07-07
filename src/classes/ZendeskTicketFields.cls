@@ -1,16 +1,16 @@
-// This class provides common functionality to call the Zendesk API to interact with Ticket Field records
+// This class provides functionality to call the Zendesk API to interact with Ticket Field records
 public with sharing class ZendeskTicketFields {
 
 	private final ZendeskAPI zapi;
 	private Map<String, ZTicketField> ticketFieldsMap {get; private set; }
 
 	public class ZTicketField {
-		public Integer id {get;set;}
-		public String type {get;set;}
-		public String title {get;set;}
-		public String raw_title {get;set;}
-		public Boolean active {get;set;}
-		public ZCustomFieldOption[] custom_field_options {get;set;}
+		public Integer id {get; private set;}
+		public String type {get; set;}
+		public String title {get; set;}
+		public String raw_title {get; set;}
+		public Boolean active {get; set;}
+		public ZCustomFieldOption[] custom_field_options {get; set;}
 
 		// Get the picklist "value" matching the provided name
 		public String getOptionValue(String optname) {
@@ -34,14 +34,14 @@ public with sharing class ZendeskTicketFields {
 	}
 
 	public class ZCustomFieldOption {
-		public Integer id {get;set;}
-		public String name {get;set;}
-		public String raw_name {get;set;}
-		public String value {get;set;}
+		public Integer id {get; private set;}
+		public String name {get; set;}
+		public String raw_name {get; set;}
+		public String value {get; set;}
 	}
 
 	public class PagedTicketFieldsWrapper {
-		public ZTicketField[] ticket_fields {get;set;}
+		public ZTicketField[] ticket_fields {get; set;}
 
 		// "https://test.zendesk.com/api/v2/ticket_fields.json?page=2"
 		public String next_page {get;set;}
@@ -60,7 +60,7 @@ public with sharing class ZendeskTicketFields {
 		ticketFieldsMap = new Map<String, ZTicketField>();
 	}
 
-	// Retrieves all the custom ticket fields. Uses the field "raw_title" as the map key
+	// Retrieves all the custom ticket fields. Uses the field "title" as the map key
 	public Map<String, ZTicketField> getAllFields() {
         if (ticketFieldsMap.isEmpty()) {
             loadAll();
@@ -69,15 +69,13 @@ public with sharing class ZendeskTicketFields {
     }
 
 	public ZTicketField getTicketField(Integer ticketFieldId) {
-		Http h = new Http();
 		HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + String.valueOf(ticketFieldId) + '.json');
-		HttpResponse res = h.send(queryReq);
-		System.debug('getTicketField res: ' + res);
+		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
-		System.debug('resBody: ' + resBody);
 
 		ZTicketField ticketField = null;
 		if (res.getStatusCode() == 200) {
+			// Deserialize the response into a typed class
 			TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
 			ticketField = wrapper.ticket_field;
 		}
@@ -85,6 +83,8 @@ public with sharing class ZendeskTicketFields {
 		return ticketField;
 	}
 
+	// non-native API method
+    // Return the first Ticket Field where the name matches the "name" parameter
 	public ZTicketField getTicketField(String name) {
 		// TODO: should we pre-load all ticket field pages?
 		if (ticketFieldsMap.isEmpty()) {
@@ -99,38 +99,38 @@ public with sharing class ZendeskTicketFields {
 		return obj;
 	}
 
+	// TODO: "title" isn't guaranteed to be unique across custom fields so
+	// this doesn't make a good map key
 	private void loadAll() {
 		PagedTicketFieldsWrapper wrapper = getTicketFields();
-		System.debug('**wrapper=' + wrapper);
 		if (wrapper != null && wrapper.ticket_fields != null) {
 			for (ZTicketField obj : wrapper.ticket_fields) {
-				ticketFieldsMap.put(obj.raw_title, obj);
+				ticketFieldsMap.put(obj.title, obj);
 			}
 
 			while (!String.isEmpty(wrapper.next_page)) {
-				System.debug('**wrapper.next_page=' + wrapper.next_page);
 				wrapper = getTicketFields(wrapper.nextPageNumber);
 				for (ZTicketField obj : wrapper.ticket_fields) {
-					ticketFieldsMap.put(obj.raw_title, obj);
+					ticketFieldsMap.put(obj.title, obj);
 				}
 			}
 		}
 	}
 
+	// Get the first page of Ticket Fields
 	public PagedTicketFieldsWrapper getTicketFields() {
 		return getTicketFields(null);
 	}
 
+	// Get a specific page of User Fields
 	public PagedTicketFieldsWrapper getTicketFields(Integer page) {
-		Http h = new Http();
 		HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
-		HttpResponse res = h.send(queryReq);
-		System.debug('getTicketFields res: ' + res);
+		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
-		System.debug('resBody: ' + resBody);
 
 		PagedTicketFieldsWrapper wrapper = null;
 		if (res.getStatusCode() == 200) {
+			// Deserialize the response into a typed class
 			wrapper = (PagedTicketFieldsWrapper)JSON.deserialize(resBody, PagedTicketFieldsWrapper.class);
 		}
 

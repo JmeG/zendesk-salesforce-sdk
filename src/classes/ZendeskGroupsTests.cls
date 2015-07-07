@@ -51,7 +51,6 @@ private class ZendeskGroupsTests {
 
     static testMethod void testZGroup() {
         ZendeskGroups.ZGroup zgroup = new ZendeskGroups.ZGroup();
-        zgroup.id = 1;
         zgroup.name = '';
 
         System.assert(true);
