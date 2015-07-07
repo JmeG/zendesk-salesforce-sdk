@@ -41,4 +41,9 @@ public with sharing class ZendeskAPI {
 		return req;
 	}
 
+	// pageURL looks like "https://test.zendesk.com/api/v2/tickets.json?page=2"
+	// simply return Integer 2
+	public static Integer getPageNumber(String pageUrl) {
+		return (String.isEmpty(pageUrl) ? null : Integer.valueOf(pageUrl.substringAfterLast('page=').substringBefore('&')));
+	}
 }

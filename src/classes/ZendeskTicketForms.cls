@@ -14,12 +14,11 @@ public with sharing class ZendeskTicketForms {
 	public class PagedTicketFormsWrapper {
 		public ZTicketForm[] ticket_forms {get;set;}
 
-		// "https://test.zendesk.com/api/v2/ticket_forms.json?page=2"
+		// Paging support
 		public String next_page {get; set;}
-		public Integer nextPageNumber {
-			public get { return (String.isEmpty(next_page) ? null : Integer.valueOf(next_page.substringAfterLast('page=').substringBefore('&'))); }
-			private set;
-		}
+		public Integer nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
+		public String previous_page {get; set;}
+		public Integer previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	public ZendeskTicketForms(ZendeskAPI zapi) {

@@ -44,12 +44,11 @@ public with sharing class ZendeskUserFields {
     public class PagedUserFieldsWrapper {
         public ZUserField[] user_fields {get; set;}
 
-        // "https://test.zendesk.com/api/v2/user_fields.json?page=2"
-        public String next_page {get; set;}
-        public Integer nextPageNumber {
-            public get { return (String.isEmpty(next_page) ? null : Integer.valueOf(next_page.substringAfterLast('page=').substringBefore('&'))); }
-            private set;
-        }
+        // Paging support
+		public String next_page {get; set;}
+		public Integer nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
+		public String previous_page {get; set;}
+		public Integer previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
     }
 
     private class UserFieldWrapper {

@@ -68,12 +68,11 @@ public with sharing class ZendeskTickets {
 	public class PagedTicketsWrapper {
 		public ZTicket[] tickets {get;set;}
 
-		// "https://test.zendesk.com/api/v2/tickets.json?page=2"
+		// Paging support
 		public String next_page {get; set;}
-		public Integer nextPageNumber {
-			public get { return (String.isEmpty(next_page) ? null : Integer.valueOf(next_page.substringAfterLast('page=').substringBefore('&'))); }
-			private set;
-		}
+		public Integer nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
+		public String previous_page {get; set;}
+		public Integer previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	// Used to deserialize the result of a individual Ticket create/read/update API call
