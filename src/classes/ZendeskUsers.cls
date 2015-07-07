@@ -111,7 +111,6 @@ public with sharing class ZendeskUsers {
 					}
 				}
 			}
-			// TODO: what if there are multiple pages?
 		}
 
 		return user;
@@ -121,6 +120,7 @@ public with sharing class ZendeskUsers {
         return getUsers(null);
     }
 
+	// TODO: does paging exist for Users endpoing?
     public PagedUsersWrapper getUsers(Integer page) {
         HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
         HttpResponse res = new Http().send(queryReq);
