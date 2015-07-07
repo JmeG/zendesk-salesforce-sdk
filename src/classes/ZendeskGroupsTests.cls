@@ -2,6 +2,15 @@
 @isTest
 private class ZendeskGroupsTests {
 
+    public class MockOKResponse implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            HttpResponse res = new HttpResponse();
+            res.setStatusCode(200);
+            res.setStatus('OK');
+            return res;
+        }
+    }
+
     public class MockGroupsResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
             HttpResponse res = new HttpResponse();
@@ -23,6 +32,19 @@ private class ZendeskGroupsTests {
         Test.stopTest();
 
         System.assertNotEquals(null, testObj);
+    }
+
+    static testMethod void testDeleteGroup() {
+        Test.setMock(HttpCalloutMock.class, new MockOKResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskGroups zgroups = new ZendeskGroups(zapi);
+        zgroups.deleteGroup(123);
+        Test.stopTest();
+
+        System.assert(true);
     }
 
     static testMethod void testGetAllGroups() {

@@ -136,4 +136,14 @@ public with sharing class ZendeskTicketFields {
 
 		return wrapper;
 	}
+
+	public void deleteTicketField(Integer ticketFieldId) {
+		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_fields/' + String.valueOf(ticketFieldId) + '.json');
+		HttpResponse res = new Http().send(req);
+		String resBody = res.getBody();
+
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error occurred trying to delete ticket field ' + ticketFieldId);
+		}
+	}
 }

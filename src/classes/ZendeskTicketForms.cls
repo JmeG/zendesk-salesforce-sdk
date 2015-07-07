@@ -85,4 +85,14 @@ public with sharing class ZendeskTicketForms {
 
 		return wrapper;
 	}
+
+	public void deleteTicketForm(Integer ticketFormId) {
+		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_forms/' + String.valueOf(ticketFormId) + '.json');
+		HttpResponse res = new Http().send(req);
+		String resBody = res.getBody();
+
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error occurred trying to delete ticket form ' + ticketFormId);
+		}
+	}
 }

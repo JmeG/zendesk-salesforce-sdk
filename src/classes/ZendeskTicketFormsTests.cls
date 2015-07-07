@@ -2,6 +2,15 @@
 @isTest
 private class ZendeskTicketFormsTests {
 
+    public class MockOKResponse implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            HttpResponse res = new HttpResponse();
+            res.setStatusCode(200);
+            res.setStatus('OK');
+            return res;
+        }
+    }
+
     public class MockTicketFormsResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
             HttpResponse res = new HttpResponse();
@@ -20,10 +29,22 @@ private class ZendeskTicketFormsTests {
         Test.startTest();
         ZendeskTicketForms zticketforms = new ZendeskTicketForms(zapi);
 		ZendeskTicketForms.ZTicketForm testObj = zticketforms.getTicketForm('Test');
-
         Test.stopTest();
 
 		System.assertNotEquals(null, testObj);
+	}
+
+    static testmethod void testDeleteTicketForm() {
+        Test.setMock(HttpCalloutMock.class, new MockOKResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskTicketForms zticketforms = new ZendeskTicketForms(zapi);
+		zticketforms.deleteTicketForm(123);
+        Test.stopTest();
+
+		System.assert(true);
 	}
 
     static testMethod void testGetNextPage() {

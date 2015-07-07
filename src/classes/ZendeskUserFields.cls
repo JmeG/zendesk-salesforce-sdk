@@ -138,4 +138,14 @@ public with sharing class ZendeskUserFields {
 
         return wrapper;
     }
+
+    public void deleteUserField(Integer userFieldId) {
+		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/user_fields/' + String.valueOf(userFieldId) + '.json');
+		HttpResponse res = new Http().send(req);
+		String resBody = res.getBody();
+
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error occurred trying to delete user field ' + userFieldId);
+		}
+	}
 }

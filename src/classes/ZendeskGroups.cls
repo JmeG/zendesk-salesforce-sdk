@@ -82,4 +82,14 @@ public with sharing class ZendeskGroups {
 
         return wrapper;
     }
+
+    public void deleteGroup(Integer groupId) {
+		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
+		HttpResponse res = new Http().send(req);
+		String resBody = res.getBody();
+
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error occurred trying to delete group ' + groupId);
+		}
+	}
 }

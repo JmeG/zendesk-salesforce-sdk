@@ -160,17 +160,6 @@ public with sharing class ZendeskTickets {
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
 	}
 
-	// NOTE: You must use Admin credentials to use this method
-	public void deleteTicket(Integer ticketId) {
-		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
-		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
-
-		if (res.getStatusCode() != 200) {
-			throw new ZendeskException('Error occurred trying to delete ticket ' + ticketId);
-		}
-	}
-
 	// /api/v2/tickets.json
 	public PagedTicketsWrapper getTickets() {
         return getTickets(null);
@@ -245,6 +234,17 @@ public with sharing class ZendeskTickets {
 
         return wrapper;
     }
+
+	// NOTE: You must use Admin credentials to use this method
+	public void deleteTicket(Integer ticketId) {
+		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
+		HttpResponse res = new Http().send(req);
+		String resBody = res.getBody();
+
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error occurred trying to delete ticket ' + ticketId);
+		}
+	}
 
 /*
 	public void addTicketComment(Integer ticketId, String commentText) {

@@ -2,7 +2,16 @@
 @isTest
 private class ZendeskUserFieldsTests {
 
-    public class MockUserResponse implements HttpCalloutMock {
+    public class MockOKResponse implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            HttpResponse res = new HttpResponse();
+            res.setStatusCode(200);
+            res.setStatus('OK');
+            return res;
+        }
+    }
+
+    public class MockUserFieldResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
             HttpResponse res = new HttpResponse();
             res.setStatusCode(200);
@@ -12,7 +21,7 @@ private class ZendeskUserFieldsTests {
         }
     }
 
-    public class MockUsersResponse implements HttpCalloutMock {
+    public class MockUserFieldsResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
             HttpResponse res = new HttpResponse();
             res.setStatusCode(200);
@@ -23,7 +32,7 @@ private class ZendeskUserFieldsTests {
     }
 
     static testMethod void testGetUserFieldById() {
-        Test.setMock(HttpCalloutMock.class, new MockUserResponse());
+        Test.setMock(HttpCalloutMock.class, new MockUserFieldResponse());
 
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
@@ -38,7 +47,7 @@ private class ZendeskUserFieldsTests {
     }
 
     static testMethod void testGetUserFieldByKey() {
-        Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
+        Test.setMock(HttpCalloutMock.class, new MockUserFieldsResponse());
 
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
@@ -50,8 +59,21 @@ private class ZendeskUserFieldsTests {
         System.assertNotEquals(null, testObj);
     }
 
+    static testMethod void testDeleteField() {
+        Test.setMock(HttpCalloutMock.class, new MockOKResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskUserFields zfields = new ZendeskUserFields(zapi);
+        zfields.deleteUserField(123);
+        Test.stopTest();
+
+        System.assert(true);
+    }
+
     static testMethod void testGetAllFields() {
-        Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
+        Test.setMock(HttpCalloutMock.class, new MockUserFieldsResponse());
 
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 

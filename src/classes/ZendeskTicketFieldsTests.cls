@@ -2,7 +2,16 @@
 @isTest
 private class ZendeskTicketFieldsTests {
 
-    public class MockTicketResponse implements HttpCalloutMock {
+    public class MockOKResponse implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            HttpResponse res = new HttpResponse();
+            res.setStatusCode(200);
+            res.setStatus('OK');
+            return res;
+        }
+    }
+
+    public class MockTicketFieldResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
             HttpResponse res = new HttpResponse();
             res.setStatusCode(200);
@@ -12,7 +21,7 @@ private class ZendeskTicketFieldsTests {
         }
     }
 
-    public class MockTicketsResponse implements HttpCalloutMock {
+    public class MockTicketFieldsResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
             HttpResponse res = new HttpResponse();
             res.setStatusCode(200);
@@ -23,7 +32,7 @@ private class ZendeskTicketFieldsTests {
     }
 
     static testMethod void testGetTicketFieldById() {
-        Test.setMock(HttpCalloutMock.class, new MockTicketResponse());
+        Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
 
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
@@ -38,7 +47,7 @@ private class ZendeskTicketFieldsTests {
     }
 
     static testMethod void testGetTicketFieldByName() {
-        Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
+        Test.setMock(HttpCalloutMock.class, new MockTicketFieldsResponse());
 
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
@@ -50,8 +59,21 @@ private class ZendeskTicketFieldsTests {
         System.assertNotEquals(null, testObj);
     }
 
+    static testMethod void testDeleteField() {
+        Test.setMock(HttpCalloutMock.class, new MockOKResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
+        zfields.deleteTicketField(123);
+        Test.stopTest();
+
+        System.assert(true);
+    }
+
     static testMethod void testGetAllFields() {
-        Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
+        Test.setMock(HttpCalloutMock.class, new MockTicketFieldsResponse());
 
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
