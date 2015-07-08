@@ -11,7 +11,7 @@
                 <apex:commandButton action="{!getGroupById}" value="Get by ID"/>
                 <apex:commandButton action="{!getGroups}" value="Get all Groups"/>
             </apex:pageBlockButtons>
-            <apex:pageBlockSection title="Get" columns="1">
+            <apex:pageBlockSection title="" columns="1">
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Group ID" />
                     <apex:inputText value="{!groupId}" />

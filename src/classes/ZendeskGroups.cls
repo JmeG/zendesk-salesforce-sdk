@@ -27,30 +27,6 @@ public with sharing class ZendeskGroups {
 		groupsMap = new Map<Integer, ZGroup>();
 	}
 
-	// Retrieves all pages of groups. Uses the Group field "id" as the map key
-	public Map<Integer, ZGroup> getAllGroups() {
-		if (groupsMap.isEmpty()) {
-			loadAll();
-		}
-		return groupsMap;
-	}
-
-	private void loadAll() {
-		PagedGroupsWrapper wrapper = getGroups();
-		if (wrapper != null && wrapper.groups != null) {
-			for (ZGroup obj : wrapper.groups) {
-				groupsMap.put(obj.id, obj);
-			}
-
-			while (!String.isEmpty(wrapper.next_page)) {
-				wrapper = getGroups(wrapper.nextPageNumber);
-				for (ZGroup obj : wrapper.groups) {
-					groupsMap.put(obj.id, obj);
-				}
-			}
-		}
-	}
-
 	public PagedGroupsWrapper getGroups() {
 		return getGroups(null);
 	}
@@ -92,7 +68,7 @@ public with sharing class ZendeskGroups {
 
 		return zgroupObj;
 	}
-	
+
 	public void deleteGroup(Integer groupId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
 		HttpResponse res = new Http().send(req);
@@ -100,6 +76,30 @@ public with sharing class ZendeskGroups {
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error deleting Group ' + groupId + ' (' + res.getStatusCode() + ')');
+		}
+	}
+
+	// Retrieves all pages of groups. Uses the Group field "id" as the map key
+	public Map<Integer, ZGroup> getAllGroups() {
+		if (groupsMap.isEmpty()) {
+			loadAll();
+		}
+		return groupsMap;
+	}
+
+	private void loadAll() {
+		PagedGroupsWrapper wrapper = getGroups();
+		if (wrapper != null && wrapper.groups != null) {
+			for (ZGroup obj : wrapper.groups) {
+				groupsMap.put(obj.id, obj);
+			}
+
+			while (!String.isEmpty(wrapper.next_page)) {
+				wrapper = getGroups(wrapper.nextPageNumber);
+				for (ZGroup obj : wrapper.groups) {
+					groupsMap.put(obj.id, obj);
+				}
+			}
 		}
 	}
 }
