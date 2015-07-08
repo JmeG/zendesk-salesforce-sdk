@@ -11,27 +11,38 @@ private class ZendeskTicketFormsTests {
         }
     }
 
+    public class MockTicketFormResponse implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            HttpResponse res = new HttpResponse();
+            res.setStatusCode(200);
+            res.setStatus('OK');
+            res.setBody('{ "ticket_form": { "url": "https://test.zendesk.com/api/v2/ticket_forms/123.json", "id": 123, "name": "Test", "raw_name": "Test", "display_name": "Test", "raw_display_name": "Test", "end_user_visible": true, "position": 0, "active": true, "default": true, "created_at": "2013-04-23T01:24:04Z", "updated_at": "2013-08-07T21:29:47Z" } }');
+            return res;
+        }
+    }
+
     public class MockTicketFormsResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
             HttpResponse res = new HttpResponse();
             res.setStatusCode(200);
             res.setStatus('OK');
-            res.setBody('{ "ticket_forms": [ { "url": "https://test.zendesk.com/api/v2/ticket_forms/466.json", "id": 466, "name": "Test", "raw_name": "Test", "display_name": "Test", "raw_display_name": "Test", "end_user_visible": true, "position": 0, "active": true, "default": true, "created_at": "2013-04-23T01:24:04Z", "updated_at": "2013-08-07T21:29:47Z" } ], "next_page": null, "previous_page": null, "count": 1 }');
+            res.setBody('{ "ticket_forms": [ { "url": "https://test.zendesk.com/api/v2/ticket_forms/123.json", "id": 123, "name": "Test", "raw_name": "Test", "display_name": "Test", "raw_display_name": "Test", "end_user_visible": true, "position": 0, "active": true, "default": true, "created_at": "2013-04-23T01:24:04Z", "updated_at": "2013-08-07T21:29:47Z" } ], "next_page": null, "previous_page": null, "count": 1 }');
             return res;
         }
     }
 
     static testmethod void testGetTicketForm() {
-        Test.setMock(HttpCalloutMock.class, new MockTicketFormsResponse());
+        Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
 
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
         Test.startTest();
         ZendeskTicketForms zticketforms = new ZendeskTicketForms(zapi);
-		ZendeskTicketForms.ZTicketForm testObj = zticketforms.getTicketForm('Test');
+		ZendeskTicketForms.ZTicketForm testObj = zticketforms.getTicketForm(123);
         Test.stopTest();
 
 		System.assertNotEquals(null, testObj);
+        System.assertEquals(123, testObj.id);
 	}
 
     static testmethod void testDeleteTicketForm() {
@@ -63,10 +74,10 @@ private class ZendeskTicketFormsTests {
 
         Test.startTest();
         ZendeskTicketForms zfields = new ZendeskTicketForms(zapi);
-        Map<String, ZendeskTicketForms.ZTicketForm> fieldsMap = zfields.getAllTicketForms();
+        Map<Integer, ZendeskTicketForms.ZTicketForm> fieldsMap = zfields.getAllTicketForms();
         Test.stopTest();
 
-        System.assertNotEquals(null, fieldsMap.containsKey('Test'));
+        System.assertNotEquals(null, fieldsMap.containsKey(123));
     }
 
     static testMethod void testZTicketForm() {

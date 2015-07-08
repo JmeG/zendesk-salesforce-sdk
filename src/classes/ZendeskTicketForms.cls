@@ -2,7 +2,7 @@
 public with sharing class ZendeskTicketForms {
 
 	private final ZendeskAPI zapi;
-	private Map<String, ZTicketForm> ticketFormsMap;
+	private Map<Integer, ZTicketForm> ticketFormsMap;
 
 	public class ZTicketForm {
 		public Integer id {get; private set;}
@@ -10,6 +10,10 @@ public with sharing class ZendeskTicketForms {
 		public String raw_name {get; set;}
 		public Boolean active {get; set;}
 		//public Boolean default {get; set;} // can't use since "default" is a keyword
+	}
+
+	private class TicketFormWrapper {
+		public ZTicketForm ticket_form {get; set;}
 	}
 
 	public class PagedTicketFormsWrapper {
@@ -24,45 +28,28 @@ public with sharing class ZendeskTicketForms {
 
 	public ZendeskTicketForms(ZendeskAPI zapi) {
 		this.zapi = zapi;
-		ticketFormsMap = new Map<String, ZTicketForm>();
+		ticketFormsMap = new Map<Integer, ZTicketForm>();
 	}
 
-	// TODO: "name" is not unique on Ticket Forms. Perhaps just return a List instead
-	// Retrieves all pages of ticket forms. Uses the field "name" as the map key
-	public Map<String, ZTicketForm> getAllTicketForms() {
+	// Retrieves all pages of ticket forms. Uses the field "id" as the map key
+	public Map<Integer, ZTicketForm> getAllTicketForms() {
         if (ticketFormsMap.isEmpty()) {
             loadAll();
         }
         return ticketFormsMap;
     }
 
-	// non-native API method.
-	// TODO: since "name" is not unique should we even have this method?
-	public ZTicketForm getTicketForm(String name) {
-		// TODO: should we fetch all pages?
-		if (ticketFormsMap.isEmpty()) {
-			loadAll();
-		}
-
-		ZTicketForm obj = null;
-		if (ticketFormsMap.containsKey(name)) {
-			obj = ticketFormsMap.get(name);
-		}
-
-		return obj;
-	}
-
 	private void loadAll() {
 		PagedTicketFormsWrapper wrapper = getTicketForms();
 		if (wrapper != null && wrapper.ticket_forms != null) {
 			for (ZTicketForm obj : wrapper.ticket_forms) {
-				ticketFormsMap.put(obj.name, obj);
+				ticketFormsMap.put(obj.id, obj);
 			}
 
 			while (!String.isEmpty(wrapper.next_page)) {
 				wrapper = getTicketForms(wrapper.nextPageNumber);
 				for (ZTicketForm obj : wrapper.ticket_forms) {
-					ticketFormsMap.put(obj.name, obj);
+					ticketFormsMap.put(obj.id, obj);
 				}
 			}
 		}
@@ -87,6 +74,22 @@ public with sharing class ZendeskTicketForms {
 		PagedTicketFormsWrapper wrapper = (PagedTicketFormsWrapper)JSON.deserialize(resBody, PagedTicketFormsWrapper.class);
 
 		return wrapper;
+	}
+
+	public ZTicketForm getTicketForm(Integer ticketFormId) {
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms/' + String.valueOf(ticketFormId) + '.json');
+		HttpResponse res = new Http().send(req);
+		String resBody = res.getBody();
+
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting Ticket Form ' + ticketFormId + ' (' + res.getStatusCode() + ')');
+		}
+
+		// Deserialize the response into a concrete class
+		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(resBody, TicketFormWrapper.class);
+		ZTicketForm zticketform = resultWrapper.ticket_form;
+
+		return zticketform;
 	}
 
 	public void deleteTicketForm(Integer ticketFormId) {
