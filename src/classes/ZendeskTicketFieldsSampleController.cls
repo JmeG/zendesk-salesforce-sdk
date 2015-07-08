@@ -6,8 +6,8 @@ public with sharing class ZendeskTicketFieldsSampleController {
 	public String authType {get;set;}
 
 	public String pageMessage {get;set;}
-	public String searchText {get;set;}
-	public Map<String, ZendeskTicketFields.ZTicketField> fieldsMap {get;set;}
+	public Integer ticketFieldId {get;set;}
+	public Map<Integer, ZendeskTicketFields.ZTicketField> fieldsMap {get;set;}
 
 	public ZendeskTicketFieldsSampleController() {}
 
@@ -25,19 +25,19 @@ public with sharing class ZendeskTicketFieldsSampleController {
 		return null;
 	}
 
-	public PageReference findFieldByName() {
+	public PageReference getFieldByID() {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
 
-			fieldsMap = new Map<String, ZendeskTicketFields.ZTicketField>();
-			ZendeskTicketFields.ZTicketField field = zfields.getTicketField(searchText);
+			fieldsMap = new Map<Integer, ZendeskTicketFields.ZTicketField>();
+			ZendeskTicketFields.ZTicketField field = zfields.getTicketField(ticketFieldId);
 			if (field != null) {
-				fieldsMap.put(field.title, field);
+				fieldsMap.put(field.id, field);
 			}
 			else {
-				throw new ZendeskException('Field "' + searchText + '" not found');
+				throw new ZendeskException('Ticket Field "' + ticketFieldId + '" not found');
 			}
 		}
 		catch(Exception e) {

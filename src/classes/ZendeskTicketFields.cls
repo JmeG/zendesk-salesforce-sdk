@@ -2,7 +2,7 @@
 public with sharing class ZendeskTicketFields {
 
 	private final ZendeskAPI zapi;
-	private Map<String, ZTicketField> ticketFieldsMap {get; private set; }
+	private Map<Integer, ZTicketField> ticketFieldsMap {get; private set; }
 
 	public class ZTicketField {
 		public Integer id {get; private set;}
@@ -58,65 +58,22 @@ public with sharing class ZendeskTicketFields {
 
 	public ZendeskTicketFields(ZendeskAPI zapi) {
 		this.zapi = zapi;
-		ticketFieldsMap = new Map<String, ZTicketField>();
+		ticketFieldsMap = new Map<Integer, ZTicketField>();
 	}
-
-	// TODO: "title" is not unique on Ticket Forms. Perhaps just return a List instead
-	// Retrieves all pages of ticket fields. Uses the field "title" as the map key
-	public Map<String, ZTicketField> getAllFields() {
-        if (ticketFieldsMap.isEmpty()) {
-            loadAll();
-        }
-        return ticketFieldsMap;
-    }
 
 	public ZTicketField getTicketField(Integer ticketFieldId) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + String.valueOf(ticketFieldId) + '.json');
 		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
 
-		ZTicketField ticketField = null;
-		if (res.getStatusCode() == 200) {
-			// Deserialize the response into a concrete class
-			TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
-			ticketField = wrapper.ticket_field;
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting Ticket Field ' + ticketFieldId + ' (' + res.getStatusCode() + ')');
 		}
 
-		return ticketField;
-	}
+		// Deserialize the response into a concrete class
+		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
 
-	// non-native API method
-	// TODO: since "title" is not unique should we even have this method?
-	public ZTicketField getTicketField(String name) {
-		// TODO: should we fetch all pages?
-		if (ticketFieldsMap.isEmpty()) {
-			loadAll();
-		}
-
-		ZTicketField obj = null;
-		if (ticketFieldsMap.containsKey(name)) {
-			obj = ticketFieldsMap.get(name);
-		}
-
-		return obj;
-	}
-
-	// TODO: "title" isn't guaranteed to be unique across custom fields so
-	// this doesn't make a good map key
-	private void loadAll() {
-		PagedTicketFieldsWrapper wrapper = getTicketFields();
-		if (wrapper != null && wrapper.ticket_fields != null) {
-			for (ZTicketField obj : wrapper.ticket_fields) {
-				ticketFieldsMap.put(obj.title, obj);
-			}
-
-			while (!String.isEmpty(wrapper.next_page)) {
-				wrapper = getTicketFields(wrapper.nextPageNumber);
-				for (ZTicketField obj : wrapper.ticket_fields) {
-					ticketFieldsMap.put(obj.title, obj);
-				}
-			}
-		}
+		return wrapper.ticket_field;
 	}
 
 	// Get the first page of Ticket Fields
@@ -147,6 +104,30 @@ public with sharing class ZendeskTicketFields {
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error deleting Ticket Field ' + ticketFieldId + ' (' + res.getStatusCode() + ')');
+		}
+	}
+
+	// Retrieves all pages of ticket fields. Uses the field "id" as the map key
+	public Map<Integer, ZTicketField> getAllFields() {
+        if (ticketFieldsMap.isEmpty()) {
+            loadAll();
+        }
+        return ticketFieldsMap;
+    }
+
+	private void loadAll() {
+		PagedTicketFieldsWrapper wrapper = getTicketFields();
+		if (wrapper != null && wrapper.ticket_fields != null) {
+			for (ZTicketField obj : wrapper.ticket_fields) {
+				ticketFieldsMap.put(obj.id, obj);
+			}
+
+			while (!String.isEmpty(wrapper.next_page)) {
+				wrapper = getTicketFields(wrapper.nextPageNumber);
+				for (ZTicketField obj : wrapper.ticket_fields) {
+					ticketFieldsMap.put(obj.id, obj);
+				}
+			}
 		}
 	}
 }

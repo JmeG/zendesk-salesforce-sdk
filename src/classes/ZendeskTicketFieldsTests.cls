@@ -46,19 +46,6 @@ private class ZendeskTicketFieldsTests {
         Test.stopTest();
     }
 
-    static testMethod void testGetTicketFieldByName() {
-        Test.setMock(HttpCalloutMock.class, new MockTicketFieldsResponse());
-
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
-        Test.startTest();
-        ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
-        ZendeskTicketFields.ZTicketField testObj = zfields.getTicketField('Test');
-        Test.stopTest();
-
-        System.assertNotEquals(null, testObj);
-    }
-
     static testMethod void testDeleteField() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
@@ -79,10 +66,10 @@ private class ZendeskTicketFieldsTests {
 
         Test.startTest();
         ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
-        Map<String, ZendeskTicketFields.ZTicketField> fieldsMap = zfields.getAllFields();
+        Map<Integer, ZendeskTicketFields.ZTicketField> fieldsMap = zfields.getAllFields();
         Test.stopTest();
 
-        System.assertNotEquals(null, fieldsMap.containsKey('Test'));
+        System.assertNotEquals(null, fieldsMap.containsKey(123));
     }
 
     static testMethod void testGetNextPage() {
