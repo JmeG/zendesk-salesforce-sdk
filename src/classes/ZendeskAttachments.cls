@@ -18,13 +18,17 @@ public with sharing class ZendeskAttachments {
 
 			if (res.getStatusCode() != 201) {
 				throw new ZendeskException('Error uploading Attachment (' + res.getStatusCode() + ')');
-				//throw new ZendeskException(res.getBody());
 			}
 
 			// Extract the token from the response
 			Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(res.getBody());
-			Map<String, Object> upload = (Map<String, Object>)jsonMap.get('upload');
-			zendeskAttachmentToken = (String)upload.get('token');
+			if (jsonMap.containsKey('upload')) {
+				Map<String, Object> upload = (Map<String, Object>)jsonMap.get('upload');
+				zendeskAttachmentToken = (String)upload.get('token');
+			}
+			else {
+				throw new ZendeskException('Unexpected content in response. Could not find "upload"');
+			}
 		}
 		catch(Exception e) {
 			throw new ZendeskException('Error uploading attachment: ' + e.getMessage());
