@@ -5,6 +5,8 @@ public with sharing class ZendeskSample1Controller {
 	public String pwdOrToken {get;set;}
 	public String authType {get;set;}
 
+	public String pageMessage {get;set;}
+
 	public ZendeskSample1Controller() {
 		Zendesk_API__c settings = Zendesk_API__c.getOrgDefaults();
 		if (settings != null) {
@@ -15,9 +17,23 @@ public with sharing class ZendeskSample1Controller {
 		}
 	}
 
-	// This method simply exists so that changes to API fields are saved in the controller
-	// without a postback
+	// This method simply exists so that changes to API fields are saved in the controller without a postback
 	public void changeAPIdetails() {
-    	System.debug('changeAPIdetails');
+    	pageMessage = '';
+	}
+
+
+	public PageReference validateLogin() {
+		pageMessage = '';
+		try {
+			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
+			if (zapi.canLogin()) {
+				pageMessage = 'Successfully logged in';
+			}
+		}
+		catch(Exception e) {
+			pageMessage = 'Login failed ' + e.getMessage();
+		}
+		return null;
 	}
 }
