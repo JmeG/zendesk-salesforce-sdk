@@ -20,7 +20,7 @@ public with sharing class ZendeskAPI {
 		this.authenticationType = authenticationType;
 	}
 
-	public HttpRequest setupRequest(String reqMethod, String path) {
+	public HttpRequest createRequest(String reqMethod, String path) {
 		Blob headerValue = null;
 		if (authenticationType == AuthType.Password) {
 			headerValue = Blob.valueOf(username + ':' + passwordOrToken);

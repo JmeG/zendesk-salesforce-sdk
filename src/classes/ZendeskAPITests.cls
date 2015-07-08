@@ -2,11 +2,11 @@
 @isTest
 private class ZendeskAPITests {
 
-    static testMethod void testSetupRequest() {
+    static testMethod void testcreateRequest() {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
         Test.startTest();
-        HttpRequest req = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/users.json');
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json');
         Test.stopTest();
 
         System.assertEquals('GET', req.getMethod());

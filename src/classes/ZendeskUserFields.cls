@@ -71,7 +71,7 @@ public with sharing class ZendeskUserFields {
     }
 
     public ZUserField getUserField(Integer userFieldId) {
-        HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + String.valueOf(userFieldId) + '.json');
+        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + String.valueOf(userFieldId) + '.json');
         HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
 
@@ -128,7 +128,7 @@ public with sharing class ZendeskUserFields {
 
     // Get a specific page of User Fields
     public PagedUserFieldsWrapper getUserFields(Integer page) {
-        HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
         HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
 
@@ -143,7 +143,7 @@ public with sharing class ZendeskUserFields {
     }
 
     public void deleteUserField(Integer userFieldId) {
-		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/user_fields/' + String.valueOf(userFieldId) + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/user_fields/' + String.valueOf(userFieldId) + '.json');
 		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 

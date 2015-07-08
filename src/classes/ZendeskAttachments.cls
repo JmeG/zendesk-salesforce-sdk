@@ -10,7 +10,7 @@ public with sharing class ZendeskAttachments {
 	public String uploadAttachment(String fileName, String fileContentType, Blob fileBody) {
 		String zendeskAttachmentToken = null;
 		try {
-			HttpRequest req = zapi.setupRequest('POST', ZendeskAPI.BASE_PATH + '/uploads.json?filename=' + EncodingUtil.urlEncode(fileName, 'UTF-8'));
+			HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/uploads.json?filename=' + EncodingUtil.urlEncode(fileName, 'UTF-8'));
 			req.setHeader('Accept', 'application/json');
 			req.setHeader('Content-Type', fileContentType);
 			req.setBodyAsBlob(fileBody);
@@ -35,7 +35,7 @@ public with sharing class ZendeskAttachments {
 
 	// NOTE: You must use Admin credentials to use this method
 	public void deleteAttachment(Integer attachmentId) {
-		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + String.valueOf(attachmentId) + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + String.valueOf(attachmentId) + '.json');
 		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 

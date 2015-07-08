@@ -75,7 +75,7 @@ public with sharing class ZendeskTicketForms {
 
 	// Get a specific page of Ticket Forms
 	public PagedTicketFormsWrapper getTicketForms(Integer page) {
-		HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
 		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
 
@@ -90,7 +90,7 @@ public with sharing class ZendeskTicketForms {
 	}
 
 	public void deleteTicketForm(Integer ticketFormId) {
-		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_forms/' + String.valueOf(ticketFormId) + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_forms/' + String.valueOf(ticketFormId) + '.json');
 		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 

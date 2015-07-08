@@ -51,7 +51,7 @@ public with sharing class ZendeskUsers {
 		UserWrapper wrapper = new UserWrapper();
 		wrapper.user = zuser;
 
-		HttpRequest req = zapi.setupRequest('POST', ZendeskAPI.BASE_PATH + '/users.json');
+		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/users.json');
 		String reqBody = JSON.serialize(wrapper);
 		req.setBody(reqBody);
 		HttpResponse res = new Http().send(req);
@@ -75,7 +75,7 @@ public with sharing class ZendeskUsers {
 	// This can be a partial or complete Name or Email address
 	public PagedUsersWrapper findUsersByNameOrEmail(String nameOrEmail) {
 		String encodedNameOrEmail = EncodingUtil.urlEncode(nameOrEmail, 'UTF-8');
-		HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedNameOrEmail);
+		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedNameOrEmail);
 		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
 
@@ -92,7 +92,7 @@ public with sharing class ZendeskUsers {
 	public ZUser findUserByEmail(String email) {
 		// Make sure to set the email to lowercase because that's the way Zendesk will return it
 		String encodedEmail = EncodingUtil.urlEncode(email.toLowerCase(), 'UTF-8');
-		HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedEmail);
+		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedEmail);
 		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
 
@@ -122,7 +122,7 @@ public with sharing class ZendeskUsers {
 
 	// TODO: does paging exist for Users endpoing?
     public PagedUsersWrapper getUsers(Integer page) {
-        HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
         HttpResponse res = new Http().send(queryReq);
         String resBody = res.getBody();
 

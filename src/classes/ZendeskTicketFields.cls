@@ -71,7 +71,7 @@ public with sharing class ZendeskTicketFields {
     }
 
 	public ZTicketField getTicketField(Integer ticketFieldId) {
-		HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + String.valueOf(ticketFieldId) + '.json');
+		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + String.valueOf(ticketFieldId) + '.json');
 		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
 
@@ -126,7 +126,7 @@ public with sharing class ZendeskTicketFields {
 
 	// Get a specific page of User Fields
 	public PagedTicketFieldsWrapper getTicketFields(Integer page) {
-		HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
 		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
 
@@ -141,7 +141,7 @@ public with sharing class ZendeskTicketFields {
 	}
 
 	public void deleteTicketField(Integer ticketFieldId) {
-		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_fields/' + String.valueOf(ticketFieldId) + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_fields/' + String.valueOf(ticketFieldId) + '.json');
 		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 

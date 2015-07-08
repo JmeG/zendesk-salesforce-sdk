@@ -73,7 +73,7 @@ public with sharing class ZendeskGroups {
 	}
 
 	public PagedGroupsWrapper getGroups(Integer page) {
-		HttpRequest queryReq = zapi.setupRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
 		HttpResponse res = new Http().send(queryReq);
 		String resBody = res.getBody();
 
@@ -88,7 +88,7 @@ public with sharing class ZendeskGroups {
 	}
 
 	public void deleteGroup(Integer groupId) {
-		HttpRequest req = zapi.setupRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
 		HttpResponse res = new Http().send(req);
 		String resBody = res.getBody();
 
