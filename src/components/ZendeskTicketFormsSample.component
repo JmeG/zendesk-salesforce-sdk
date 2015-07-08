@@ -11,7 +11,7 @@
                 <apex:commandButton action="{!getFormByID}" value="Get by ID"/>
                 <apex:commandButton action="{!getForms}" value="Get All Ticket Forms"/>
             </apex:pageBlockButtons>
-            <apex:pageBlockSection title="Get" columns="1">
+            <apex:pageBlockSection title="" columns="1">
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Ticket Form ID" />
                     <apex:inputText value="{!ticketFormId}" />

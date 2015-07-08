@@ -8,9 +8,16 @@
         <apex:pageBlock title="User Fields" mode="edit">
             <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
             <apex:pageBlockButtons location="top">
-                <apex:commandButton action="{!findFieldByName}" value="Search"/>
+                <apex:commandButton action="{!getFieldByID}" value="Get by ID"/>
+                <apex:commandButton action="{!findFieldByName}" value="Search by Key"/>
                 <apex:commandButton action="{!getFields}" value="Get Fields"/>
             </apex:pageBlockButtons>
+            <apex:pageBlockSection title="" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="User Field ID" />
+                    <apex:inputText value="{!userFieldId}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
             <apex:pageBlockSection title="Search" columns="1">
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Key" />

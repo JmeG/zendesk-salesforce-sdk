@@ -62,14 +62,6 @@ public with sharing class ZendeskUserFields {
         userFieldsMap = new Map<String, ZUserField>();
     }
 
-    // Retrieves all pages of user fields. Uses the field "key" as the map key
-    public Map<String, ZUserField> getAllFields() {
-        if (userFieldsMap.isEmpty()) {
-            loadAll();
-        }
-        return userFieldsMap;
-    }
-
     public ZUserField getUserField(Integer userFieldId) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + String.valueOf(userFieldId) + '.json');
         HttpResponse res = new Http().send(queryReq);
@@ -84,41 +76,6 @@ public with sharing class ZendeskUserFields {
         ZUserField userField = wrapper.user_field;
 
         return userField;
-    }
-
-    // non-native API method
-    public ZUserField getUserFieldByKey(String key) {
-		// TODO: should we fetch all pages?
-        if (userFieldsMap.isEmpty()) {
-            loadAll();
-        }
-
-        ZUserField obj = null;
-        if (userFieldsMap.containsKey(key)) {
-            obj = userFieldsMap.get(key);
-        }
-
-        return obj;
-    }
-
-    // Returns a list of all custom User Fields in your account. Fields are returned in the order
-    // that you specify in your User Fields configuration in Zendesk. Clients should cache this
-    // resource for the duration of their API usage and map the key for each User Field to the values
-    // returned under the user_fields attribute on the User resource.
-    private void loadAll() {
-        PagedUserFieldsWrapper wrapper = getUserFields();
-        if (wrapper != null && wrapper.user_fields != null) {
-            for (ZUserField obj : wrapper.user_fields) {
-                userFieldsMap.put(obj.key, obj);
-            }
-
-            while (!String.isEmpty(wrapper.next_page)) {
-                wrapper = getUserFields(wrapper.nextPageNumber);
-                for (ZUserField obj : wrapper.user_fields) {
-                    userFieldsMap.put(obj.key, obj);
-                }
-            }
-        }
     }
 
     // Get the first page of User Fields
@@ -151,4 +108,47 @@ public with sharing class ZendeskUserFields {
 			throw new ZendeskException('Error deleting User Field ' + userFieldId + ' (' + res.getStatusCode() + ')');
 		}
 	}
+
+    // non-native API method
+    public ZUserField getUserFieldByKey(String key) {
+        if (userFieldsMap.isEmpty()) {
+            loadAll();
+        }
+
+        ZUserField obj = null;
+        if (userFieldsMap.containsKey(key)) {
+            obj = userFieldsMap.get(key);
+        }
+
+        return obj;
+    }
+
+    // Retrieves all pages of user fields. Uses the field "key" as the map key
+    public Map<String, ZUserField> getAllFields() {
+        if (userFieldsMap.isEmpty()) {
+            loadAll();
+        }
+        return userFieldsMap;
+    }
+
+    // Returns a list of all custom User Fields in your account. Fields are returned in the order
+    // that you specify in your User Fields configuration in Zendesk. Clients should cache this
+    // resource for the duration of their API usage and map the key for each User Field to the values
+    // returned under the user_fields attribute on the User resource.
+    private void loadAll() {
+        PagedUserFieldsWrapper wrapper = getUserFields();
+        if (wrapper != null && wrapper.user_fields != null) {
+            for (ZUserField obj : wrapper.user_fields) {
+                userFieldsMap.put(obj.key, obj);
+            }
+
+            while (!String.isEmpty(wrapper.next_page)) {
+                wrapper = getUserFields(wrapper.nextPageNumber);
+                for (ZUserField obj : wrapper.user_fields) {
+                    userFieldsMap.put(obj.key, obj);
+                }
+            }
+        }
+    }
+
 }
