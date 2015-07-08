@@ -135,4 +135,34 @@ public with sharing class ZendeskUsers {
 
         return wrapper;
     }
+
+	public ZUser getUser(Integer userId) {
+        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + String.valueOf(userId) + '.json');
+        HttpResponse res = new Http().send(queryReq);
+        String resBody = res.getBody();
+
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting user ' + userId + ' (' + res.getStatusCode() + ')');
+		}
+
+		// Deserialize the response into a concrete class
+        UserWrapper wrapper = (UserWrapper)JSON.deserialize(resBody, UserWrapper.class);
+
+        return wrapper.user;
+    }
+
+	public ZUser getCurrentUser() {
+        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/me.json');
+        HttpResponse res = new Http().send(queryReq);
+        String resBody = res.getBody();
+
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting current user (' + res.getStatusCode() + ')');
+		}
+
+		// Deserialize the response into a concrete class
+        UserWrapper wrapper = (UserWrapper)JSON.deserialize(resBody, UserWrapper.class);
+
+        return wrapper.user;
+    }
 }
