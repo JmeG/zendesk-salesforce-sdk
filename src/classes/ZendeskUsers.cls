@@ -55,15 +55,13 @@ public with sharing class ZendeskUsers {
 		String reqBody = JSON.serialize(wrapper);
 		req.setBody(reqBody);
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 201) {
 			throw new ZendeskException('Error creating User (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-		UserWrapper resultWrapper = (UserWrapper)JSON.deserialize(resBody, UserWrapper.class);
-
+		UserWrapper resultWrapper = (UserWrapper)JSON.deserialize(res.getBody(), UserWrapper.class);
+		// return the ID of the new user
 		return ((resultWrapper==null || resultWrapper.user == null) ? null : resultWrapper.user.id);
 	}
 
@@ -77,15 +75,12 @@ public with sharing class ZendeskUsers {
 		String encodedNameOrEmail = EncodingUtil.urlEncode(nameOrEmail, 'UTF-8');
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedNameOrEmail);
 		HttpResponse res = new Http().send(queryReq);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-		PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
-
+		PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(res.getBody(), PagedUsersWrapper.class);
 		return wrapper;
 	}
 
@@ -94,15 +89,12 @@ public with sharing class ZendeskUsers {
 		String encodedEmail = EncodingUtil.urlEncode(email.toLowerCase(), 'UTF-8');
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedEmail);
 		HttpResponse res = new Http().send(queryReq);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-		PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
-
+		PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(res.getBody(), PagedUsersWrapper.class);
 		ZUser user = null;
 		if (wrapper != null && wrapper.users != null) {
 			for (ZUser obj : wrapper.users) {
@@ -124,45 +116,36 @@ public with sharing class ZendeskUsers {
     public PagedUsersWrapper getUsers(Integer page) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
         HttpResponse res = new Http().send(queryReq);
-        String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting users (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-        PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
-
+        PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(res.getBody(), PagedUsersWrapper.class);
         return wrapper;
     }
 
 	public ZUser getUser(Integer userId) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + String.valueOf(userId) + '.json');
         HttpResponse res = new Http().send(queryReq);
-        String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting user ' + userId + ' (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-        UserWrapper wrapper = (UserWrapper)JSON.deserialize(resBody, UserWrapper.class);
-
+        UserWrapper wrapper = (UserWrapper)JSON.deserialize(res.getBody(), UserWrapper.class);
         return wrapper.user;
     }
 
 	public ZUser getCurrentUser() {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/me.json');
         HttpResponse res = new Http().send(queryReq);
-        String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting current user (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-        UserWrapper wrapper = (UserWrapper)JSON.deserialize(resBody, UserWrapper.class);
-
+        UserWrapper wrapper = (UserWrapper)JSON.deserialize(res.getBody(), UserWrapper.class);
         return wrapper.user;
     }
 }

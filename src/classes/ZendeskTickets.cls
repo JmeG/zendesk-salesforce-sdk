@@ -87,15 +87,12 @@ public with sharing class ZendeskTickets {
 	public ZTicket getTicket(Integer ticketId) {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting Ticket ' + ticketId + ' (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
-
+		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(res.getBody(), TicketWrapper.class);
 		return resultWrapper.ticket;
 	}
 
@@ -146,15 +143,12 @@ public with sharing class ZendeskTickets {
 		String reqBody = JSON.serialize(newTicketWrapper);
 		req.setBody(reqBody);
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 201) {
 			throw new ZendeskException('Error creating Ticket (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
-
+		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(res.getBody(), TicketWrapper.class);
 		// Return the ID of the new Ticket
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
 	}
@@ -223,15 +217,12 @@ public with sharing class ZendeskTickets {
 	private PagedTicketsWrapper getTickets(Integer page, String apiPath) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
         HttpResponse res = new Http().send(queryReq);
-        String resBody = res.getBody();
 
         if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting Tickets (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-        PagedTicketsWrapper wrapper = (PagedTicketsWrapper)JSON.deserialize(resBody, PagedTicketsWrapper.class);
-
+        PagedTicketsWrapper wrapper = (PagedTicketsWrapper)JSON.deserialize(res.getBody(), PagedTicketsWrapper.class);
         return wrapper;
     }
 
@@ -239,7 +230,6 @@ public with sharing class ZendeskTickets {
 	public void deleteTicket(Integer ticketId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error deleting Ticket ' + ticketId + ' (' + res.getStatusCode() + ')');
@@ -253,9 +243,7 @@ public with sharing class ZendeskTickets {
 		// TODO: encode the commentText
 		String ticketJson = '{ "ticket": { "id": ' + String.valueOf(ticketId) + ', "comment": { "body": "' + commentText + '" } } }';
 		req.setBody(ticketJson);
-
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error occurred trying to update ticket + ' (' + res.getStatusCode() + ')');
@@ -277,7 +265,6 @@ public with sharing class ZendeskTickets {
 		req.setBody('{ "ticket": { "id": 24, "comment": { "body": "new comment" } } } ');
 
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error occurred trying to update ticket + ' (' + res.getStatusCode() + ')');

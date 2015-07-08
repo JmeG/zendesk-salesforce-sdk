@@ -41,7 +41,6 @@ public with sharing class ZendeskAttachments {
 	public void deleteAttachment(Integer attachmentId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + String.valueOf(attachmentId) + '.json');
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error deleting Attachment ' + attachmentId + ' (' + res.getStatusCode() + ')');

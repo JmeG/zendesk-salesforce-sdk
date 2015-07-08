@@ -34,22 +34,18 @@ public with sharing class ZendeskGroups {
 	public PagedGroupsWrapper getGroups(Integer page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
 		HttpResponse res = new Http().send(queryReq);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting Groups (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-		PagedGroupsWrapper wrapper = (PagedGroupsWrapper)JSON.deserialize(resBody, PagedGroupsWrapper.class);
-
+		PagedGroupsWrapper wrapper = (PagedGroupsWrapper)JSON.deserialize(res.getBody(), PagedGroupsWrapper.class);
 		return wrapper;
 	}
 
 	public ZGroup getGroup(Integer groupId) {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting Group ' + groupId + ' (' + res.getStatusCode() + ')');
@@ -59,20 +55,18 @@ public with sharing class ZendeskGroups {
 		// is a Salesforce keyword so we can't define a class that has "group" as a parameter name
 		// Here is our workaround
 		ZGroup zgroupObj = null;
-		Map<String, Object> objMap = (Map<String, Object>)JSON.deserializeUntyped(resBody);
+		Map<String, Object> objMap = (Map<String, Object>)JSON.deserializeUntyped(res.getBody());
 		if (objMap.containsKey('group')) {
 			zgroupObj = (ZGroup)JSON.deserialize(JSON.serialize(objMap.get('group')), ZGroup.class);
 		} else {
 			throw new ZendeskException('Unexpected content in Group response');
 		}
-
 		return zgroupObj;
 	}
 
 	public void deleteGroup(Integer groupId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error deleting Group ' + groupId + ' (' + res.getStatusCode() + ')');

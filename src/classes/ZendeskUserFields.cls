@@ -65,17 +65,13 @@ public with sharing class ZendeskUserFields {
     public ZUserField getUserField(Integer userFieldId) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + String.valueOf(userFieldId) + '.json');
         HttpResponse res = new Http().send(queryReq);
-        String resBody = res.getBody();
 
         if (res.getStatusCode() != 200) {
             throw new ZendeskException('Error getting User Field ' + userFieldId + ' (' + res.getStatusCode() + ')');
         }
 
-        // Deserialize the response into a concrete class
-        UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(resBody, UserFieldWrapper.class);
-        ZUserField userField = wrapper.user_field;
-
-        return userField;
+        UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(res.getBody(), UserFieldWrapper.class);
+        return wrapper.user_field;
     }
 
     // Get the first page of User Fields
@@ -87,22 +83,18 @@ public with sharing class ZendeskUserFields {
     public PagedUserFieldsWrapper getUserFields(Integer page) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
         HttpResponse res = new Http().send(queryReq);
-        String resBody = res.getBody();
 
         if (res.getStatusCode() != 200) {
             throw new ZendeskException('Error getting User Fields (' + res.getStatusCode() + ')');
         }
 
-        // Deserialize the response into a concrete class
-        PagedUserFieldsWrapper wrapper = (PagedUserFieldsWrapper)JSON.deserialize(resBody, PagedUserFieldsWrapper.class);
-
+        PagedUserFieldsWrapper wrapper = (PagedUserFieldsWrapper)JSON.deserialize(res.getBody(), PagedUserFieldsWrapper.class);
         return wrapper;
     }
 
     public void deleteUserField(Integer userFieldId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/user_fields/' + String.valueOf(userFieldId) + '.json');
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error deleting User Field ' + userFieldId + ' (' + res.getStatusCode() + ')');

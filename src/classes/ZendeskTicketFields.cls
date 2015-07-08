@@ -64,15 +64,12 @@ public with sharing class ZendeskTicketFields {
 	public ZTicketField getTicketField(Integer ticketFieldId) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + String.valueOf(ticketFieldId) + '.json');
 		HttpResponse res = new Http().send(queryReq);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting Ticket Field ' + ticketFieldId + ' (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
-
+		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(res.getBody(), TicketFieldWrapper.class);
 		return wrapper.ticket_field;
 	}
 
@@ -85,22 +82,18 @@ public with sharing class ZendeskTicketFields {
 	public PagedTicketFieldsWrapper getTicketFields(Integer page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
 		HttpResponse res = new Http().send(queryReq);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting Ticket Fields (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-		PagedTicketFieldsWrapper wrapper = (PagedTicketFieldsWrapper)JSON.deserialize(resBody, PagedTicketFieldsWrapper.class);
-
+		PagedTicketFieldsWrapper wrapper = (PagedTicketFieldsWrapper)JSON.deserialize(res.getBody(), PagedTicketFieldsWrapper.class);
 		return wrapper;
 	}
 
 	public void deleteTicketField(Integer ticketFieldId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_fields/' + String.valueOf(ticketFieldId) + '.json');
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error deleting Ticket Field ' + ticketFieldId + ' (' + res.getStatusCode() + ')');

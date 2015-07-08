@@ -40,37 +40,30 @@ public with sharing class ZendeskTicketForms {
 	public PagedTicketFormsWrapper getTicketForms(Integer page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
 		HttpResponse res = new Http().send(queryReq);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting Ticket Forms (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-		PagedTicketFormsWrapper wrapper = (PagedTicketFormsWrapper)JSON.deserialize(resBody, PagedTicketFormsWrapper.class);
-
+		PagedTicketFormsWrapper wrapper = (PagedTicketFormsWrapper)JSON.deserialize(res.getBody(), PagedTicketFormsWrapper.class);
 		return wrapper;
 	}
 
 	public ZTicketForm getTicketForm(Integer ticketFormId) {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms/' + String.valueOf(ticketFormId) + '.json');
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting Ticket Form ' + ticketFormId + ' (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a concrete class
-		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(resBody, TicketFormWrapper.class);
-
+		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(res.getBody(), TicketFormWrapper.class);
 		return resultWrapper.ticket_form;
 	}
 
 	public void deleteTicketForm(Integer ticketFormId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_forms/' + String.valueOf(ticketFormId) + '.json');
 		HttpResponse res = new Http().send(req);
-		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error deleting Ticket Form ' + ticketFormId + ' (' + res.getStatusCode() + ')');
