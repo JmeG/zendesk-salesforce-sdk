@@ -31,30 +31,6 @@ public with sharing class ZendeskTicketForms {
 		ticketFormsMap = new Map<Integer, ZTicketForm>();
 	}
 
-	// Retrieves all pages of ticket forms. Uses the field "id" as the map key
-	public Map<Integer, ZTicketForm> getAllTicketForms() {
-        if (ticketFormsMap.isEmpty()) {
-            loadAll();
-        }
-        return ticketFormsMap;
-    }
-
-	private void loadAll() {
-		PagedTicketFormsWrapper wrapper = getTicketForms();
-		if (wrapper != null && wrapper.ticket_forms != null) {
-			for (ZTicketForm obj : wrapper.ticket_forms) {
-				ticketFormsMap.put(obj.id, obj);
-			}
-
-			while (!String.isEmpty(wrapper.next_page)) {
-				wrapper = getTicketForms(wrapper.nextPageNumber);
-				for (ZTicketForm obj : wrapper.ticket_forms) {
-					ticketFormsMap.put(obj.id, obj);
-				}
-			}
-		}
-	}
-
 	// Get the first page of Ticket Forms
 	public PagedTicketFormsWrapper getTicketForms() {
 		return getTicketForms(null);
@@ -87,9 +63,8 @@ public with sharing class ZendeskTicketForms {
 
 		// Deserialize the response into a concrete class
 		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(resBody, TicketFormWrapper.class);
-		ZTicketForm zticketform = resultWrapper.ticket_form;
 
-		return zticketform;
+		return resultWrapper.ticket_form;
 	}
 
 	public void deleteTicketForm(Integer ticketFormId) {
@@ -99,6 +74,30 @@ public with sharing class ZendeskTicketForms {
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error deleting Ticket Form ' + ticketFormId + ' (' + res.getStatusCode() + ')');
+		}
+	}
+
+	// Retrieves all pages of ticket forms. Uses the field "id" as the map key
+	public Map<Integer, ZTicketForm> getAllTicketForms() {
+        if (ticketFormsMap.isEmpty()) {
+            loadAll();
+        }
+        return ticketFormsMap;
+    }
+
+	private void loadAll() {
+		PagedTicketFormsWrapper wrapper = getTicketForms();
+		if (wrapper != null && wrapper.ticket_forms != null) {
+			for (ZTicketForm obj : wrapper.ticket_forms) {
+				ticketFormsMap.put(obj.id, obj);
+			}
+
+			while (!String.isEmpty(wrapper.next_page)) {
+				wrapper = getTicketForms(wrapper.nextPageNumber);
+				for (ZTicketForm obj : wrapper.ticket_forms) {
+					ticketFormsMap.put(obj.id, obj);
+				}
+			}
 		}
 	}
 }
