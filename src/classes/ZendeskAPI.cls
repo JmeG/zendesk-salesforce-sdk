@@ -41,6 +41,16 @@ public with sharing class ZendeskAPI {
 		return req;
 	}
 
+	// Validate that the API login parameters are valid by simply trying to get our own user record
+	public Boolean canLogin() {
+        HttpResponse res = new Http().send(createRequest('GET', BASE_PATH + '/users/me.json'));
+		if (res.getStatusCode() == 200) {
+			return true;
+		} else {
+			throw new ZendeskException('Cannot login: ' + res.getStatusCode());
+		}
+	}
+
 	// pageURL looks like "https://test.zendesk.com/api/v2/tickets.json?page=2"
 	// simply return Integer 2
 	public static Integer getPageNumber(String pageUrl) {
