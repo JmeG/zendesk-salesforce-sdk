@@ -2,7 +2,7 @@
 public with sharing class ZendeskGroups {
 
 	private final ZendeskAPI zapi;
-	private Map<String, ZGroup> groupsMap;
+	private Map<Integer, ZGroup> groupsMap;
 
 	public class ZGroup {
 		public Integer id {get; private set;}
@@ -24,45 +24,28 @@ public with sharing class ZendeskGroups {
 
 	public ZendeskGroups(ZendeskAPI zapi) {
 		this.zapi = zapi;
-		groupsMap = new Map<String, ZGroup>();
+		groupsMap = new Map<Integer, ZGroup>();
 	}
 
-	// TODO: "name" is not unique on Groups. Perhaps just return a List instead
-	// Retrieves all pages of groups. Uses the field "name" as the map key
-	public Map<String, ZGroup> getAllGroups() {
+	// Retrieves all pages of groups. Uses the Group field "id" as the map key
+	public Map<Integer, ZGroup> getAllGroups() {
 		if (groupsMap.isEmpty()) {
 			loadAll();
 		}
 		return groupsMap;
 	}
 
-	// non-native API method
-	// TODO: since "name" is not unique should we even have this method?
-	public ZGroup getGroup(String name) {
-		// TODO: should we fetch all pages?
-		if (groupsMap.isEmpty()) {
-			loadAll();
-		}
-
-		ZGroup obj = null;
-		if (groupsMap.containsKey(name)) {
-			obj = groupsMap.get(name);
-		}
-
-		return obj;
-	}
-
 	private void loadAll() {
 		PagedGroupsWrapper wrapper = getGroups();
 		if (wrapper != null && wrapper.groups != null) {
 			for (ZGroup obj : wrapper.groups) {
-				groupsMap.put(obj.name, obj);
+				groupsMap.put(obj.id, obj);
 			}
 
 			while (!String.isEmpty(wrapper.next_page)) {
 				wrapper = getGroups(wrapper.nextPageNumber);
 				for (ZGroup obj : wrapper.groups) {
-					groupsMap.put(obj.name, obj);
+					groupsMap.put(obj.id, obj);
 				}
 			}
 		}
@@ -81,10 +64,33 @@ public with sharing class ZendeskGroups {
 			throw new ZendeskException('Error getting Groups (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a typed class
+		// Deserialize the response into a concrete class
 		PagedGroupsWrapper wrapper = (PagedGroupsWrapper)JSON.deserialize(resBody, PagedGroupsWrapper.class);
 
 		return wrapper;
+	}
+
+	public ZGroup getGroup(Integer groupId) {
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
+		HttpResponse res = new Http().send(req);
+		String resBody = res.getBody();
+
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting Group ' + groupId + ' (' + res.getStatusCode() + ')');
+		}
+
+		// NOTE: We can't deserialize the response directly into a concrete class because "group"
+		// is a Salesforce keyword so we can't define a class that has "group" as a parameter name
+		// Here is our workaround
+		ZGroup zgroupObj = null;
+		Map<String, Object> objMap = (Map<String, Object>)JSON.deserializeUntyped(resBody);
+		if (objMap.containsKey('group')) {
+			zgroupObj = (ZGroup)JSON.deserialize(JSON.serialize(objMap.get('group')), ZGroup.class);
+		} else {
+			throw new ZendeskException('Unexpected content in Group response');
+		}
+
+		return zgroupObj;
 	}
 
 	public void deleteGroup(Integer groupId) {

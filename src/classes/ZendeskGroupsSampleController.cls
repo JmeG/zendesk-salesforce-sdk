@@ -6,8 +6,8 @@ public with sharing class ZendeskGroupsSampleController {
 	public String authType {get;set;}
 
 	public String pageMessage {get;set;}
-	public String searchText {get;set;}
-	public Map<String, ZendeskGroups.ZGroup> groupsMap {get;set;}
+	public Integer groupId {get;set;}
+	public Map<Integer, ZendeskGroups.ZGroup> groupsMap {get;set;}
 
 	public ZendeskGroupsSampleController() {}
 
@@ -25,19 +25,19 @@ public with sharing class ZendeskGroupsSampleController {
 		return null;
 	}
 
-	public PageReference findGroupByName() {
+	public PageReference getGroupById() {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskGroups zgroups = new ZendeskGroups(zapi);
 
-			groupsMap = new Map<String, ZendeskGroups.ZGroup>();
-			ZendeskGroups.ZGroup g = zgroups.getGroup(searchText);
+			groupsMap = new Map<Integer, ZendeskGroups.ZGroup>();
+			ZendeskGroups.ZGroup g = zgroups.getGroup(groupId);
 			if (g != null) {
-				groupsMap.put(g.name, g);
+				groupsMap.put(g.id, g);
 			}
 			else {
-				throw new ZendeskException('Group "' + searchText + '" not found');
+				throw new ZendeskException('Group "' + groupId + '" not found');
 			}
 		}
 		catch(Exception e) {
