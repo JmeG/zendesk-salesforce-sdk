@@ -14,4 +14,10 @@ public with sharing class ZendeskSample1Controller {
 			authType = settings.Authentication_Type__c;
 		}
 	}
+
+	// This method simply exists so that changes to API fields are saved in the controller
+	// without a postback
+	public void changeAPIdetails() {
+    	System.debug('changeAPIdetails');
+	}
 }

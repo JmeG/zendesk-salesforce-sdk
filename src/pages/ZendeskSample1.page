@@ -2,24 +2,32 @@
     <apex:sectionHeader title="Zendesk" subtitle="API Samples"/>
     <apex:form id="credsForm">
         <apex:pageBlock title="API Details" mode="edit">
-            <apex:pageBlockSection title="Zendesk Credentials" columns="2">
+            <apex:pageBlockSection title="Zendesk Credentials" columns="2" id="apiDetails">
+            <!-- TODO: add actionFunction's or onChange events to these fields -->
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Subdomain" />
-                    <apex:inputText value="{!subdomain}" size="50" required="true"/>
+                    <apex:inputText value="{!subdomain}" size="50" required="true">
+                        <apex:actionSupport event="onchange" action="{!changeAPIdetails}" reRender="apiDetails" />
+                    </apex:inputText>
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Password or Token" />
-                    <apex:inputText value="{!pwdOrToken}" size="50" required="true"/>
+                    <apex:inputText value="{!pwdOrToken}" size="50" required="true">
+                        <apex:actionSupport event="onchange" action="{!changeAPIdetails}" reRender="apiDetails" />
+                    </apex:inputText>
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Username" />
-                    <apex:inputText value="{!username}" size="50" required="true"/>
+                    <apex:inputText value="{!username}" size="50" required="true">
+                        <apex:actionSupport event="onchange" action="{!changeAPIdetails}" reRender="apiDetails" />
+                    </apex:inputText>
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Auth Type" />
                     <apex:selectRadio value="{!authType}">
                         <apex:selectOption itemLabel="Token" itemValue="Token"/>
                         <apex:selectOption itemLabel="Password" itemValue="Password"/>
+                        <apex:actionSupport event="onchange" action="{!changeAPIdetails}" reRender="apiDetails" />
                     </apex:selectRadio>
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSection>
