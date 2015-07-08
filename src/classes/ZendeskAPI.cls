@@ -31,7 +31,7 @@ public with sharing class ZendeskAPI {
 
 		HttpRequest req = new HttpRequest();
 		req.setMethod(reqMethod);
-		req.setTimeout(20000); // 20 seconds
+		req.setTimeout(30000); // 30 seconds
 		req.setHeader('Authorization', authorizationHeader);
 		req.setEndpoint('https://' + subdomain + '.zendesk.com' + path);
 		if (reqMethod == 'POST' || reqMethod == 'PUT') {
