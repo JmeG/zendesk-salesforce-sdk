@@ -77,7 +77,7 @@ public with sharing class ZendeskTicketFields {
 
 		ZTicketField ticketField = null;
 		if (res.getStatusCode() == 200) {
-			// Deserialize the response into a typed class
+			// Deserialize the response into a concrete class
 			TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
 			ticketField = wrapper.ticket_field;
 		}
@@ -134,7 +134,7 @@ public with sharing class ZendeskTicketFields {
 			throw new ZendeskException('Error getting Ticket Fields (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a typed class
+		// Deserialize the response into a concrete class
 		PagedTicketFieldsWrapper wrapper = (PagedTicketFieldsWrapper)JSON.deserialize(resBody, PagedTicketFieldsWrapper.class);
 
 		return wrapper;

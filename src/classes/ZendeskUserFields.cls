@@ -79,7 +79,7 @@ public with sharing class ZendeskUserFields {
             throw new ZendeskException('Error getting User Field ' + userFieldId + ' (' + res.getStatusCode() + ')');
         }
 
-        // Deserialize the response into a typed class
+        // Deserialize the response into a concrete class
         UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(resBody, UserFieldWrapper.class);
         ZUserField userField = wrapper.user_field;
 
@@ -136,7 +136,7 @@ public with sharing class ZendeskUserFields {
             throw new ZendeskException('Error getting User Fields (' + res.getStatusCode() + ')');
         }
 
-        // Deserialize the response into a typed class
+        // Deserialize the response into a concrete class
         PagedUserFieldsWrapper wrapper = (PagedUserFieldsWrapper)JSON.deserialize(resBody, PagedUserFieldsWrapper.class);
 
         return wrapper;

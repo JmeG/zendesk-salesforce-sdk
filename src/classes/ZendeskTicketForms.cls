@@ -83,7 +83,7 @@ public with sharing class ZendeskTicketForms {
 			throw new ZendeskException('Error getting Ticket Forms (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a typed class
+		// Deserialize the response into a concrete class
 		PagedTicketFormsWrapper wrapper = (PagedTicketFormsWrapper)JSON.deserialize(resBody, PagedTicketFormsWrapper.class);
 
 		return wrapper;

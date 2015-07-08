@@ -61,7 +61,7 @@ public with sharing class ZendeskUsers {
 			throw new ZendeskException('Error creating User (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a typed class
+		// Deserialize the response into a concrete class
 		UserWrapper resultWrapper = (UserWrapper)JSON.deserialize(resBody, UserWrapper.class);
 
 		return ((resultWrapper==null || resultWrapper.user == null) ? null : resultWrapper.user.id);
@@ -83,7 +83,7 @@ public with sharing class ZendeskUsers {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a typed class
+		// Deserialize the response into a concrete class
 		PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
 
 		return wrapper;
@@ -100,7 +100,7 @@ public with sharing class ZendeskUsers {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a typed class
+		// Deserialize the response into a concrete class
 		PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
 
 		ZUser user = null;
@@ -130,7 +130,7 @@ public with sharing class ZendeskUsers {
 			throw new ZendeskException('Error getting users (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a typed class
+		// Deserialize the response into a concrete class
         PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(resBody, PagedUsersWrapper.class);
 
         return wrapper;

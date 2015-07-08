@@ -93,7 +93,7 @@ public with sharing class ZendeskTickets {
 			throw new ZendeskException('Error getting Ticket ' + ticketId + ' (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a typed class
+		// Deserialize the response into a concrete class
 		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
 		ZTicket zticket = resultWrapper.ticket;
 
@@ -153,7 +153,7 @@ public with sharing class ZendeskTickets {
 			throw new ZendeskException('Error creating Ticket (' + res.getStatusCode() + ')');
 		}
 
-		// Deserialize the response into a typed class
+		// Deserialize the response into a concrete class
 		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
 
 		// Return the ID of the new Ticket
@@ -232,7 +232,7 @@ public with sharing class ZendeskTickets {
 			//throw new ZendeskException('Error getting Tickets (' + res.getStatusCode() + ') ' + res.getBody());
 		}
 
-		// Deserialize the response into a typed class
+		// Deserialize the response into a concrete class
         PagedTicketsWrapper wrapper = (PagedTicketsWrapper)JSON.deserialize(resBody, PagedTicketsWrapper.class);
 
         return wrapper;
