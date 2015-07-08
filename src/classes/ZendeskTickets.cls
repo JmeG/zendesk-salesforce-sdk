@@ -227,8 +227,6 @@ public with sharing class ZendeskTickets {
 
         if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting Tickets (' + res.getStatusCode() + ')');
-			// { "error": { "title": "Forbidden", "message": "You do not have access to this page. Please contact the account owner of this help desk for further help." } }
-			//throw new ZendeskException('Error getting Tickets (' + res.getStatusCode() + ') ' + res.getBody());
 		}
 
 		// Deserialize the response into a concrete class
