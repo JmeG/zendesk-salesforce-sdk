@@ -92,7 +92,7 @@ public with sharing class ZendeskGroups {
 
 		return zgroupObj;
 	}
-
+	
 	public void deleteGroup(Integer groupId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
 		HttpResponse res = new Http().send(req);
