@@ -95,9 +95,8 @@ public with sharing class ZendeskTickets {
 
 		// Deserialize the response into a concrete class
 		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
-		ZTicket zticket = resultWrapper.ticket;
 
-		return zticket;
+		return resultWrapper.ticket;
 	}
 
 	public Integer createTicket(TicketType type, String subject, String commentText, Integer requesterId) {
@@ -261,7 +260,7 @@ public with sharing class ZendeskTickets {
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
-			throw new ZendeskException('Error occurred trying to update ticket.');
+			throw new ZendeskException('Error occurred trying to update ticket + ' (' + res.getStatusCode() + ')');
 		}
 	}
 */
@@ -283,7 +282,7 @@ public with sharing class ZendeskTickets {
 		String resBody = res.getBody();
 
 		if (res.getStatusCode() != 200) {
-			throw new ZendeskException('Error occurred trying to update ticket.');
+			throw new ZendeskException('Error occurred trying to update ticket + ' (' + res.getStatusCode() + ')');
 		}
 	}
 */
@@ -310,7 +309,7 @@ public with sharing class ZendeskTickets {
 		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {
-			//error handling logic
+			throw new ZendeskException('Error occurred trying to update tickets + ' (' + res.getStatusCode() + ')');
 		}
 	}
 	*/
