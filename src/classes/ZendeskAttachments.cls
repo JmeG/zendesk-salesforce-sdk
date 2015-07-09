@@ -3,6 +3,20 @@ public with sharing class ZendeskAttachments {
 
 	private final ZendeskAPI zapi;
 
+	public class ZAttachment {
+		public Integer id {get; private set;}
+		public String name {get; set;}
+		public String content_url {get; set;}
+		public String content_type {get; set;}
+		//public Object[] thumbnails {get; set:}
+		public Integer size {get; set;}
+	}
+
+	private class AttachmentWrapper {
+		public ZAttachment attachment {get; set;}
+	}
+
+
 	public ZendeskAttachments(ZendeskAPI zapi) {
 		this.zapi = zapi;
 	}
@@ -37,7 +51,6 @@ public with sharing class ZendeskAttachments {
 		return zendeskAttachmentToken;
 	}
 
-	// NOTE: You must use Admin credentials to use this method
 	public void deleteAttachment(Integer attachmentId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + String.valueOf(attachmentId) + '.json');
 		HttpResponse res = new Http().send(req);
@@ -45,6 +58,18 @@ public with sharing class ZendeskAttachments {
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error deleting Attachment ' + attachmentId + ' (' + res.getStatusCode() + ')');
 		}
+	}
+
+	public ZAttachment getAttachment(Integer attachmentId) {
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/attachments/' + String.valueOf(attachmentId) + '.json');
+		HttpResponse res = new Http().send(req);
+
+		if (res.getStatusCode() != 200) {
+			throw new ZendeskException('Error getting Attachment ' + attachmentId + ' (' + res.getStatusCode() + ')');
+		}
+
+		AttachmentWrapper resultWrapper = (AttachmentWrapper)JSON.deserialize(res.getBody(), AttachmentWrapper.class);
+		return resultWrapper.attachment;
 	}
 
 }
