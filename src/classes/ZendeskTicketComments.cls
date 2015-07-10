@@ -51,7 +51,7 @@ public with sharing class ZendeskTicketComments {
 		return wrapper;
 	}
 
-	public void redactStringInComment(Integer ticketId, Integer ticketCommentId, String redactText) {
+	public void redactStringInComment(Integer ticketId, Long ticketCommentId, String redactText) {
 		if (String.isBlank(redactText)) { throw new ZendeskException ('You must specify text to redact'); }
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '/comments/' + String.valueOf(ticketCommentId) + '/redact.json');
 		req.setBody('{"text": "' + redactText + '"}');
@@ -62,7 +62,7 @@ public with sharing class ZendeskTicketComments {
 		}
 	}
 
-	public void makeCommentPrivate(Integer ticketId, Integer ticketCommentId) {
+	public void makeCommentPrivate(Integer ticketId, Long ticketCommentId) {
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '/comments/' + String.valueOf(ticketCommentId) + '/make_private.json');
 		HttpResponse res = new Http().send(req);
 
