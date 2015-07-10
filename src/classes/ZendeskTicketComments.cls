@@ -4,7 +4,7 @@ public with sharing class ZendeskTicketComments {
 	private final ZendeskAPI zapi;
 
 	public class ZTicketComment {
-		public Integer id {get; private set;}
+		public Long id {get; private set;}
 		public String type {get; set;}
 		public String body {get; set;}
 		public String html_body {get; set;}
@@ -12,7 +12,6 @@ public with sharing class ZendeskTicketComments {
 		public Integer author_id {get; set;}
 		public ZendeskAttachments.ZAttachment[] attachments {get; set;}
 		public ZendeskTickets.ZTicketVia via {get; set;}
-		//public Object metadata {get; set;}
 		public DateTime created_at {get; private set;}
 	}
 
