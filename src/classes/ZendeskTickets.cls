@@ -5,11 +5,23 @@ public with sharing class ZendeskTickets {
 
 	public enum TicketType { question, incident, problem, task }
 	public enum TicketPriority { low, normal, high, urgent }
-	// TODO: we can't use "new" since it's a reserved keyword
+
+	// NOTE: we can't use "new" since it's a reserved keyword
 	//public enum TicketStatus { new, open, pending, hold, solved, closed }
+	public class TicketStatus {
+		public String status {get; private set;}
+		public TicketStatus(String status) {
+			if (status == 'new' || status == 'open' || status == 'pending'
+			|| status == 'hold' || status == 'solved' || status == 'closed') {
+				this.status = status;
+			} else {
+				throw new ZendeskException('Invalid Ticket Status "' + status + '"');
+			}
+		}
+	}
 
 	public class ZTicket {
-		public Integer id {get; private set;}
+		public Long id {get; private set;}
 		public String url {get; private set;}
 		public String external_id {get; set;}
 		public TicketType type {get; set;}
@@ -18,35 +30,36 @@ public with sharing class ZendeskTickets {
 		public TicketPriority priority {get; set;}
 		public String status {get; set;}
 		public String recipient {get; set;}
-		public Integer requester_id {get; set;}
-		public Integer submitter_id {get; set;}
-		public Integer assignee_id {get; set;}
-		public Integer organization_id {get; private set;}
-		public Integer group_id {get; set;}
-		public List<Integer> collaborator_ids {get; set;}
-		public Integer forum_topic_id {get; set;}
-		public Integer problem_id {get; set;}
+		public Long requester_id {get; set;}
+		public ZTicketRequester requester {get; set;} // optional when creating a new ticket in place of requester_id
+		public Long submitter_id {get; set;}
+		public Long assignee_id {get; set;}
+		public Long organization_id {get; private set;}
+		public Long group_id {get; set;}
+		public List<Long> collaborator_ids {get; set;}
+		public Long forum_topic_id {get; set;}
+		public Long problem_id {get; set;}
 		public Boolean has_incidents {get; private set;}
 		public DateTime due_at {get; set;}
 		public List<String> tags {get; set;}
 		public ZTicketVia via {get; private set;}
 		public List<ZTicketCustomField> custom_fields {get; set;}
 		public ZTicketSatisfactionRating satisfaction_rating {get; private set;}
-		public List<Integer> sharing_agreement_ids {get; private set;}
-		public List<Integer> followup_ids {get; private set;}
-		public Integer ticket_form_id {get; set;}
-		public Integer brand_id {get; set;}
+		public List<Long> sharing_agreement_ids {get; private set;}
+		public List<Long> followup_ids {get; private set;}
+		public Long ticket_form_id {get; set;}
+		public Long brand_id {get; set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
 		public ZTicketComment comment {get; set;} // use for adding the ticket comment
 	}
 
 	public class ZTicketCustomField {
-		public Integer id {get; set;}
+		public Long id {get; set;}
 		public String value {get; set;}
 
 		public ZTicketCustomField() {}
-		public ZTicketCustomField(Integer id, String value) { this.id = id; this.value = value; }
+		public ZTicketCustomField(Long id, String value) { this.id = id; this.value = value; }
 	}
 
 	public class ZTicketVia {
@@ -55,7 +68,7 @@ public with sharing class ZendeskTickets {
 	}
 
 	public class ZTicketSatisfactionRating {
-		public Integer id {get; set;}
+		public Long id {get; set;}
 		public String score {get; set;}
 		public String comment {get; set;}
 	}
@@ -65,14 +78,21 @@ public with sharing class ZendeskTickets {
 		public String uploads {get; set;}
 	}
 
+	// { "locale_id": 8, "name": "Pablo", "email": "pablito@example.org" }
+	public class ZTicketRequester {
+		public Long locale_id {get; set;}
+		public String name {get; set;}
+		public String email {get; set;}
+	}
+
 	public class PagedTicketsWrapper {
 		public ZTicket[] tickets {get;set;}
 
 		// Paging support
 		public String next_page {get; set;}
-		public Integer nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
+		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
 		public String previous_page {get; set;}
-		public Integer previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
+		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	// Used to deserialize the result of a individual Ticket create/read/update API call
@@ -84,7 +104,7 @@ public with sharing class ZendeskTickets {
 		this.zapi = zapi;
 	}
 
-	public ZTicket getTicket(Integer ticketId) {
+	public ZTicket getTicket(Long ticketId) {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
 		HttpResponse res = new Http().send(req);
 
@@ -96,28 +116,28 @@ public with sharing class ZendeskTickets {
 		return resultWrapper.ticket;
 	}
 
-	public Integer createTicket(TicketType type, String subject, String commentText, Integer requesterId) {
+	public Long createTicket(TicketType type, String subject, String commentText, Long requesterId) {
 		return createTicket(type, subject, commentText, null, requesterId, null, null, null, null);
 	}
 
-	public Integer createTicket(TicketType type, String subject, String commentText, String attachmentToken, Integer requesterId) {
+	public Long createTicket(TicketType type, String subject, String commentText, String attachmentToken, Long requesterId) {
 		return createTicket(type, subject, commentText, attachmentToken, requesterId, null, null, null, null);
 	}
 
-	public Integer createTicket(TicketType type, String subject, String commentText, Integer requesterId, List<ZTicketCustomField> zcfList) {
+	public Long createTicket(TicketType type, String subject, String commentText, Long requesterId, List<ZTicketCustomField> zcfList) {
 		return createTicket(type, subject, commentText, null, requesterId, null, null, null, zcfList);
 	}
 
-	public Integer createTicket(TicketType type, String subject, String commentText, String attachmentToken, Integer requesterId, List<ZTicketCustomField> zcfList) {
+	public Long createTicket(TicketType type, String subject, String commentText, String attachmentToken, Long requesterId, List<ZTicketCustomField> zcfList) {
 		return createTicket(type, subject, commentText, attachmentToken, requesterId, null, null, null, zcfList);
 	}
 
-	public Integer createTicket(TicketType type, String subject, String commentText, Integer requesterId, Integer groupId, Integer assigneeId, Integer ticketFormId, List<ZTicketCustomField> zcfList) {
+	public Long createTicket(TicketType type, String subject, String commentText, Long requesterId, Long groupId, Long assigneeId, Long ticketFormId, List<ZTicketCustomField> zcfList) {
 		return createTicket(type, subject, commentText, null, requesterId, groupId, assigneeId, ticketFormId, zcfList);
 	}
 
 	// Type can be one of: question, incident, problem, task
-	public Integer createTicket(TicketType type, String subject, String commentText, String attachmentToken, Integer requesterId, Integer groupId, Integer assigneeId, Integer ticketFormId, List<ZTicketCustomField> zcfList) {
+	public Long createTicket(TicketType type, String subject, String commentText, String attachmentToken, Long requesterId, Long groupId, Long assigneeId, Long ticketFormId, List<ZTicketCustomField> zcfList) {
 		ZTicket zt = new ZTicket();
 		//zt.type = type.name();
 		zt.type = type;
@@ -135,7 +155,7 @@ public with sharing class ZendeskTickets {
 		return createTicket(zt);
 	}
 
-	public Integer createTicket(ZTicket zticket) {
+	public Long createTicket(ZTicket zticket) {
 		TicketWrapper newTicketWrapper = new TicketWrapper();
 		newTicketWrapper.ticket = zticket;
 
@@ -153,53 +173,71 @@ public with sharing class ZendeskTickets {
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
 	}
 
+/*
+	public void createManyTickets(List<ZTicket> ztickets) {
+		PagedTicketsWrapper wrapper = new PagedTicketsWrapper();
+		wrapper.tickets = ztickets;
+
+		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/tickets/create_many.json');
+		req.setBody(JSON.serialize(newTicketWrapper));
+		HttpResponse res = new Http().send(req);
+
+		if (res.getStatusCode() != 201) {
+			throw new ZendeskException('Error creating Ticket (' + res.getStatusCode() + ')');
+		}
+
+		System.debug('**createMany response=' = res.getBody());
+		//TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(res.getBody(), TicketWrapper.class);
+	}
+*/
+
 	// /api/v2/tickets.json
 	public PagedTicketsWrapper getTickets() {
         return getTickets(null);
     }
 
 	// /api/v2/tickets.json
-    public PagedTicketsWrapper getTickets(Integer page) {
+    public PagedTicketsWrapper getTickets(Long page) {
         return getTickets(page, '/tickets.json');
     }
 
 	// /api/v2/organizations/{organization_id}/tickets.json
-	public PagedTicketsWrapper getTicketsByOrgId(Integer orgId) {
+	public PagedTicketsWrapper getTicketsByOrgId(Long orgId) {
         return getTicketsByOrgId(orgId, null);
     }
 
 	// /api/v2/organizations/{organization_id}/tickets.json
-	public PagedTicketsWrapper getTicketsByOrgId(Integer orgId, Integer page) {
+	public PagedTicketsWrapper getTicketsByOrgId(Long orgId, Long page) {
         return getTickets(page, '/organizations/' + String.valueOf(orgId) + '/tickets.json');
     }
 
 	// /api/v2/users/{user_id}/tickets/requested.json
-	public PagedTicketsWrapper getTicketsByRequesterId(Integer requesterId) {
+	public PagedTicketsWrapper getTicketsByRequesterId(Long requesterId) {
         return getTicketsByRequesterId(requesterId, null);
     }
 
 	// /api/v2/users/{user_id}/tickets/requested.json
-	public PagedTicketsWrapper getTicketsByRequesterId(Integer requesterId, Integer page) {
+	public PagedTicketsWrapper getTicketsByRequesterId(Long requesterId, Long page) {
         return getTickets(page, '/users/' + String.valueOf(requesterId) + '/tickets/requested.json');
     }
 
 	// /api/v2/users/{user_id}/tickets/ccd.json
-	public PagedTicketsWrapper getTicketsByCCUserId(Integer userId) {
+	public PagedTicketsWrapper getTicketsByCCUserId(Long userId) {
         return getTicketsByCCUserId(userId, null);
     }
 
 	// /api/v2/users/{user_id}/tickets/ccd.json
-	public PagedTicketsWrapper getTicketsByCCUserId(Integer userId, Integer page) {
+	public PagedTicketsWrapper getTicketsByCCUserId(Long userId, Long page) {
         return getTickets(page, '/users/' + String.valueOf(userId) + '/tickets/ccd.json');
     }
 
 	// /api/v2/users/{user_id}/tickets/assigned.json
-	public PagedTicketsWrapper getTicketsByAssigneeId(Integer assigneeId) {
+	public PagedTicketsWrapper getTicketsByAssigneeId(Long assigneeId) {
         return getTicketsByAssigneeId(assigneeId, null);
     }
 
 	// /api/v2/users/{user_id}/tickets/assigned.json
-	public PagedTicketsWrapper getTicketsByAssigneeId(Integer assigneeId, Integer page) {
+	public PagedTicketsWrapper getTicketsByAssigneeId(Long assigneeId, Long page) {
         return getTickets(page, '/users/' + String.valueOf(assigneeId) + '/tickets/assigned.json');
     }
 
@@ -209,12 +247,12 @@ public with sharing class ZendeskTickets {
     }
 
 	// /api/v2/tickets/recent.json
-	public PagedTicketsWrapper getRecentTickets(Integer page) {
+	public PagedTicketsWrapper getRecentTickets(Long page) {
         return getTickets(page, '/users/tickets/recent.json');
     }
 
 	// Get a specific page of Tickets
-	private PagedTicketsWrapper getTickets(Integer page, String apiPath) {
+	private PagedTicketsWrapper getTickets(Long page, String apiPath) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
         HttpResponse res = new Http().send(queryReq);
 
@@ -226,8 +264,7 @@ public with sharing class ZendeskTickets {
         return wrapper;
     }
 
-	// NOTE: You must use Admin credentials to use this method
-	public void deleteTicket(Integer ticketId) {
+	public void deleteTicket(Long ticketId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
 		HttpResponse res = new Http().send(req);
 
@@ -236,41 +273,21 @@ public with sharing class ZendeskTickets {
 		}
 	}
 
-/*
-	public void addTicketComment(Integer ticketId, String commentText) {
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(zticket.id) + '.json');
+	public void updateTicket(Long ticketId, ZTicket zticket) {
+		updateTicket(ticketId, zticket, null);
+	}
 
-		// TODO: encode the commentText
-		String ticketJson = '{ "ticket": { "id": ' + String.valueOf(ticketId) + ', "comment": { "body": "' + commentText + '" } } }';
-		req.setBody(ticketJson);
+	public void updateTicket(Long ticketId, ZTicket zticket, Set<String> fieldsToNull) {
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
+		String ticketJson = ZendeskAPI.serializeJsonNoNulls(zticket, fieldsToNull);
+		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {
-			throw new ZendeskException('Error occurred trying to update ticket + ' (' + res.getStatusCode() + ')');
+			System.debug(res.getBody());
+			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
 		}
 	}
-*/
-
-/*
-	// NOTE: this isn't working correctly because when we serialize the ZTicket object it includes all fields
-	// in the object that aren't populated with null values and the ZendeskAPI thinks it needs to update
-	// those fields to NULL instead of ignoring them.
-	// We only want the JSON to include fields we are trying to update
-	public void updateTicket(ZTicket zticket) {
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(zticket.id) + '.json');
-
-		TicketWrapper ticketWrapper = new TicketWrapper();
-		ticketWrapper.ticket = zticket;
-		String reqBody = JSON.serialize(ticketWrapper);
-		req.setBody('{ "ticket": { "id": 24, "comment": { "body": "new comment" } } } ');
-
-		HttpResponse res = new Http().send(req);
-
-		if (res.getStatusCode() != 200) {
-			throw new ZendeskException('Error occurred trying to update ticket + ' (' + res.getStatusCode() + ')');
-		}
-	}
-*/
 
 	/*
 	public void updateTickets(Set<String> ticketIds, String commentText) {
@@ -298,4 +315,59 @@ public with sharing class ZendeskTickets {
 		}
 	}
 	*/
+
+	// helper method to add a new comment to a ticket
+	public void addTicketComment(Long ticketId, String commentText, Boolean isPublic) {
+		// Manually build the update ticket JSON
+		String ticketJson = '{'
+		 	+ '"ticket": {'
+		    + ' "comment": { "body": "' + commentText + '", "public": ' + isPublic + ' }'
+			+ '}'
+			+ '}';
+		System.debug('***ticketJson1=' + ticketJson);
+
+		JSONGenerator gen = JSON.createGenerator(true); // pretty print = true
+		gen.writeStartObject();
+		gen.writeFieldName('ticket');
+		gen.writeStartObject();
+		gen.writeFieldName('comment');
+		gen.writeObjectField('body', commentText);
+		gen.writeObjectField('public', isPublic);
+		gen.writeEndObject();
+		gen.writeEndObject();
+		ticketJson = gen.getAsString();
+		System.debug('***ticketJson2=' + ticketJson);
+
+
+
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
+		req.setBody(ticketJson);
+		HttpResponse res = new Http().send(req);
+
+		if (res.getStatusCode() != 200) {
+			System.debug(res.getBody());
+			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
+		}
+	}
+
+	// helper method to add a new comment to a ticket and change its status
+	public void addTicketCommentAndChangeStatus(Long ticketId, String commentText, Boolean isPublic, TicketStatus status) {
+		// Manually build the update ticket JSON
+		String ticketJson = '{'
+		 	+ '"ticket": {'
+		    + ' "comment": { "body": "' + commentText + '", "public": ' + isPublic + ' },'
+		    + ' "status":  "' + status.status + '"'
+			+ '}'
+			+ '}';
+
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
+		req.setBody(ticketJson);
+		HttpResponse res = new Http().send(req);
+
+		if (res.getStatusCode() != 200) {
+			System.debug(res.getBody());
+			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
+		}
+	}
+
 }
