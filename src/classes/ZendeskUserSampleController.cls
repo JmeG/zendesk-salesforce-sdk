@@ -20,7 +20,7 @@ public with sharing class ZendeskUserSampleController {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskUsers zusers = new ZendeskUsers(zapi);
 
-			Integer newUserId = zusers.createUser(nameInput, emailInput);
+			Long newUserId = zusers.createUser(nameInput, emailInput);
 
 			pageMessage = 'User created with ID: ' + newUserId;
 		}

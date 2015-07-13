@@ -5,7 +5,7 @@ public with sharing class ZendeskTicketSampleController {
 	public String pwdOrToken {get;set;}
 	public String authType {get;set;}
 
-	public Integer requesterId {get;set;}
+	public Long requesterId {get;set;}
 	public String newTicketSubject {get;set;}
 	public String newTicketComment {get;set;}
 
@@ -20,7 +20,7 @@ public with sharing class ZendeskTicketSampleController {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskTickets ztickets = new ZendeskTickets(zapi);
 
-			Integer newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, newTicketSubject, newTicketComment, requesterId);
+			Long newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, newTicketSubject, newTicketComment, requesterId);
 
 			pageMessage = 'Ticket created with ID: ' + newTicketId;
 		}

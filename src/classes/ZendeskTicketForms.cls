@@ -2,10 +2,10 @@
 public with sharing class ZendeskTicketForms {
 
 	private final ZendeskAPI zapi;
-	private Map<Integer, ZTicketForm> ticketFormsMap;
+	private Map<Long, ZTicketForm> ticketFormsMap;
 
 	public class ZTicketForm {
-		public Integer id {get; private set;}
+		public Long id {get; private set;}
 		public String name {get; set;}
 		public String raw_name {get; set;}
 		public Boolean active {get; set;}
@@ -21,14 +21,14 @@ public with sharing class ZendeskTicketForms {
 
 		// Paging support
 		public String next_page {get; set;}
-		public Integer nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
+		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
 		public String previous_page {get; set;}
-		public Integer previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
+		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	public ZendeskTicketForms(ZendeskAPI zapi) {
 		this.zapi = zapi;
-		ticketFormsMap = new Map<Integer, ZTicketForm>();
+		ticketFormsMap = new Map<Long, ZTicketForm>();
 	}
 
 	// Get the first page of Ticket Forms
@@ -37,7 +37,7 @@ public with sharing class ZendeskTicketForms {
 	}
 
 	// Get a specific page of Ticket Forms
-	public PagedTicketFormsWrapper getTicketForms(Integer page) {
+	public PagedTicketFormsWrapper getTicketForms(Long page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
 		HttpResponse res = new Http().send(queryReq);
 
@@ -49,7 +49,7 @@ public with sharing class ZendeskTicketForms {
 		return wrapper;
 	}
 
-	public ZTicketForm getTicketForm(Integer ticketFormId) {
+	public ZTicketForm getTicketForm(Long ticketFormId) {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms/' + String.valueOf(ticketFormId) + '.json');
 		HttpResponse res = new Http().send(req);
 
@@ -61,7 +61,7 @@ public with sharing class ZendeskTicketForms {
 		return resultWrapper.ticket_form;
 	}
 
-	public void deleteTicketForm(Integer ticketFormId) {
+	public void deleteTicketForm(Long ticketFormId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_forms/' + String.valueOf(ticketFormId) + '.json');
 		HttpResponse res = new Http().send(req);
 
@@ -71,7 +71,7 @@ public with sharing class ZendeskTicketForms {
 	}
 
 	// Retrieves all pages of ticket forms. Uses the field "id" as the map key
-	public Map<Integer, ZTicketForm> getAllTicketForms() {
+	public Map<Long, ZTicketForm> getAllTicketForms() {
         if (ticketFormsMap.isEmpty()) {
             loadAll();
         }

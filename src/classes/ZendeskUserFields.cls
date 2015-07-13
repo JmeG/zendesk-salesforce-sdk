@@ -5,7 +5,7 @@ public with sharing class ZendeskUserFields {
     private Map<String, ZUserField> userFieldsMap {get; private set; }
 
     public class ZUserField {
-	    public Integer id {get; private set;}
+	    public Long id {get; private set;}
         public String key {get; set;}
 	    public String type {get; set;}
 	    public String title {get; set;}
@@ -37,7 +37,7 @@ public with sharing class ZendeskUserFields {
 	}
 
     public class ZCustomFieldOption {
-		public Integer id {get; set;}
+		public Long id {get; set;}
 		public String name {get; set;}
 		public String raw_name {get; set;}
 		public String value {get; set;}
@@ -48,9 +48,9 @@ public with sharing class ZendeskUserFields {
 
         // Paging support
 		public String next_page {get; set;}
-		public Integer nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
+		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
 		public String previous_page {get; set;}
-		public Integer previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
+		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
     }
 
     private class UserFieldWrapper {
@@ -62,7 +62,7 @@ public with sharing class ZendeskUserFields {
         userFieldsMap = new Map<String, ZUserField>();
     }
 
-    public ZUserField getUserField(Integer userFieldId) {
+    public ZUserField getUserField(Long userFieldId) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + String.valueOf(userFieldId) + '.json');
         HttpResponse res = new Http().send(queryReq);
 
@@ -80,7 +80,7 @@ public with sharing class ZendeskUserFields {
     }
 
     // Get a specific page of User Fields
-    public PagedUserFieldsWrapper getUserFields(Integer page) {
+    public PagedUserFieldsWrapper getUserFields(Long page) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
         HttpResponse res = new Http().send(queryReq);
 
@@ -92,7 +92,7 @@ public with sharing class ZendeskUserFields {
         return wrapper;
     }
 
-    public void deleteUserField(Integer userFieldId) {
+    public void deleteUserField(Long userFieldId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/user_fields/' + String.valueOf(userFieldId) + '.json');
 		HttpResponse res = new Http().send(req);
 

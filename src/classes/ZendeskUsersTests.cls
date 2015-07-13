@@ -39,7 +39,7 @@ private class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(zapi);
-		Integer userId = zusers.createUser('John Doe', 'jdoe@zendesk.com');
+		Long userId = zusers.createUser('John Doe', 'jdoe@zendesk.com');
         Test.stopTest();
 
 		System.assertNotEquals(null, userId);
@@ -52,7 +52,7 @@ private class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(zapi);
-		Integer userId = zusers.getUserIdByEmail('foo@bar.com');
+		Long userId = zusers.getUserIdByEmail('foo@bar.com');
         Test.stopTest();
 
 		System.assertNotEquals(null, userId);

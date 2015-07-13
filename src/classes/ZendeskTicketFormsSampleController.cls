@@ -6,8 +6,8 @@ public with sharing class ZendeskTicketFormsSampleController {
 	public String authType {get;set;}
 
 	public String pageMessage {get;set;}
-	public Integer ticketFormId {get;set;}
-	public Map<Integer, ZendeskTicketForms.ZTicketForm> formsMap {get;set;}
+	public Long ticketFormId {get;set;}
+	public Map<Long, ZendeskTicketForms.ZTicketForm> formsMap {get;set;}
 
 	public ZendeskTicketFormsSampleController() {}
 
@@ -31,7 +31,7 @@ public with sharing class ZendeskTicketFormsSampleController {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskTicketForms zforms = new ZendeskTicketForms(zapi);
 
-			formsMap = new Map<Integer, ZendeskTicketForms.ZTicketForm>();
+			formsMap = new Map<Long, ZendeskTicketForms.ZTicketForm>();
 			ZendeskTicketForms.ZTicketForm tf = zforms.getTicketForm(ticketFormId);
 			if (tf != null) {
 				formsMap.put(tf.id, tf);

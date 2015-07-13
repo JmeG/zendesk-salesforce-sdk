@@ -74,7 +74,7 @@ private class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTickets ztickets = new ZendeskTickets(zapi);
-        Integer newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, 'subject', 'comment', 999);
+        Long newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, 'subject', 'comment', 999);
 
         Test.stopTest();
 
@@ -88,7 +88,7 @@ private class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTickets ztickets = new ZendeskTickets(zapi);
-        Integer newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, 'testsubj', 'testcomment', 'attachmentToken', 123);
+        Long newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, 'testsubj', 'testcomment', 'attachmentToken', 123);
 
         Test.stopTest();
 
@@ -102,7 +102,7 @@ private class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTickets ztickets = new ZendeskTickets(zapi);
-        Integer newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, 'testsubj', 'testcomment', 123, new List<ZendeskTickets.ZTicketCustomField>());
+        Long newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, 'testsubj', 'testcomment', 123, new List<ZendeskTickets.ZTicketCustomField>());
 
         Test.stopTest();
 
@@ -116,7 +116,7 @@ private class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTickets ztickets = new ZendeskTickets(zapi);
-        Integer newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, 'testsubj', 'testcomment', 123, 234, 345, 456, new List<ZendeskTickets.ZTicketCustomField>());
+        Long newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, 'testsubj', 'testcomment', 123, 234, 345, 456, new List<ZendeskTickets.ZTicketCustomField>());
 
         Test.stopTest();
 
@@ -130,7 +130,7 @@ private class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTickets ztickets = new ZendeskTickets(zapi);
-        Integer newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, 'testsubj', 'testcomment', 'token', 123,  new List<ZendeskTickets.ZTicketCustomField>());
+        Long newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, 'testsubj', 'testcomment', 'token', 123,  new List<ZendeskTickets.ZTicketCustomField>());
 
         Test.stopTest();
 

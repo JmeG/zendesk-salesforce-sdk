@@ -2,10 +2,10 @@
 public with sharing class ZendeskGroups {
 
 	private final ZendeskAPI zapi;
-	private Map<Integer, ZGroup> groupsMap;
+	private Map<Long, ZGroup> groupsMap;
 
 	public class ZGroup {
-		public Integer id {get; private set;}
+		public Long id {get; private set;}
 		public String name {get; set;}
 		public Boolean deleted {get; private set;}
 		public DateTime created_at {get; private set;}
@@ -17,21 +17,21 @@ public with sharing class ZendeskGroups {
 
 		// Paging support
 		public String next_page {get; set;}
-		public Integer nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
+		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
 		public String previous_page {get; set;}
-		public Integer previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
+		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	public ZendeskGroups(ZendeskAPI zapi) {
 		this.zapi = zapi;
-		groupsMap = new Map<Integer, ZGroup>();
+		groupsMap = new Map<Long, ZGroup>();
 	}
 
 	public PagedGroupsWrapper getGroups() {
 		return getGroups(null);
 	}
 
-	public PagedGroupsWrapper getGroups(Integer page) {
+	public PagedGroupsWrapper getGroups(Long page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
 		HttpResponse res = new Http().send(queryReq);
 
@@ -43,7 +43,7 @@ public with sharing class ZendeskGroups {
 		return wrapper;
 	}
 
-	public ZGroup getGroup(Integer groupId) {
+	public ZGroup getGroup(Long groupId) {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
 		HttpResponse res = new Http().send(req);
 
@@ -64,7 +64,7 @@ public with sharing class ZendeskGroups {
 		return zgroupObj;
 	}
 
-	public void deleteGroup(Integer groupId) {
+	public void deleteGroup(Long groupId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
 		HttpResponse res = new Http().send(req);
 
@@ -74,7 +74,7 @@ public with sharing class ZendeskGroups {
 	}
 
 	// Retrieves all pages of groups. Uses the Group field "id" as the map key
-	public Map<Integer, ZGroup> getAllGroups() {
+	public Map<Long, ZGroup> getAllGroups() {
 		if (groupsMap.isEmpty()) {
 			loadAll();
 		}

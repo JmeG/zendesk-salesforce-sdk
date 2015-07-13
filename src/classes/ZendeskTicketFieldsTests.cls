@@ -66,7 +66,7 @@ private class ZendeskTicketFieldsTests {
 
         Test.startTest();
         ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
-        Map<Integer, ZendeskTicketFields.ZTicketField> fieldsMap = zfields.getAllFields();
+        Map<Long, ZendeskTicketFields.ZTicketField> fieldsMap = zfields.getAllFields();
         Test.stopTest();
 
         System.assertNotEquals(null, fieldsMap.containsKey(123));

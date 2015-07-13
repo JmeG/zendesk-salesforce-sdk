@@ -31,6 +31,14 @@ private class ZendeskAttachmentsTests {
         }
     }
 
+    public class MockFailedResponse implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            HttpResponse res = new HttpResponse();
+            res.setStatusCode(400);
+            return res;
+        }
+    }
+
     static testMethod void testUploadAttachment() {
         Test.setMock(HttpCalloutMock.class, new MockCreateAttachmentResponse());
 
@@ -42,6 +50,20 @@ private class ZendeskAttachmentsTests {
         Test.stopTest();
 
 		System.assertNotEquals(null, attachId);
+    }
+
+    static testMethod void testUploadAttachmentException() {
+        Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskAttachments zattach = new ZendeskAttachments(zapi);
+		try {
+            zattach.uploadAttachment('filename.txt', 'fileContentType', Blob.valueOf('asdfasfdasdfasdfasdf'));
+            System.assert(false); // throw an exception if we get here
+        } catch(Exception e) {}
+        Test.stopTest();
     }
 
     static testMethod void testDeleteAttachment() {
@@ -57,6 +79,20 @@ private class ZendeskAttachmentsTests {
         System.assert(true);
     }
 
+    static testMethod void testDeleteAttachmentException() {
+        Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskAttachments zattach = new ZendeskAttachments(zapi);
+		try {
+            zattach.deleteAttachment(123);
+            System.assert(false); // throw an exception if we get here
+        } catch(Exception e) {}
+        Test.stopTest();
+    }
+
     static testMethod void testGetAttachment() {
         Test.setMock(HttpCalloutMock.class, new MockAttachmentResponse());
 
@@ -68,5 +104,29 @@ private class ZendeskAttachmentsTests {
         Test.stopTest();
 
         System.assertNotEquals(null, za);
+    }
+
+    static testMethod void testGetAttachmentException() {
+        Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskAttachments zattach = new ZendeskAttachments(zapi);
+		try {
+            zattach.getAttachment(123);
+            System.assert(false); // throw an exception if we get here
+        } catch(Exception e) {}
+        Test.stopTest();
+    }
+
+    static testMethod void testZAttachment() {
+        ZendeskAttachments.ZAttachment obj = new ZendeskAttachments.ZAttachment();
+        obj.name = '';
+        obj.content_url = '';
+        obj.content_type = '';
+        obj.size = 0L;
+
+        System.assert(true);
     }
 }

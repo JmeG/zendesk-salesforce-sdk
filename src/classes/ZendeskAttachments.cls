@@ -4,12 +4,12 @@ public with sharing class ZendeskAttachments {
 	private final ZendeskAPI zapi;
 
 	public class ZAttachment {
-		public Integer id {get; private set;}
+		public Long id {get; private set;}
 		public String name {get; set;}
 		public String content_url {get; set;}
 		public String content_type {get; set;}
 		//public Object[] thumbnails {get; set:}
-		public Integer size {get; set;}
+		public Long size {get; set;}
 	}
 
 	private class AttachmentWrapper {
@@ -25,7 +25,6 @@ public with sharing class ZendeskAttachments {
 		String zendeskAttachmentToken = null;
 		try {
 			HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/uploads.json?filename=' + EncodingUtil.urlEncode(fileName, 'UTF-8'));
-			req.setHeader('Accept', 'application/json');
 			req.setHeader('Content-Type', fileContentType);
 			req.setBodyAsBlob(fileBody);
 			HttpResponse res = new Http().send(req);
@@ -51,7 +50,7 @@ public with sharing class ZendeskAttachments {
 		return zendeskAttachmentToken;
 	}
 
-	public void deleteAttachment(Integer attachmentId) {
+	public void deleteAttachment(Long attachmentId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + String.valueOf(attachmentId) + '.json');
 		HttpResponse res = new Http().send(req);
 
@@ -60,7 +59,7 @@ public with sharing class ZendeskAttachments {
 		}
 	}
 
-	public ZAttachment getAttachment(Integer attachmentId) {
+	public ZAttachment getAttachment(Long attachmentId) {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/attachments/' + String.valueOf(attachmentId) + '.json');
 		HttpResponse res = new Http().send(req);
 

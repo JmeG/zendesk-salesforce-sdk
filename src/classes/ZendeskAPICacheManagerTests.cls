@@ -21,7 +21,7 @@ private class ZendeskAPICacheManagerTests {
 		Test.startTest();
 
 		ZendeskAPICacheManager cache = new ZendeskAPICacheManager();
-		Integer cacheId = cache.getID('unittestdomain', 'testtype', 'not to be found', false);
+		Long cacheId = cache.getID('unittestdomain', 'testtype', 'not to be found', false);
 
 		Test.stopTest();
 
@@ -42,7 +42,7 @@ private class ZendeskAPICacheManagerTests {
 		Test.startTest();
 
 		ZendeskAPICacheManager cache = new ZendeskAPICacheManager();
-		Integer cacheId = cache.getID('unittestdomain', 'testtype', 'name1', false);
+		Long cacheId = cache.getID('unittestdomain', 'testtype', 'name1', false);
 
 		Test.stopTest();
 

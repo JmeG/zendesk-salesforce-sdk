@@ -7,7 +7,7 @@ public with sharing class ZendeskUserFieldsSampleController {
 
 	public String pageMessage {get;set;}
 	public String searchText {get;set;}
-	public Integer userFieldId {get;set;}
+	public Long userFieldId {get;set;}
 	public Map<String, ZendeskUserFields.ZUserField> fieldsMap {get;set;}
 
 	public ZendeskUserFieldsSampleController() {}

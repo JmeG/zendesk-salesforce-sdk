@@ -28,7 +28,7 @@ global with sharing class ZendeskCreateTicketSampleService {
 
 			// Create a new user or get the existing id of the requesting user
 			ZendeskUsers zUsers = new ZendeskUsers(zapi);
-			Integer requesterId = zUsers.getUserIdFromEmail(UserInfo.getUserEmail());
+			Long requesterId = zUsers.getUserIdFromEmail(UserInfo.getUserEmail());
 			if (requesterId == null) {
 				requesterId = zUsers.createUser(UserInfo.getName(), UserInfo.getUserEmail());
 				if (requesterId == null) { throw new ZendeskException('Error creating user in ' + zendeskSubdomain); }
@@ -51,7 +51,7 @@ global with sharing class ZendeskCreateTicketSampleService {
 
 			// Create the request
 			ZendeskTickets zTickets = new ZendeskTickets(zapi);
-			Integer ticketNum = zTickets.createTicket('question', ticketSubject, ticketDescription, requesterId, zcfList);
+			Long ticketNum = zTickets.createTicket('question', ticketSubject, ticketDescription, requesterId, zcfList);
 
 			// Return the newly created ticket number
 			return 'Ticket # ' + ticketNum + ' created.';

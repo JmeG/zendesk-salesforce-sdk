@@ -65,7 +65,7 @@ private class ZendeskGroupsTests {
 
         Test.startTest();
         ZendeskGroups zgroups = new ZendeskGroups(zapi);
-        Map<Integer, ZendeskGroups.ZGroup> fieldsMap = zgroups.getAllGroups();
+        Map<Long, ZendeskGroups.ZGroup> fieldsMap = zgroups.getAllGroups();
         Test.stopTest();
 
         System.assertNotEquals(null, fieldsMap.containsKey(123));

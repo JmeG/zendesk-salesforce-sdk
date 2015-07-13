@@ -4,7 +4,7 @@ public with sharing class ZendeskUsers {
 	private final ZendeskAPI zapi;
 
 	public class ZUser {
-		public Integer id {get; private set;}
+		public Long id {get; private set;}
 		public String name {get; set;}
 		public String email {get; set;}
 		public String phone {get; set;}
@@ -14,7 +14,7 @@ public with sharing class ZendeskUsers {
 		public Boolean verified {get; set;}
 		public String role {get; set;}
 		public DateTime last_login_at {get; private set;}
-		public Integer organization_id {get; set;}
+		public Long organization_id {get; set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
 		public Map<String, String> user_fields {get; set;}
@@ -25,9 +25,9 @@ public with sharing class ZendeskUsers {
 
 		// Paging support
 		public String next_page {get; set;}
-		public Integer nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
+		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
 		public String previous_page {get; set;}
-		public Integer previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
+		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	// Used to deserialize the result of a User create/update API call
@@ -39,7 +39,7 @@ public with sharing class ZendeskUsers {
 		this.zapi = zapi;
 	}
 
-	public Integer createUser(String name, String email) {
+	public Long createUser(String name, String email) {
 		ZUser zuser = new ZUser();
 		zuser.name = name;
 		zuser.email = email;
@@ -47,7 +47,7 @@ public with sharing class ZendeskUsers {
 		return createUser(zuser);
 	}
 
-	public Integer createUser(ZUser zuser) {
+	public Long createUser(ZUser zuser) {
 		UserWrapper wrapper = new UserWrapper();
 		wrapper.user = zuser;
 
@@ -65,7 +65,7 @@ public with sharing class ZendeskUsers {
 		return ((resultWrapper==null || resultWrapper.user == null) ? null : resultWrapper.user.id);
 	}
 
-	public Integer getUserIdByEmail(String email) {
+	public Long getUserIdByEmail(String email) {
 		ZUser user = findUserByEmail(email);
 		return (user == null ? null : user.id);
 	}
@@ -113,7 +113,7 @@ public with sharing class ZendeskUsers {
     }
 
 	// TODO: does paging exist for Users endpoing?
-    public PagedUsersWrapper getUsers(Integer page) {
+    public PagedUsersWrapper getUsers(Long page) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
         HttpResponse res = new Http().send(queryReq);
 
@@ -125,7 +125,7 @@ public with sharing class ZendeskUsers {
         return wrapper;
     }
 
-	public ZUser getUser(Integer userId) {
+	public ZUser getUser(Long userId) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + String.valueOf(userId) + '.json');
         HttpResponse res = new Http().send(queryReq);
 

@@ -6,8 +6,8 @@ public with sharing class ZendeskTicketFieldsSampleController {
 	public String authType {get;set;}
 
 	public String pageMessage {get;set;}
-	public Integer ticketFieldId {get;set;}
-	public Map<Integer, ZendeskTicketFields.ZTicketField> fieldsMap {get;set;}
+	public Long ticketFieldId {get;set;}
+	public Map<Long, ZendeskTicketFields.ZTicketField> fieldsMap {get;set;}
 
 	public ZendeskTicketFieldsSampleController() {}
 
@@ -31,7 +31,7 @@ public with sharing class ZendeskTicketFieldsSampleController {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
 
-			fieldsMap = new Map<Integer, ZendeskTicketFields.ZTicketField>();
+			fieldsMap = new Map<Long, ZendeskTicketFields.ZTicketField>();
 			ZendeskTicketFields.ZTicketField field = zfields.getTicketField(ticketFieldId);
 			if (field != null) {
 				fieldsMap.put(field.id, field);

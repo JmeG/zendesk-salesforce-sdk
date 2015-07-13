@@ -9,7 +9,7 @@ public with sharing class ZendeskTicketComments {
 		public String body {get; set;}
 		public String html_body {get; set;}
 		//public Boolean public {get; set;} // TODO: can't use reserved keyword "public". Need to do custom serialization
-		public Integer author_id {get; set;}
+		public Long author_id {get; set;}
 		public ZendeskAttachments.ZAttachment[] attachments {get; set;}
 		public ZendeskTickets.ZTicketVia via {get; set;}
 		public DateTime created_at {get; private set;}
@@ -20,9 +20,9 @@ public with sharing class ZendeskTicketComments {
 
 		// Paging support
 		public String next_page {get; set;}
-		public Integer nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
+		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
 		public String previous_page {get; set;}
-		public Integer previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
+		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	private class TicketCommentWrapper {
@@ -34,12 +34,12 @@ public with sharing class ZendeskTicketComments {
 	}
 
 	// Get the first page of Ticket Comments
-	public PagedTicketCommentsWrapper getTicketComments(Integer ticketId) {
+	public PagedTicketCommentsWrapper getTicketComments(Long ticketId) {
 		return getTicketComments(ticketId, null);
 	}
 
 	// Get a specific page of Ticket Comments
-	public PagedTicketCommentsWrapper getTicketComments(Integer ticketId, Integer page) {
+	public PagedTicketCommentsWrapper getTicketComments(Long ticketId, Long page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
 		HttpResponse res = new Http().send(queryReq);
 
@@ -51,7 +51,7 @@ public with sharing class ZendeskTicketComments {
 		return wrapper;
 	}
 
-	public void redactStringInComment(Integer ticketId, Long ticketCommentId, String redactText) {
+	public void redactStringInComment(Long ticketId, Long ticketCommentId, String redactText) {
 		if (String.isBlank(redactText)) { throw new ZendeskException ('You must specify text to redact'); }
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '/comments/' + String.valueOf(ticketCommentId) + '/redact.json');
 		req.setBody('{"text": "' + redactText + '"}');
@@ -62,7 +62,7 @@ public with sharing class ZendeskTicketComments {
 		}
 	}
 
-	public void makeCommentPrivate(Integer ticketId, Long ticketCommentId) {
+	public void makeCommentPrivate(Long ticketId, Long ticketCommentId) {
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '/comments/' + String.valueOf(ticketCommentId) + '/make_private.json');
 		HttpResponse res = new Http().send(req);
 

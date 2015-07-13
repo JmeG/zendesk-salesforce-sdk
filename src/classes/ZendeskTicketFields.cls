@@ -2,10 +2,10 @@
 public with sharing class ZendeskTicketFields {
 
 	private final ZendeskAPI zapi;
-	private Map<Integer, ZTicketField> ticketFieldsMap {get; private set; }
+	private Map<Long, ZTicketField> ticketFieldsMap {get; private set; }
 
 	public class ZTicketField {
-		public Integer id {get; private set;}
+		public Long id {get; private set;}
 		public String type {get; set;}
 		public String title {get; set;}
 		public String raw_title {get; set;}
@@ -36,7 +36,7 @@ public with sharing class ZendeskTicketFields {
 	}
 
 	public class ZCustomFieldOption {
-		public Integer id {get; private set;}
+		public Long id {get; private set;}
 		public String name {get; set;}
 		public String raw_name {get; set;}
 		public String value {get; set;}
@@ -47,9 +47,9 @@ public with sharing class ZendeskTicketFields {
 
 		// Paging support
 		public String next_page {get; set;}
-		public Integer nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
+		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
 		public String previous_page {get; set;}
-		public Integer previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
+		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	private class TicketFieldWrapper {
@@ -58,10 +58,10 @@ public with sharing class ZendeskTicketFields {
 
 	public ZendeskTicketFields(ZendeskAPI zapi) {
 		this.zapi = zapi;
-		ticketFieldsMap = new Map<Integer, ZTicketField>();
+		ticketFieldsMap = new Map<Long, ZTicketField>();
 	}
 
-	public ZTicketField getTicketField(Integer ticketFieldId) {
+	public ZTicketField getTicketField(Long ticketFieldId) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + String.valueOf(ticketFieldId) + '.json');
 		HttpResponse res = new Http().send(queryReq);
 
@@ -79,7 +79,7 @@ public with sharing class ZendeskTicketFields {
 	}
 
 	// Get a specific page of User Fields
-	public PagedTicketFieldsWrapper getTicketFields(Integer page) {
+	public PagedTicketFieldsWrapper getTicketFields(Long page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
 		HttpResponse res = new Http().send(queryReq);
 
@@ -91,7 +91,7 @@ public with sharing class ZendeskTicketFields {
 		return wrapper;
 	}
 
-	public void deleteTicketField(Integer ticketFieldId) {
+	public void deleteTicketField(Long ticketFieldId) {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_fields/' + String.valueOf(ticketFieldId) + '.json');
 		HttpResponse res = new Http().send(req);
 
@@ -101,7 +101,7 @@ public with sharing class ZendeskTicketFields {
 	}
 
 	// Retrieves all pages of ticket fields. Uses the field "id" as the map key
-	public Map<Integer, ZTicketField> getAllFields() {
+	public Map<Long, ZTicketField> getAllFields() {
         if (ticketFieldsMap.isEmpty()) {
             loadAll();
         }

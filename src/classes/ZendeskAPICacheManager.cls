@@ -13,16 +13,16 @@ public with sharing class ZendeskAPICacheManager {
 		cacheMap = Zendesk_API_Cache__c.getAll();
 	}
 
-	public Integer getID(String subdomain, String itemType, String itemName) {
+	public Long getID(String subdomain, String itemType, String itemName) {
 		return getID(subdomain, itemType, itemName, false);
 	}
 
-	public Integer getID(String subdomain, String itemType, String itemName, Boolean throwErrorIfNotFound) {
-		Integer itemID = null;
+	public Long getID(String subdomain, String itemType, String itemName, Boolean throwErrorIfNotFound) {
+		Long itemID = null;
 		for (String key : cacheMap.keySet()) {
 			Zendesk_API_Cache__c cached = cacheMap.get(key);
 			if (cached.Subdomain__c == subdomain && cached.Item_Type__c == itemType && cached.Item_Name__c == itemName) {
-				itemID = Integer.valueOf(cached.Item_ID__c);
+				itemID = cached.Item_ID__c.longValue();
 				break;
 			}
 		}
@@ -52,7 +52,7 @@ public with sharing class ZendeskAPICacheManager {
 		}
 	}
 
-	public void add(String subdomain, String itemType, String itemName, Integer itemID) {
+	public void add(String subdomain, String itemType, String itemName, Long itemID) {
 		if (getID(subdomain, itemType, itemName) != null) {
 			throw new ZendeskException('The data you are trying to add is not unique [Saved] ' + subdomain + '.' + itemType + '.' + itemName + '"');
 		}
