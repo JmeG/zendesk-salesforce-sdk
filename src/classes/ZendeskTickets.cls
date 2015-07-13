@@ -318,27 +318,20 @@ public with sharing class ZendeskTickets {
 
 	// helper method to add a new comment to a ticket
 	public void addTicketComment(Long ticketId, String commentText, Boolean isPublic) {
-		// Manually build the update ticket JSON
-		String ticketJson = '{'
-		 	+ '"ticket": {'
-		    + ' "comment": { "body": "' + commentText + '", "public": ' + isPublic + ' }'
-			+ '}'
-			+ '}';
-		System.debug('***ticketJson1=' + ticketJson);
-
-		JSONGenerator gen = JSON.createGenerator(true); // pretty print = true
+		// Manually build the update ticket JSON since we can't serialize a TicketComment
+		// object due to "public" being a reserved keyword
+		JSONGenerator gen = JSON.createGenerator(true);
 		gen.writeStartObject();
 		gen.writeFieldName('ticket');
 		gen.writeStartObject();
 		gen.writeFieldName('comment');
+		gen.writeStartObject();
 		gen.writeObjectField('body', commentText);
 		gen.writeObjectField('public', isPublic);
 		gen.writeEndObject();
 		gen.writeEndObject();
-		ticketJson = gen.getAsString();
-		System.debug('***ticketJson2=' + ticketJson);
-
-
+		gen.writeEndObject();
+		String ticketJson = gen.getAsString();
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
 		req.setBody(ticketJson);
@@ -352,13 +345,21 @@ public with sharing class ZendeskTickets {
 
 	// helper method to add a new comment to a ticket and change its status
 	public void addTicketCommentAndChangeStatus(Long ticketId, String commentText, Boolean isPublic, TicketStatus status) {
-		// Manually build the update ticket JSON
-		String ticketJson = '{'
-		 	+ '"ticket": {'
-		    + ' "comment": { "body": "' + commentText + '", "public": ' + isPublic + ' },'
-		    + ' "status":  "' + status.status + '"'
-			+ '}'
-			+ '}';
+		// Manually build the update ticket JSON since we can't serialize a TicketComment
+		// object due to "public" being a reserved keyword
+		JSONGenerator gen = JSON.createGenerator(true);
+		gen.writeStartObject();
+		gen.writeFieldName('ticket');
+		gen.writeStartObject();
+		gen.writeFieldName('comment');
+		gen.writeStartObject();
+		gen.writeObjectField('body', commentText);
+		gen.writeObjectField('public', isPublic);
+		gen.writeEndObject();
+		gen.writeObjectField('status', status.status);
+		gen.writeEndObject();
+		gen.writeEndObject();
+		String ticketJson = gen.getAsString();
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
 		req.setBody(ticketJson);
