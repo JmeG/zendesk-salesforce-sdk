@@ -2,11 +2,13 @@
 public with sharing class ZendeskAPI {
 
 	public final static String BASE_PATH =  '/api/v2';
+	private final static String DEFAULT_USER_AGENT =  'Force.com Toolkit for Zendesk';
 
 	private String subdomain {get;set;}
 	private String username {get;set;}
 	private String passwordOrToken {get;set;}
 	private AuthType authenticationType {get;set;}
+	public String userAgent {get;set;}
 
 	public Enum AuthType {
 		Password,
@@ -18,6 +20,8 @@ public with sharing class ZendeskAPI {
 		this.username = username;
 		this.passwordOrToken = passwordOrToken;
 		this.authenticationType = authenticationType;
+
+		userAgent = DEFAULT_USER_AGENT;
 	}
 
 	public HttpRequest createRequest(String reqMethod, String path) {
@@ -34,8 +38,12 @@ public with sharing class ZendeskAPI {
 		req.setTimeout(30000); // 30 seconds
 		req.setHeader('Authorization', authorizationHeader);
 		req.setEndpoint('https://' + subdomain + '.zendesk.com' + path);
+		req.setHeader('Accept', 'application/json');
 		if (reqMethod == 'POST' || reqMethod == 'PUT') {
 			req.setHeader('Content-Type', 'application/json');
+		}
+		if (!String.isEmpty(userAgent)) {
+			req.setHeader('User-Agent', userAgent);
 		}
 
 		return req;
@@ -52,8 +60,32 @@ public with sharing class ZendeskAPI {
 	}
 
 	// pageURL looks like "https://test.zendesk.com/api/v2/tickets.json?page=2"
-	// simply return Integer 2
-	public static Integer getPageNumber(String pageUrl) {
-		return (String.isEmpty(pageUrl) ? null : Integer.valueOf(pageUrl.substringAfterLast('page=').substringBefore('&')));
+	// simply return 2
+	public static Long getPageNumber(String pageUrl) {
+		return (String.isEmpty(pageUrl) ? null : Long.valueOf(pageUrl.substringAfterLast('page=').substringBefore('&')));
+	}
+
+	// A custom JSON serializer that strips out fields with NULL values from the resulting JSON
+	// Hopefully Salesforce will add support to allow this to be done natively at some point
+	// If you do need specific fields with NULL values to remain in the JSON then add the names
+	// of those fields to the fieldsToNull set.
+	// NOTE that this only looks at fields 1 level down from the top
+	public static String serializeJsonNoNulls(Object obj, Set<String> fieldsToNull) {
+		Map<String, Object> fieldsMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(obj));
+		System.debug('**fieldsMap=' + fieldsMap);
+		Map<String, Object> updateMap = new Map<String, Object>();
+		for (String key : fieldsMap.keySet()) {
+			System.debug('**[' + key + '] = ' + fieldsMap.get(key));
+			// Only keep items that have a non-null value
+			// or that have been specified in the fieldsToNull set
+			if (fieldsMap.get(key) != null || (fieldsToNull != null && fieldsToNull.contains(key))) {
+				updateMap.put(key, fieldsMap.get(key));
+			}
+		}
+
+		String updateJson = JSON.serialize(updateMap);
+		System.debug('**updateJson=' + updateJson);
+
+		return updateJson;
 	}
 }

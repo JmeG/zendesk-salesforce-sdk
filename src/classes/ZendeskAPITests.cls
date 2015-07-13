@@ -11,7 +11,7 @@ private class ZendeskAPITests {
             return res;
         }
     }
-    
+
     static testMethod void testCreateRequest() {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
@@ -38,4 +38,33 @@ private class ZendeskAPITests {
         System.assertEquals(3, ZendeskAPI.getPageNumber('https://test.zendesk.com/api/v2/tickets.json?page=3&foo=bar'));
         Test.stopTest();
     }
+
+
+    		/*
+    		ZendeskTickets.ZTicket zticket = new ZendeskTickets.ZTicket();
+    		zticket.requester_id = 123;
+    		zticket.group_id = 456;
+    		zticket.type = ZendeskTickets.TicketType.question;
+    		zticket.comment = new ZendeskTickets.ZTicketComment();
+    		zticket.comment.body = 'add new comment';
+    		zticket.custom_fields = new List<ZendeskTickets.ZTicketCustomField>();
+
+    		Set<String> fieldsToNull = new Set<String>();
+    		Map<String, Object> ticketMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(zticket));
+    		System.debug('**ticketMap=' + ticketMap);
+    		Map<String, Object> updateMap = new Map<String, Object>();
+    		for (String key : ticketMap.keySet()) {
+    			System.debug('**[' + key + '] = ' + ticketMap.get(key));
+    			// Only keep items that have a value assigned
+    			// or that have been specified in the fieldsToNull set
+    			if (ticketMap.get(key) != null || fieldsToNull.contains(key)) {
+    				updateMap.put(key, ticketMap.get(key));
+    			}
+    		}
+
+    		String updateJson = JSON.serialize(updateMap);
+    		System.debug('**updateJson=' + updateJson);
+
+    		*/
+
 }
