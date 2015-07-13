@@ -75,6 +75,7 @@ public with sharing class ZendeskTickets {
 
 	public class ZTicketComment {
 		public String body {get; set;}
+		public Boolean x_public {get; set;}  // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
 		public String uploads {get; set;}
 	}
 
@@ -318,6 +319,7 @@ public with sharing class ZendeskTickets {
 
 	// helper method to add a new comment to a ticket
 	public void addTicketComment(Long ticketId, String commentText, Boolean isPublic) {
+		/*
 		// Manually build the update ticket JSON since we can't serialize a TicketComment
 		// object due to "public" being a reserved keyword
 		JSONGenerator gen = JSON.createGenerator(true);
@@ -332,6 +334,13 @@ public with sharing class ZendeskTickets {
 		gen.writeEndObject();
 		gen.writeEndObject();
 		String ticketJson = gen.getAsString();
+		*/
+
+		ZTicket ticket = new ZTicket();
+		ticket.comment = new ZTicketComment();
+		ticket.comment.body = commentText;
+		ticket.comment.x_public = isPublic;
+		String ticketJson = unreplaceReservedWords(JSON.serialize(ticket));
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		req.setBody(ticketJson);
@@ -345,6 +354,7 @@ public with sharing class ZendeskTickets {
 
 	// helper method to add a new comment to a ticket and change its status
 	public void addTicketCommentAndChangeStatus(Long ticketId, String commentText, Boolean isPublic, TicketStatus status) {
+		/*
 		// Manually build the update ticket JSON since we can't serialize a TicketComment
 		// object due to "public" being a reserved keyword
 		JSONGenerator gen = JSON.createGenerator(true);
@@ -360,6 +370,13 @@ public with sharing class ZendeskTickets {
 		gen.writeEndObject();
 		gen.writeEndObject();
 		String ticketJson = gen.getAsString();
+		*/
+		ZTicket ticket = new ZTicket();
+		ticket.comment = new ZTicketComment();
+		ticket.comment.body = commentText;
+		ticket.comment.x_public = isPublic;
+		ticket.status = status.status;
+		String ticketJson = unreplaceReservedWords(JSON.serialize(ticket));
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		req.setBody(ticketJson);
@@ -369,6 +386,18 @@ public with sharing class ZendeskTickets {
 			System.debug(res.getBody());
 			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
 		}
+	}
+
+	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+	private String replaceReservedWords(String str) {
+		str = str.replaceAll('"public"\\s*:', '"x_public":');
+		return str;
+	}
+
+	// un-replace reserved keywords in the JSON string
+	private String unreplaceReservedWords(String str) {
+		str = str.replaceAll('"x_public"\\s*:', '"public":');
+		return str;
 	}
 
 }

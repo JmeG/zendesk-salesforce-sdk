@@ -12,6 +12,10 @@ public with sharing class ZendeskGroups {
 		public DateTime updated_at {get; private set;}
 	}
 
+	private class GroupWrapper {
+		public ZGroup x_group {get; set;} // Use "x_group" in place of "group" which is a reserved keyword. Requires custom de/serialization.
+	}
+
 	public class PagedGroupsWrapper {
 		public ZGroup[] groups {get;set;}
 
@@ -39,7 +43,7 @@ public with sharing class ZendeskGroups {
 			throw new ZendeskException('Error getting Groups (' + res.getStatusCode() + ')');
 		}
 
-		PagedGroupsWrapper wrapper = (PagedGroupsWrapper)JSON.deserialize(res.getBody(), PagedGroupsWrapper.class);
+		PagedGroupsWrapper wrapper = (PagedGroupsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), PagedGroupsWrapper.class);
 		return wrapper;
 	}
 
@@ -51,17 +55,9 @@ public with sharing class ZendeskGroups {
 			throw new ZendeskException('Error getting Group ' + groupId + ' (' + res.getStatusCode() + ')');
 		}
 
-		// NOTE: We can't deserialize the response directly into a concrete class because "group"
-		// is a Salesforce keyword so we can't define a class that has "group" as a parameter name
-		// Here is our workaround
-		ZGroup zgroupObj = null;
-		Map<String, Object> objMap = (Map<String, Object>)JSON.deserializeUntyped(res.getBody());
-		if (objMap.containsKey('group')) {
-			zgroupObj = (ZGroup)JSON.deserialize(JSON.serialize(objMap.get('group')), ZGroup.class);
-		} else {
-			throw new ZendeskException('Unexpected content in Group response');
-		}
-		return zgroupObj;
+		// use replaceReservedWords to work around JSON containing Salesforce keyword "group"
+		GroupWrapper resultWrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), GroupWrapper.class);
+		return resultWrapper.x_group;
 	}
 
 	public void deleteGroup(Long groupId) {
@@ -95,5 +91,17 @@ public with sharing class ZendeskGroups {
 				}
 			}
 		}
+	}
+
+	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+	private String replaceReservedWords(String str) {
+		str = str.replaceAll('"group"\\s*:', '"x_group":');
+		return str;
+	}
+
+	// un-replace reserved keywords in the JSON string
+	private String unreplaceReservedWords(String str) {
+		str = str.replaceAll('"x_group"\\s*:', '"group":');
+		return str;
 	}
 }

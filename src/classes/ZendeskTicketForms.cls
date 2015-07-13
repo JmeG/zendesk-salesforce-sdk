@@ -9,7 +9,7 @@ public with sharing class ZendeskTicketForms {
 		public String name {get; set;}
 		public String raw_name {get; set;}
 		public Boolean active {get; set;}
-		//public Boolean default {get; set;} // can't use since "default" is a keyword
+		public Boolean x_default {get; set;} // Use "x_default" in place of "default" which is a reserved keyword. Requires custom de/serialization.
 	}
 
 	private class TicketFormWrapper {
@@ -45,7 +45,7 @@ public with sharing class ZendeskTicketForms {
 			throw new ZendeskException('Error getting Ticket Forms (' + res.getStatusCode() + ')');
 		}
 
-		PagedTicketFormsWrapper wrapper = (PagedTicketFormsWrapper)JSON.deserialize(res.getBody(), PagedTicketFormsWrapper.class);
+		PagedTicketFormsWrapper wrapper = (PagedTicketFormsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), PagedTicketFormsWrapper.class);
 		return wrapper;
 	}
 
@@ -57,7 +57,7 @@ public with sharing class ZendeskTicketForms {
 			throw new ZendeskException('Error getting Ticket Form ' + ticketFormId + ' (' + res.getStatusCode() + ')');
 		}
 
-		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(res.getBody(), TicketFormWrapper.class);
+		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), TicketFormWrapper.class);
 		return resultWrapper.ticket_form;
 	}
 
@@ -92,5 +92,17 @@ public with sharing class ZendeskTicketForms {
 				}
 			}
 		}
+	}
+
+	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+	private String replaceReservedWords(String str) {
+		str = str.replaceAll('"default"\\s*:', '"x_default":');
+		return str;
+	}
+
+	// un-replace reserved keywords in the JSON string
+	private String unreplaceReservedWords(String str) {
+		str = str.replaceAll('"x_default"\\s*:', '"default":');
+		return str;
 	}
 }

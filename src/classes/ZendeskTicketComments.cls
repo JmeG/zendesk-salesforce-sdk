@@ -8,7 +8,7 @@ public with sharing class ZendeskTicketComments {
 		public String type {get; set;}
 		public String body {get; set;}
 		public String html_body {get; set;}
-		//public Boolean public {get; set;} // TODO: can't use reserved keyword "public". Need to do custom serialization
+		public Boolean x_public {get; set;} // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
 		public Long author_id {get; set;}
 		public ZendeskAttachments.ZAttachment[] attachments {get; set;}
 		public ZendeskTickets.ZTicketVia via {get; set;}
@@ -40,20 +40,20 @@ public with sharing class ZendeskTicketComments {
 
 	// Get a specific page of Ticket Comments
 	public PagedTicketCommentsWrapper getTicketComments(Long ticketId, Long page) {
-		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments.json' + (page==null ? '' : '?page=' + page));
 		HttpResponse res = new Http().send(queryReq);
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error getting Ticket Comments (' + res.getStatusCode() + ')');
 		}
 
-		PagedTicketCommentsWrapper wrapper = (PagedTicketCommentsWrapper)JSON.deserialize(res.getBody(), PagedTicketCommentsWrapper.class);
+		PagedTicketCommentsWrapper wrapper = (PagedTicketCommentsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), PagedTicketCommentsWrapper.class);
 		return wrapper;
 	}
 
 	public void redactStringInComment(Long ticketId, Long ticketCommentId, String redactText) {
 		if (String.isBlank(redactText)) { throw new ZendeskException ('You must specify text to redact'); }
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '/comments/' + String.valueOf(ticketCommentId) + '/redact.json');
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/redact.json');
 		req.setBody('{"text": "' + redactText + '"}');
 		HttpResponse res = new Http().send(req);
 
@@ -63,12 +63,24 @@ public with sharing class ZendeskTicketComments {
 	}
 
 	public void makeCommentPrivate(Long ticketId, Long ticketCommentId) {
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '/comments/' + String.valueOf(ticketCommentId) + '/make_private.json');
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/make_private.json');
 		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {
 			throw new ZendeskException('Error making Ticket Comment private ' + ticketCommentId + ' (' + res.getStatusCode() + ')');
 		}
+	}
+
+	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+	private String replaceReservedWords(String str) {
+		str = str.replaceAll('"public"\\s*:', '"x_public":');
+		return str;
+	}
+
+	// un-replace reserved keywords in the JSON string
+	private String unreplaceReservedWords(String str) {
+		str = str.replaceAll('"x_public"\\s*:', '"public":');
+		return str;
 	}
 
 }
