@@ -51,7 +51,7 @@ public with sharing class ZendeskAttachments {
 	}
 
 	public void deleteAttachment(Long attachmentId) {
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + String.valueOf(attachmentId) + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
 		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {
@@ -60,7 +60,7 @@ public with sharing class ZendeskAttachments {
 	}
 
 	public ZAttachment getAttachment(Long attachmentId) {
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/attachments/' + String.valueOf(attachmentId) + '.json');
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
 		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {

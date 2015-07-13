@@ -32,7 +32,7 @@ public with sharing class ZendeskGroups {
 	}
 
 	public PagedGroupsWrapper getGroups(Long page) {
-		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + page));
 		HttpResponse res = new Http().send(queryReq);
 
 		if (res.getStatusCode() != 200) {
@@ -44,7 +44,7 @@ public with sharing class ZendeskGroups {
 	}
 
 	public ZGroup getGroup(Long groupId) {
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
 		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {
@@ -65,7 +65,7 @@ public with sharing class ZendeskGroups {
 	}
 
 	public void deleteGroup(Long groupId) {
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + String.valueOf(groupId) + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
 		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {

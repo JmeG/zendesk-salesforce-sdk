@@ -114,7 +114,7 @@ public with sharing class ZendeskUsers {
 
 	// TODO: does paging exist for Users endpoing?
     public PagedUsersWrapper getUsers(Long page) {
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
 		if (res.getStatusCode() != 200) {
@@ -126,7 +126,7 @@ public with sharing class ZendeskUsers {
     }
 
 	public ZUser getUser(Long userId) {
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + String.valueOf(userId) + '.json');
+        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '.json');
         HttpResponse res = new Http().send(queryReq);
 
 		if (res.getStatusCode() != 200) {

@@ -105,7 +105,7 @@ public with sharing class ZendeskTickets {
 	}
 
 	public ZTicket getTicket(Long ticketId) {
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {
@@ -208,7 +208,7 @@ public with sharing class ZendeskTickets {
 
 	// /api/v2/organizations/{organization_id}/tickets.json
 	public PagedTicketsWrapper getTicketsByOrgId(Long orgId, Long page) {
-        return getTickets(page, '/organizations/' + String.valueOf(orgId) + '/tickets.json');
+        return getTickets(page, '/organizations/' + orgId + '/tickets.json');
     }
 
 	// /api/v2/users/{user_id}/tickets/requested.json
@@ -218,7 +218,7 @@ public with sharing class ZendeskTickets {
 
 	// /api/v2/users/{user_id}/tickets/requested.json
 	public PagedTicketsWrapper getTicketsByRequesterId(Long requesterId, Long page) {
-        return getTickets(page, '/users/' + String.valueOf(requesterId) + '/tickets/requested.json');
+        return getTickets(page, '/users/' + requesterId + '/tickets/requested.json');
     }
 
 	// /api/v2/users/{user_id}/tickets/ccd.json
@@ -228,7 +228,7 @@ public with sharing class ZendeskTickets {
 
 	// /api/v2/users/{user_id}/tickets/ccd.json
 	public PagedTicketsWrapper getTicketsByCCUserId(Long userId, Long page) {
-        return getTickets(page, '/users/' + String.valueOf(userId) + '/tickets/ccd.json');
+        return getTickets(page, '/users/' + userId + '/tickets/ccd.json');
     }
 
 	// /api/v2/users/{user_id}/tickets/assigned.json
@@ -238,7 +238,7 @@ public with sharing class ZendeskTickets {
 
 	// /api/v2/users/{user_id}/tickets/assigned.json
 	public PagedTicketsWrapper getTicketsByAssigneeId(Long assigneeId, Long page) {
-        return getTickets(page, '/users/' + String.valueOf(assigneeId) + '/tickets/assigned.json');
+        return getTickets(page, '/users/' + assigneeId + '/tickets/assigned.json');
     }
 
 	// /api/v2/tickets/recent.json
@@ -253,7 +253,7 @@ public with sharing class ZendeskTickets {
 
 	// Get a specific page of Tickets
 	private PagedTicketsWrapper getTickets(Long page, String apiPath) {
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets.json' + (page==null ? '' : '?page=' + String.valueOf(page)));
+        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
         if (res.getStatusCode() != 200) {
@@ -265,7 +265,7 @@ public with sharing class ZendeskTickets {
     }
 
 	public void deleteTicket(Long ticketId) {
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {
@@ -278,7 +278,7 @@ public with sharing class ZendeskTickets {
 	}
 
 	public void updateTicket(Long ticketId, ZTicket zticket, Set<String> fieldsToNull) {
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		String ticketJson = ZendeskAPI.serializeJsonNoNulls(zticket, fieldsToNull);
 		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
@@ -333,7 +333,7 @@ public with sharing class ZendeskTickets {
 		gen.writeEndObject();
 		String ticketJson = gen.getAsString();
 
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		req.setBody(ticketJson);
 		HttpResponse res = new Http().send(req);
 
@@ -361,7 +361,7 @@ public with sharing class ZendeskTickets {
 		gen.writeEndObject();
 		String ticketJson = gen.getAsString();
 
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + String.valueOf(ticketId) + '.json');
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		req.setBody(ticketJson);
 		HttpResponse res = new Http().send(req);
 
