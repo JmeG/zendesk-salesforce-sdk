@@ -9,8 +9,8 @@
             <apex:pageBlock title="Ticket Fields" mode="edit">
                 <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
                 <apex:pageBlockButtons location="top">
-                    <apex:commandButton action="{!getFieldByID}" value="Get by ID" rerender="ticketFieldsPanel" />
                     <apex:commandButton action="{!getFields}" value="Get all Ticket Fields" rerender="ticketFieldsPanel" />
+                    <apex:commandButton action="{!getFieldByID}" value="Get by ID" rerender="ticketFieldsPanel" />
                 </apex:pageBlockButtons>
                 <apex:pageBlockSection title="" columns="1">
                     <apex:pageBlockSectionItem >

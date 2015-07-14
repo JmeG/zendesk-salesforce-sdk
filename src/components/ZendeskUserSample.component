@@ -9,10 +9,10 @@
             <apex:pageBlock title="Users" mode="edit">
                 <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
                 <apex:pageBlockButtons location="top">
+                    <apex:commandButton action="{!getUsers}" value="Get Users" rerender="usersPanel" />
                     <apex:commandButton action="{!createUser}" value="Create New User" rerender="usersPanel" />
                     <apex:commandButton action="{!findUserByEmail}" value="Find User by Email" rerender="usersPanel" />
                     <apex:commandButton action="{!findUsersByNameOrEmail}" value="Search Users" rerender="usersPanel" />
-                    <apex:commandButton action="{!getUsers}" value="Get Users" rerender="usersPanel" />
                 </apex:pageBlockButtons>
                 <apex:pageBlockSection title="User Details" columns="1">
                     <apex:pageBlockSectionItem >

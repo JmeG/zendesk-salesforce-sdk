@@ -9,8 +9,8 @@
             <apex:pageBlock title="Tickets" mode="edit">
                 <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
                 <apex:pageBlockButtons location="top">
-                    <apex:commandButton action="{!createTicket}" value="Create New Ticket" rerender="ticketsPanel" />
                     <apex:commandButton action="{!getTickets}" value="Get Tickets" rerender="ticketsPanel" />
+                    <apex:commandButton action="{!createTicket}" value="Create New Ticket" rerender="ticketsPanel" />
                 </apex:pageBlockButtons>
                 <apex:pageBlockSection title="Ticket Details" columns="1">
                     <apex:pageBlockSectionItem >
