@@ -78,9 +78,9 @@ public with sharing class ZendeskTicketComments {
 	}
 
 	// un-replace reserved keywords in the JSON string
-	private String unreplaceReservedWords(String str) {
-		str = str.replaceAll('"x_public"\\s*:', '"public":');
-		return str;
-	}
+	//private String unreplaceReservedWords(String str) {
+	//	str = str.replaceAll('"x_public"\\s*:', '"public":');
+	//	return str;
+	//}
 
 }
