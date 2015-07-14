@@ -70,6 +70,10 @@ public with sharing class ZendeskAPI {
 	// If you do need specific fields with NULL values to remain in the JSON then add the names
 	// of those fields to the fieldsToNull set.
 	// NOTE that this only looks at fields 1 level down from the top
+	public static String serializeJsonNoNulls(Object obj) {
+		return serializeJsonNoNulls(obj, null);
+	}
+
 	public static String serializeJsonNoNulls(Object obj, Set<String> fieldsToNull) {
 		Map<String, Object> fieldsMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(obj));
 		System.debug('**fieldsMap=' + fieldsMap);
