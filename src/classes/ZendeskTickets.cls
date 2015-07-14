@@ -280,7 +280,7 @@ public with sharing class ZendeskTickets {
 
 	public void updateTicket(Long ticketId, ZTicket zticket, Set<String> fieldsToNull) {
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
-		String ticketJson = ZendeskAPI.serializeJsonNoNulls(zticket, fieldsToNull);
+		String ticketJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(zticket, fieldsToNull));
 		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
 
@@ -340,10 +340,11 @@ public with sharing class ZendeskTickets {
 		ticket.comment = new ZTicketComment();
 		ticket.comment.body = commentText;
 		ticket.comment.x_public = isPublic;
-		String ticketJson = unreplaceReservedWords(JSON.serialize(ticket));
+		// Use custom serialize() method to remove all NULL fields from the JSON
+		String ticketJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(ticket));
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
-		req.setBody(ticketJson);
+		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {
@@ -371,15 +372,17 @@ public with sharing class ZendeskTickets {
 		gen.writeEndObject();
 		String ticketJson = gen.getAsString();
 		*/
+
 		ZTicket ticket = new ZTicket();
 		ticket.comment = new ZTicketComment();
 		ticket.comment.body = commentText;
 		ticket.comment.x_public = isPublic;
 		ticket.status = status.status;
-		String ticketJson = unreplaceReservedWords(JSON.serialize(ticket));
+		// Use custom serialize() method to remove all NULL fields from the JSON
+		String ticketJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(ticket));
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
-		req.setBody(ticketJson);
+		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
 
 		if (res.getStatusCode() != 200) {
