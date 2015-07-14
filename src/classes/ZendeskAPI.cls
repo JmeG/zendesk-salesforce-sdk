@@ -16,6 +16,10 @@ public with sharing class ZendeskAPI {
 	}
 
 	public ZendeskAPI(String subdomain, String username, String passwordOrToken, AuthType authenticationType) {
+		if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
+		if (String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
+		if (String.isBlank(passwordOrToken)) { throw new ZendeskException('passwordOrToken parameter must not be empty'); }
+
 		this.subdomain = subdomain;
 		this.username = username;
 		this.passwordOrToken = passwordOrToken;
@@ -25,6 +29,9 @@ public with sharing class ZendeskAPI {
 	}
 
 	public HttpRequest createRequest(String reqMethod, String path) {
+		if (String.isBlank(reqMethod)) { throw new ZendeskException('reqMethod parameter must not be empty'); }
+		if (String.isBlank(path)) { throw new ZendeskException('path parameter must not be empty'); }
+
 		Blob headerValue = null;
 		if (authenticationType == AuthType.Password) {
 			headerValue = Blob.valueOf(username + ':' + passwordOrToken);
@@ -65,6 +72,8 @@ public with sharing class ZendeskAPI {
 	}
 
 	public static Boolean isSuccess(HttpResponse res)) {
+		if (res == null) { throw new ZendeskException('res parameter must not be null'); }
+
 		Boolean isSuccess = (res.getStatusCode() != null && res.getStatusCode() >= 200 && res.getStatusCode() <= 299);
 		if (!isSuccess) {
 			System.debug(Logginglevel.ERROR, '**STATUS_CODE=' + res.getStatusCode());
@@ -89,6 +98,8 @@ public with sharing class ZendeskAPI {
 	}
 
 	public static String serializeJsonNoNulls(Object obj, Set<String> fieldsToNull) {
+		if (obj == null) { throw new ZendeskException('obj parameter must not be null'); }
+
 		Map<String, Object> fieldsMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(obj));
 		System.debug('**fieldsMap=' + fieldsMap);
 		Map<String, Object> updateMap = new Map<String, Object>();
