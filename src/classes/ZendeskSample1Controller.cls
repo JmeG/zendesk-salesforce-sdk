@@ -18,8 +18,9 @@ public with sharing class ZendeskSample1Controller {
 	}
 
 	// This method simply exists so that changes to API fields are saved in the controller without a postback
-	public void changeAPIdetails() {
+	public PageReference changeAPIdetails() {
     	pageMessage = '';
+		return null;
 	}
 
 
