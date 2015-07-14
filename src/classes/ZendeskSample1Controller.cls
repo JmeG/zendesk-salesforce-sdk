@@ -17,12 +17,12 @@ public with sharing class ZendeskSample1Controller {
 		}
 	}
 
-	// This method simply exists so that changes to API fields are saved in the controller without a postback
+	// This method simply exists so that changes to API fields are saved in the controller
+	// without a full postback
 	public PageReference changeAPIdetails() {
     	pageMessage = '';
 		return null;
 	}
-
 
 	public PageReference validateLogin() {
 		pageMessage = '';
