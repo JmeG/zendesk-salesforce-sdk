@@ -41,7 +41,7 @@ public with sharing class ZendeskTicketForms {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms.json' + (page==null ? '' : '?page=' + page));
 		HttpResponse res = new Http().send(queryReq);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Ticket Forms (' + res.getStatusCode() + ')');
 		}
 
@@ -55,7 +55,7 @@ public with sharing class ZendeskTicketForms {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms/' + ticketFormId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Ticket Form ' + ticketFormId + ' (' + res.getStatusCode() + ')');
 		}
 
@@ -65,11 +65,11 @@ public with sharing class ZendeskTicketForms {
 
 	public void deleteTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
-		
+
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_forms/' + ticketFormId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error deleting Ticket Form ' + ticketFormId + ' (' + res.getStatusCode() + ')');
 		}
 	}

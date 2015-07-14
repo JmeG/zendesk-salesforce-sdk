@@ -111,7 +111,7 @@ public with sharing class ZendeskTickets {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Ticket ' + ticketId + ' (' + res.getStatusCode() + ')');
 		}
 
@@ -169,7 +169,7 @@ public with sharing class ZendeskTickets {
 		req.setBody(reqBody);
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error creating Ticket (' + res.getStatusCode() + ')');
 		}
 
@@ -187,7 +187,7 @@ public with sharing class ZendeskTickets {
 		req.setBody(JSON.serialize(newTicketWrapper));
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error creating Ticket (' + res.getStatusCode() + ')');
 		}
 
@@ -269,7 +269,7 @@ public with sharing class ZendeskTickets {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
-        if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+        if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Tickets (' + res.getStatusCode() + ')');
 		}
 
@@ -283,7 +283,7 @@ public with sharing class ZendeskTickets {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error deleting Ticket ' + ticketId + ' (' + res.getStatusCode() + ')');
 		}
 	}
@@ -301,7 +301,7 @@ public with sharing class ZendeskTickets {
 		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			System.debug(res.getBody());
 			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
 		}
@@ -328,7 +328,7 @@ public with sharing class ZendeskTickets {
 		req.setBody(reqBody);
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error occurred trying to update tickets + ' (' + res.getStatusCode() + ')');
 		}
 	}
@@ -367,7 +367,7 @@ public with sharing class ZendeskTickets {
 		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			System.debug(res.getBody());
 			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
 		}
@@ -408,7 +408,7 @@ public with sharing class ZendeskTickets {
 		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			System.debug(res.getBody());
 			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
 		}

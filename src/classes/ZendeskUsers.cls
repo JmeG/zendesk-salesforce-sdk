@@ -61,7 +61,7 @@ public with sharing class ZendeskUsers {
 		req.setBody(reqBody);
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error creating User (' + res.getStatusCode() + ')');
 		}
 
@@ -85,7 +85,7 @@ public with sharing class ZendeskUsers {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedNameOrEmail);
 		HttpResponse res = new Http().send(queryReq);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
 
@@ -101,7 +101,7 @@ public with sharing class ZendeskUsers {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedEmail);
 		HttpResponse res = new Http().send(queryReq);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
 
@@ -127,7 +127,7 @@ public with sharing class ZendeskUsers {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting users (' + res.getStatusCode() + ')');
 		}
 
@@ -141,7 +141,7 @@ public with sharing class ZendeskUsers {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '.json');
         HttpResponse res = new Http().send(queryReq);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting user ' + userId + ' (' + res.getStatusCode() + ')');
 		}
 
@@ -153,7 +153,7 @@ public with sharing class ZendeskUsers {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/me.json');
         HttpResponse res = new Http().send(queryReq);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting current user (' + res.getStatusCode() + ')');
 		}
 

@@ -16,7 +16,6 @@ public with sharing class ZendeskAttachments {
 		public ZAttachment attachment {get; set;}
 	}
 
-
 	public ZendeskAttachments(ZendeskAPI zapi) {
 		this.zapi = zapi;
 	}
@@ -33,7 +32,7 @@ public with sharing class ZendeskAttachments {
 			req.setBodyAsBlob(fileBody);
 			HttpResponse res = new Http().send(req);
 
-			if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+			if (!ZendeskAPI.isSuccess(res)) {
 				throw new ZendeskException('Error uploading Attachment (' + res.getStatusCode() + ')');
 			}
 
@@ -60,7 +59,7 @@ public with sharing class ZendeskAttachments {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error deleting Attachment ' + attachmentId + ' (' + res.getStatusCode() + ')');
 		}
 	}
@@ -71,7 +70,7 @@ public with sharing class ZendeskAttachments {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Attachment ' + attachmentId + ' (' + res.getStatusCode() + ')');
 		}
 

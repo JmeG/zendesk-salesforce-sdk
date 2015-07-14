@@ -67,7 +67,7 @@ public with sharing class ZendeskTicketFields {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + ticketFieldId + '.json');
 		HttpResponse res = new Http().send(queryReq);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Ticket Field ' + ticketFieldId + ' (' + res.getStatusCode() + ')');
 		}
 
@@ -85,7 +85,7 @@ public with sharing class ZendeskTicketFields {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields.json' + (page==null ? '' : '?page=' + page));
 		HttpResponse res = new Http().send(queryReq);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Ticket Fields (' + res.getStatusCode() + ')');
 		}
 
@@ -95,11 +95,11 @@ public with sharing class ZendeskTicketFields {
 
 	public void deleteTicketField(Long ticketFieldId) {
 		if (ticketFieldId == null) { throw new ZendeskException('ticketFieldId parameter must not be null'); }
-		
+
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_fields/' + ticketFieldId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error deleting Ticket Field ' + ticketFieldId + ' (' + res.getStatusCode() + ')');
 		}
 	}

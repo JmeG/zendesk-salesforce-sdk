@@ -70,7 +70,7 @@ public with sharing class ZendeskGroups {
 	private PagedGroupsWrapper getGroupsInternal(HttpRequest queryReq) {
 		HttpResponse res = new Http().send(queryReq);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Groups (' + res.getStatusCode() + ')');
 		}
 
@@ -84,7 +84,7 @@ public with sharing class ZendeskGroups {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Group ' + groupId + ' (' + res.getStatusCode() + ')');
 		}
 
@@ -109,12 +109,13 @@ public with sharing class ZendeskGroups {
 		req.setBody(groupJSON);
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error creating Group (' + res.getStatusCode() + ')');
 		}
 
 		GroupWrapper resultWrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), GroupWrapper.class);
-		return resultWrapper.x_group.id;
+		// return the ID of the new Group
+		return ((resultWrapper==null || resultWrapper.x_group == null) ? null : resultWrapper.x_group.id);
 	}
 
 	public void updateGroupName(Long groupId, String newName) {
@@ -134,7 +135,7 @@ public with sharing class ZendeskGroups {
 		req.setBody(groupJSON);
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error updating Group ' + groupId + ' (' + res.getStatusCode() + ')');
 		}
 	}
@@ -145,7 +146,7 @@ public with sharing class ZendeskGroups {
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
+		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error deleting Group ' + groupId + ' (' + res.getStatusCode() + ')');
 		}
 	}
