@@ -40,10 +40,12 @@ public with sharing class ZendeskTicketComments {
 
 	// Get a specific page of Ticket Comments
 	public PagedTicketCommentsWrapper getTicketComments(Long ticketId, Long page) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments.json' + (page==null ? '' : '?page=' + page));
 		HttpResponse res = new Http().send(queryReq);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error getting Ticket Comments (' + res.getStatusCode() + ')');
 		}
 
@@ -52,21 +54,27 @@ public with sharing class ZendeskTicketComments {
 	}
 
 	public void redactStringInComment(Long ticketId, Long ticketCommentId, String redactText) {
-		if (String.isBlank(redactText)) { throw new ZendeskException ('You must specify text to redact'); }
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter must not be null'); }
+		if (String.isBlank(redactText)) { throw new ZendeskException('redactText parameter must not be empty'); }
+
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/redact.json');
 		req.setBody('{"text": "' + redactText + '"}');
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error redacting Ticket Comment ' + ticketCommentId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 
 	public void makeCommentPrivate(Long ticketId, Long ticketCommentId) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter must not be null'); }
+
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/make_private.json');
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error making Ticket Comment private ' + ticketCommentId + ' (' + res.getStatusCode() + ')');
 		}
 	}

@@ -106,10 +106,12 @@ public with sharing class ZendeskTickets {
 	}
 
 	public ZTicket getTicket(Long ticketId) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error getting Ticket ' + ticketId + ' (' + res.getStatusCode() + ')');
 		}
 
@@ -157,6 +159,8 @@ public with sharing class ZendeskTickets {
 	}
 
 	public Long createTicket(ZTicket zticket) {
+		if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
+
 		TicketWrapper newTicketWrapper = new TicketWrapper();
 		newTicketWrapper.ticket = zticket;
 
@@ -165,7 +169,7 @@ public with sharing class ZendeskTickets {
 		req.setBody(reqBody);
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 201) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error creating Ticket (' + res.getStatusCode() + ')');
 		}
 
@@ -183,7 +187,7 @@ public with sharing class ZendeskTickets {
 		req.setBody(JSON.serialize(newTicketWrapper));
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 201) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error creating Ticket (' + res.getStatusCode() + ')');
 		}
 
@@ -209,6 +213,8 @@ public with sharing class ZendeskTickets {
 
 	// /api/v2/organizations/{organization_id}/tickets.json
 	public PagedTicketsWrapper getTicketsByOrgId(Long orgId, Long page) {
+		if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
+
         return getTickets(page, '/organizations/' + orgId + '/tickets.json');
     }
 
@@ -219,6 +225,8 @@ public with sharing class ZendeskTickets {
 
 	// /api/v2/users/{user_id}/tickets/requested.json
 	public PagedTicketsWrapper getTicketsByRequesterId(Long requesterId, Long page) {
+		if (requesterId == null) { throw new ZendeskException('requesterId parameter must not be null'); }
+
         return getTickets(page, '/users/' + requesterId + '/tickets/requested.json');
     }
 
@@ -229,6 +237,8 @@ public with sharing class ZendeskTickets {
 
 	// /api/v2/users/{user_id}/tickets/ccd.json
 	public PagedTicketsWrapper getTicketsByCCUserId(Long userId, Long page) {
+		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
+
         return getTickets(page, '/users/' + userId + '/tickets/ccd.json');
     }
 
@@ -239,6 +249,8 @@ public with sharing class ZendeskTickets {
 
 	// /api/v2/users/{user_id}/tickets/assigned.json
 	public PagedTicketsWrapper getTicketsByAssigneeId(Long assigneeId, Long page) {
+		if (assigneeId == null) { throw new ZendeskException('assigneeId parameter must not be null'); }
+
         return getTickets(page, '/users/' + assigneeId + '/tickets/assigned.json');
     }
 
@@ -257,7 +269,7 @@ public with sharing class ZendeskTickets {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
-        if (res.getStatusCode() != 200) {
+        if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error getting Tickets (' + res.getStatusCode() + ')');
 		}
 
@@ -266,10 +278,12 @@ public with sharing class ZendeskTickets {
     }
 
 	public void deleteTicket(Long ticketId) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error deleting Ticket ' + ticketId + ' (' + res.getStatusCode() + ')');
 		}
 	}
@@ -279,12 +293,15 @@ public with sharing class ZendeskTickets {
 	}
 
 	public void updateTicket(Long ticketId, ZTicket zticket, Set<String> fieldsToNull) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+		if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
+
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		String ticketJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(zticket, fieldsToNull));
 		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			System.debug(res.getBody());
 			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
 		}
@@ -311,7 +328,7 @@ public with sharing class ZendeskTickets {
 		req.setBody(reqBody);
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error occurred trying to update tickets + ' (' + res.getStatusCode() + ')');
 		}
 	}
@@ -319,6 +336,9 @@ public with sharing class ZendeskTickets {
 
 	// helper method to add a new comment to a ticket
 	public void addTicketComment(Long ticketId, String commentText, Boolean isPublic) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+		if (String.isBlank(commentText)) { throw new ZendeskException('commentText parameter must not be empty'); }
+
 		/*
 		// Manually build the update ticket JSON since we can't serialize a TicketComment
 		// object due to "public" being a reserved keyword
@@ -347,7 +367,7 @@ public with sharing class ZendeskTickets {
 		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			System.debug(res.getBody());
 			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
 		}
@@ -355,6 +375,9 @@ public with sharing class ZendeskTickets {
 
 	// helper method to add a new comment to a ticket and change its status
 	public void addTicketCommentAndChangeStatus(Long ticketId, String commentText, Boolean isPublic, TicketStatus status) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+		if (String.isBlank(commentText)) { throw new ZendeskException('commentText parameter must not be empty'); }
+		if (status == null) { throw new ZendeskException('status parameter must not be null'); }
 		/*
 		// Manually build the update ticket JSON since we can't serialize a TicketComment
 		// object due to "public" being a reserved keyword
@@ -385,7 +408,7 @@ public with sharing class ZendeskTickets {
 		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			System.debug(res.getBody());
 			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
 		}

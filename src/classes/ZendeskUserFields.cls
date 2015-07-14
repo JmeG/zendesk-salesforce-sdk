@@ -63,10 +63,12 @@ public with sharing class ZendeskUserFields {
     }
 
     public ZUserField getUserField(Long userFieldId) {
+		if (userFieldId == null) { throw new ZendeskException('userFieldId parameter must not be null'); }
+        
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + userFieldId + '.json');
         HttpResponse res = new Http().send(queryReq);
 
-        if (res.getStatusCode() != 200) {
+        if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
             throw new ZendeskException('Error getting User Field ' + userFieldId + ' (' + res.getStatusCode() + ')');
         }
 
@@ -84,7 +86,7 @@ public with sharing class ZendeskUserFields {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
-        if (res.getStatusCode() != 200) {
+        if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
             throw new ZendeskException('Error getting User Fields (' + res.getStatusCode() + ')');
         }
 
@@ -93,16 +95,20 @@ public with sharing class ZendeskUserFields {
     }
 
     public void deleteUserField(Long userFieldId) {
+		if (userFieldId == null) { throw new ZendeskException('userFieldId parameter must not be null'); }
+
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/user_fields/' + userFieldId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error deleting User Field ' + userFieldId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 
     // non-native API method
     public ZUserField getUserFieldByKey(String key) {
+        if (String.isBlank(key)) { throw new ZendeskException('key parameter must not be empty'); }
+
         if (userFieldsMap.isEmpty()) {
             loadAll();
         }

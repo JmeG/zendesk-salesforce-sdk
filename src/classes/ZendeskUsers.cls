@@ -40,6 +40,9 @@ public with sharing class ZendeskUsers {
 	}
 
 	public Long createUser(String name, String email) {
+		if (String.isBlank(name)) { throw new ZendeskException('name parameter must not be empty'); }
+		if (String.isBlank(email)) { throw new ZendeskException('email parameter must not be empty'); }
+
 		ZUser zuser = new ZUser();
 		zuser.name = name;
 		zuser.email = email;
@@ -48,6 +51,8 @@ public with sharing class ZendeskUsers {
 	}
 
 	public Long createUser(ZUser zuser) {
+		if (zuser == null) { throw new ZendeskException('zuser parameter must not be null'); }
+
 		UserWrapper wrapper = new UserWrapper();
 		wrapper.user = zuser;
 
@@ -56,7 +61,7 @@ public with sharing class ZendeskUsers {
 		req.setBody(reqBody);
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 201) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error creating User (' + res.getStatusCode() + ')');
 		}
 
@@ -66,17 +71,21 @@ public with sharing class ZendeskUsers {
 	}
 
 	public Long getUserIdByEmail(String email) {
+		if (String.isBlank(email)) { throw new ZendeskException('email parameter must not be empty'); }
+
 		ZUser user = findUserByEmail(email);
 		return (user == null ? null : user.id);
 	}
 
 	// This can be a partial or complete Name or Email address
 	public PagedUsersWrapper findUsersByNameOrEmail(String nameOrEmail) {
+		if (String.isBlank(nameOrEmail)) { throw new ZendeskException('nameOrEmail parameter must not be empty'); }
+
 		String encodedNameOrEmail = EncodingUtil.urlEncode(nameOrEmail, 'UTF-8');
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedNameOrEmail);
 		HttpResponse res = new Http().send(queryReq);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
 
@@ -85,12 +94,14 @@ public with sharing class ZendeskUsers {
 	}
 
 	public ZUser findUserByEmail(String email) {
+		if (String.isBlank(email)) { throw new ZendeskException('email parameter must not be empty'); }
+
 		// Make sure to set the email to lowercase because that's the way Zendesk will return it
 		String encodedEmail = EncodingUtil.urlEncode(email.toLowerCase(), 'UTF-8');
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedEmail);
 		HttpResponse res = new Http().send(queryReq);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
 
@@ -116,7 +127,7 @@ public with sharing class ZendeskUsers {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error getting users (' + res.getStatusCode() + ')');
 		}
 
@@ -125,10 +136,12 @@ public with sharing class ZendeskUsers {
     }
 
 	public ZUser getUser(Long userId) {
+		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
+
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '.json');
         HttpResponse res = new Http().send(queryReq);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error getting user ' + userId + ' (' + res.getStatusCode() + ')');
 		}
 
@@ -140,7 +153,7 @@ public with sharing class ZendeskUsers {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/me.json');
         HttpResponse res = new Http().send(queryReq);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error getting current user (' + res.getStatusCode() + ')');
 		}
 

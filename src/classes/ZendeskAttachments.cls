@@ -22,6 +22,10 @@ public with sharing class ZendeskAttachments {
 	}
 
 	public String uploadAttachment(String fileName, String fileContentType, Blob fileBody) {
+		if (String.isBlank(fileName)) { throw new ZendeskException('fileName parameter must not be empty'); }
+		if (String.isBlank(fileContentType)) { throw new ZendeskException('fileContentType parameter must not be empty'); }
+		if (fileBody == null) { throw new ZendeskException('fileBody parameter must not be null'); }
+
 		String zendeskAttachmentToken = null;
 		try {
 			HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/uploads.json?filename=' + EncodingUtil.urlEncode(fileName, 'UTF-8'));
@@ -29,7 +33,7 @@ public with sharing class ZendeskAttachments {
 			req.setBodyAsBlob(fileBody);
 			HttpResponse res = new Http().send(req);
 
-			if (res.getStatusCode() != 201) {
+			if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 				throw new ZendeskException('Error uploading Attachment (' + res.getStatusCode() + ')');
 			}
 
@@ -51,19 +55,23 @@ public with sharing class ZendeskAttachments {
 	}
 
 	public void deleteAttachment(Long attachmentId) {
+		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
+
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error deleting Attachment ' + attachmentId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 
 	public ZAttachment getAttachment(Long attachmentId) {
+		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
+
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
 		HttpResponse res = new Http().send(req);
 
-		if (res.getStatusCode() != 200) {
+		if (!ZendeskAPI.isSuccessStatus(res.getStatusCode())) {
 			throw new ZendeskException('Error getting Attachment ' + attachmentId + ' (' + res.getStatusCode() + ')');
 		}
 
