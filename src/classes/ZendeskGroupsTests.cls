@@ -58,6 +58,32 @@ private class ZendeskGroupsTests {
         System.assert(true);
     }
 
+    static testMethod void testCreateGroup() {
+        Test.setMock(HttpCalloutMock.class, new MockGroupResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskGroups zgroups = new ZendeskGroups(zapi);
+        Long groupId = zgroups.createGroup('foo');
+        Test.stopTest();
+
+        System.assertNotEquals(null, groupId);
+    }
+
+    static testMethod void testUpdateGroup() {
+        Test.setMock(HttpCalloutMock.class, new MockOKResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskGroups zgroups = new ZendeskGroups(zapi);
+        zgroups.updateGroupName(123, 'foo');
+        Test.stopTest();
+
+        System.assert(true);
+    }
+
     static testMethod void testGetAllGroups() {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
@@ -132,7 +158,7 @@ private class ZendeskGroupsTests {
           + '}'
         + '}';
         */
-        
+
         System.assert(true);
     }
 }
