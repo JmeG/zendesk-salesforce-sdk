@@ -49,6 +49,11 @@ public with sharing class ZendeskAPI {
 		return req;
 	}
 
+	// Zendesk responds to successful requests with HTTP status codes in the 200 or 300 range.
+	public static Boolean isSuccessStatus(Integer statusCode) {
+		return (statusCode != null && statusCode >= 200 && statusCode <= 299);
+	}
+
 	// Validate that the API login parameters are valid by simply trying to get our own user record
 	public Boolean canLogin() {
         HttpResponse res = new Http().send(createRequest('GET', BASE_PATH + '/users/me.json'));
