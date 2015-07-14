@@ -37,6 +37,33 @@ public with sharing class ZendeskGroups {
 
 	public PagedGroupsWrapper getGroups(Long page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + page));
+		return getGroupsInternal(queryReq);
+	}
+
+	// Get all assignable groups
+	public PagedGroupsWrapper getAssignableGroups() {
+		return getAssignableGroups(null);
+	}
+
+	// Get all assignable groups by page number
+	public PagedGroupsWrapper getAssignableGroups(Long page) {
+		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/assignable.json' + (page==null ? '' : '?page=' + page));
+		return getGroupsInternal(queryReq);
+	}
+
+	// Get the groups that a user is a member of
+	public PagedGroupsWrapper getUserGroups(Long userId) {
+		return getUserGroups(userId, null);
+	}
+
+	// Get the groups that a user is a member of
+	public PagedGroupsWrapper getUserGroups(Long userId, Long page) {
+		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '/groups.json' + (page==null ? '' : '?page=' + page));
+		return getGroupsInternal(queryReq);
+	}
+
+	// Private helper method to query multiple groups
+	private PagedGroupsWrapper getGroupsInternal(HttpRequest queryReq) {
 		HttpResponse res = new Http().send(queryReq);
 
 		if (res.getStatusCode() != 200) {

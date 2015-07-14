@@ -61,14 +61,48 @@ private class ZendeskGroupsTests {
     static testMethod void testGetAllGroups() {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskGroups zgroups = new ZendeskGroups(zapi);
+        ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         Map<Long, ZendeskGroups.ZGroup> fieldsMap = zgroups.getAllGroups();
         Test.stopTest();
 
         System.assertNotEquals(null, fieldsMap.containsKey(123));
+    }
+
+    static testMethod void testGetGroups() {
+        Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
+
+        Test.startTest();
+        ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskGroups.PagedGroupsWrapper wrapper = zgroups.getGroups();
+        Test.stopTest();
+
+        System.assertNotEquals(null, wrapper.groups);
+        System.assertNotEquals(0, wrapper.groups.size());
+    }
+
+    static testMethod void testGetAssignableGroups() {
+        Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
+
+        Test.startTest();
+        ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskGroups.PagedGroupsWrapper wrapper = zgroups.getAssignableGroups();
+        Test.stopTest();
+
+        System.assertNotEquals(null, wrapper.groups);
+        System.assertNotEquals(0, wrapper.groups.size());
+    }
+
+    static testMethod void testGetUserGroups() {
+        Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
+
+        Test.startTest();
+        ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskGroups.PagedGroupsWrapper wrapper = zgroups.getUserGroups(123);
+        Test.stopTest();
+
+        System.assertNotEquals(null, wrapper.groups);
+        System.assertNotEquals(0, wrapper.groups.size());
     }
 
     static testMethod void testGetNextPage() {
@@ -86,6 +120,19 @@ private class ZendeskGroupsTests {
         ZendeskGroups.ZGroup zgroup = new ZendeskGroups.ZGroup();
         zgroup.name = '';
 
+        /*
+        String json = '{'
+          + '"group": {
+          + '"url": "https://z3njgibsontest1.zendesk.com/api/v2/groups/21468420.json",
+          + '"id": 21468420,
+          + '"name": "Marketing",
+          + '"deleted": false,
+          + '"created_at": "2014-09-26T01:43:11Z",
+          + '"updated_at": "2014-09-26T01:43:11Z"
+          + '}'
+        + '}';
+        */
+        
         System.assert(true);
     }
 }
