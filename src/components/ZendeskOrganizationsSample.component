@@ -1,0 +1,32 @@
+<apex:component controller="ZendeskOrganizationsSampleController">
+    <apex:attribute name="subdomainParam" description="Subdomain" type="String" required="required" assignTo="{!subdomain}"/>
+    <apex:attribute name="usernameParam" description="Username" type="String" required="required" assignTo="{!username}"/>
+    <apex:attribute name="pwdOrTokenParam" description="Password or Token" type="String" required="required" assignTo="{!pwdOrToken}"/>
+    <apex:attribute name="authTypeParam" description="Auth Type" type="String" required="required" assignTo="{!authType}"/>
+
+    <apex:form>
+        <apex:outputPanel id="organizationsPanel">
+            <apex:pageBlock title="Organizations" mode="edit">
+                <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
+                <apex:pageBlockButtons location="top">
+                    <apex:commandButton action="{!getOrganizations}" value="Get Organizations" rerender="organizationsPanel" />
+                    <apex:commandButton action="{!getOrganizationById}" value="Get by ID" rerender="organizationsPanel" />
+                </apex:pageBlockButtons>
+                <apex:pageBlockSection title="" columns="1">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Organization ID" />
+                        <apex:inputText value="{!organizationId}" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Organizations List" columns="1">
+                    <apex:pageBlockTable value="{!organizations}" var="org">
+                        <apex:column value="{!org.id}" headerValue="ID"/>
+                        <apex:column value="{!org.name}" headerValue="Name"/>
+                        <apex:column value="{!org}" headerValue="Attributes"/>
+                    </apex:pageBlockTable>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:outputPanel>
+    </apex:form>
+
+</apex:component>
