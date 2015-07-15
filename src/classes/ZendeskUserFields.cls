@@ -1,4 +1,13 @@
-// This class provides functionality to call the Zendesk API to interact with User Field records
+// This class provides functionality to call the Zendesk User Fields API
+// Currently upports the following API endpoints:
+// GET    /api/v2/user_fields.json
+// GET    /api/v2/user_fields/{id}.json
+// DELETE /api/v2/user_fields/{id}.json
+// *************************************
+// TODO: Implement the following methods
+// POST   /api/v2/user_fields.json
+// PUT    /api/v2/user_fields/{id}.json
+// PUT    /api/v2/user_fields/reorder.json
 public with sharing class ZendeskUserFields {
 
     private final ZendeskAPI zapi;
@@ -64,7 +73,7 @@ public with sharing class ZendeskUserFields {
 
     public ZUserField getUserField(Long userFieldId) {
 		if (userFieldId == null) { throw new ZendeskException('userFieldId parameter must not be null'); }
-        
+
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + userFieldId + '.json');
         HttpResponse res = new Http().send(queryReq);
 

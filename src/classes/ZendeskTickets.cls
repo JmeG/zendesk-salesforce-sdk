@@ -1,4 +1,32 @@
-// This class provides functionality to call the Zendesk API to interact with Ticket records
+// This class provides functionality to call the Zendesk Tickets API
+// Currently upports the following API endpoints:
+// GET    /api/v2/tickets.json
+// GET    /api/v2/users/{user_id}/tickets/requested.json
+// GET    /api/v2/users/{user_id}/tickets/ccd.json
+// GET    /api/v2/users/{user_id}/tickets/assigned.json
+// GET    /api/v2/tickets/recent.json
+// GET    /api/v2/tickets/{id}.json
+// POST   /api/v2/tickets.json
+// PUT    /api/v2/tickets/{id}.json
+// DELETE /api/v2/tickets/{id}.json
+// *************************************
+// TODO: Implement the following methods
+// GET /api/v2/organizations/{organization_id}/tickets.json
+// GET /api/v2/tickets/show_many.json?ids={ids}
+// POST /api/v2/tickets/create_many.json
+// PUT /api/v2/tickets/update_many.json
+// PUT /api/v2/tickets/update_many.json?ids={ids}
+// PUT /api/v2/tickets/{id}/mark_as_spam.json
+// PUT /api/v2/tickets/mark_many_as_spam.json?ids={ids}
+// POST /api/v2/tickets/{id}/merge.json
+// GET /api/v2/tickets/{id}/related.json
+// DELETE /api/v2/tickets/destroy_many.json?ids={ids}
+// GET /api/v2/tickets/{id}/collaborators.json
+// GET /api/v2/tickets/{id}/incidents.json
+// GET /api/v2/problems.json
+// POST /api/v2/problems/autocomplete.json?text={name}
+// POST /api/v2/channels/twitter/tickets.json
+// GET /api/v2/channels/twitter/tickets/{id}/statuses.json
 public with sharing class ZendeskTickets {
 
 	private final ZendeskAPI zapi;

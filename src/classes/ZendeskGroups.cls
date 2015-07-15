@@ -1,4 +1,12 @@
 // This class provides functionality to call the Zendesk Groups API
+// Currently upports the following API endpoints:
+// GET    /api/v2/groups.json
+// GET    /api/v2/users/{user_id}/groups.json
+// GET    /api/v2/groups/assignable.json
+// GET    /api/v2/groups/{id}.json
+// POST   /api/v2/groups.json
+// PUT    /api/v2/groups/{id}.json
+// DELETE /api/v2/groups/{id}.json
 public with sharing class ZendeskGroups {
 
 	private final ZendeskAPI zapi;

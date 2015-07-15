@@ -1,4 +1,14 @@
-// This class provides functionality to call the Zendesk API to interact with Ticket Form records
+// This class provides functionality to call the Zendesk Ticket Forms API
+// Currently upports the following API endpoints:
+// GET    /api/v2/ticket_forms.json
+// GET    /api/v2/ticket_forms/{id}.json
+// DELETE /api/v2/ticket_forms/{id}.json
+// *************************************
+// TODO: Implement the following methods
+// POST   /api/v2/ticket_forms.json
+// PUT    /api/v2/ticket_forms/{id}.json
+// PUT    /api/v2/ticket_forms/reorder.json
+// POST   /api/v2/ticket_forms/{id}/clone.json
 public with sharing class ZendeskTicketForms {
 
 	private final ZendeskAPI zapi;

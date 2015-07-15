@@ -1,4 +1,31 @@
-// This class provides functionality to call the Zendesk API to interact with User records
+// This class provides functionality to call the Zendesk Users API
+// Currently upports the following API endpoints:
+// GET    /api/v2/users.json
+// GET    /api/v2/users/{id}.json
+// POST   /api/v2/users.json
+// GET    /api/v2/users/search.json?query={query}
+// GET    /api/v2/users/me.json
+// *************************************
+// TODO: Implement the following methods
+// GET    /api/v2/groups/{id}/users.json
+// GET    /api/v2/organizations/{id}/users.json
+// GET    /api/v2/users/show_many.json?ids={ids}
+// GET    /api/v2/users/show_many.json?external_ids={external_ids}
+// GET    /api/v2/users/{id}/related.json
+// PUT    /api/v2/users/me/merge.json
+// PUT    /api/v2/users/{id}/merge.json
+// POST   /api/v2/users/create_many.json
+// PUT    /api/v2/users/{id}.json
+// PUT    /api/v2/users/update_many.json
+// PUT    /api/v2/users/update_many.json?ids={ids}
+// PUT    /api/v2/users/update_many.json?external_ids={external_ids}
+// DELETE /api/v2/users/destroy_many.json?ids={ids}
+// DELETE /api/v2/users/destroy_many.json?external_ids={external_ids}
+// DELETE /api/v2/users/{id}.json
+// GET    /api/v2/users/search.json?external_id={external_id}
+// GET    /api/v2/users/autocomplete.json?name={name}
+// POST   /api/v2/users/{user_id}/password.json
+// PUT    /api/v2/users/{user_id}/password.json
 public with sharing class ZendeskUsers {
 
 	private final ZendeskAPI zapi;

@@ -1,4 +1,8 @@
-// This class provides functionality to call the Zendesk API to interact with Ticket Comment records
+// This class provides functionality to call the Zendesk Ticket Comments API
+// Currently supports the following API endpoints:
+// GET /api/v2/tickets/{ticket_id}/comments.json
+// PUT /api/v2/tickets/{ticket_id}/comments/{id}/redact.json
+// PUT /api/v2/tickets/{ticket_id}/comments/{id}/make_private.json
 public with sharing class ZendeskTicketComments {
 
 	private final ZendeskAPI zapi;
