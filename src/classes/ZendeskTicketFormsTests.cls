@@ -62,6 +62,7 @@ private class ZendeskTicketFormsTests {
         Test.startTest();
         ZendeskTicketForms.PagedTicketFormsWrapper wrapper = new ZendeskTicketForms.PagedTicketFormsWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/ticket_forms.json?page=2';
+        wrapper.previous_page = 'https://test.zendesk.com/api/v2/ticket_forms.json?page=1';
         Test.stopTest();
 
         System.assertEquals(2, wrapper.nextPageNumber);

@@ -137,6 +137,7 @@ private class ZendeskGroupsTests {
         Test.startTest();
         ZendeskGroups.PagedGroupsWrapper wrapper = new ZendeskGroups.PagedGroupsWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/groups.json?page=2';
+        wrapper.previous_page = 'https://test.zendesk.com/api/v2/groups.json?page=1';
         Test.stopTest();
 
         System.assertEquals(2, wrapper.nextPageNumber);

@@ -119,6 +119,7 @@ private class ZendeskUsersTests {
         Test.startTest();
         ZendeskUsers.PagedUsersWrapper wrapper = new ZendeskUsers.PagedUsersWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/users.json?page=2';
+        wrapper.previous_page = 'https://test.zendesk.com/api/v2/users.json?page=1';
         Test.stopTest();
 
         System.assertEquals(2, wrapper.nextPageNumber);
