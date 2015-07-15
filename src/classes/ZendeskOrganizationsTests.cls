@@ -2,6 +2,15 @@
 @isTest
 private class ZendeskOrganizationsTests {
 
+    public class MockOKResponse implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            HttpResponse res = new HttpResponse();
+            res.setStatusCode(200);
+            res.setStatus('OK');
+            return res;
+        }
+    }
+
     public class MockOrganizationResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
             HttpResponse res = new HttpResponse();
@@ -28,8 +37,8 @@ private class ZendeskOrganizationsTests {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
         Test.startTest();
-		ZendeskOrganizations zorganizations = new ZendeskOrganizations(zapi);
-		ZendeskOrganizations.PagedOrganizationsWrapper results = zorganizations.getOrganizations();
+		ZendeskOrganizations zorgs = new ZendeskOrganizations(zapi);
+		ZendeskOrganizations.PagedOrganizationsWrapper results = zorgs.getOrganizations();
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -43,12 +52,25 @@ private class ZendeskOrganizationsTests {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
         Test.startTest();
-		ZendeskOrganizations zorganizations = new ZendeskOrganizations(zapi);
-		ZendeskOrganizations.ZOrganization org = zorganizations.getOrganization(123);
+		ZendeskOrganizations zorgs = new ZendeskOrganizations(zapi);
+		ZendeskOrganizations.ZOrganization org = zorgs.getOrganization(123);
         Test.stopTest();
 
 		System.assertNotEquals(null, org);
         System.assertEquals(123, org.id);
+    }
+
+    static testMethod void testDeleteOrganization() {
+        Test.setMock(HttpCalloutMock.class, new MockOKResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskOrganizations zorgs = new ZendeskOrganizations(zapi);
+        zorgs.deleteOrganization(123);
+        Test.stopTest();
+
+        System.assert(true);
     }
 
     static testMethod void testGetNextPage() {
