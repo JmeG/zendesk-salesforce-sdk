@@ -66,12 +66,7 @@ public with sharing class ZendeskAPI {
 		}
 	}
 
-	// Zendesk responds to successful requests with HTTP status codes in the 200 or 300 range.
-	public static Boolean isSuccessStatus(Integer statusCode) {
-		return (statusCode != null && statusCode >= 200 && statusCode <= 299);
-	}
-
-	public static Boolean isSuccess(HttpResponse res)) {
+	public static Boolean isSuccess(HttpResponse res) {
 		if (res == null) { throw new ZendeskException('res parameter must not be null'); }
 
 		Boolean isSuccess = (res.getStatusCode() != null && res.getStatusCode() >= 200 && res.getStatusCode() <= 299);
