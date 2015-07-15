@@ -6,9 +6,9 @@
 // *************************************
 // TODO: Implement the following methods
 // POST   /api/v2/ticket_forms.json
+// POST   /api/v2/ticket_forms/{id}/clone.json
 // PUT    /api/v2/ticket_forms/{id}.json
 // PUT    /api/v2/ticket_forms/reorder.json
-// POST   /api/v2/ticket_forms/{id}/clone.json
 public with sharing class ZendeskTicketForms {
 
 	private final ZendeskAPI zapi;

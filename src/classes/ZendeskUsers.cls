@@ -12,9 +12,13 @@
 // GET    /api/v2/users/show_many.json?ids={ids}
 // GET    /api/v2/users/show_many.json?external_ids={external_ids}
 // GET    /api/v2/users/{id}/related.json
+// GET    /api/v2/users/search.json?external_id={external_id}
+// GET    /api/v2/users/autocomplete.json?name={name}
+// POST   /api/v2/users/create_many.json
+// POST   /api/v2/users/{user_id}/password.json
+// PUT    /api/v2/users/{user_id}/password.json
 // PUT    /api/v2/users/me/merge.json
 // PUT    /api/v2/users/{id}/merge.json
-// POST   /api/v2/users/create_many.json
 // PUT    /api/v2/users/{id}.json
 // PUT    /api/v2/users/update_many.json
 // PUT    /api/v2/users/update_many.json?ids={ids}
@@ -22,10 +26,6 @@
 // DELETE /api/v2/users/destroy_many.json?ids={ids}
 // DELETE /api/v2/users/destroy_many.json?external_ids={external_ids}
 // DELETE /api/v2/users/{id}.json
-// GET    /api/v2/users/search.json?external_id={external_id}
-// GET    /api/v2/users/autocomplete.json?name={name}
-// POST   /api/v2/users/{user_id}/password.json
-// PUT    /api/v2/users/{user_id}/password.json
 public with sharing class ZendeskUsers {
 
 	private final ZendeskAPI zapi;

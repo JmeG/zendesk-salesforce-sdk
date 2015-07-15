@@ -13,20 +13,20 @@
 // TODO: Implement the following methods
 // GET /api/v2/organizations/{organization_id}/tickets.json
 // GET /api/v2/tickets/show_many.json?ids={ids}
-// POST /api/v2/tickets/create_many.json
-// PUT /api/v2/tickets/update_many.json
-// PUT /api/v2/tickets/update_many.json?ids={ids}
-// PUT /api/v2/tickets/{id}/mark_as_spam.json
-// PUT /api/v2/tickets/mark_many_as_spam.json?ids={ids}
-// POST /api/v2/tickets/{id}/merge.json
 // GET /api/v2/tickets/{id}/related.json
-// DELETE /api/v2/tickets/destroy_many.json?ids={ids}
 // GET /api/v2/tickets/{id}/collaborators.json
 // GET /api/v2/tickets/{id}/incidents.json
 // GET /api/v2/problems.json
+// GET /api/v2/channels/twitter/tickets/{id}/statuses.js
+// POST /api/v2/tickets/create_many.json
 // POST /api/v2/problems/autocomplete.json?text={name}
 // POST /api/v2/channels/twitter/tickets.json
-// GET /api/v2/channels/twitter/tickets/{id}/statuses.json
+// POST /api/v2/tickets/{id}/merge.json
+// PUT /api/v2/tickets/update_many.json
+// PUT /api/v2/tickets/update_many.json?ids={ids}
+// PUT /api/v2/tickets/{id}/mark_as_spam.json
+// PUT /api/v2/tickets/mark_many_as_spam.json?ids={ids}on
+// DELETE /api/v2/tickets/destroy_many.json?ids={ids}
 public with sharing class ZendeskTickets {
 
 	private final ZendeskAPI zapi;

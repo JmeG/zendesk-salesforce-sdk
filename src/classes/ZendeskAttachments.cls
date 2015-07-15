@@ -1,8 +1,8 @@
 // This class provides functionality to call the Zendesk Attachments API
 // Currently upports the following API endpoints:
 // GET    /api/v2/attachments/{id}.json
-// DELETE /api/v2/attachments/{id}.json
 // POST   /api/v2/uploads.json
+// DELETE /api/v2/attachments/{id}.json
 // DELETE /api/v2/uploads/{token}.json
 // *************************************
 // TODO: Implement the following methods

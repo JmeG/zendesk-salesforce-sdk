@@ -1,6 +1,24 @@
 // This class provides functionality to call the Zendesk Organizations API
 // Currently upports the following API endpoints:
-
+// GET    /api/v2/organizations.json
+// GET    /api/v2/organizations/{id}.json
+// DELETE /api/v2/organizations/{id}.json
+// *************************************
+// TODO: Implement the following methods
+// GET    /api/v2/users/{user_id}/organizations.json
+// GET    /api/v2/organizations/autocomplete.json?name={name}
+// GET    /api/v2/organizations/{id}/related.json
+// GET    /api/v2/organizations/show_many.json?ids={ids}
+// GET    /api/v2/organizations/show_many.json?external_ids={external_ids}
+// GET    /api/v2/organizations/search.json?external_id={external_id}
+// POST   /api/v2/organizations.json
+// POST   /api/v2/organizations/create_many.json
+// PUT    /api/v2/organizations/{id}.json
+// PUT    /api/v2/organizations/update_many.json
+// PUT    /api/v2/organizations/update_many.json?ids={ids}
+// PUT    /api/v2/organizations/update_many.json?external_ids={external_ids}
+// DELETE /api/v2/organizations/destroy_many.json?ids={ids}
+// DELETE /api/v2/organizations/destroy_many.json?external_ids={external_ids}
 public with sharing class ZendeskOrganizations {
 
 	private final ZendeskAPI zapi;
@@ -69,5 +87,16 @@ public with sharing class ZendeskOrganizations {
         OrganizationWrapper wrapper = (OrganizationWrapper)JSON.deserialize(res.getBody(), OrganizationWrapper.class);
         return wrapper.organization;
     }
+
+	public void deleteOrganization(Long organizationId) {
+		if (organizationId == null) { throw new ZendeskException('organizationId parameter must not be null'); }
+
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/organizations/' + organizationId + '.json');
+		HttpResponse res = new Http().send(req);
+
+		if (!ZendeskAPI.isSuccess(res)) {
+			throw new ZendeskException('Error deleting Organization ' + organizationId + ' (' + res.getStatusCode() + ')');
+		}
+	}
 
 }
