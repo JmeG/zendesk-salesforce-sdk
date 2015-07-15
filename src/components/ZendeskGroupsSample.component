@@ -9,7 +9,7 @@
             <apex:pageBlock title="Groups" mode="edit">
                 <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
                 <apex:pageBlockButtons location="top">
-                <apex:commandButton action="{!getGroups}" value="Get all Groups" rerender="groupsPanel" />
+                    <apex:commandButton action="{!getGroups}" value="Get all Groups" rerender="groupsPanel" />
                     <apex:commandButton action="{!getGroupById}" value="Get by ID" rerender="groupsPanel" />
                     <apex:commandButton action="{!getAssignableGroups}" value="Get Assignable Groups" rerender="groupsPanel" />
                     <apex:commandButton action="{!getUserGroups}" value="Get User Groups" rerender="groupsPanel" />
