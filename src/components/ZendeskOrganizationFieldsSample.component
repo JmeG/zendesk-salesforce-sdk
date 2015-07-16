@@ -1,4 +1,4 @@
-<apex:component controller="ZendeskOrganizationFieldsSampleController">
+<apex:component controller="ZendeskOrgFieldsSampleController">
     <apex:attribute name="subdomainParam" description="Subdomain" type="String" required="required" assignTo="{!subdomain}"/>
     <apex:attribute name="usernameParam" description="Organizationname" type="String" required="required" assignTo="{!username}"/>
     <apex:attribute name="pwdOrTokenParam" description="Password or Token" type="String" required="required" assignTo="{!pwdOrToken}"/>

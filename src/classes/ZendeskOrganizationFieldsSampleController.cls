@@ -1,4 +1,4 @@
-public with sharing class ZendeskOrganizationFieldsSampleController {
+public with sharing class ZendeskOrgFieldsSampleController {
 
 	public String subdomain {get;set;}
 	public String username {get;set;}
@@ -10,7 +10,7 @@ public with sharing class ZendeskOrganizationFieldsSampleController {
 	public Long organizationFieldId {get;set;}
 	public Map<String, ZendeskOrganizationFields.ZOrganizationField> fieldsMap {get;set;}
 
-	public ZendeskOrganizationFieldsSampleController() {}
+	public ZendeskOrgFieldsSampleController() {}
 
 	public PageReference getFields() {
 		pageMessage = '';
