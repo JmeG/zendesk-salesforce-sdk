@@ -1,0 +1,40 @@
+<apex:component controller="ZendeskOrganizationFieldsSampleController">
+    <apex:attribute name="subdomainParam" description="Subdomain" type="String" required="required" assignTo="{!subdomain}"/>
+    <apex:attribute name="usernameParam" description="Organizationname" type="String" required="required" assignTo="{!username}"/>
+    <apex:attribute name="pwdOrTokenParam" description="Password or Token" type="String" required="required" assignTo="{!pwdOrToken}"/>
+    <apex:attribute name="authTypeParam" description="Auth Type" type="String" required="required" assignTo="{!authType}"/>
+
+    <apex:form>
+        <apex:outputPanel id="fieldsPanel">
+            <apex:pageBlock title="Organization Fields" mode="edit">
+                <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
+                <apex:pageBlockButtons location="top">
+                    <apex:commandButton action="{!getFields}" value="Get Fields" rerender="fieldsPanel" />
+                    <apex:commandButton action="{!getFieldByID}" value="Get by ID" rerender="fieldsPanel" />
+                    <apex:commandButton action="{!findFieldByName}" value="Search by Key" rerender="fieldsPanel" />
+                </apex:pageBlockButtons>
+                <apex:pageBlockSection title="" columns="1">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Organization Field ID" />
+                        <apex:inputText value="{!organizationFieldId}" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Search" columns="1">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Key" />
+                        <apex:inputText value="{!searchText}" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Fields List" columns="1">
+                    <apex:pageBlockTable value="{!fieldsMap}" var="key">
+                        <apex:column value="{!fieldsMap[key].id}" headerValue="ID"/>
+                        <apex:column value="{!fieldsMap[key].key}" headerValue="Key"/>
+                        <apex:column value="{!fieldsMap[key].title}" headerValue="Title"/>
+                        <apex:column value="{!fieldsMap[key]}" headerValue="Attributes"/>
+                    </apex:pageBlockTable>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:outputPanel>
+    </apex:form>
+
+</apex:component>
