@@ -5,13 +5,13 @@
     <apex:attribute name="authTypeParam" description="Auth Type" type="String" required="required" assignTo="{!authType}"/>
 
     <apex:form>
-        <apex:outputPanel id="userFieldsPanel">
+        <apex:outputPanel id="fieldsPanel">
             <apex:pageBlock title="User Fields" mode="edit">
                 <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
                 <apex:pageBlockButtons location="top">
-                    <apex:commandButton action="{!getFields}" value="Get Fields" rerender="userFieldsPanel" />
-                    <apex:commandButton action="{!getFieldByID}" value="Get by ID" rerender="userFieldsPanel" />
-                    <apex:commandButton action="{!findFieldByName}" value="Search by Key" rerender="userFieldsPanel" />
+                    <apex:commandButton action="{!getFields}" value="Get Fields" rerender="fieldsPanel" />
+                    <apex:commandButton action="{!getFieldByID}" value="Get by ID" rerender="fieldsPanel" />
+                    <apex:commandButton action="{!findFieldByName}" value="Search by Key" rerender="fieldsPanel" />
                 </apex:pageBlockButtons>
                 <apex:pageBlockSection title="" columns="1">
                     <apex:pageBlockSectionItem >

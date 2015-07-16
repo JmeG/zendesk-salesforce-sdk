@@ -96,19 +96,19 @@ private class ZendeskUserFieldsTests {
     }
 
     static testMethod void testZUserField() {
-        ZendeskUserFields.ZUserField zuserfield = new ZendeskUserFields.ZUserField();
-        //zuserfield.id = 0;
-        zuserfield.type = '';
-        zuserfield.title = '';
-        zuserfield.raw_title = '';
-        zuserfield.active = true;
-        zuserfield.custom_field_options = null;
+        ZendeskUserFields.ZUserField zfield = new ZendeskUserFields.ZUserField();
+        //zfield.id = 0;
+        zfield.type = '';
+        zfield.title = '';
+        zfield.raw_title = '';
+        zfield.active = true;
+        zfield.custom_field_options = null;
 
-        ZendeskUserFields.ZCustomFieldOption zcustomfieldoption = new ZendeskUserFields.ZCustomFieldOption();
-        zcustomfieldoption.id = 0;
-        zcustomfieldoption.name = '';
-        zcustomfieldoption.raw_name = '';
-        zcustomfieldoption.value = '';
+        ZendeskUserFields.ZCustomFieldOption zfieldoption = new ZendeskUserFields.ZCustomFieldOption();
+        zfieldoption.id = 0;
+        zfieldoption.name = '';
+        zfieldoption.raw_name = '';
+        zfieldoption.value = '';
 
         System.assert(true);
     }
