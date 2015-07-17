@@ -42,10 +42,8 @@ private class ZendeskAttachmentsTests {
     static testMethod void testUploadAttachment() {
         Test.setMock(HttpCalloutMock.class, new MockCreateAttachmentResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(zapi);
+        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		String attachId = zattach.uploadAttachment('filename.txt', 'fileContentType', Blob.valueOf('asdfasfdasdfasdfasdf'));
         Test.stopTest();
 
@@ -55,10 +53,8 @@ private class ZendeskAttachmentsTests {
     static testMethod void testUploadAttachmentException() {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(zapi);
+        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		try {
             zattach.uploadAttachment('filename.txt', 'fileContentType', Blob.valueOf('asdfasfdasdfasdfasdf'));
             System.assert(false); // throw an exception if we get here
@@ -69,10 +65,8 @@ private class ZendeskAttachmentsTests {
     static testMethod void testDeleteAttachment() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(zapi);
+        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zattach.deleteAttachment(123);
         Test.stopTest();
 
@@ -85,7 +79,7 @@ private class ZendeskAttachmentsTests {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(zapi);
+        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		try {
             zattach.deleteAttachment(123);
             System.assert(false); // throw an exception if we get here
@@ -96,10 +90,8 @@ private class ZendeskAttachmentsTests {
     static testMethod void testGetAttachment() {
         Test.setMock(HttpCalloutMock.class, new MockAttachmentResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(zapi);
+        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskAttachments.ZAttachment za = zattach.getAttachment(123);
         Test.stopTest();
 
@@ -109,10 +101,8 @@ private class ZendeskAttachmentsTests {
     static testMethod void testGetAttachmentException() {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(zapi);
+        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		try {
             zattach.getAttachment(123);
             System.assert(false); // throw an exception if we get here
@@ -123,10 +113,8 @@ private class ZendeskAttachmentsTests {
     static testMethod void testRedactTicketAttachment() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(zapi);
+        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zattach.redactCommentAttachment(123, 456, 789);
         Test.stopTest();
 

@@ -34,10 +34,8 @@ private class ZendeskOrganizationFieldsTests {
     static testMethod void testGetOrganizationFieldById() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskOrganizationFields zfields = new ZendeskOrganizationFields(zapi);
+        ZendeskOrganizationFields zfields = new ZendeskOrganizationFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskOrganizationFields.ZOrganizationField testObj = zfields.getOrganizationField(123);
         System.assertNotEquals(null, testObj);
 
@@ -49,10 +47,8 @@ private class ZendeskOrganizationFieldsTests {
     static testMethod void testGetOrganizationFieldByKey() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldsResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskOrganizationFields zfields = new ZendeskOrganizationFields(zapi);
+        ZendeskOrganizationFields zfields = new ZendeskOrganizationFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskOrganizationFields.ZOrganizationField testObj = zfields.getOrganizationFieldByKey('custom_field_1');
         Test.stopTest();
 
@@ -62,10 +58,8 @@ private class ZendeskOrganizationFieldsTests {
     static testMethod void testDeleteField() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskOrganizationFields zfields = new ZendeskOrganizationFields(zapi);
+        ZendeskOrganizationFields zfields = new ZendeskOrganizationFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zfields.deleteOrganizationField(123);
         Test.stopTest();
 
@@ -75,10 +69,8 @@ private class ZendeskOrganizationFieldsTests {
     static testMethod void testGetAllFields() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldsResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskOrganizationFields zfields = new ZendeskOrganizationFields(zapi);
+        ZendeskOrganizationFields zfields = new ZendeskOrganizationFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         Map<String, ZendeskOrganizationFields.ZOrganizationField> fieldsMap = zfields.getAllFields();
         Test.stopTest();
 

@@ -34,10 +34,8 @@ private class ZendeskOrganizationsTests {
     static testMethod void testGetOrganizations() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-		ZendeskOrganizations zorgs = new ZendeskOrganizations(zapi);
+		ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		ZendeskOrganizations.PagedOrganizationsWrapper results = zorgs.getOrganizations();
         Test.stopTest();
 
@@ -49,10 +47,8 @@ private class ZendeskOrganizationsTests {
     static testMethod void testGetOrganization() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-		ZendeskOrganizations zorgs = new ZendeskOrganizations(zapi);
+		ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		ZendeskOrganizations.ZOrganization org = zorgs.getOrganization(123);
         Test.stopTest();
 
@@ -63,10 +59,8 @@ private class ZendeskOrganizationsTests {
     static testMethod void testDeleteOrganization() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskOrganizations zorgs = new ZendeskOrganizations(zapi);
+        ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zorgs.deleteOrganization(123);
         Test.stopTest();
 

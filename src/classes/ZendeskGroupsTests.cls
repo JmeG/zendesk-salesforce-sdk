@@ -34,10 +34,8 @@ private class ZendeskGroupsTests {
     static testMethod void testGetGroup() {
         Test.setMock(HttpCalloutMock.class, new MockGroupResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskGroups zgroups = new ZendeskGroups(zapi);
+        ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskGroups.ZGroup testObj = zgroups.getGroup(123);
         Test.stopTest();
 
@@ -48,10 +46,8 @@ private class ZendeskGroupsTests {
     static testMethod void testDeleteGroup() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskGroups zgroups = new ZendeskGroups(zapi);
+        ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zgroups.deleteGroup(123);
         Test.stopTest();
 
@@ -64,7 +60,7 @@ private class ZendeskGroupsTests {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
         Test.startTest();
-        ZendeskGroups zgroups = new ZendeskGroups(zapi);
+        ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         Long groupId = zgroups.createGroup('foo');
         Test.stopTest();
 
@@ -74,10 +70,8 @@ private class ZendeskGroupsTests {
     static testMethod void testUpdateGroup() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskGroups zgroups = new ZendeskGroups(zapi);
+        ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zgroups.updateGroupName(123, 'foo');
         Test.stopTest();
 

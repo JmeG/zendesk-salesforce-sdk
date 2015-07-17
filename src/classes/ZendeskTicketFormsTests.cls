@@ -34,10 +34,8 @@ private class ZendeskTicketFormsTests {
     static testmethod void testGetTicketForm() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskTicketForms zticketforms = new ZendeskTicketForms(zapi);
+        ZendeskTicketForms zticketforms = new ZendeskTicketForms(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		ZendeskTicketForms.ZTicketForm testObj = zticketforms.getTicketForm(123);
         Test.stopTest();
 
@@ -48,10 +46,8 @@ private class ZendeskTicketFormsTests {
     static testmethod void testDeleteTicketForm() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskTicketForms zticketforms = new ZendeskTicketForms(zapi);
+        ZendeskTicketForms zticketforms = new ZendeskTicketForms(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		zticketforms.deleteTicketForm(123);
         Test.stopTest();
 
@@ -71,10 +67,8 @@ private class ZendeskTicketFormsTests {
     static testMethod void testGetAllTicketForms() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormsResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskTicketForms zfields = new ZendeskTicketForms(zapi);
+        ZendeskTicketForms zfields = new ZendeskTicketForms(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         Map<Long, ZendeskTicketForms.ZTicketForm> fieldsMap = zfields.getAllTicketForms();
         Test.stopTest();
 

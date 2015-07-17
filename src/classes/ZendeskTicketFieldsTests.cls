@@ -34,10 +34,8 @@ private class ZendeskTicketFieldsTests {
     static testMethod void testGetTicketFieldById() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
+        ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTicketFields.ZTicketField testObj = zfields.getTicketField(123);
         System.assertNotEquals(null, testObj);
 
@@ -49,10 +47,8 @@ private class ZendeskTicketFieldsTests {
     static testMethod void testDeleteField() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
+        ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zfields.deleteTicketField(123);
         Test.stopTest();
 
@@ -62,10 +58,8 @@ private class ZendeskTicketFieldsTests {
     static testMethod void testGetAllFields() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldsResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
+        ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         Map<Long, ZendeskTicketFields.ZTicketField> fieldsMap = zfields.getAllFields();
         Test.stopTest();
 

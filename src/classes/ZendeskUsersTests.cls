@@ -35,10 +35,8 @@ private class ZendeskUsersTests {
     static testmethod void testCreateUser() {
         Test.setMock(HttpCalloutMock.class, new MockCreateUserResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-		ZendeskUsers zusers = new ZendeskUsers(zapi);
+		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		Long userId = zusers.createUser('John Doe', 'jdoe@zendesk.com');
         Test.stopTest();
 
@@ -48,10 +46,8 @@ private class ZendeskUsersTests {
 	static testmethod void testGetUserId() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-		ZendeskUsers zusers = new ZendeskUsers(zapi);
+		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		Long userId = zusers.getUserIdByEmail('foo@bar.com');
         Test.stopTest();
 
@@ -61,10 +57,8 @@ private class ZendeskUsersTests {
     static testMethod void testFindUsersByNameOrEmail() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-		ZendeskUsers zusers = new ZendeskUsers(zapi);
+		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		ZendeskUsers.PagedUsersWrapper results = zusers.findUsersByNameOrEmail('foo@bar.com');
         Test.stopTest();
 
@@ -76,10 +70,8 @@ private class ZendeskUsersTests {
     static testMethod void testGetUsers() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-		ZendeskUsers zusers = new ZendeskUsers(zapi);
+		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		ZendeskUsers.PagedUsersWrapper results = zusers.getUsers();
         Test.stopTest();
 
@@ -91,10 +83,8 @@ private class ZendeskUsersTests {
     static testMethod void testGetUser() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-		ZendeskUsers zusers = new ZendeskUsers(zapi);
+		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		ZendeskUsers.ZUser u = zusers.getUser(123);
         Test.stopTest();
 
@@ -105,10 +95,8 @@ private class ZendeskUsersTests {
     static testMethod void testGetCurrentUser() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-		ZendeskUsers zusers = new ZendeskUsers(zapi);
+		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		ZendeskUsers.ZUser u = zusers.getCurrentUser();
         Test.stopTest();
 
