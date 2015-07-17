@@ -4,7 +4,7 @@
     <apex:attribute name="pwdOrTokenParam" description="Password or Token" type="String" required="required" assignTo="{!pwdOrToken}"/>
     <apex:attribute name="authTypeParam" description="Auth Type" type="String" required="required" assignTo="{!authType}"/>
 
-    <apex:form>
+    <apex:form >
         <apex:outputPanel id="usersPanel">
             <apex:pageBlock title="Users" mode="edit">
                 <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
