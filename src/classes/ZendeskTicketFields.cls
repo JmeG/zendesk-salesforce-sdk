@@ -2,11 +2,9 @@
 // Currently upports the following API endpoints:
 // GET    /api/v2/ticket_fields.json
 // GET    /api/v2/ticket_fields/{id}.json
-// DELETE /api/v2/ticket_fields/{id}.json
-// *************************************
-// TODO: Implement the following methods
 // POST   /api/v2/ticket_fields.json
 // PUT    /api/v2/ticket_fields/{id}.json
+// DELETE /api/v2/ticket_fields/{id}.json
 public with sharing class ZendeskTicketFields {
 
 	private final ZendeskAPI zapi;
@@ -109,6 +107,37 @@ public with sharing class ZendeskTicketFields {
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error deleting Ticket Field ' + ticketFieldId + ' (' + res.getStatusCode() + ')');
+		}
+	}
+
+	public Long createTicketField(ZTicketField zticketField) {
+		if (zticketField == null) { throw new ZendeskException('zticketField parameter must not be null'); }
+
+		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/ticket_fields/.json');
+		String ticketFieldJson = unreplaceReservedWords(JSON.serialize(zticketField));
+		req.setBody('{ "ticket_field": ' + ticketFieldJson + ' }');
+		HttpResponse res = new Http().send(req);
+
+		if (!ZendeskAPI.isSuccess(res)) {
+			throw new ZendeskException('Error creating Ticket Field (' + res.getStatusCode() + ')');
+		}
+	}
+
+	public void updateTicketField(Long ticketFieldId, ZTicketField zticketField) {
+		updateTicketField(ticketFieldId, zticketField, null);
+	}
+
+	public void updateTicketField(Long ticketFieldId, ZTicketField zticketField, Set<String> fieldsToNull) {
+		if (ticketFieldId == null) { throw new ZendeskException('ticketFieldId parameter must not be null'); }
+		if (zticketField == null) { throw new ZendeskException('zticketField parameter must not be null'); }
+
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_fields/' + ticketFieldId + '.json');
+		String ticketFieldJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(zticketField, fieldsToNull));
+		req.setBody('{ "ticket_field": ' + ticketFieldJson + ' }');
+		HttpResponse res = new Http().send(req);
+
+		if (!ZendeskAPI.isSuccess(res)) {
+			throw new ZendeskException('Error updating Ticket Field (' + res.getStatusCode() + ')');
 		}
 	}
 
