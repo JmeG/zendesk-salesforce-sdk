@@ -120,6 +120,19 @@ private class ZendeskAttachmentsTests {
         Test.stopTest();
     }
 
+    static testMethod void testRedactTicketAttachment() {
+        Test.setMock(HttpCalloutMock.class, new MockOKResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskAttachments zattach = new ZendeskAttachments(zapi);
+        zattach.redactCommentAttachment(123, 456, 789);
+        Test.stopTest();
+
+        System.assert(true);
+    }
+
     static testMethod void testZAttachment() {
         ZendeskAttachments.ZAttachment obj = new ZendeskAttachments.ZAttachment();
         obj.name = '';

@@ -2,11 +2,9 @@
 // Currently upports the following API endpoints:
 // GET    /api/v2/attachments/{id}.json
 // POST   /api/v2/uploads.json
+// PUT    /api/v2/tickets/{ticket_id}/comments/{comment_id}/attachments/{attachment_id}/redact.json
 // DELETE /api/v2/attachments/{id}.json
 // DELETE /api/v2/uploads/{token}.json
-// *************************************
-// TODO: Implement the following methods
-// PUT /api/v2/tickets/{ticket_id}/comments/{comment_id}/attachments/{attachment_id}/redact.json
 public with sharing class ZendeskAttachments {
 
 	private final ZendeskAPI zapi;
@@ -84,6 +82,20 @@ public with sharing class ZendeskAttachments {
 
 		AttachmentWrapper resultWrapper = (AttachmentWrapper)JSON.deserialize(res.getBody(), AttachmentWrapper.class);
 		return resultWrapper.attachment;
+	}
+
+	public void redactCommentAttachment(Long ticketId, Long commentId, Long attachmentId) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+		if (commentId == null) { throw new ZendeskException('commentId parameter must not be null'); }
+		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
+
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + commentId + '/attachments/' + attachmentId + '/redact.json');
+		req.setBody('{}');
+		HttpResponse res = new Http().send(req);
+
+		if (!ZendeskAPI.isSuccess(res)) {
+			throw new ZendeskException('Error redacting Comment Attachment (' + res.getStatusCode() + ')');
+		}
 	}
 
 }
