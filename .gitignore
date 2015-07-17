@@ -1,3 +1,15 @@
 .DS_Store
 .project
 .settings
+
+config/.debug
+
+config/.describe
+
+config/.local_store
+
+config/.org_metadata
+
+config/.session
+
+config/.lightning
