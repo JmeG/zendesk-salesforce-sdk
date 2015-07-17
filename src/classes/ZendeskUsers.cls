@@ -155,7 +155,7 @@ public with sharing class ZendeskUsers {
         HttpResponse res = new Http().send(queryReq);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting users (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error getting Users (' + res.getStatusCode() + ')');
 		}
 
         PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(res.getBody(), PagedUsersWrapper.class);
@@ -169,7 +169,7 @@ public with sharing class ZendeskUsers {
         HttpResponse res = new Http().send(queryReq);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting user ' + userId + ' (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error getting User ' + userId + ' (' + res.getStatusCode() + ')');
 		}
 
         UserWrapper wrapper = (UserWrapper)JSON.deserialize(res.getBody(), UserWrapper.class);
@@ -181,7 +181,7 @@ public with sharing class ZendeskUsers {
         HttpResponse res = new Http().send(queryReq);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting current user (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error getting current User (' + res.getStatusCode() + ')');
 		}
 
         UserWrapper wrapper = (UserWrapper)JSON.deserialize(res.getBody(), UserWrapper.class);

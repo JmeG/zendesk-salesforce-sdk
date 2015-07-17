@@ -67,7 +67,7 @@ public with sharing class ZendeskOrganizations {
         HttpResponse res = new Http().send(queryReq);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting organizations (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error getting Organizations (' + res.getStatusCode() + ')');
 		}
 
         PagedOrganizationsWrapper wrapper = (PagedOrganizationsWrapper)JSON.deserialize(res.getBody(), PagedOrganizationsWrapper.class);
@@ -81,7 +81,7 @@ public with sharing class ZendeskOrganizations {
         HttpResponse res = new Http().send(queryReq);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting organization ' + organizationId + ' (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error getting Organization ' + organizationId + ' (' + res.getStatusCode() + ')');
 		}
 
         OrganizationWrapper wrapper = (OrganizationWrapper)JSON.deserialize(res.getBody(), OrganizationWrapper.class);

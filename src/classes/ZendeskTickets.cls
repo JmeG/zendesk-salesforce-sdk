@@ -330,8 +330,7 @@ public with sharing class ZendeskTickets {
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			System.debug(res.getBody());
-			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error updating Ticket (' + res.getStatusCode() + ')');
 		}
 	}
 
@@ -357,7 +356,7 @@ public with sharing class ZendeskTickets {
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error occurred trying to update tickets + ' (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error updating tickets + ' (' + res.getStatusCode() + ')');
 		}
 	}
 	*/
@@ -397,7 +396,7 @@ public with sharing class ZendeskTickets {
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			System.debug(res.getBody());
-			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error updating ticket (' + res.getStatusCode() + ')');
 		}
 	}
 
@@ -438,7 +437,7 @@ public with sharing class ZendeskTickets {
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			System.debug(res.getBody());
-			throw new ZendeskException('Error occurred trying to update ticket (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error updating ticket (' + res.getStatusCode() + ')');
 		}
 	}
 
