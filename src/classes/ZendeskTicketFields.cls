@@ -114,13 +114,16 @@ public with sharing class ZendeskTicketFields {
 		if (zticketField == null) { throw new ZendeskException('zticketField parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/ticket_fields/.json');
-		String ticketFieldJson = unreplaceReservedWords(JSON.serialize(zticketField));
-		req.setBody('{ "ticket_field": ' + ticketFieldJson + ' }');
+		req.setBody('{ "ticket_field": ' + JSON.serialize(zticketField) + ' }');
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error creating Ticket Field (' + res.getStatusCode() + ')');
 		}
+
+		TicketFieldWrapper resultWrapper = (TicketFieldWrapper)JSON.deserialize(res.getBody(), TicketFieldWrapper.class);
+		// return the ID of the new field
+		return ((resultWrapper==null || resultWrapper.ticket_field == null) ? null : resultWrapper.ticket_field.id);
 	}
 
 	public void updateTicketField(Long ticketFieldId, ZTicketField zticketField) {
@@ -132,8 +135,7 @@ public with sharing class ZendeskTicketFields {
 		if (zticketField == null) { throw new ZendeskException('zticketField parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_fields/' + ticketFieldId + '.json');
-		String ticketFieldJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(zticketField, fieldsToNull));
-		req.setBody('{ "ticket_field": ' + ticketFieldJson + ' }');
+		req.setBody('{ "ticket_field": ' + ZendeskAPI.serializeJsonNoNulls(zticketField, fieldsToNull) + ' }');
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
