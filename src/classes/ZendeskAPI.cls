@@ -105,6 +105,7 @@ public with sharing class ZendeskAPI {
 		return csv;
 	}
 
+	/*
 	// A custom JSON serializer that strips out fields with NULL values from the resulting JSON
 	// Hopefully Salesforce will add support to allow this to be done natively at some point
 	// If you do need specific fields with NULL values to remain in the JSON then add the names
@@ -134,6 +135,7 @@ public with sharing class ZendeskAPI {
 
 		return updateJson;
 	}
+	*/
 
 	// Realllly hacky way of stripping out nulls. Experimenting with this instead of using deserializeUntyped
 	// https://iwritecrappycode.wordpress.com/2014/07/16/stripping-nulls-from-a-json-object-in-apex/
