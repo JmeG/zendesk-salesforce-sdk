@@ -125,7 +125,7 @@ private class ZendeskGroupsTests {
         System.assertNotEquals(0, wrapper.groups.size());
     }
 
-    static testMethod void testGetNextPage() {
+    static testMethod void testPaging() {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
         Test.startTest();
@@ -134,6 +134,7 @@ private class ZendeskGroupsTests {
         wrapper.previous_page = 'https://test.zendesk.com/api/v2/groups.json?page=1';
         Test.stopTest();
 
+        System.assertEquals(1, wrapper.previousPageNumber);
         System.assertEquals(2, wrapper.nextPageNumber);
     }
 

@@ -106,13 +106,14 @@ private class ZendeskTicketFormsTests {
         System.assertNotEquals(null, newTicketFormId);
     }
 
-    static testMethod void testGetNextPage() {
+    static testMethod void testPaging() {
         Test.startTest();
         ZendeskTicketForms.TicketFormsWrapper wrapper = new ZendeskTicketForms.TicketFormsWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/ticket_forms.json?page=2';
         wrapper.previous_page = 'https://test.zendesk.com/api/v2/ticket_forms.json?page=1';
         Test.stopTest();
 
+        System.assertEquals(1, wrapper.previousPageNumber);
         System.assertEquals(2, wrapper.nextPageNumber);
     }
 

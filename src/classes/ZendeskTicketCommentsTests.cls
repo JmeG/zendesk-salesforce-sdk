@@ -56,12 +56,24 @@ private class ZendeskTicketCommentsTests {
         System.assert(true);
     }
 
+    static testMethod void testPaging() {
+        Test.startTest();
+        ZendeskTicketComments.TicketCommentsWrapper wrapper = new ZendeskTicketComments.TicketCommentsWrapper();
+        wrapper.next_page = 'https://test.zendesk.com/api/v2/ticket_comments.json?page=2';
+        wrapper.previous_page = 'https://test.zendesk.com/api/v2/ticket_comments.json?page=1';
+        Test.stopTest();
+
+        System.assertEquals(1, wrapper.previousPageNumber);
+        System.assertEquals(2, wrapper.nextPageNumber);
+    }
+
     static testMethod void testZTicketComment() {
         ZendeskTicketComments.ZTicketComment zcomment = new ZendeskTicketComments.ZTicketComment();
         zcomment.type = '';
         zcomment.body = '';
         zcomment.html_body = '';
         zcomment.author_id = 0;
+        zcomment.x_public = true;
         zcomment.attachments = new ZendeskAttachments.ZAttachment[1];
         zcomment.via = new ZendeskTickets.ZTicketVia();
 

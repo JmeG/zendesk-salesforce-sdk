@@ -118,13 +118,14 @@ private class ZendeskOrganizationFieldsTests {
         System.assertNotEquals(null, fieldsMap.containsKey('Test'));
     }
 
-    static testMethod void testGetNextPage() {
+    static testMethod void testPaging() {
         Test.startTest();
         ZendeskOrganizationFields.OrganizationFieldsWrapper wrapper = new ZendeskOrganizationFields.OrganizationFieldsWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/organization_fields.json?page=2';
         wrapper.previous_page = 'https://test.zendesk.com/api/v2/organization_fields.json?page=1';
         Test.stopTest();
 
+        System.assertEquals(1, wrapper.previousPageNumber);
         System.assertEquals(2, wrapper.nextPageNumber);
     }
 

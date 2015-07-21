@@ -67,13 +67,14 @@ private class ZendeskOrganizationsTests {
         System.assert(true);
     }
 
-    static testMethod void testGetNextPage() {
+    static testMethod void testPaging() {
         Test.startTest();
         ZendeskOrganizations.OrganizationsWrapper wrapper = new ZendeskOrganizations.OrganizationsWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/organizations.json?page=2';
         wrapper.previous_page = 'https://test.zendesk.com/api/v2/organizations.json?page=1';
         Test.stopTest();
 
+        System.assertEquals(1, wrapper.previousPageNumber);
         System.assertEquals(2, wrapper.nextPageNumber);
     }
 
