@@ -113,7 +113,7 @@ public with sharing class ZendeskUsers {
 		HttpResponse res = new Http().send(queryReq);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error searching Users (' + res.getStatusCode() + ')');
 		}
 
 		UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(res.getBody(), UsersWrapper.class);
@@ -129,7 +129,7 @@ public with sharing class ZendeskUsers {
 		HttpResponse res = new Http().send(queryReq);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error searching Users (' + res.getStatusCode() + ')');
 		}
 
 		UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(res.getBody(), UsersWrapper.class);

@@ -53,7 +53,7 @@ public with sharing class ZendeskAttachments {
 			}
 		}
 		catch(Exception e) {
-			throw new ZendeskException('Error uploading attachment: ' + e.getMessage());
+			throw new ZendeskException('Error uploading Attachment: ' + e.getMessage());
 		}
 
 		return zendeskAttachmentToken;

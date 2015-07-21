@@ -207,7 +207,7 @@ public with sharing class ZendeskTickets {
 	}
 
 /*
-	public void createManyTickets(List<ZTicket> ztickets) {
+	public void createManyTickets(ZTicket[] ztickets) {
 		TicketsWrapper wrapper = new TicketsWrapper();
 		wrapper.tickets = ztickets;
 
@@ -219,7 +219,6 @@ public with sharing class ZendeskTickets {
 			throw new ZendeskException('Error creating Ticket (' + res.getStatusCode() + ')');
 		}
 
-		System.debug('**createMany response=' = res.getBody());
 		//TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(res.getBody(), TicketWrapper.class);
 	}
 */
@@ -395,8 +394,7 @@ public with sharing class ZendeskTickets {
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			System.debug(res.getBody());
-			throw new ZendeskException('Error updating ticket (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error updating Ticket (' + res.getStatusCode() + ')');
 		}
 	}
 
@@ -436,8 +434,7 @@ public with sharing class ZendeskTickets {
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			System.debug(res.getBody());
-			throw new ZendeskException('Error updating ticket (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error updating Ticket (' + res.getStatusCode() + ')');
 		}
 	}
 
