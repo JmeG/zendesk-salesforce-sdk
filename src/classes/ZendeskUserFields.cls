@@ -2,12 +2,10 @@
 // Currently upports the following API endpoints:
 // GET    /api/v2/user_fields.json
 // GET    /api/v2/user_fields/{id}.json
-// DELETE /api/v2/user_fields/{id}.json
-// *************************************
-// TODO: Implement the following methods
 // POST   /api/v2/user_fields.json
 // PUT    /api/v2/user_fields/{id}.json
 // PUT    /api/v2/user_fields/reorder.json
+// DELETE /api/v2/user_fields/{id}.json
 public with sharing class ZendeskUserFields {
 
     private final ZendeskAPI zapi;
@@ -19,7 +17,13 @@ public with sharing class ZendeskUserFields {
 	    public String type {get; set;}
 	    public String title {get; set;}
 	    public String raw_title {get; set;}
+        //public String description {get; set;}
+        //public String raw_description {get; set;}
+	    public Long position {get; set;}
 	    public Boolean active {get; set;}
+	    //public Boolean x_system {get; set;} // NOTE: "system" is reserved
+        //public String regexp_for_validation {get; set;}
+	    //public String tag {get; set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
 	    public ZCustomFieldOption[] custom_field_options {get; set;}
@@ -71,27 +75,27 @@ public with sharing class ZendeskUserFields {
         userFieldsMap = new Map<String, ZUserField>();
     }
 
-    public ZUserField getUserField(Long userFieldId) {
-		if (userFieldId == null) { throw new ZendeskException('userFieldId parameter must not be null'); }
+    public ZUserField getField(Long fieldId) {
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + userFieldId + '.json');
+        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
         HttpResponse res = new Http().send(queryReq);
 
         if (!ZendeskAPI.isSuccess(res)) {
-            throw new ZendeskException('Error getting User Field ' + userFieldId + ' (' + res.getStatusCode() + ')');
+            throw new ZendeskException('Error getting User Field ' + fieldId + ' (' + res.getStatusCode() + ')');
         }
 
-        UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(res.getBody(), UserFieldWrapper.class);
+        UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), UserFieldWrapper.class);
         return wrapper.user_field;
     }
 
     // Get the first page of User Fields
-    public PagedUserFieldsWrapper getUserFields() {
-        return getUserFields(null);
+    public PagedUserFieldsWrapper getFields() {
+        return getFields(null);
     }
 
     // Get a specific page of User Fields
-    public PagedUserFieldsWrapper getUserFields(Long page) {
+    public PagedUserFieldsWrapper getFields(Long page) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
@@ -99,23 +103,70 @@ public with sharing class ZendeskUserFields {
             throw new ZendeskException('Error getting User Fields (' + res.getStatusCode() + ')');
         }
 
-        PagedUserFieldsWrapper wrapper = (PagedUserFieldsWrapper)JSON.deserialize(res.getBody(), PagedUserFieldsWrapper.class);
+        PagedUserFieldsWrapper wrapper = (PagedUserFieldsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), PagedUserFieldsWrapper.class);
         return wrapper;
     }
 
-    public void deleteUserField(Long userFieldId) {
-		if (userFieldId == null) { throw new ZendeskException('userFieldId parameter must not be null'); }
+    public void deleteField(Long fieldId) {
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/user_fields/' + userFieldId + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error deleting User Field ' + userFieldId + ' (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error deleting User Field ' + fieldId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 
+    public void reorderFields(Long[] orderedFieldIds) {
+        if (orderedFieldIds == null || orderedFieldIds.size() < 2) { throw new ZendeskException('orderedFieldIds parameter contain at least 2 items'); }
+
+        HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/user_fields/reorder.json');
+        req.setBody('{ "user_field_ids": ' + JSON.serialize(orderedFieldIds) + '}');
+		HttpResponse res = new Http().send(req);
+
+		if (!ZendeskAPI.isSuccess(res)) {
+			throw new ZendeskException('Error reordering User Fields (' + res.getStatusCode() + ')');
+		}
+    }
+
+    public Long createField(ZUserField zfield) {
+        if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
+
+        HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/user_fields.json');
+        String fieldJson = JSON.serialize(zfield);
+        req.setBody('{ "user_field": ' + fieldJson + '}');
+		HttpResponse res = new Http().send(req);
+
+		if (!ZendeskAPI.isSuccess(res)) {
+			throw new ZendeskException('Error creating User Field (' + res.getStatusCode() + ')');
+		}
+
+        UserFieldWrapper resultWrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), UserFieldWrapper.class);
+		// return the ID of the new field
+		return ((resultWrapper==null || resultWrapper.user_field==null) ? null : resultWrapper.user_field.id);
+    }
+
+    public void updateField(Long fieldId, ZUserField zfield) {
+		updateField(fieldId, zfield, null);
+	}
+
+    public void updateField(Long fieldId, ZUserField zfield, Set<String> fieldsToNull) {
+        if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
+        if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
+
+        HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/user_fields.json');
+		String fieldJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(zfield, fieldsToNull));
+		req.setBody('{ "user_field": ' + fieldJson + ' }');
+		HttpResponse res = new Http().send(req);
+
+		if (!ZendeskAPI.isSuccess(res)) {
+			throw new ZendeskException('Error creating User Field (' + res.getStatusCode() + ')');
+		}
+    }
+
     // non-native API method
-    public ZUserField getUserFieldByKey(String key) {
+    public ZUserField getFieldByKey(String key) {
         if (String.isBlank(key)) { throw new ZendeskException('key parameter must not be empty'); }
 
         if (userFieldsMap.isEmpty()) {
@@ -143,19 +194,31 @@ public with sharing class ZendeskUserFields {
     // resource for the duration of their API usage and map the key for each User Field to the values
     // returned under the user_fields attribute on the User resource.
     private void loadAll() {
-        PagedUserFieldsWrapper wrapper = getUserFields();
+        PagedUserFieldsWrapper wrapper = getFields();
         if (wrapper != null && wrapper.user_fields != null) {
             for (ZUserField obj : wrapper.user_fields) {
                 userFieldsMap.put(obj.key, obj);
             }
 
             while (!String.isEmpty(wrapper.next_page)) {
-                wrapper = getUserFields(wrapper.nextPageNumber);
+                wrapper = getFields(wrapper.nextPageNumber);
                 for (ZUserField obj : wrapper.user_fields) {
                     userFieldsMap.put(obj.key, obj);
                 }
             }
         }
     }
+
+    // replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+	private String replaceReservedWords(String str) {
+		str = str.replaceAll('"system"\\s*:', '"x_system":');
+		return str;
+	}
+
+	// un-replace reserved keywords in the JSON string
+	private String unreplaceReservedWords(String str) {
+		str = str.replaceAll('"x_system"\\s*:', '"system":');
+		return str;
+	}
 
 }

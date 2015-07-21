@@ -8,6 +8,7 @@ public with sharing class ZendeskOrgFieldsSampleController {
 	public String pageMessage {get;set;}
 	public String searchText {get;set;}
 	public Long organizationFieldId {get;set;}
+	public String fieldOrderCSV {get;set;}
 	public Map<String, ZendeskOrganizationFields.ZOrganizationField> fieldsMap {get;set;}
 
 	public ZendeskOrgFieldsSampleController() {}
@@ -33,7 +34,7 @@ public with sharing class ZendeskOrgFieldsSampleController {
 			ZendeskOrganizationFields zfields = new ZendeskOrganizationFields(zapi);
 
 			fieldsMap = new Map<String, ZendeskOrganizationFields.ZOrganizationField>();
-			ZendeskOrganizationFields.ZOrganizationField field = zfields.getOrganizationFieldByKey(searchText);
+			ZendeskOrganizationFields.ZOrganizationField field = zfields.getFieldByKey(searchText);
 			if (field != null) {
 				fieldsMap.put(field.key, field);
 			}
@@ -54,7 +55,7 @@ public with sharing class ZendeskOrgFieldsSampleController {
 			ZendeskOrganizationFields zfields = new ZendeskOrganizationFields(zapi);
 
 			fieldsMap = new Map<String, ZendeskOrganizationFields.ZOrganizationField>();
-			ZendeskOrganizationFields.ZOrganizationField field = zfields.getOrganizationField(organizationFieldId);
+			ZendeskOrganizationFields.ZOrganizationField field = zfields.getField(organizationFieldId);
 			if (field != null) {
 				fieldsMap.put(field.key, field);
 			}
@@ -67,4 +68,24 @@ public with sharing class ZendeskOrgFieldsSampleController {
 		}
 		return null;
 	}
+
+	public PageReference reorderFields() {
+		pageMessage = '';
+		try {
+			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
+			ZendeskOrganizationFields zfields = new ZendeskOrganizationFields(zapi);
+
+			String[] splits = fieldOrderCSV.split(',');
+			List<Long> orderedFieldIds = new List<Long>();
+			for (String s : splits) {
+				orderedFieldIds.add(Long.valueOf(s.trim()));
+			}
+			zfields.reorderFields(orderedFieldIds);
+		}
+		catch(Exception e) {
+			pageMessage = e.getMessage();
+		}
+		return null;
+	}
+
 }

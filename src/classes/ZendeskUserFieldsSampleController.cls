@@ -8,6 +8,7 @@ public with sharing class ZendeskUserFieldsSampleController {
 	public String pageMessage {get;set;}
 	public String searchText {get;set;}
 	public Long userFieldId {get;set;}
+	public String fieldOrderCSV {get;set;}
 	public Map<String, ZendeskUserFields.ZUserField> fieldsMap {get;set;}
 
 	public ZendeskUserFieldsSampleController() {}
@@ -33,7 +34,7 @@ public with sharing class ZendeskUserFieldsSampleController {
 			ZendeskUserFields zfields = new ZendeskUserFields(zapi);
 
 			fieldsMap = new Map<String, ZendeskUserFields.ZUserField>();
-			ZendeskUserFields.ZUserField field = zfields.getUserFieldByKey(searchText);
+			ZendeskUserFields.ZUserField field = zfields.getFieldByKey(searchText);
 			if (field != null) {
 				fieldsMap.put(field.key, field);
 			}
@@ -54,7 +55,7 @@ public with sharing class ZendeskUserFieldsSampleController {
 			ZendeskUserFields zfields = new ZendeskUserFields(zapi);
 
 			fieldsMap = new Map<String, ZendeskUserFields.ZUserField>();
-			ZendeskUserFields.ZUserField field = zfields.getUserField(userFieldId);
+			ZendeskUserFields.ZUserField field = zfields.getField(userFieldId);
 			if (field != null) {
 				fieldsMap.put(field.key, field);
 			}
@@ -67,4 +68,24 @@ public with sharing class ZendeskUserFieldsSampleController {
 		}
 		return null;
 	}
+
+	public PageReference reorderFields() {
+		pageMessage = '';
+		try {
+			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
+			ZendeskUserFields zfields = new ZendeskUserFields(zapi);
+
+			String[] splits = fieldOrderCSV.split(',');
+			List<Long> orderedFieldIds = new List<Long>();
+			for (String s : splits) {
+				orderedFieldIds.add(Long.valueOf(s.trim()));
+			}
+			zfields.reorderFields(orderedFieldIds);
+		}
+		catch(Exception e) {
+			pageMessage = e.getMessage();
+		}
+		return null;
+	}
+
 }

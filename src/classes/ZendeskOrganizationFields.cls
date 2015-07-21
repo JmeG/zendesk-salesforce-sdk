@@ -2,24 +2,28 @@
 // Currently upports the following API endpoints:
 // GET    /api/v2/organization_fields.json
 // GET    /api/v2/organization_fields/{id}.json
-// DELETE /api/v2/organization_fields/{id}.json
-// *************************************
-// TODO: Implement the following methods
 // POST   /api/v2/organization_fields.json
 // PUT    /api/v2/organization_fields/{id}.json
 // PUT    /api/v2/organization_fields/reorder.json
+// DELETE /api/v2/organization_fields/{id}.json
 public with sharing class ZendeskOrganizationFields {
 
     private final ZendeskAPI zapi;
-    private Map<String, ZOrganizationField> organizationFieldsMap {get; private set; }
+    private Map<String, ZOrganizationField> fieldsMap {get; private set; }
 
     public class ZOrganizationField {
-	    public Long id {get; private set;}
+        public Long id {get; private set;}
         public String key {get; set;}
 	    public String type {get; set;}
 	    public String title {get; set;}
 	    public String raw_title {get; set;}
+        //public String description {get; set;}
+        //public String raw_description {get; set;}
+	    public Long position {get; set;}
 	    public Boolean active {get; set;}
+	    //public Boolean x_system {get; set;} // NOTE: "system" is reserved
+        //public String regexp_for_validation {get; set;}
+	    //public String tag {get; set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
 	    public ZCustomFieldOption[] custom_field_options {get; set;}
@@ -68,63 +72,110 @@ public with sharing class ZendeskOrganizationFields {
 
     public ZendeskOrganizationFields(ZendeskAPI zapi) {
         this.zapi = zapi;
-        organizationFieldsMap = new Map<String, ZOrganizationField>();
+        fieldsMap = new Map<String, ZOrganizationField>();
     }
 
-    public ZOrganizationField getOrganizationField(Long organizationFieldId) {
-		if (organizationFieldId == null) { throw new ZendeskException('organizationFieldId parameter must not be null'); }
+    public ZOrganizationField getField(Long fieldId) {
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organization_fields/' + organizationFieldId + '.json');
+        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organization_fields/' + fieldId + '.json');
         HttpResponse res = new Http().send(queryReq);
 
         if (!ZendeskAPI.isSuccess(res)) {
-            throw new ZendeskException('Error getting Organization Field ' + organizationFieldId + ' (' + res.getStatusCode() + ')');
+            throw new ZendeskException('Error getting Field ' + fieldId + ' (' + res.getStatusCode() + ')');
         }
 
-        OrganizationFieldWrapper wrapper = (OrganizationFieldWrapper)JSON.deserialize(res.getBody(), OrganizationFieldWrapper.class);
+        OrganizationFieldWrapper wrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), OrganizationFieldWrapper.class);
         return wrapper.organization_field;
     }
 
     // Get the first page of Organization Fields
-    public PagedOrganizationFieldsWrapper getOrganizationFields() {
-        return getOrganizationFields(null);
+    public PagedOrganizationFieldsWrapper getFields() {
+        return getFields(null);
     }
 
     // Get a specific page of Organization Fields
-    public PagedOrganizationFieldsWrapper getOrganizationFields(Long page) {
+    public PagedOrganizationFieldsWrapper getFields(Long page) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organization_fields.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
         if (!ZendeskAPI.isSuccess(res)) {
-            throw new ZendeskException('Error getting Organization Fields (' + res.getStatusCode() + ')');
+            throw new ZendeskException('Error getting Fields (' + res.getStatusCode() + ')');
         }
 
-        PagedOrganizationFieldsWrapper wrapper = (PagedOrganizationFieldsWrapper)JSON.deserialize(res.getBody(), PagedOrganizationFieldsWrapper.class);
+        PagedOrganizationFieldsWrapper wrapper = (PagedOrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), PagedOrganizationFieldsWrapper.class);
         return wrapper;
     }
 
-    public void deleteOrganizationField(Long organizationFieldId) {
-		if (organizationFieldId == null) { throw new ZendeskException('organizationFieldId parameter must not be null'); }
+    public void deleteField(Long fieldId) {
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/organization_fields/' + organizationFieldId + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/organization_fields/' + fieldId + '.json');
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error deleting Organization Field ' + organizationFieldId + ' (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error deleting Field ' + fieldId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 
+    public void reorderFields(Long[] orderedFieldIds) {
+        if (orderedFieldIds == null || orderedFieldIds.size() < 2) { throw new ZendeskException('orderedFieldIds parameter contain at least 2 items'); }
+
+        HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organization_fields/reorder.json');
+        req.setBody('{ "organization_field_ids": ' + JSON.serialize(orderedFieldIds) + '}');
+		HttpResponse res = new Http().send(req);
+
+		if (!ZendeskAPI.isSuccess(res)) {
+			throw new ZendeskException('Error reordering Organization Fields (' + res.getStatusCode() + ')');
+		}
+    }
+
+    public Long createField(ZOrganizationField zfield) {
+        if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
+
+        HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/organization_fields.json');
+        String fieldJson = JSON.serialize(zfield);
+        req.setBody('{ "organization_field": ' + fieldJson + '}');
+		HttpResponse res = new Http().send(req);
+
+		if (!ZendeskAPI.isSuccess(res)) {
+			throw new ZendeskException('Error creating Field (' + res.getStatusCode() + ')');
+		}
+
+        OrganizationFieldWrapper resultWrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), OrganizationFieldWrapper.class);
+		// return the ID of the new field
+		return ((resultWrapper==null || resultWrapper.organization_field == null) ? null : resultWrapper.organization_field.id);
+    }
+
+    public void updateField(Long fieldId, ZOrganizationField zfield) {
+		updateField(fieldId, zfield, null);
+	}
+
+    public void updateField(Long fieldId, ZOrganizationField zfield, Set<String> fieldsToNull) {
+        if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
+        if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
+
+        HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organization_fields.json');
+		String fieldJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(zfield, fieldsToNull));
+		req.setBody('{ "organization_field": ' + fieldJson + ' }');
+		HttpResponse res = new Http().send(req);
+
+		if (!ZendeskAPI.isSuccess(res)) {
+			throw new ZendeskException('Error creating Field (' + res.getStatusCode() + ')');
+		}
+    }
+
     // non-native API method
-    public ZOrganizationField getOrganizationFieldByKey(String key) {
+    public ZOrganizationField getFieldByKey(String key) {
         if (String.isBlank(key)) { throw new ZendeskException('key parameter must not be empty'); }
 
-        if (organizationFieldsMap.isEmpty()) {
+        if (fieldsMap.isEmpty()) {
             loadAll();
         }
 
         ZOrganizationField obj = null;
-        if (organizationFieldsMap.containsKey(key)) {
-            obj = organizationFieldsMap.get(key);
+        if (fieldsMap.containsKey(key)) {
+            obj = fieldsMap.get(key);
         }
 
         return obj;
@@ -132,10 +183,10 @@ public with sharing class ZendeskOrganizationFields {
 
     // Retrieves all pages of organization fields. Uses the field "key" as the map key
     public Map<String, ZOrganizationField> getAllFields() {
-        if (organizationFieldsMap.isEmpty()) {
+        if (fieldsMap.isEmpty()) {
             loadAll();
         }
-        return organizationFieldsMap;
+        return fieldsMap;
     }
 
     // Returns a list of all custom Organization Fields in your account. Fields are returned in the order
@@ -143,19 +194,31 @@ public with sharing class ZendeskOrganizationFields {
     // resource for the duration of their API usage and map the key for each Organization Field to the values
     // returned under the organization_fields attribute on the Organization resource.
     private void loadAll() {
-        PagedOrganizationFieldsWrapper wrapper = getOrganizationFields();
+        PagedOrganizationFieldsWrapper wrapper = getFields();
         if (wrapper != null && wrapper.organization_fields != null) {
             for (ZOrganizationField obj : wrapper.organization_fields) {
-                organizationFieldsMap.put(obj.key, obj);
+                fieldsMap.put(obj.key, obj);
             }
 
             while (!String.isEmpty(wrapper.next_page)) {
-                wrapper = getOrganizationFields(wrapper.nextPageNumber);
+                wrapper = getFields(wrapper.nextPageNumber);
                 for (ZOrganizationField obj : wrapper.organization_fields) {
-                    organizationFieldsMap.put(obj.key, obj);
+                    fieldsMap.put(obj.key, obj);
                 }
             }
         }
     }
+
+    // replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+	private String replaceReservedWords(String str) {
+		str = str.replaceAll('"system"\\s*:', '"x_system":');
+		return str;
+	}
+
+	// un-replace reserved keywords in the JSON string
+	private String unreplaceReservedWords(String str) {
+		str = str.replaceAll('"x_system"\\s*:', '"system":');
+		return str;
+	}
 
 }
