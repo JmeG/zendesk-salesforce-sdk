@@ -1,57 +1,44 @@
 /*
-Javascript Detail Page button added to an object layout in Salesforce
+Javascript Detail Page button added to an Account object layout in Salesforce
 Set the following content in the button's OnClick JavaScript field.
 
-{!requireScript("/soap/ajax/20.0/connection.js")}
-{!requireScript("/soap/ajax/20.0/apex.js")}
+{!requireScript("/soap/ajax/25.0/connection.js")}
+{!requireScript("/soap/ajax/25.0/apex.js")}
 
-var subject = 'my subject';
-var description = 'my comment';
-var custom1 = '{!Opportunity.customField1__c}';
-var custom2 = '{!Opportunity.customField2__c}';
+var subject = '{!Account.Name}';
+var comment = '{!Account.Description}';
 
-var retStr = sforce.apex.execute("ZendeskCreateTicketSampleService", "createNewZendeskTicket", {ticketSubject:subject, ticketDescription:description, customField1Text:custom1, customField2Text:custom2});
-alert(retStr);
+// NOTE: if your org has a namespace you must put that before "ZendeskCreateTicketSampleService" in the below call.
+// "<ns>.ZendeskCreateTicketSampleService"
+var result = sforce.apex.execute("ZendeskCreateTicketSampleService", "createNewZendeskTicket", {ticketSubject: subject, ticketComment: comment});
+
+alert(result);
 */
 global with sharing class ZendeskCreateTicketSampleService {
 
-/*
-  private static final String zendeskSubdomain = 'z3njgibsontest1';
-  private static final String zendeskUsername = 'jgibson@zendesk.com';
-  private static final String zendeskToken = 'Token';
-  private static final ZendeskAPI.AuthType zendeskAuthType = ZendeskAPI.AuthType.Token;
-
 	// Expose method as a webService so we can call it from a Javascript button on a Salesforce layout
-	webService static String createNewZendeskTicket(String ticketSubject, String ticketDescription, String customField1Text, String customField2Text) {
+	webService static String createNewZendeskTicket(String ticketSubject, String ticketComment) {
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(zendeskSubdomain, zendeskUsername, zendeskToken, zendeskAuthType);
+            // Retrieve the Zendesk API details from the custom settings object
+            Zendesk_API__c settings = Zendesk_API__c.getOrgDefaults();
+    		if (settings == null) { throw new ZendeskException('Zendesk_API custom settings are null'); }
+			ZendeskAPI.AuthType zdAuthType = (settings.Authentication_Type__c=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token);
 
-			// Create a new user or get the existing id of the requesting user
-			ZendeskUsers zUsers = new ZendeskUsers(zapi);
-			Long requesterId = zUsers.getUserIdFromEmail(UserInfo.getUserEmail());
-			if (requesterId == null) {
-				requesterId = zUsers.createUser(UserInfo.getName(), UserInfo.getUserEmail());
-				if (requesterId == null) { throw new ZendeskException('Error creating user in ' + zendeskSubdomain); }
-			}
+			// Create a new Ticket object
+            ZendeskTickets.ZTicket zt = new ZendeskTickets.ZTicket();
+            zt.type = ZendeskTickets.TicketType.question;
+    		zt.subject = ticketSubject;
+            // Create a new requester if one doesn't exist with this email address
+    		zt.requester = new ZendeskTickets.ZTicketRequester();
+            zt.requester.name = UserInfo.getName();
+            zt.requester.email = UserInfo.getUserEmail();
+            // Add a comment to the ticket
+            zt.comment = new ZendeskTickets.ZTicketComment();
+    		zt.comment.body = ticketComment;
 
-			// Retrieve the Zendesk ID of two different custom ticket fields
-			// The performance here can be improved by making use of the ZendeskAPICacheManager
-			ZendeskTicketFields zTicketFields = new ZendeskTicketFields(zapi);
-			String customFieldName = 'Custom Field Name 1';
-			ZendeskTicketFields.ZTicketField zticketField1 = zTicketFields.getTicketField(customFieldName);
-			if (zticketField1 == null) { throw new ZendeskException('Unable to find Ticket Field "' + customFieldName + '"'); }
-			customFieldName = 'Custom Field Name 2';
-			ZendeskTicketFields.ZTicketField zticketField2 = zTicketFields.getTicketField(customFieldName);
-			if (zticketField2 == null) { throw new ZendeskException('Unable to find Ticket Field "' + customFieldName + '"'); }
-
-			// Build list of custom fields and values
-			List<ZendeskTicketFields.ZTicketCustomField> zcfList = new List<ZendeskTicketFields.ZTicketCustomField>();
-			zcfList.add(new ZendeskTicketFields.ZTicketCustomField(zticketField1.Id, customField1Text));
-			zcfList.add(new ZendeskTicketFields.ZTicketCustomField(zticketField2.Id, customField2Text));
-
-			// Create the request
+			ZendeskAPI zapi = new ZendeskAPI(settings.Subdomain__c, settings.Username__c, settings.Password_or_Token__c, zdAuthType);
 			ZendeskTickets zTickets = new ZendeskTickets(zapi);
-			Long ticketNum = zTickets.createTicket('question', ticketSubject, ticketDescription, requesterId, zcfList);
+			Long ticketNum = zTickets.createTicket(zt);
 
 			// Return the newly created ticket number
 			return 'Ticket # ' + ticketNum + ' created.';
@@ -60,45 +47,4 @@ global with sharing class ZendeskCreateTicketSampleService {
 			return 'Error creating ticket: ' + e.getMessage();
 		}
 	}
-*/
-	/*
-	// Additional sample code that shows how you can cache and reuse the Zendesk ID's of custom fields and forms rather than
-	// having to call the API each time you create a ticket.
-	private static void BuildCache() {
-		ZendeskAPICacheManager cache = new ZendeskAPICacheManager();
-
-		ZendeskAPI zapi = new ZendeskAPI(zendeskSubdomain, zendeskUsername, zendeskToken, zendeskAuthType);
-
-		// --------------------
-		// Custom Ticket Forms
-		Set<String> formNames = new Set<String>();
-		formNames.add('Form Name 1');
-		formNames.add('Form Name 2');
-
-		ZendeskTicketForms zTicketForms = new ZendeskTicketForms(zapi);
-		for (String formName : formNames) {
-			ZendeskTicketForms.ZTicketForm zticketForm = zTicketForms.getTicketForm(formName);
-			if (zticketForm == null) { throw new ZendeskException('Unable to find Ticket Form "' + formName + '"'); }
-			cache.add(zendeskSubdomain, ZendeskAPICacheManager.TICKET_FORM, formName, zticketForm.id);
-		}
-
-		// --------------------
-		// Custom Ticket Fields
-		Set<String> fieldNames = new Set<String>();
-		fieldNames.add('Custom Field Name 1');
-		fieldNames.add('Custom Field Name 2');
-		fieldNames.add('Custom Field Name 3');
-
-		ZendeskTicketFields zTicketFields = new ZendeskTicketFields(zapi);
-		for (String fieldName : fieldNames) {
-			ZendeskTickets.ZTicketField zticketField = zTicketFields.getTicketField(fieldName);
-			if (zticketField == null) { throw new ZendeskException('Unable to find Ticket Field "' + fieldName + '"'); }
-			cache.add(zendeskSubdomain, ZendeskAPICacheManager.TICKET_FIELD, fieldName, zticketField.id);
-		}
-
-		// --------------------
-		// Save the new records to the cache
-		cache.saveUncommitted();
-	}
-	*/
 }
