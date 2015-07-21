@@ -22,6 +22,18 @@ private class ZendeskAPITests {
         System.assertEquals('GET', req.getMethod());
     }
 
+    static testMethod void testIsSuccess() {
+        Test.setMock(HttpCalloutMock.class, new MockUserResponse());
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json');
+
+        Test.startTest();
+        HttpResponse res = new Http().send(req);
+        Test.stopTest();
+
+        System.assertEquals(true, ZendeskAPI.isSuccess(res));
+    }
+
     static testMethod void testCanLogin() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
 
@@ -44,6 +56,17 @@ private class ZendeskAPITests {
         System.assertEquals('1,2,3', ZendeskAPI.arrayToCSV(new Long[] { 1, 2, 3 }));
         System.assertEquals('1,2,3', ZendeskAPI.arrayToCSV(new String[] { '1', '2', '3' }));
         Test.stopTest();
+    }
+
+    static testMethod void testStripJsonNulls() {
+        Account acct = new Account();
+        acct.Name = 'test';
+
+        Test.startTest();
+        String testJson = ZendeskAPI.stripJsonNulls(JSON.serialize(acct));
+        Test.stopTest();
+
+        System.assertEquals(false, testJson.containsIgnoreCase('null'));
     }
 
 
