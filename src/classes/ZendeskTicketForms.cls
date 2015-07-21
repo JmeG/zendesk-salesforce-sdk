@@ -51,8 +51,8 @@ public with sharing class ZendeskTicketForms {
 
 	// Get a specific page of Ticket Forms
 	public TicketFormsWrapper getTicketForms(Long page) {
-		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms.json' + (page==null ? '' : '?page=' + page));
-		HttpResponse res = new Http().send(queryReq);
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms.json' + (page==null ? '' : '?page=' + page));
+		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Ticket Forms (' + res.getStatusCode() + ')');

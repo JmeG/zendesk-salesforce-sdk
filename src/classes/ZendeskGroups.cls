@@ -44,8 +44,8 @@ public with sharing class ZendeskGroups {
 	}
 
 	public GroupsWrapper getGroups(Long page) {
-		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + page));
-		return getGroupsInternal(queryReq);
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + page));
+		return getGroupsInternal(req);
 	}
 
 	// Get all assignable groups
@@ -55,8 +55,8 @@ public with sharing class ZendeskGroups {
 
 	// Get all assignable groups by page number
 	public GroupsWrapper getAssignableGroups(Long page) {
-		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/assignable.json' + (page==null ? '' : '?page=' + page));
-		return getGroupsInternal(queryReq);
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/assignable.json' + (page==null ? '' : '?page=' + page));
+		return getGroupsInternal(req);
 	}
 
 	// Get the groups that a user is a member of
@@ -70,13 +70,13 @@ public with sharing class ZendeskGroups {
 	public GroupsWrapper getUserGroups(Long userId, Long page) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
-		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '/groups.json' + (page==null ? '' : '?page=' + page));
-		return getGroupsInternal(queryReq);
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '/groups.json' + (page==null ? '' : '?page=' + page));
+		return getGroupsInternal(req);
 	}
 
 	// Private helper method to query multiple groups
-	private GroupsWrapper getGroupsInternal(HttpRequest queryReq) {
-		HttpResponse res = new Http().send(queryReq);
+	private GroupsWrapper getGroupsInternal(HttpRequest req) {
+		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Groups (' + res.getStatusCode() + ')');

@@ -109,8 +109,8 @@ public with sharing class ZendeskUsers {
 		if (String.isBlank(nameOrEmail)) { throw new ZendeskException('nameOrEmail parameter must not be empty'); }
 
 		String encodedNameOrEmail = EncodingUtil.urlEncode(nameOrEmail, 'UTF-8');
-		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedNameOrEmail);
-		HttpResponse res = new Http().send(queryReq);
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedNameOrEmail);
+		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error searching Users (' + res.getStatusCode() + ')');
@@ -125,8 +125,8 @@ public with sharing class ZendeskUsers {
 
 		// Make sure to set the email to lowercase because that's the way Zendesk will return it
 		String encodedEmail = EncodingUtil.urlEncode(email.toLowerCase(), 'UTF-8');
-		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedEmail);
-		HttpResponse res = new Http().send(queryReq);
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedEmail);
+		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error searching Users (' + res.getStatusCode() + ')');
@@ -151,8 +151,8 @@ public with sharing class ZendeskUsers {
     }
 
     public UsersWrapper getUsers(Long page) {
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + page));
-        HttpResponse res = new Http().send(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + page));
+        HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Users (' + res.getStatusCode() + ')');
@@ -165,8 +165,8 @@ public with sharing class ZendeskUsers {
 	public ZUser getUser(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '.json');
-        HttpResponse res = new Http().send(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '.json');
+        HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting User ' + userId + ' (' + res.getStatusCode() + ')');
@@ -177,8 +177,8 @@ public with sharing class ZendeskUsers {
     }
 
 	public ZUser getCurrentUser() {
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/me.json');
-        HttpResponse res = new Http().send(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/me.json');
+        HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting current User (' + res.getStatusCode() + ')');

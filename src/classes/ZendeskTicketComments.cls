@@ -46,8 +46,8 @@ public with sharing class ZendeskTicketComments {
 	public TicketCommentsWrapper getTicketComments(Long ticketId, Long page) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
-		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments.json' + (page==null ? '' : '?page=' + page));
-		HttpResponse res = new Http().send(queryReq);
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments.json' + (page==null ? '' : '?page=' + page));
+		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Ticket Comments (' + res.getStatusCode() + ')');

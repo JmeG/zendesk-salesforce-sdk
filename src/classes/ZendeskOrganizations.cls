@@ -57,54 +57,54 @@ public with sharing class ZendeskOrganizations {
 	}
 
 	public OrganizationsWrapper getOrganizations() {
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations.json');
-        return getOrganizations(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations.json');
+        return getOrganizations(req);
     }
 
     public OrganizationsWrapper getOrganizations(Long page) {
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations.json' + (page==null ? '' : '?page=' + page));
-        return getOrganizations(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations.json' + (page==null ? '' : '?page=' + page));
+        return getOrganizations(req);
     }
 
 	public OrganizationsWrapper getOrganizationsByIds(Long[] orgIds) {
 		if (orgIds == null || orgIds.isEmpty()) { throw new ZendeskException('orgIds parameter must not be null or empty'); }
 
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/show_many.json?ids=' + ZendeskAPI.arrayToCSV(orgIds));
-        return getOrganizations(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/show_many.json?ids=' + ZendeskAPI.arrayToCSV(orgIds));
+        return getOrganizations(req);
     }
 
 	public OrganizationsWrapper getOrganizationsByExternalIds(String[] externalIds) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter must not be null or empty'); }
 
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/show_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
-        return getOrganizations(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/show_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
+        return getOrganizations(req);
     }
 
 	public OrganizationsWrapper getOrganizations(String autoCompleteName) {
 		if (String.isBlank(autoCompleteName) || autoCompleteName.length() < 2) { throw new ZendeskException('autoCompleteName parameter must at least 2 characters'); }
 
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/autocomplete.json?name=' + autoCompleteName);
-        return getOrganizations(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/autocomplete.json?name=' + autoCompleteName);
+        return getOrganizations(req);
     }
 
 	// TODO: test whether this can return an array or only one record
 	public OrganizationsWrapper searchOrganizations(String externalId) {
 		if (String.isBlank(externalId)) { throw new ZendeskException('externalId parameter must not be null or empty'); }
 
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/search.json?external_id=' + externalId);
-        return getOrganizations(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/search.json?external_id=' + externalId);
+        return getOrganizations(req);
     }
 
 	public OrganizationsWrapper getUserOrganizations(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '/organizations.json');
-        return getOrganizations(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '/organizations.json');
+        return getOrganizations(req);
     }
 
 	// Helper method for GET Organization's
-	private OrganizationsWrapper getOrganizations(HttpRequest queryReq) {
-        HttpResponse res = new Http().send(queryReq);
+	private OrganizationsWrapper getOrganizations(HttpRequest req) {
+        HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Organizations (' + res.getStatusCode() + ')');
@@ -117,8 +117,8 @@ public with sharing class ZendeskOrganizations {
 	public ZOrganization getOrganization(Long orgId) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
 
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/' + orgId + '.json');
-        HttpResponse res = new Http().send(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/' + orgId + '.json');
+        HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Organization ' + orgId + ' (' + res.getStatusCode() + ')');
@@ -131,14 +131,13 @@ public with sharing class ZendeskOrganizations {
 	public Map<String, Object> getOrganizationRelatedInfo(Long orgId) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
 
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/' + orgId + '/related.json');
-        HttpResponse res = new Http().send(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/' + orgId + '/related.json');
+        HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting Organization related info' + orgId + ' (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error getting Organization related info ' + orgId + ' (' + res.getStatusCode() + ')');
 		}
 
-		// TODO: figure out exactly what the response to this call looks like
 		Map<String, Object> resultMap = (Map<String, Object>)JSON.deserializeUntyped(res.getBody());
 		return resultMap;
 	}

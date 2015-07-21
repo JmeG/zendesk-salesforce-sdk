@@ -78,8 +78,8 @@ public with sharing class ZendeskUserFields {
     public ZUserField getField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
-        HttpResponse res = new Http().send(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
+        HttpResponse res = new Http().send(req);
 
         if (!ZendeskAPI.isSuccess(res)) {
             throw new ZendeskException('Error getting User Field ' + fieldId + ' (' + res.getStatusCode() + ')');
@@ -96,8 +96,8 @@ public with sharing class ZendeskUserFields {
 
     // Get a specific page of User Fields
     public UserFieldsWrapper getFields(Long page) {
-        HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + page));
-        HttpResponse res = new Http().send(queryReq);
+        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + page));
+        HttpResponse res = new Http().send(req);
 
         if (!ZendeskAPI.isSuccess(res)) {
             throw new ZendeskException('Error getting User Fields (' + res.getStatusCode() + ')');
