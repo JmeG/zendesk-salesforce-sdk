@@ -142,20 +142,15 @@ public with sharing class ZendeskUserFields {
 		}
 
         UserFieldWrapper resultWrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), UserFieldWrapper.class);
-		// return the ID of the new field
 		return ((resultWrapper==null || resultWrapper.user_field==null) ? null : resultWrapper.user_field.id);
     }
 
     public void updateField(Long fieldId, ZUserField zfield) {
-		updateField(fieldId, zfield, null);
-	}
-
-    public void updateField(Long fieldId, ZUserField zfield, Set<String> fieldsToNull) {
         if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
-		String fieldJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(zfield, fieldsToNull));
+		String fieldJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(zfield));
 		req.setBody('{ "user_field": ' + fieldJson + ' }');
 		HttpResponse res = new Http().send(req);
 

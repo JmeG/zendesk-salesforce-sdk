@@ -316,15 +316,11 @@ public with sharing class ZendeskTickets {
 	}
 
 	public void updateTicket(Long ticketId, ZTicket zticket) {
-		updateTicket(ticketId, zticket, null);
-	}
-
-	public void updateTicket(Long ticketId, ZTicket zticket, Set<String> fieldsToNull) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 		if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
-		String ticketJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(zticket, fieldsToNull));
+		String ticketJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(zticket));
 		req.setBody('{ "ticket": ' + ticketJson + ' }');
 		HttpResponse res = new Http().send(req);
 
@@ -387,7 +383,7 @@ public with sharing class ZendeskTickets {
 		ticket.comment.body = commentText;
 		ticket.comment.x_public = isPublic;
 		// Use custom serialize() method to remove all NULL fields from the JSON
-		String ticketJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(ticket));
+		String ticketJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(ticket));
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		req.setBody('{ "ticket": ' + ticketJson + ' }');
@@ -427,7 +423,7 @@ public with sharing class ZendeskTickets {
 		ticket.comment.x_public = isPublic;
 		ticket.status = status.status;
 		// Use custom serialize() method to remove all NULL fields from the JSON
-		String ticketJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(ticket));
+		String ticketJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(ticket));
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		req.setBody('{ "ticket": ' + ticketJson + ' }');

@@ -105,15 +105,11 @@ public with sharing class ZendeskTicketForms {
 	}
 
 	public void updateTicketForm(Long ticketFormId, ZTicketForm ticketForm) {
-		updateTicketForm(ticketFormId, ticketForm, null);
-	}
-
-    public void updateTicketForm(Long ticketFormId, ZTicketForm ticketForm, Set<String> fieldsToNull) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
         if (ticketForm == null) { throw new ZendeskException('ticketForm parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_forms/' + ticketFormId + '.json');
-		String tformJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(ticketForm, fieldsToNull));
+		String tformJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(ticketForm));
 		req.setBody('{ "ticket_form": ' + tformJson + ' }');
 		HttpResponse res = new Http().send(req);
 

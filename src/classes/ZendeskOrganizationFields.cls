@@ -148,15 +148,11 @@ public with sharing class ZendeskOrganizationFields {
     }
 
     public void updateField(Long fieldId, ZOrganizationField zfield) {
-		updateField(fieldId, zfield, null);
-	}
-
-    public void updateField(Long fieldId, ZOrganizationField zfield, Set<String> fieldsToNull) {
         if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organization_fields/' + fieldId + '.json');
-		String fieldJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(zfield, fieldsToNull));
+		String fieldJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(zfield));
 		req.setBody('{ "organization_field": ' + fieldJson + ' }');
 		HttpResponse res = new Http().send(req);
 

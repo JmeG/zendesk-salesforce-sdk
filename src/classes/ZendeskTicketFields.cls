@@ -127,15 +127,11 @@ public with sharing class ZendeskTicketFields {
 	}
 
 	public void updateField(Long fieldId, ZTicketField zticketField) {
-		updateField(fieldId, zticketField, null);
-	}
-
-	public void updateField(Long fieldId, ZTicketField zfield, Set<String> fieldsToNull) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
-		req.setBody('{ "ticket_field": ' + ZendeskAPI.serializeJsonNoNulls(zfield, fieldsToNull) + ' }');
+		req.setBody('{ "ticket_field": ' + ZendeskAPI.stripJsonNulls(zfield) + ' }');
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
