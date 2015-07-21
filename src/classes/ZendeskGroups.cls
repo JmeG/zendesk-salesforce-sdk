@@ -111,10 +111,9 @@ public with sharing class ZendeskGroups {
 		gen.writeObjectField('name', name);
 		gen.writeEndObject();
 		gen.writeEndObject();
-		String groupJSON = gen.getAsString();
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/groups.json');
-		req.setBody(groupJSON);
+		req.setBody(gen.getAsString());
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
