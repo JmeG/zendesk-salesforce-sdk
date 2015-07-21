@@ -29,7 +29,7 @@ public with sharing class ZendeskTicketForms {
 		public ZTicketForm ticket_form {get; set;}
 	}
 
-	public class PagedTicketFormsWrapper {
+	public class TicketFormsWrapper {
 		public ZTicketForm[] ticket_forms {get;set;}
 
 		// Paging support
@@ -45,12 +45,12 @@ public with sharing class ZendeskTicketForms {
 	}
 
 	// Get the first page of Ticket Forms
-	public PagedTicketFormsWrapper getTicketForms() {
+	public TicketFormsWrapper getTicketForms() {
 		return getTicketForms(null);
 	}
 
 	// Get a specific page of Ticket Forms
-	public PagedTicketFormsWrapper getTicketForms(Long page) {
+	public TicketFormsWrapper getTicketForms(Long page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms.json' + (page==null ? '' : '?page=' + page));
 		HttpResponse res = new Http().send(queryReq);
 
@@ -58,7 +58,7 @@ public with sharing class ZendeskTicketForms {
 			throw new ZendeskException('Error getting Ticket Forms (' + res.getStatusCode() + ')');
 		}
 
-		PagedTicketFormsWrapper wrapper = (PagedTicketFormsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), PagedTicketFormsWrapper.class);
+		TicketFormsWrapper wrapper = (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), TicketFormsWrapper.class);
 		return wrapper;
 	}
 
@@ -158,7 +158,7 @@ public with sharing class ZendeskTicketForms {
     }
 
 	private void loadAll() {
-		PagedTicketFormsWrapper wrapper = getTicketForms();
+		TicketFormsWrapper wrapper = getTicketForms();
 		if (wrapper != null && wrapper.ticket_forms != null) {
 			for (ZTicketForm obj : wrapper.ticket_forms) {
 				ticketFormsMap.put(obj.id, obj);

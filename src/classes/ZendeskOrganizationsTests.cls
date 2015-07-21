@@ -36,7 +36,7 @@ private class ZendeskOrganizationsTests {
 
         Test.startTest();
 		ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskOrganizations.PagedOrganizationsWrapper results = zorgs.getOrganizations();
+		ZendeskOrganizations.OrganizationsWrapper results = zorgs.getOrganizations();
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -69,7 +69,7 @@ private class ZendeskOrganizationsTests {
 
     static testMethod void testGetNextPage() {
         Test.startTest();
-        ZendeskOrganizations.PagedOrganizationsWrapper wrapper = new ZendeskOrganizations.PagedOrganizationsWrapper();
+        ZendeskOrganizations.OrganizationsWrapper wrapper = new ZendeskOrganizations.OrganizationsWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/organizations.json?page=2';
         wrapper.previous_page = 'https://test.zendesk.com/api/v2/organizations.json?page=1';
         Test.stopTest();

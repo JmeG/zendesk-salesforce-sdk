@@ -120,7 +120,7 @@ private class ZendeskOrganizationFieldsTests {
 
     static testMethod void testGetNextPage() {
         Test.startTest();
-        ZendeskOrganizationFields.PagedOrganizationFieldsWrapper wrapper = new ZendeskOrganizationFields.PagedOrganizationFieldsWrapper();
+        ZendeskOrganizationFields.OrganizationFieldsWrapper wrapper = new ZendeskOrganizationFields.OrganizationFieldsWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/organization_fields.json?page=2';
         wrapper.previous_page = 'https://test.zendesk.com/api/v2/organization_fields.json?page=1';
         Test.stopTest();

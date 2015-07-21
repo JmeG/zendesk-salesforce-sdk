@@ -71,7 +71,7 @@ public with sharing class ZendeskUserSampleController {
 				searchStr = nameInput;
 			}
 
-			ZendeskUsers.PagedUsersWrapper pagedUsers = zusers.findUsersByNameOrEmail(searchStr);
+			ZendeskUsers.UsersWrapper pagedUsers = zusers.findUsersByNameOrEmail(searchStr);
 			users = pagedUsers.users;
 		}
 		catch(Exception e) {
@@ -87,7 +87,7 @@ public with sharing class ZendeskUserSampleController {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskUsers zusers = new ZendeskUsers(zapi);
 
-			ZendeskUsers.PagedUsersWrapper pagedUsers = zusers.getUsers();
+			ZendeskUsers.UsersWrapper pagedUsers = zusers.getUsers();
 			users = pagedUsers.users;
 		}
 		catch(Exception e) {

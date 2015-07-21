@@ -24,7 +24,7 @@ public with sharing class ZendeskGroups {
 		public ZGroup x_group {get; set;} // Use "x_group" in place of "group" which is a reserved keyword. Requires custom de/serialization.
 	}
 
-	public class PagedGroupsWrapper {
+	public class GroupsWrapper {
 		public ZGroup[] groups {get;set;}
 
 		// Paging support
@@ -39,35 +39,35 @@ public with sharing class ZendeskGroups {
 		groupsMap = new Map<Long, ZGroup>();
 	}
 
-	public PagedGroupsWrapper getGroups() {
+	public GroupsWrapper getGroups() {
 		return getGroups(null);
 	}
 
-	public PagedGroupsWrapper getGroups(Long page) {
+	public GroupsWrapper getGroups(Long page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + page));
 		return getGroupsInternal(queryReq);
 	}
 
 	// Get all assignable groups
-	public PagedGroupsWrapper getAssignableGroups() {
+	public GroupsWrapper getAssignableGroups() {
 		return getAssignableGroups(null);
 	}
 
 	// Get all assignable groups by page number
-	public PagedGroupsWrapper getAssignableGroups(Long page) {
+	public GroupsWrapper getAssignableGroups(Long page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/assignable.json' + (page==null ? '' : '?page=' + page));
 		return getGroupsInternal(queryReq);
 	}
 
 	// Get the groups that a user is a member of
-	public PagedGroupsWrapper getUserGroups(Long userId) {
+	public GroupsWrapper getUserGroups(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
 		return getUserGroups(userId, null);
 	}
 
 	// Get the groups that a user is a member of
-	public PagedGroupsWrapper getUserGroups(Long userId, Long page) {
+	public GroupsWrapper getUserGroups(Long userId, Long page) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '/groups.json' + (page==null ? '' : '?page=' + page));
@@ -75,14 +75,14 @@ public with sharing class ZendeskGroups {
 	}
 
 	// Private helper method to query multiple groups
-	private PagedGroupsWrapper getGroupsInternal(HttpRequest queryReq) {
+	private GroupsWrapper getGroupsInternal(HttpRequest queryReq) {
 		HttpResponse res = new Http().send(queryReq);
 
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error getting Groups (' + res.getStatusCode() + ')');
 		}
 
-		PagedGroupsWrapper wrapper = (PagedGroupsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), PagedGroupsWrapper.class);
+		GroupsWrapper wrapper = (GroupsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), GroupsWrapper.class);
 		return wrapper;
 	}
 
@@ -168,7 +168,7 @@ public with sharing class ZendeskGroups {
 	}
 
 	private void loadAll() {
-		PagedGroupsWrapper wrapper = getGroups();
+		GroupsWrapper wrapper = getGroups();
 		if (wrapper != null && wrapper.groups != null) {
 			for (ZGroup obj : wrapper.groups) {
 				groupsMap.put(obj.id, obj);

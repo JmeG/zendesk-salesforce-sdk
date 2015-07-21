@@ -128,7 +128,7 @@ private class ZendeskTicketsTests {
 
         Test.startTest();
 		ZendeskTickets ztickets = new ZendeskTickets(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTickets.PagedTicketsWrapper results = ztickets.getTickets();
+		ZendeskTickets.TicketsWrapper results = ztickets.getTickets();
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -141,7 +141,7 @@ private class ZendeskTicketsTests {
 
         Test.startTest();
 		ZendeskTickets ztickets = new ZendeskTickets(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTickets.PagedTicketsWrapper results = ztickets.getTicketsByOrgId(123);
+		ZendeskTickets.TicketsWrapper results = ztickets.getTicketsByOrgId(123);
         results = ztickets.getTicketsByRequesterId(123);
         results = ztickets.getTicketsByCCUserId(123);
         results = ztickets.getTicketsByAssigneeId(123);

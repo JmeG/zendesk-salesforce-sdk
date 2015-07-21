@@ -53,7 +53,7 @@ public with sharing class ZendeskGroupsSampleController {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskGroups zgroups = new ZendeskGroups(zapi);
 
-			ZendeskGroups.PagedGroupsWrapper wrapper = zgroups.getAssignableGroups();
+			ZendeskGroups.GroupsWrapper wrapper = zgroups.getAssignableGroups();
 			groupsMap = new Map<Long, ZendeskGroups.ZGroup>();
 			for (ZendeskGroups.ZGroup grp : wrapper.groups) {
 				groupsMap.put(grp.id, grp);
@@ -71,7 +71,7 @@ public with sharing class ZendeskGroupsSampleController {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskGroups zgroups = new ZendeskGroups(zapi);
 
-			ZendeskGroups.PagedGroupsWrapper wrapper = zgroups.getUserGroups(userId);
+			ZendeskGroups.GroupsWrapper wrapper = zgroups.getUserGroups(userId);
 			groupsMap = new Map<Long, ZendeskGroups.ZGroup>();
 			for (ZendeskGroups.ZGroup grp : wrapper.groups) {
 				groupsMap.put(grp.id, grp);

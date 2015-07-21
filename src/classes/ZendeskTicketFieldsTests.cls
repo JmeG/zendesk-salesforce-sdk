@@ -68,7 +68,7 @@ private class ZendeskTicketFieldsTests {
 
     static testMethod void testGetNextPage() {
         Test.startTest();
-        ZendeskTicketFields.PagedTicketFieldsWrapper wrapper = new ZendeskTicketFields.PagedTicketFieldsWrapper();
+        ZendeskTicketFields.TicketFieldsWrapper wrapper = new ZendeskTicketFields.TicketFieldsWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/ticket_fields.json?page=2';
         wrapper.previous_page = 'https://test.zendesk.com/api/v2/ticket_fields.json?page=1';
         Test.stopTest();

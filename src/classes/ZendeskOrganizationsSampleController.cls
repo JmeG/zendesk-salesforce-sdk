@@ -18,7 +18,7 @@ public with sharing class ZendeskOrganizationsSampleController {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskOrganizations zorganizations = new ZendeskOrganizations(zapi);
 
-			ZendeskOrganizations.PagedOrganizationsWrapper wrapper = zorganizations.getOrganizations();
+			ZendeskOrganizations.OrganizationsWrapper wrapper = zorganizations.getOrganizations();
 			organizations = wrapper.organizations;
 		}
 		catch(Exception e) {

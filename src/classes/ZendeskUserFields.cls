@@ -56,7 +56,7 @@ public with sharing class ZendeskUserFields {
 		public String value {get; set;}
 	}
 
-    public class PagedUserFieldsWrapper {
+    public class UserFieldsWrapper {
         public ZUserField[] user_fields {get; set;}
 
         // Paging support
@@ -90,12 +90,12 @@ public with sharing class ZendeskUserFields {
     }
 
     // Get the first page of User Fields
-    public PagedUserFieldsWrapper getFields() {
+    public UserFieldsWrapper getFields() {
         return getFields(null);
     }
 
     // Get a specific page of User Fields
-    public PagedUserFieldsWrapper getFields(Long page) {
+    public UserFieldsWrapper getFields(Long page) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
@@ -103,7 +103,7 @@ public with sharing class ZendeskUserFields {
             throw new ZendeskException('Error getting User Fields (' + res.getStatusCode() + ')');
         }
 
-        PagedUserFieldsWrapper wrapper = (PagedUserFieldsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), PagedUserFieldsWrapper.class);
+        UserFieldsWrapper wrapper = (UserFieldsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), UserFieldsWrapper.class);
         return wrapper;
     }
 
@@ -194,7 +194,7 @@ public with sharing class ZendeskUserFields {
     // resource for the duration of their API usage and map the key for each User Field to the values
     // returned under the user_fields attribute on the User resource.
     private void loadAll() {
-        PagedUserFieldsWrapper wrapper = getFields();
+        UserFieldsWrapper wrapper = getFields();
         if (wrapper != null && wrapper.user_fields != null) {
             for (ZUserField obj : wrapper.user_fields) {
                 userFieldsMap.put(obj.key, obj);

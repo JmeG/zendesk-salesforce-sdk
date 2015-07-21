@@ -94,7 +94,7 @@ private class ZendeskGroupsTests {
 
         Test.startTest();
         ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskGroups.PagedGroupsWrapper wrapper = zgroups.getGroups();
+        ZendeskGroups.GroupsWrapper wrapper = zgroups.getGroups();
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper.groups);
@@ -106,7 +106,7 @@ private class ZendeskGroupsTests {
 
         Test.startTest();
         ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskGroups.PagedGroupsWrapper wrapper = zgroups.getAssignableGroups();
+        ZendeskGroups.GroupsWrapper wrapper = zgroups.getAssignableGroups();
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper.groups);
@@ -118,7 +118,7 @@ private class ZendeskGroupsTests {
 
         Test.startTest();
         ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskGroups.PagedGroupsWrapper wrapper = zgroups.getUserGroups(123);
+        ZendeskGroups.GroupsWrapper wrapper = zgroups.getUserGroups(123);
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper.groups);
@@ -129,7 +129,7 @@ private class ZendeskGroupsTests {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
         Test.startTest();
-        ZendeskGroups.PagedGroupsWrapper wrapper = new ZendeskGroups.PagedGroupsWrapper();
+        ZendeskGroups.GroupsWrapper wrapper = new ZendeskGroups.GroupsWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/groups.json?page=2';
         wrapper.previous_page = 'https://test.zendesk.com/api/v2/groups.json?page=1';
         Test.stopTest();

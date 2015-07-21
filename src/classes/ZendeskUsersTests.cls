@@ -59,7 +59,7 @@ private class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsers.PagedUsersWrapper results = zusers.findUsersByNameOrEmail('foo@bar.com');
+		ZendeskUsers.UsersWrapper results = zusers.findUsersByNameOrEmail('foo@bar.com');
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -72,7 +72,7 @@ private class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsers.PagedUsersWrapper results = zusers.getUsers();
+		ZendeskUsers.UsersWrapper results = zusers.getUsers();
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -105,7 +105,7 @@ private class ZendeskUsersTests {
 
     static testMethod void testGetNextPage() {
         Test.startTest();
-        ZendeskUsers.PagedUsersWrapper wrapper = new ZendeskUsers.PagedUsersWrapper();
+        ZendeskUsers.UsersWrapper wrapper = new ZendeskUsers.UsersWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/users.json?page=2';
         wrapper.previous_page = 'https://test.zendesk.com/api/v2/users.json?page=1';
         Test.stopTest();

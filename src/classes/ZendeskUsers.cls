@@ -47,7 +47,7 @@ public with sharing class ZendeskUsers {
 		public Map<String, String> user_fields {get; set;}
 	}
 
-	public class PagedUsersWrapper {
+	public class UsersWrapper {
 		public ZUser[] users {get;set;}
 
 		// Paging support
@@ -105,7 +105,7 @@ public with sharing class ZendeskUsers {
 	}
 
 	// This can be a partial or complete Name or Email address
-	public PagedUsersWrapper findUsersByNameOrEmail(String nameOrEmail) {
+	public UsersWrapper findUsersByNameOrEmail(String nameOrEmail) {
 		if (String.isBlank(nameOrEmail)) { throw new ZendeskException('nameOrEmail parameter must not be empty'); }
 
 		String encodedNameOrEmail = EncodingUtil.urlEncode(nameOrEmail, 'UTF-8');
@@ -116,7 +116,7 @@ public with sharing class ZendeskUsers {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
 
-		PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(res.getBody(), PagedUsersWrapper.class);
+		UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(res.getBody(), UsersWrapper.class);
 		return wrapper;
 	}
 
@@ -132,7 +132,7 @@ public with sharing class ZendeskUsers {
 			throw new ZendeskException('Error searching users (' + res.getStatusCode() + ')');
 		}
 
-		PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(res.getBody(), PagedUsersWrapper.class);
+		UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(res.getBody(), UsersWrapper.class);
 		ZUser user = null;
 		if (wrapper != null && wrapper.users != null) {
 			for (ZUser obj : wrapper.users) {
@@ -146,11 +146,11 @@ public with sharing class ZendeskUsers {
 		return user;
 	}
 
-	public PagedUsersWrapper getUsers() {
+	public UsersWrapper getUsers() {
         return getUsers(null);
     }
 
-    public PagedUsersWrapper getUsers(Long page) {
+    public UsersWrapper getUsers(Long page) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
@@ -158,7 +158,7 @@ public with sharing class ZendeskUsers {
 			throw new ZendeskException('Error getting Users (' + res.getStatusCode() + ')');
 		}
 
-        PagedUsersWrapper wrapper = (PagedUsersWrapper)JSON.deserialize(res.getBody(), PagedUsersWrapper.class);
+        UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(res.getBody(), UsersWrapper.class);
         return wrapper;
     }
 

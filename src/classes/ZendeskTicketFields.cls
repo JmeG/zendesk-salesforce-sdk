@@ -48,7 +48,7 @@ public with sharing class ZendeskTicketFields {
 		public String value {get; set;}
 	}
 
-	public class PagedTicketFieldsWrapper {
+	public class TicketFieldsWrapper {
 		public ZTicketField[] ticket_fields {get; set;}
 
 		// Paging support
@@ -82,12 +82,12 @@ public with sharing class ZendeskTicketFields {
 	}
 
 	// Get the first page of Ticket Fields
-	public PagedTicketFieldsWrapper getTicketFields() {
+	public TicketFieldsWrapper getTicketFields() {
 		return getTicketFields(null);
 	}
 
 	// Get a specific page of User Fields
-	public PagedTicketFieldsWrapper getTicketFields(Long page) {
+	public TicketFieldsWrapper getTicketFields(Long page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields.json' + (page==null ? '' : '?page=' + page));
 		HttpResponse res = new Http().send(queryReq);
 
@@ -95,7 +95,7 @@ public with sharing class ZendeskTicketFields {
 			throw new ZendeskException('Error getting Ticket Fields (' + res.getStatusCode() + ')');
 		}
 
-		PagedTicketFieldsWrapper wrapper = (PagedTicketFieldsWrapper)JSON.deserialize(res.getBody(), PagedTicketFieldsWrapper.class);
+		TicketFieldsWrapper wrapper = (TicketFieldsWrapper)JSON.deserialize(res.getBody(), TicketFieldsWrapper.class);
 		return wrapper;
 	}
 
@@ -152,7 +152,7 @@ public with sharing class ZendeskTicketFields {
     }
 
 	private void loadAll() {
-		PagedTicketFieldsWrapper wrapper = getTicketFields();
+		TicketFieldsWrapper wrapper = getTicketFields();
 		if (wrapper != null && wrapper.ticket_fields != null) {
 			for (ZTicketField obj : wrapper.ticket_fields) {
 				ticketFieldsMap.put(obj.id, obj);

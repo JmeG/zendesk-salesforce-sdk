@@ -120,7 +120,7 @@ private class ZendeskUserFieldsTests {
 
     static testMethod void testGetNextPage() {
         Test.startTest();
-        ZendeskUserFields.PagedUserFieldsWrapper wrapper = new ZendeskUserFields.PagedUserFieldsWrapper();
+        ZendeskUserFields.UserFieldsWrapper wrapper = new ZendeskUserFields.UserFieldsWrapper();
         wrapper.next_page = 'https://test.zendesk.com/api/v2/user_fields.json?page=2';
         wrapper.previous_page = 'https://test.zendesk.com/api/v2/user_fields.json?page=1';
         Test.stopTest();

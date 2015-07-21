@@ -37,7 +37,7 @@ public with sharing class ZendeskTicketSampleController {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskTickets ztickets = new ZendeskTickets(zapi);
 
-			ZendeskTickets.PagedTicketsWrapper pagedTickets = ztickets.getTickets();
+			ZendeskTickets.TicketsWrapper pagedTickets = ztickets.getTickets();
 			tickets = pagedTickets.tickets;
 		}
 		catch(Exception e) {

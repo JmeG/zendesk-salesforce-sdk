@@ -19,7 +19,7 @@ public with sharing class ZendeskTicketComments {
 		public DateTime created_at {get; private set;}
 	}
 
-	public class PagedTicketCommentsWrapper {
+	public class TicketCommentsWrapper {
 		public ZTicketComment[] comments {get; set;}
 
 		// Paging support
@@ -38,12 +38,12 @@ public with sharing class ZendeskTicketComments {
 	}
 
 	// Get the first page of Ticket Comments
-	public PagedTicketCommentsWrapper getTicketComments(Long ticketId) {
+	public TicketCommentsWrapper getTicketComments(Long ticketId) {
 		return getTicketComments(ticketId, null);
 	}
 
 	// Get a specific page of Ticket Comments
-	public PagedTicketCommentsWrapper getTicketComments(Long ticketId, Long page) {
+	public TicketCommentsWrapper getTicketComments(Long ticketId, Long page) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments.json' + (page==null ? '' : '?page=' + page));
@@ -53,7 +53,7 @@ public with sharing class ZendeskTicketComments {
 			throw new ZendeskException('Error getting Ticket Comments (' + res.getStatusCode() + ')');
 		}
 
-		PagedTicketCommentsWrapper wrapper = (PagedTicketCommentsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), PagedTicketCommentsWrapper.class);
+		TicketCommentsWrapper wrapper = (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), TicketCommentsWrapper.class);
 		return wrapper;
 	}
 

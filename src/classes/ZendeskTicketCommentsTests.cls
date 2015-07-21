@@ -26,7 +26,7 @@ private class ZendeskTicketCommentsTests {
 
         Test.startTest();
         ZendeskTicketComments zcomments = new ZendeskTicketComments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketComments.PagedTicketCommentsWrapper wrapper = zcomments.getTicketComments(123);
+        ZendeskTicketComments.TicketCommentsWrapper wrapper = zcomments.getTicketComments(123);
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper);

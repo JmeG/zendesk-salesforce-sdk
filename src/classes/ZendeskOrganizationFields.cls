@@ -56,7 +56,7 @@ public with sharing class ZendeskOrganizationFields {
 		public String value {get; set;}
 	}
 
-    public class PagedOrganizationFieldsWrapper {
+    public class OrganizationFieldsWrapper {
         public ZOrganizationField[] organization_fields {get; set;}
 
         // Paging support
@@ -90,12 +90,12 @@ public with sharing class ZendeskOrganizationFields {
     }
 
     // Get the first page of Organization Fields
-    public PagedOrganizationFieldsWrapper getFields() {
+    public OrganizationFieldsWrapper getFields() {
         return getFields(null);
     }
 
     // Get a specific page of Organization Fields
-    public PagedOrganizationFieldsWrapper getFields(Long page) {
+    public OrganizationFieldsWrapper getFields(Long page) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organization_fields.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
@@ -103,7 +103,7 @@ public with sharing class ZendeskOrganizationFields {
             throw new ZendeskException('Error getting Fields (' + res.getStatusCode() + ')');
         }
 
-        PagedOrganizationFieldsWrapper wrapper = (PagedOrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), PagedOrganizationFieldsWrapper.class);
+        OrganizationFieldsWrapper wrapper = (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), OrganizationFieldsWrapper.class);
         return wrapper;
     }
 
@@ -194,7 +194,7 @@ public with sharing class ZendeskOrganizationFields {
     // resource for the duration of their API usage and map the key for each Organization Field to the values
     // returned under the organization_fields attribute on the Organization resource.
     private void loadAll() {
-        PagedOrganizationFieldsWrapper wrapper = getFields();
+        OrganizationFieldsWrapper wrapper = getFields();
         if (wrapper != null && wrapper.organization_fields != null) {
             for (ZOrganizationField obj : wrapper.organization_fields) {
                 fieldsMap.put(obj.key, obj);

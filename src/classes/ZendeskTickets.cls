@@ -114,7 +114,7 @@ public with sharing class ZendeskTickets {
 		public String email {get; set;}
 	}
 
-	public class PagedTicketsWrapper {
+	public class TicketsWrapper {
 		public ZTicket[] tickets {get;set;}
 
 		// Paging support
@@ -208,7 +208,7 @@ public with sharing class ZendeskTickets {
 
 /*
 	public void createManyTickets(List<ZTicket> ztickets) {
-		PagedTicketsWrapper wrapper = new PagedTicketsWrapper();
+		TicketsWrapper wrapper = new TicketsWrapper();
 		wrapper.tickets = ztickets;
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/tickets/create_many.json');
@@ -225,75 +225,75 @@ public with sharing class ZendeskTickets {
 */
 
 	// /api/v2/tickets.json
-	public PagedTicketsWrapper getTickets() {
+	public TicketsWrapper getTickets() {
         return getTickets(null);
     }
 
 	// /api/v2/tickets.json
-    public PagedTicketsWrapper getTickets(Long page) {
+    public TicketsWrapper getTickets(Long page) {
         return getTickets(page, '/tickets.json');
     }
 
 	// /api/v2/organizations/{organization_id}/tickets.json
-	public PagedTicketsWrapper getTicketsByOrgId(Long orgId) {
+	public TicketsWrapper getTicketsByOrgId(Long orgId) {
         return getTicketsByOrgId(orgId, null);
     }
 
 	// /api/v2/organizations/{organization_id}/tickets.json
-	public PagedTicketsWrapper getTicketsByOrgId(Long orgId, Long page) {
+	public TicketsWrapper getTicketsByOrgId(Long orgId, Long page) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
 
         return getTickets(page, '/organizations/' + orgId + '/tickets.json');
     }
 
 	// /api/v2/users/{user_id}/tickets/requested.json
-	public PagedTicketsWrapper getTicketsByRequesterId(Long requesterId) {
+	public TicketsWrapper getTicketsByRequesterId(Long requesterId) {
         return getTicketsByRequesterId(requesterId, null);
     }
 
 	// /api/v2/users/{user_id}/tickets/requested.json
-	public PagedTicketsWrapper getTicketsByRequesterId(Long requesterId, Long page) {
+	public TicketsWrapper getTicketsByRequesterId(Long requesterId, Long page) {
 		if (requesterId == null) { throw new ZendeskException('requesterId parameter must not be null'); }
 
         return getTickets(page, '/users/' + requesterId + '/tickets/requested.json');
     }
 
 	// /api/v2/users/{user_id}/tickets/ccd.json
-	public PagedTicketsWrapper getTicketsByCCUserId(Long userId) {
+	public TicketsWrapper getTicketsByCCUserId(Long userId) {
         return getTicketsByCCUserId(userId, null);
     }
 
 	// /api/v2/users/{user_id}/tickets/ccd.json
-	public PagedTicketsWrapper getTicketsByCCUserId(Long userId, Long page) {
+	public TicketsWrapper getTicketsByCCUserId(Long userId, Long page) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
         return getTickets(page, '/users/' + userId + '/tickets/ccd.json');
     }
 
 	// /api/v2/users/{user_id}/tickets/assigned.json
-	public PagedTicketsWrapper getTicketsByAssigneeId(Long assigneeId) {
+	public TicketsWrapper getTicketsByAssigneeId(Long assigneeId) {
         return getTicketsByAssigneeId(assigneeId, null);
     }
 
 	// /api/v2/users/{user_id}/tickets/assigned.json
-	public PagedTicketsWrapper getTicketsByAssigneeId(Long assigneeId, Long page) {
+	public TicketsWrapper getTicketsByAssigneeId(Long assigneeId, Long page) {
 		if (assigneeId == null) { throw new ZendeskException('assigneeId parameter must not be null'); }
 
         return getTickets(page, '/users/' + assigneeId + '/tickets/assigned.json');
     }
 
 	// /api/v2/tickets/recent.json
-	public PagedTicketsWrapper getRecentTickets() {
+	public TicketsWrapper getRecentTickets() {
         return getRecentTickets(null);
     }
 
 	// /api/v2/tickets/recent.json
-	public PagedTicketsWrapper getRecentTickets(Long page) {
+	public TicketsWrapper getRecentTickets(Long page) {
         return getTickets(page, '/users/tickets/recent.json');
     }
 
 	// Get a specific page of Tickets
-	private PagedTicketsWrapper getTickets(Long page, String apiPath) {
+	private TicketsWrapper getTickets(Long page, String apiPath) {
         HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets.json' + (page==null ? '' : '?page=' + page));
         HttpResponse res = new Http().send(queryReq);
 
@@ -301,7 +301,7 @@ public with sharing class ZendeskTickets {
 			throw new ZendeskException('Error getting Tickets (' + res.getStatusCode() + ')');
 		}
 
-        PagedTicketsWrapper wrapper = (PagedTicketsWrapper)JSON.deserialize(res.getBody(), PagedTicketsWrapper.class);
+        TicketsWrapper wrapper = (TicketsWrapper)JSON.deserialize(res.getBody(), TicketsWrapper.class);
         return wrapper;
     }
 
