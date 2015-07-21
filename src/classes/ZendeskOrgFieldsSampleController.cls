@@ -81,6 +81,9 @@ public with sharing class ZendeskOrgFieldsSampleController {
 				orderedFieldIds.add(Long.valueOf(s.trim()));
 			}
 			zfields.reorderFields(orderedFieldIds);
+
+			// clear the fields list
+			fieldsMap = new Map<String, ZendeskOrganizationFields.ZOrganizationField>();
 		}
 		catch(Exception e) {
 			pageMessage = e.getMessage();

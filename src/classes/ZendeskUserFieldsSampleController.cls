@@ -81,6 +81,9 @@ public with sharing class ZendeskUserFieldsSampleController {
 				orderedFieldIds.add(Long.valueOf(s.trim()));
 			}
 			zfields.reorderFields(orderedFieldIds);
+
+			// clear the fields list
+			fieldsMap = new Map<String, ZendeskUserFields.ZUserField>();
 		}
 		catch(Exception e) {
 			pageMessage = e.getMessage();
