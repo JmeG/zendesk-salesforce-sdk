@@ -91,7 +91,7 @@ public with sharing class ZendeskTicketForms {
 		if (ticketForm == null) { throw new ZendeskException('ticketForm parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/ticket_forms.json');
-        String tformJson = JSON.serialize(ticketForm);
+        String tformJson = JSON.serialize(unreplaceReservedWords(ticketForm));
         req.setBody('{ "ticket_form": ' + tformJson + '}');
 		HttpResponse res = new Http().send(req);
 
