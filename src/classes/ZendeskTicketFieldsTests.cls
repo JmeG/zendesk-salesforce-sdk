@@ -36,7 +36,7 @@ private class ZendeskTicketFieldsTests {
 
         Test.startTest();
         ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketFields.ZTicketField testObj = zfields.getTicketField(123);
+        ZendeskTicketFields.ZTicketField testObj = zfields.getField(123);
         System.assertNotEquals(null, testObj);
 
         String optVal = testObj.getOptionValue('Test');
@@ -49,7 +49,35 @@ private class ZendeskTicketFieldsTests {
 
         Test.startTest();
         ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        zfields.deleteTicketField(123);
+        zfields.deleteField(123);
+        Test.stopTest();
+
+        System.assert(true);
+    }
+
+    static testMethod void testCreateField() {
+        Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
+
+        Test.startTest();
+        ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketFields.ZTicketField zfield = new ZendeskTicketFields.ZTicketField();
+        zfield.type = 'create type';
+        zfield.title = 'create title';
+        Long fieldId = zfields.createField(zfield);
+        Test.stopTest();
+
+        System.assertNotEquals(null, fieldId);
+    }
+
+    static testMethod void testUpdateField() {
+        Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
+
+        Test.startTest();
+        ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketFields.ZTicketField zfield = new ZendeskTicketFields.ZTicketField();
+        zfield.type = 'update type';
+        zfield.title = 'update title';
+        zfields.updateField(123, zfield);
         Test.stopTest();
 
         System.assert(true);

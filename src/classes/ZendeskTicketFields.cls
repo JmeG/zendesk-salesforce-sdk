@@ -8,7 +8,7 @@
 public with sharing class ZendeskTicketFields {
 
 	private final ZendeskAPI zapi;
-	private Map<Long, ZTicketField> ticketFieldsMap {get; private set; }
+	private Map<Long, ZTicketField> fieldsMap {get; private set; }
 
 	public class ZTicketField {
 		public Long id {get; private set;}
@@ -64,17 +64,17 @@ public with sharing class ZendeskTicketFields {
 
 	public ZendeskTicketFields(ZendeskAPI zapi) {
 		this.zapi = zapi;
-		ticketFieldsMap = new Map<Long, ZTicketField>();
+		fieldsMap = new Map<Long, ZTicketField>();
 	}
 
-	public ZTicketField getTicketField(Long ticketFieldId) {
-		if (ticketFieldId == null) { throw new ZendeskException('ticketFieldId parameter must not be null'); }
+	public ZTicketField getField(Long fieldId) {
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + ticketFieldId + '.json');
+		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
 		HttpResponse res = new Http().send(queryReq);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting Ticket Field ' + ticketFieldId + ' (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error getting Ticket Field ' + fieldId + ' (' + res.getStatusCode() + ')');
 		}
 
 		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(res.getBody(), TicketFieldWrapper.class);
@@ -82,12 +82,12 @@ public with sharing class ZendeskTicketFields {
 	}
 
 	// Get the first page of Ticket Fields
-	public TicketFieldsWrapper getTicketFields() {
-		return getTicketFields(null);
+	public TicketFieldsWrapper getFields() {
+		return getFields(null);
 	}
 
 	// Get a specific page of User Fields
-	public TicketFieldsWrapper getTicketFields(Long page) {
+	public TicketFieldsWrapper getFields(Long page) {
 		HttpRequest queryReq = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields.json' + (page==null ? '' : '?page=' + page));
 		HttpResponse res = new Http().send(queryReq);
 
@@ -99,22 +99,22 @@ public with sharing class ZendeskTicketFields {
 		return wrapper;
 	}
 
-	public void deleteTicketField(Long ticketFieldId) {
-		if (ticketFieldId == null) { throw new ZendeskException('ticketFieldId parameter must not be null'); }
+	public void deleteField(Long fieldId) {
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_fields/' + ticketFieldId + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error deleting Ticket Field ' + ticketFieldId + ' (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error deleting Ticket Field ' + fieldId + ' (' + res.getStatusCode() + ')');
 		}
 	}
 
-	public Long createTicketField(ZTicketField zticketField) {
-		if (zticketField == null) { throw new ZendeskException('zticketField parameter must not be null'); }
+	public Long createField(ZTicketField zfield) {
+		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/ticket_fields/.json');
-		req.setBody('{ "ticket_field": ' + JSON.serialize(zticketField) + ' }');
+		req.setBody('{ "ticket_field": ' + JSON.serialize(zfield) + ' }');
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
@@ -126,16 +126,16 @@ public with sharing class ZendeskTicketFields {
 		return ((resultWrapper==null || resultWrapper.ticket_field == null) ? null : resultWrapper.ticket_field.id);
 	}
 
-	public void updateTicketField(Long ticketFieldId, ZTicketField zticketField) {
-		updateTicketField(ticketFieldId, zticketField, null);
+	public void updateField(Long fieldId, ZTicketField zticketField) {
+		updateField(fieldId, zticketField, null);
 	}
 
-	public void updateTicketField(Long ticketFieldId, ZTicketField zticketField, Set<String> fieldsToNull) {
-		if (ticketFieldId == null) { throw new ZendeskException('ticketFieldId parameter must not be null'); }
-		if (zticketField == null) { throw new ZendeskException('zticketField parameter must not be null'); }
+	public void updateField(Long fieldId, ZTicketField zfield, Set<String> fieldsToNull) {
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
+		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_fields/' + ticketFieldId + '.json');
-		req.setBody('{ "ticket_field": ' + ZendeskAPI.serializeJsonNoNulls(zticketField, fieldsToNull) + ' }');
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
+		req.setBody('{ "ticket_field": ' + ZendeskAPI.serializeJsonNoNulls(zfield, fieldsToNull) + ' }');
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
@@ -145,23 +145,23 @@ public with sharing class ZendeskTicketFields {
 
 	// Retrieves all pages of ticket fields. Uses the field "id" as the map key
 	public Map<Long, ZTicketField> getAllFields() {
-        if (ticketFieldsMap.isEmpty()) {
+        if (fieldsMap.isEmpty()) {
             loadAll();
         }
-        return ticketFieldsMap;
+        return fieldsMap;
     }
 
 	private void loadAll() {
-		TicketFieldsWrapper wrapper = getTicketFields();
+		TicketFieldsWrapper wrapper = getFields();
 		if (wrapper != null && wrapper.ticket_fields != null) {
 			for (ZTicketField obj : wrapper.ticket_fields) {
-				ticketFieldsMap.put(obj.id, obj);
+				fieldsMap.put(obj.id, obj);
 			}
 
 			while (!String.isEmpty(wrapper.next_page)) {
-				wrapper = getTicketFields(wrapper.nextPageNumber);
+				wrapper = getFields(wrapper.nextPageNumber);
 				for (ZTicketField obj : wrapper.ticket_fields) {
-					ticketFieldsMap.put(obj.id, obj);
+					fieldsMap.put(obj.id, obj);
 				}
 			}
 		}

@@ -32,7 +32,7 @@ public with sharing class ZendeskTicketFieldsSampleController {
 			ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
 
 			fieldsMap = new Map<Long, ZendeskTicketFields.ZTicketField>();
-			ZendeskTicketFields.ZTicketField field = zfields.getTicketField(ticketFieldId);
+			ZendeskTicketFields.ZTicketField field = zfields.getField(ticketFieldId);
 			if (field != null) {
 				fieldsMap.put(field.id, field);
 			}
