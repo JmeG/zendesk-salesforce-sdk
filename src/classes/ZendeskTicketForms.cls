@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Ticket Forms API
-// Currently upports the following API endpoints:
+// Currently supports the following API endpoints:
 // GET    /api/v2/ticket_forms.json
 // GET    /api/v2/ticket_forms/{id}.json
 // POST   /api/v2/ticket_forms.json

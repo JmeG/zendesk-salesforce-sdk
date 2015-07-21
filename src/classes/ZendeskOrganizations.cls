@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Organizations API
-// Currently upports the following API endpoints:
+// Currently supports the following API endpoints:
 // GET    /api/v2/organizations.json
 // GET    /api/v2/organizations/{id}.json
 // GET    /api/v2/organizations/show_many.json?ids={ids}
@@ -199,7 +199,7 @@ public with sharing class ZendeskOrganizations {
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error updating Organizations (' + res.getStatusCode() + ')');
 		}
-	}	
+	}
 
 	public void updateOrganizations(Long[] orgIds, ZOrganization zorg) {
 		if (orgIds == null || orgIds.isEmpty()) { throw new ZendeskException('orgIds parameter must not be null or empty'); }

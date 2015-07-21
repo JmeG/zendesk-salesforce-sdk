@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Attachments API
-// Currently upports the following API endpoints:
+// Currently supports the following API endpoints:
 // GET    /api/v2/attachments/{id}.json
 // POST   /api/v2/uploads.json
 // PUT    /api/v2/tickets/{ticket_id}/comments/{comment_id}/attachments/{attachment_id}/redact.json

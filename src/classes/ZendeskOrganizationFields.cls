@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Organization Fields API
-// Currently upports the following API endpoints:
+// Currently supports the following API endpoints:
 // GET    /api/v2/organization_fields.json
 // GET    /api/v2/organization_fields/{id}.json
 // POST   /api/v2/organization_fields.json

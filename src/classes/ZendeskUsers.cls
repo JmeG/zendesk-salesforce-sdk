@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Users API
-// Currently upports the following API endpoints:
+// Currently supports the following API endpoints:
 // GET    /api/v2/users.json
 // GET    /api/v2/users/{id}.json
 // POST   /api/v2/users.json

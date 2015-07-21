@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Groups API
-// Currently upports the following API endpoints:
+// Currently supports the following API endpoints:
 // GET    /api/v2/groups.json
 // GET    /api/v2/users/{user_id}/groups.json
 // GET    /api/v2/groups/assignable.json
