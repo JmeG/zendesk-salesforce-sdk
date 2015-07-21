@@ -83,6 +83,28 @@ public with sharing class ZendeskAPI {
 		return (String.isEmpty(pageUrl) ? null : Long.valueOf(pageUrl.substringAfterLast('page=').substringBefore('&')));
 	}
 
+	public static String arrayToCSV(Long[] longs) {
+		String csv = '';
+		if (longs != null && !longs.isEmpty()) {
+			for (Long l : longs) {
+				csv += l + ',';
+			}
+			csv = csv.removeEnd(','); // remove trailing comma
+		}
+		return csv;
+	}
+
+	public static String arrayToCSV(String[] strings) {
+		String csv = '';
+		if (strings != null && !strings.isEmpty()) {
+			for (String str : strings) {
+				csv += str + ',';
+			}
+			csv = csv.removeEnd(','); // remove trailing comma
+		}
+		return csv;
+	}
+
 	// A custom JSON serializer that strips out fields with NULL values from the resulting JSON
 	// Hopefully Salesforce will add support to allow this to be done natively at some point
 	// If you do need specific fields with NULL values to remain in the JSON then add the names

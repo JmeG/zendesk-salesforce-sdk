@@ -39,32 +39,39 @@ private class ZendeskAPITests {
         Test.stopTest();
     }
 
+    static testMethod void testArrayToCSV() {
+        Test.startTest();
+        System.assertEquals('1,2,3', ZendeskAPI.arrayToCSV(new Long[] { 1, 2, 3 }));
+        System.assertEquals('1,2,3', ZendeskAPI.arrayToCSV(new String[] { '1', '2', '3' }));
+        Test.stopTest();
+    }
 
-    		/*
-    		ZendeskTickets.ZTicket zticket = new ZendeskTickets.ZTicket();
-    		zticket.requester_id = 123;
-    		zticket.group_id = 456;
-    		zticket.type = ZendeskTickets.TicketType.question;
-    		zticket.comment = new ZendeskTickets.ZTicketComment();
-    		zticket.comment.body = 'add new comment';
-    		zticket.custom_fields = new List<ZendeskTickets.ZTicketCustomField>();
 
-    		Set<String> fieldsToNull = new Set<String>();
-    		Map<String, Object> ticketMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(zticket));
-    		System.debug('**ticketMap=' + ticketMap);
-    		Map<String, Object> updateMap = new Map<String, Object>();
-    		for (String key : ticketMap.keySet()) {
-    			System.debug('**[' + key + '] = ' + ticketMap.get(key));
-    			// Only keep items that have a value assigned
-    			// or that have been specified in the fieldsToNull set
-    			if (ticketMap.get(key) != null || fieldsToNull.contains(key)) {
-    				updateMap.put(key, ticketMap.get(key));
-    			}
-    		}
+	/*
+	ZendeskTickets.ZTicket zticket = new ZendeskTickets.ZTicket();
+	zticket.requester_id = 123;
+	zticket.group_id = 456;
+	zticket.type = ZendeskTickets.TicketType.question;
+	zticket.comment = new ZendeskTickets.ZTicketComment();
+	zticket.comment.body = 'add new comment';
+	zticket.custom_fields = new List<ZendeskTickets.ZTicketCustomField>();
 
-    		String updateJson = JSON.serialize(updateMap);
-    		System.debug('**updateJson=' + updateJson);
+	Set<String> fieldsToNull = new Set<String>();
+	Map<String, Object> ticketMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(zticket));
+	System.debug('**ticketMap=' + ticketMap);
+	Map<String, Object> updateMap = new Map<String, Object>();
+	for (String key : ticketMap.keySet()) {
+		System.debug('**[' + key + '] = ' + ticketMap.get(key));
+		// Only keep items that have a value assigned
+		// or that have been specified in the fieldsToNull set
+		if (ticketMap.get(key) != null || fieldsToNull.contains(key)) {
+			updateMap.put(key, ticketMap.get(key));
+		}
+	}
 
-    		*/
+	String updateJson = JSON.serialize(updateMap);
+	System.debug('**updateJson=' + updateJson);
+
+	*/
 
 }
