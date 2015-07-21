@@ -87,7 +87,6 @@ public with sharing class ZendeskOrganizations {
         return getOrganizations(req);
     }
 
-	// TODO: test whether this can return an array or only one record
 	public OrganizationsWrapper searchOrganizations(String externalId) {
 		if (String.isBlank(externalId)) { throw new ZendeskException('externalId parameter must not be null or empty'); }
 
