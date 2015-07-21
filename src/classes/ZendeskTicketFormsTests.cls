@@ -54,6 +54,58 @@ private class ZendeskTicketFormsTests {
 		System.assert(true);
 	}
 
+    static testMethod void testCreateTicketForm() {
+        Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
+
+        Test.startTest();
+        ZendeskTicketForms zticketforms = new ZendeskTicketForms(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketForms.ZTicketForm zform = new ZendeskTicketForms.ZTicketForm();
+        zform.name = 'create name';
+        zform.ticket_field_ids = new Long[] { 123, 456 };
+        Long newTicketFormId = zticketforms.createTicketForm(zform);
+        Test.stopTest();
+
+        System.assertNotEquals(null, newTicketFormId);
+    }
+
+    static testMethod void testUpdateTicketForm() {
+        Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
+
+        Test.startTest();
+        ZendeskTicketForms zticketforms = new ZendeskTicketForms(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketForms.ZTicketForm zform = new ZendeskTicketForms.ZTicketForm();
+        zform.name = 'update name';
+        zform.ticket_field_ids = new Long[] { 456, 123 };
+        zticketforms.updateTicketForm(123, zform);
+        Test.stopTest();
+
+        System.assert(true);
+    }
+
+    static testMethod void testReorderFields() {
+        Test.setMock(HttpCalloutMock.class, new MockOKResponse());
+
+        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+
+        Test.startTest();
+        ZendeskTicketForms zfields = new ZendeskTicketForms(zapi);
+        zfields.reorderTicketForms(new Long[] { 123, 456 });
+        Test.stopTest();
+
+        System.assert(true);
+    }
+
+    static testMethod void testCloneTicketForm() {
+        Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
+
+        Test.startTest();
+        ZendeskTicketForms zticketforms = new ZendeskTicketForms(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        Long newTicketFormId = zticketforms.cloneTicketForm(123);
+        Test.stopTest();
+
+        System.assertNotEquals(null, newTicketFormId);
+    }
+
     static testMethod void testGetNextPage() {
         Test.startTest();
         ZendeskTicketForms.PagedTicketFormsWrapper wrapper = new ZendeskTicketForms.PagedTicketFormsWrapper();
@@ -77,10 +129,15 @@ private class ZendeskTicketFormsTests {
 
     static testMethod void testZTicketForm() {
         ZendeskTicketForms.ZTicketForm zticketform = new ZendeskTicketForms.ZTicketForm();
-        //zticketform.id = 0;
+        zticketform.position = 0;
         zticketform.name = '';
         zticketform.raw_name = '';
+        zticketform.display_name = '';
+        zticketform.raw_display_name = '';
         zticketform.active = true;
+        zticketform.x_default = true;
+        zticketform.end_user_visible = false;
+        zticketform.ticket_field_ids = new Long[] { 1, 2 };
 
         System.assert(true);
     }
