@@ -189,7 +189,7 @@ public with sharing class ZendeskOrganizations {
 	public void updateOrganizations(ZOrganization[] zorgs) {
 		if (zorgs == null || zorgs.isEmpty()) { throw new ZendeskException('zorgs parameter must not be null or empty'); }
 		for (ZOrganization zorg : zorgs) {
-			if (zorg.id == null || String.isEmpty(zorg.external_id)) { throw new ZendeskException('Each org must have either an id or external_id populated'); }
+			if (zorg.id == null && String.isEmpty(zorg.external_id)) { throw new ZendeskException('Each org must have either an id or external_id populated'); }
 		}
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organizations/update_many.json');
@@ -199,7 +199,7 @@ public with sharing class ZendeskOrganizations {
 		if (!ZendeskAPI.isSuccess(res)) {
 			throw new ZendeskException('Error updating Organizations (' + res.getStatusCode() + ')');
 		}
-	}
+	}	
 
 	public void updateOrganizations(Long[] orgIds, ZOrganization zorg) {
 		if (orgIds == null || orgIds.isEmpty()) { throw new ZendeskException('orgIds parameter must not be null or empty'); }
