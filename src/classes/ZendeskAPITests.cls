@@ -58,10 +58,8 @@ private class ZendeskAPITests {
 
 	Set<String> fieldsToNull = new Set<String>();
 	Map<String, Object> ticketMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(zticket));
-	System.debug('**ticketMap=' + ticketMap);
 	Map<String, Object> updateMap = new Map<String, Object>();
 	for (String key : ticketMap.keySet()) {
-		System.debug('**[' + key + '] = ' + ticketMap.get(key));
 		// Only keep items that have a value assigned
 		// or that have been specified in the fieldsToNull set
 		if (ticketMap.get(key) != null || fieldsToNull.contains(key)) {
@@ -70,8 +68,6 @@ private class ZendeskAPITests {
 	}
 
 	String updateJson = JSON.serialize(updateMap);
-	System.debug('**updateJson=' + updateJson);
-
 	*/
 
 }
