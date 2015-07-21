@@ -155,13 +155,13 @@ public with sharing class ZendeskUserFields {
         if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/user_fields.json');
+        HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
 		String fieldJson = unreplaceReservedWords(ZendeskAPI.serializeJsonNoNulls(zfield, fieldsToNull));
 		req.setBody('{ "user_field": ' + fieldJson + ' }');
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error creating User Field (' + res.getStatusCode() + ')');
+			throw new ZendeskException('Error updating User Field (' + res.getStatusCode() + ')');
 		}
     }
 
