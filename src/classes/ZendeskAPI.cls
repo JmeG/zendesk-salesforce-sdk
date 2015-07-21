@@ -134,4 +134,20 @@ public with sharing class ZendeskAPI {
 
 		return updateJson;
 	}
+
+	// Realllly hacky way of stripping out nulls. Experimenting with this instead of using deserializeUntyped
+	// https://iwritecrappycode.wordpress.com/2014/07/16/stripping-nulls-from-a-json-object-in-apex/
+	public static string stripJsonNulls(String jsonString) {
+		System.debug('stripJsonNulls: input=' + jsonString);
+		if (!String.isEmpty(jsonString)) {
+			jsonString = jsonString.replaceAll('\"[^\"]*\":null',''); // basic removal of null values
+			jsonString = jsonString.replaceAll(',{2,}', ','); // remove duplicate/multiple commas
+			jsonString = jsonString.replace('{,', '{'); // prevent opening brace from having a comma after it
+			jsonString = jsonString.replace(',}', '}'); // prevent closing brace from having a comma before it
+			jsonString = jsonString.replace('[,', '['); // prevent opening bracket from having a comma after it
+			jsonString = jsonString.replace(',]', ']'); // prevent closing bracket from having a comma before it
+		}
+		System.debug('stripJsonNulls: output=' + jsonString);
+		return jsonString;
+	}
 }
