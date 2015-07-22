@@ -25,7 +25,7 @@
 // PUT    /api/v2/tickets/mark_many_as_spam.json?ids={ids}
 // DELETE /api/v2/tickets/{id}.json
 // DELETE /api/v2/tickets/destroy_many.json?ids={ids}
-public with sharing class ZendeskTickets {
+public class ZendeskTickets {
 
 	private final ZendeskAPI zapi;
 

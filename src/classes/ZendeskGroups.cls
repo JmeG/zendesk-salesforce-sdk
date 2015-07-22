@@ -7,7 +7,7 @@
 // POST   /api/v2/groups.json
 // PUT    /api/v2/groups/{id}.json
 // DELETE /api/v2/groups/{id}.json
-public with sharing class ZendeskGroups {
+public class ZendeskGroups {
 
 	private final ZendeskAPI zapi;
 	private Map<Long, ZGroup> groupsMap;

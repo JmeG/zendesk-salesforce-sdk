@@ -5,7 +5,7 @@
 // POST   /api/v2/ticket_fields.json
 // PUT    /api/v2/ticket_fields/{id}.json
 // DELETE /api/v2/ticket_fields/{id}.json
-public with sharing class ZendeskTicketFields {
+public class ZendeskTicketFields {
 
 	private final ZendeskAPI zapi;
 	private Map<Long, ZTicketField> fieldsMap {get; private set; }

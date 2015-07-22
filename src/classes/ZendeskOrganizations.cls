@@ -17,7 +17,7 @@
 // DELETE /api/v2/organizations/{id}.json
 // DELETE /api/v2/organizations/destroy_many.json?ids={ids}
 // DELETE /api/v2/organizations/destroy_many.json?external_ids={external_ids}
-public with sharing class ZendeskOrganizations {
+public class ZendeskOrganizations {
 
 	private final ZendeskAPI zapi;
 

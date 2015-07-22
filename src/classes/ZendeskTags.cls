@@ -19,7 +19,7 @@ DELETE /api/v2/topics/{id}/tags.json
 DELETE /api/v2/organizations/{id}/tags.json
 DELETE /api/v2/users/{id}/tags.json
 */
-public with sharing class ZendeskTags {
+public class ZendeskTags {
 
 	private final ZendeskAPI zapi;
 

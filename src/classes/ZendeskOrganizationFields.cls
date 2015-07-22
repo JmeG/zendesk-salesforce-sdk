@@ -6,7 +6,7 @@
 // PUT    /api/v2/organization_fields/{id}.json
 // PUT    /api/v2/organization_fields/reorder.json
 // DELETE /api/v2/organization_fields/{id}.json
-public with sharing class ZendeskOrganizationFields {
+public class ZendeskOrganizationFields {
 
     private final ZendeskAPI zapi;
     private Map<String, ZOrganizationField> fieldsMap {get; private set; }

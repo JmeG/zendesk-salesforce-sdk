@@ -3,7 +3,7 @@
 // GET /api/v2/tickets/{ticket_id}/comments.json
 // PUT /api/v2/tickets/{ticket_id}/comments/{id}/redact.json
 // PUT /api/v2/tickets/{ticket_id}/comments/{id}/make_private.json
-public with sharing class ZendeskTicketComments {
+public class ZendeskTicketComments {
 
 	private final ZendeskAPI zapi;
 

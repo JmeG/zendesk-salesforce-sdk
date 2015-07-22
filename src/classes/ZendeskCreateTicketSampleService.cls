@@ -14,7 +14,7 @@ var result = sforce.apex.execute("ZendeskCreateTicketSampleService", "createNewZ
 
 alert(result);
 */
-global with sharing class ZendeskCreateTicketSampleService {
+global class ZendeskCreateTicketSampleService {
 
 	// Expose method as a webService so we can call it from a Javascript button on a Salesforce layout
 	webService static String createNewZendeskTicket(String ticketSubject, String ticketComment) {

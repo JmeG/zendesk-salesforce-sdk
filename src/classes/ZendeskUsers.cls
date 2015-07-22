@@ -26,7 +26,7 @@
 // POST   /api/v2/users/{user_id}/password.json
 // PUT    /api/v2/users/{user_id}/password.json
 // PUT    /api/v2/users/me/merge.json
-public with sharing class ZendeskUsers {
+public class ZendeskUsers {
 
 	private final ZendeskAPI zapi;
 

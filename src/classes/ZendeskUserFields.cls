@@ -6,7 +6,7 @@
 // PUT    /api/v2/user_fields/{id}.json
 // PUT    /api/v2/user_fields/reorder.json
 // DELETE /api/v2/user_fields/{id}.json
-public with sharing class ZendeskUserFields {
+public class ZendeskUserFields {
 
     private final ZendeskAPI zapi;
     private Map<String, ZUserField> userFieldsMap {get; private set; }

@@ -1,4 +1,4 @@
-public with sharing class ZendeskTicketFormsSampleController {
+public class ZendeskTicketFormsSampleController {
 
 	public String subdomain {get;set;}
 	public String username {get;set;}

@@ -7,7 +7,7 @@
 // PUT    /api/v2/ticket_forms/{id}.json
 // PUT    /api/v2/ticket_forms/reorder.json
 // DELETE /api/v2/ticket_forms/{id}.json
-public with sharing class ZendeskTicketForms {
+public class ZendeskTicketForms {
 
 	private final ZendeskAPI zapi;
 	private Map<Long, ZTicketForm> ticketFormsMap;

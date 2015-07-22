@@ -1,4 +1,4 @@
-public with sharing class ZendeskGroupsSampleController {
+public class ZendeskGroupsSampleController {
 
 	public String subdomain {get;set;}
 	public String username {get;set;}
