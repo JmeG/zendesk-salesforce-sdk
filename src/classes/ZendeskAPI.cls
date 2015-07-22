@@ -10,14 +10,11 @@ public class ZendeskAPI {
 	private AuthType authenticationType {get;set;}
 	public String userAgent {get;set;}
 
-	private class ZendeskError {
-		public String error {get; set;}
-		public String description {get; set;}
-	}
+	public Enum AuthType { Password, Token }
 
-	public Enum AuthType {
-		Password,
-		Token
+	private class ZendeskError {
+		public String error;
+		public String description;
 	}
 
 	public ZendeskAPI(String subdomain, String username, String passwordOrToken, AuthType authenticationType) {
