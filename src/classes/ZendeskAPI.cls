@@ -1,5 +1,5 @@
 // This class provides functionality for creating requests to interact with the Zendesk API
-public with sharing class ZendeskAPI {
+public class ZendeskAPI {
 
 	public final static String BASE_PATH =  '/api/v2';
 	private final static String DEFAULT_USER_AGENT =  'Force.com Toolkit for Zendesk';
@@ -9,6 +9,11 @@ public with sharing class ZendeskAPI {
 	private String passwordOrToken {get;set;}
 	private AuthType authenticationType {get;set;}
 	public String userAgent {get;set;}
+
+	private class ZendeskError {
+		public String error {get; set;}
+		public String description {get; set;}
+	}
 
 	public Enum AuthType {
 		Password,
@@ -68,8 +73,17 @@ public with sharing class ZendeskAPI {
 
 	public String sendRequest(HttpRequest req) {
 		HttpResponse res = new Http().send(req);
+
+		System.debug(Logginglevel.INFO, '**STATUS_CODE=' + res.getStatusCode());
+		System.debug(Logginglevel.INFO, '**RESPONSE_BODY=' + res.getBody());
+
 		if (!isSuccess(res)) {
-			throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ')');
+			ZendeskError zerr = safeGetError(res.getBody());
+			if (zerr != null && !String.isEmpty(zerr.error)) {
+				throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ') ' + zerr.error + ' ' + zerr.description);
+			} else {
+				throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ')');
+			}
 		}
 		return res.getBody();
 	}
@@ -77,13 +91,20 @@ public with sharing class ZendeskAPI {
 	private Boolean isSuccess(HttpResponse res) {
 		if (res == null) { throw new ZendeskException('res parameter must not be null'); }
 
-		System.debug(Logginglevel.INFO, '**RES_BODY=' + res.getBody());
 		Boolean isSuccess = (res.getStatusCode() != null && res.getStatusCode() >= 200 && res.getStatusCode() <= 299);
-		if (!isSuccess) {
-			System.debug(Logginglevel.ERROR, '**STATUS_CODE=' + res.getStatusCode());
-			System.debug(Logginglevel.ERROR, '**RESPONSE_BODY=' + res.getBody());
-		}
 		return isSuccess;
+	}
+
+	// Attempt to deserialize the response body JSON into a ZendeskError class
+	// Examples of error responses
+	// {"error":"RecordNotFound","description":"Not found"}
+	// {"error":"InvalidEndpoint","description":"Not found"}
+	private ZendeskError safeGetError(String resBody) {
+		ZendeskError zerr = null;
+		try {
+			zerr = (ZendeskError)JSON.deserialize(resBody, ZendeskError.class);
+		} catch(Exception e) {}
+		return zerr;
 	}
 
 	public static String arrayToCSV(Long[] longs) {
