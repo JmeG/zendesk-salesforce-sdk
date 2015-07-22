@@ -1,5 +1,7 @@
 # Force.com Toolkit for Zendesk
 
+** This is very much still an early work in progress and hasn't been fully tested yet.
+
 The Force.com Toolkit for Zendesk allows your Force.com apps to manipulate the Zendesk [ API](https://developer.zendesk.com/rest_api). The toolkit provides a set of Apex classes, such as `ZendeskUsers` and `ZendeskTickets`, that model Zendesk API Objects such as `Users` and `Tickets`.
 
 ## Installation
