@@ -150,7 +150,7 @@ public with sharing class ZendeskUserFields {
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
-		String fieldJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(zfield));
+		String fieldJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zfield)));
 		req.setBody('{ "user_field": ' + fieldJson + ' }');
 		HttpResponse res = new Http().send(req);
 

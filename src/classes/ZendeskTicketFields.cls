@@ -126,12 +126,12 @@ public with sharing class ZendeskTicketFields {
 		return ((resultWrapper==null || resultWrapper.ticket_field == null) ? null : resultWrapper.ticket_field.id);
 	}
 
-	public void updateField(Long fieldId, ZTicketField zticketField) {
+	public void updateField(Long fieldId, ZTicketField zfield) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
-		req.setBody('{ "ticket_field": ' + ZendeskAPI.stripJsonNulls(zfield) + ' }');
+		req.setBody('{ "ticket_field": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zfield)) + ' }');
 		HttpResponse res = new Http().send(req);
 
 		if (!ZendeskAPI.isSuccess(res)) {
