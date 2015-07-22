@@ -204,15 +204,14 @@ public class ZendeskTickets {
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
 	}
 
-	public ZTicket[] createTickets(ZTicket[] ztickets) {
+	public ZendeskJobStatuses.JobStatus createTickets(ZTicket[] ztickets) {
 		if (ztickets == null || ztickets.isEmpty()) { throw new ZendeskException('ztickets parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/tickets/create_many.json');
 		req.setBody('{ "tickets": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ztickets))) + ' }');
 		String resBody = zapi.sendRequest(req);
 
-		TicketsWrapper resultsWrapper = (TicketsWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketsWrapper.class);
-		return ((resultsWrapper==null || resultsWrapper.tickets==null) ? null : resultsWrapper.tickets);
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
 	// /api/v2/tickets.json
@@ -356,7 +355,7 @@ public class ZendeskTickets {
 		zapi.sendRequest(req);
 	}
 
-	public void updateTickets(ZTicket[] ztickets) {
+	public ZendeskJobStatuses.JobStatus updateTickets(ZTicket[] ztickets) {
 		if (ztickets == null || ztickets.isEmpty()) { throw new ZendeskException('ztickets parameter must not be null or empty'); }
 		for (ZTicket zticket : ztickets) {
 			if (zticket.id == null) { throw new ZendeskException('Each Ticket must have an id populated'); }
@@ -364,16 +363,20 @@ public class ZendeskTickets {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/update_many.json');
 		req.setBody('{ "tickets": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ztickets))) + ' }');
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
-	public void updateTickets(Long[] ticketIds, ZTicket zticket) {
+	public ZendeskJobStatuses.JobStatus updateTickets(Long[] ticketIds, ZTicket zticket) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter must not be null or empty'); }
         if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/update_many.json?ids=' + ZendeskAPI.arrayToCSV(ticketIds));
 		req.setBody('{ "ticket": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zticket))) + ' }');
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
 	// helper method to add a new comment to a ticket
@@ -408,7 +411,7 @@ public class ZendeskTickets {
 		zapi.sendRequest(req);
 	}
 
-	public void mergeTickets(Long[] sourceTicketIds, String sourceComment, Long targetTicketId, String targetComment) {
+	public ZendeskJobStatuses.JobStatus mergeTickets(Long[] sourceTicketIds, String sourceComment, Long targetTicketId, String targetComment) {
 		if (sourceTicketIds == null || sourceTicketIds.isEmpty()) { throw new ZendeskException('sourceTicketIds parameter must not be null or empty'); }
 		if (targetTicketId == null) { throw new ZendeskException('targetTicketId parameter must not be null'); }
 
@@ -422,7 +425,9 @@ public class ZendeskTickets {
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/tickets/' + targetTicketId + '/merge.json');
 		req.setBody(gen.getAsString());
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
 	public void deleteTicket(Long ticketId) {
@@ -455,11 +460,13 @@ public class ZendeskTickets {
 		zapi.sendRequest(req);
 	}
 
-	public void markTicketsAsSpam(Long[] ticketIds) {
+	public ZendeskJobStatuses.JobStatus markTicketsAsSpam(Long[] ticketIds) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/mark_many_as_spam.json?ids=' + ZendeskAPI.arrayToCSV(ticketIds));
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
 	public TicketsWrapper autoCompleteProblems(String autoCompleteText) {

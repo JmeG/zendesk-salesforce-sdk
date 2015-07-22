@@ -86,15 +86,14 @@ public class ZendeskUsers {
 		return ((resultWrapper==null || resultWrapper.user == null) ? null : resultWrapper.user.id);
 	}
 
-	public ZUser[] createUsers(ZUser[] zusers) {
+	public ZendeskJobStatuses.JobStatus createUsers(ZUser[] zusers) {
         if (zusers == null || zusers.isEmpty()) { throw new ZendeskException('zusers parameter must not be null or empty'); }
 
         HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/users/create_many.json');
         req.setBody('{ "users": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zusers)) + '}');
 		String resBody = zapi.sendRequest(req);
 
-        UsersWrapper resultsWrapper = (UsersWrapper)JSON.deserialize(resBody, UsersWrapper.class);
-		return ((resultsWrapper==null || resultsWrapper.users==null) ? null : resultsWrapper.users);
+        return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
     }
 
 	public void updateUser(Long userId, ZUser zuser) {
@@ -105,7 +104,7 @@ public class ZendeskUsers {
 		zapi.sendRequest(req);
 	}
 
-	public void updateUsers(ZUser[] zusers) {
+	public ZendeskJobStatuses.JobStatus updateUsers(ZUser[] zusers) {
 		if (zusers == null || zusers.isEmpty()) { throw new ZendeskException('zusers parameter must not be null or empty'); }
 		for (ZUser zuser : zusers) {
 			if (zuser.id == null && String.isEmpty(zuser.external_id)) { throw new ZendeskException('Each user must have either an id or external_id populated'); }
@@ -113,25 +112,31 @@ public class ZendeskUsers {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/users/update_many.json');
 		req.setBody('{ "users": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zusers)) + ' }');
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
-	public void updateUsers(Long[] userIds, ZUser zuser) {
+	public ZendeskJobStatuses.JobStatus updateUsers(Long[] userIds, ZUser zuser) {
 		if (userIds == null || userIds.isEmpty()) { throw new ZendeskException('userIds parameter must not be null or empty'); }
         if (zuser == null) { throw new ZendeskException('zuser parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/users/update_many.json?ids=' + ZendeskAPI.arrayToCSV(userIds));
 		req.setBody('{ "user": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zuser)) + ' }');
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
-	public void updateUsers(String[] externalIds, ZUser zusers) {
+	public ZendeskJobStatuses.JobStatus updateUsers(String[] externalIds, ZUser zusers) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter must not be null or empty'); }
 		if (zusers == null) { throw new ZendeskException('zusers parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/users/update_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
 		req.setBody('{ "user": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zusers)) + ' }');
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
 	public void mergeUsers(Long sourceUserId, Long targetUserId) {

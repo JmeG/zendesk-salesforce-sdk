@@ -132,15 +132,14 @@ public class ZendeskOrganizations {
 		return ((resultWrapper==null || resultWrapper.organization==null) ? null : resultWrapper.organization.id);
     }
 
-	public ZOrganization[] createOrganizations(ZOrganization[] zorgs) {
+	public ZendeskJobStatuses.JobStatus createOrganizations(ZOrganization[] zorgs) {
         if (zorgs == null || zorgs.isEmpty()) { throw new ZendeskException('zorgs parameter must not be null or empty'); }
 
         HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/organizations/create_many.json');
         req.setBody('{ "organizations": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zorgs)) + '}');
 		String resBody = zapi.sendRequest(req);
 
-        OrganizationsWrapper resultsWrapper = (OrganizationsWrapper)JSON.deserialize(resBody, OrganizationsWrapper.class);
-		return ((resultsWrapper==null || resultsWrapper.organizations==null) ? null : resultsWrapper.organizations);
+        return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
     }
 
     public void updateOrganization(Long orgId, ZOrganization zorg) {
@@ -152,7 +151,7 @@ public class ZendeskOrganizations {
 		zapi.sendRequest(req);
     }
 
-	public void updateOrganizations(ZOrganization[] zorgs) {
+	public ZendeskJobStatuses.JobStatus updateOrganizations(ZOrganization[] zorgs) {
 		if (zorgs == null || zorgs.isEmpty()) { throw new ZendeskException('zorgs parameter must not be null or empty'); }
 		for (ZOrganization zorg : zorgs) {
 			if (zorg.id == null && String.isEmpty(zorg.external_id)) { throw new ZendeskException('Each org must have either an id or external_id populated'); }
@@ -160,25 +159,31 @@ public class ZendeskOrganizations {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organizations/update_many.json');
 		req.setBody('{ "organizations": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zorgs)) + ' }');
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
-	public void updateOrganizations(Long[] orgIds, ZOrganization zorg) {
+	public ZendeskJobStatuses.JobStatus updateOrganizations(Long[] orgIds, ZOrganization zorg) {
 		if (orgIds == null || orgIds.isEmpty()) { throw new ZendeskException('orgIds parameter must not be null or empty'); }
         if (zorg == null) { throw new ZendeskException('zorg parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organizations/update_many.json?ids=' + ZendeskAPI.arrayToCSV(orgIds));
 		req.setBody('{ "organization": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zorg)) + ' }');
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
-	public void updateOrganizations(String[] externalIds, ZOrganization zorg) {
+	public ZendeskJobStatuses.JobStatus updateOrganizations(String[] externalIds, ZOrganization zorg) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter must not be null or empty'); }
 		if (zorg == null) { throw new ZendeskException('zorg parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organizations/update_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
 		req.setBody('{ "organization": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zorg)) + ' }');
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
 	public void deleteOrganization(Long orgId) {
@@ -188,18 +193,22 @@ public class ZendeskOrganizations {
 		zapi.sendRequest(req);
 	}
 
-	public void deleteOrganizations(Long[] orgIds) {
+	public ZendeskJobStatuses.JobStatus deleteOrganizations(Long[] orgIds) {
 		if (orgIds == null || orgIds.isEmpty()) { throw new ZendeskException('orgIds parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/organizations/destroy_many.json?ids=' + ZendeskAPI.arrayToCSV(orgIds));
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
-	public void deleteOrganizations(String[] externalIds) {
+	public ZendeskJobStatuses.JobStatus deleteOrganizations(String[] externalIds) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/organizations/destroy_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
-		zapi.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
+
+		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
 	}
 
 }

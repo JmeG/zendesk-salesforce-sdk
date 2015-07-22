@@ -31,16 +31,25 @@ private class ZendeskUsersTests {
         }
     }
 
+    public class MockJobStatusResponse implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            HttpResponse res = new HttpResponse();
+            res.setStatusCode(200);
+            res.setBody('{ "job_status": {"id": "31a2e47012e2013340b438ca3a5dc6c8", "url": "https://test.zendesk.com/api/v2/job_statuses/31a2e47012e2013340b438ca3a5dc6c8.json", "status": "queued" }}');
+            return res;
+        }
+    }
+
     static testmethod void testCreateUsers() {
-        Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
+        Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskUsers.ZUser zu = new ZendeskUsers.ZUser();
-		ZendeskUsers.ZUser[] createdUsers = zusers.createUsers(new ZendeskUsers.ZUser[] { zu });
+		ZendeskJobStatuses.JobStatus jobStatus = zusers.createUsers(new ZendeskUsers.ZUser[] { zu });
         Test.stopTest();
 
-		System.assertNotEquals(null, createdUsers);
+		System.assertNotEquals(null, jobStatus);
 	}
 
     static testmethod void testUpdateUser() {
@@ -56,7 +65,7 @@ private class ZendeskUsersTests {
 	}
 
     static testmethod void testUpdateUsers1() {
-        Test.setMock(HttpCalloutMock.class, new MockOKResponse());
+        Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
@@ -69,7 +78,7 @@ private class ZendeskUsersTests {
 	}
 
     static testmethod void testUpdateUsers2() {
-        Test.setMock(HttpCalloutMock.class, new MockOKResponse());
+        Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
@@ -81,7 +90,7 @@ private class ZendeskUsersTests {
 	}
 
     static testmethod void testUpdateUsers3() {
-        Test.setMock(HttpCalloutMock.class, new MockOKResponse());
+        Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
