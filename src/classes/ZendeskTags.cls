@@ -51,40 +51,40 @@ public with sharing class ZendeskTags {
 		return (ListTagsWrapper)JSON.deserialize(resBody, ListTagsWrapper.class);
 	}
 
-	public TagsWrapper getTags(Resource resourceType, Long resourceId) {
-		return getTags(resourceType, resourceId, null);
+	public TagsWrapper getTags(Resource resourceType, Long recordId) {
+		return getTags(resourceType, recordId, null);
 	}
 
-	public TagsWrapper getTags(Resource resourceType, Long resourceId, Long page) {
-		if (resourceId == null) { throw new ZendeskException('resourceId parameter must not be null'); }
+	public TagsWrapper getTags(Resource resourceType, Long recordId, Long page) {
+		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/' + resourceType.name() + '/' + resourceId + '/tags.json' + (page==null ? '' : '?page=' + page));
+		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/' + resourceType.name() + '/' + recordId + '/tags.json' + (page==null ? '' : '?page=' + page));
 		String resBody = zapi.sendRequest(req);
 
 		// { "tags": ["important", "customer"] }
 		return (TagsWrapper)JSON.deserialize(resBody, TagsWrapper.class);
 	}
 
-	public void setTags(Resource resourceType, Long resourceId, String[] tags) {
-		if (resourceId == null) { throw new ZendeskException('resourceId parameter must not be null'); }
+	public void setTags(Resource resourceType, Long recordId, String[] tags) {
+		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/' + resourceType.name() + '/' + resourceId + '/tags.json');
+		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/' + resourceType.name() + '/' + recordId + '/tags.json');
 		req.setBody('{ "tags": ' + JSON.serialize(tags) + ' }');
 		zapi.sendRequest(req);
 	}
 
-	public void addTags(Resource resourceType, Long resourceId, String[] tags) {
-		if (resourceId == null) { throw new ZendeskException('resourceId parameter must not be null'); }
+	public void addTags(Resource resourceType, Long recordId, String[] tags) {
+		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/' + resourceType.name() + '/' + resourceId + '/tags.json');
+		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/' + resourceType.name() + '/' + recordId + '/tags.json');
 		req.setBody('{ "tags": ' + JSON.serialize(tags) + ' }');
 		zapi.sendRequest(req);
 	}
 
-	public void removeTags(Resource resourceType, Long resourceId, String[] tags) {
-		if (resourceId == null) { throw new ZendeskException('resourceId parameter must not be null'); }
+	public void removeTags(Resource resourceType, Long recordId, String[] tags) {
+		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/' + resourceType.name() + '/' + resourceId + '/tags.json');
+		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/' + resourceType.name() + '/' + recordId + '/tags.json');
 		req.setBody('{ "tags": ' + JSON.serialize(tags) + ' }');
 		zapi.sendRequest(req);
 	}
