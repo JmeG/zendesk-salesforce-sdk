@@ -22,16 +22,16 @@ private class ZendeskAPITests {
         System.assertEquals('GET', req.getMethod());
     }
 
-    static testMethod void testIsSuccess() {
+    static testMethod void testSendRequest() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json');
 
         Test.startTest();
-        HttpResponse res = new Http().send(req);
+        String resBody = ZendeskAPI.sendRequest(req);
         Test.stopTest();
 
-        System.assertEquals(true, ZendeskAPI.isSuccess(res));
+        System.assertNotEquals(null, resBody);
     }
 
     static testMethod void testCanLogin() {

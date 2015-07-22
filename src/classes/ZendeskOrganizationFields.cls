@@ -73,13 +73,9 @@ public with sharing class ZendeskOrganizationFields {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organization_fields/' + fieldId + '.json');
-        HttpResponse res = new Http().send(req);
+        String resBody = ZendeskAPI.sendRequest(req);
 
-        if (!ZendeskAPI.isSuccess(res)) {
-            throw new ZendeskException('Error getting Field ' + fieldId + ' (' + res.getStatusCode() + ')');
-        }
-
-        OrganizationFieldWrapper wrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), OrganizationFieldWrapper.class);
+        OrganizationFieldWrapper wrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(resBody), OrganizationFieldWrapper.class);
         return wrapper.organization_field;
     }
 
@@ -91,25 +87,16 @@ public with sharing class ZendeskOrganizationFields {
     // Get a specific page of Organization Fields
     public OrganizationFieldsWrapper getFields(Long page) {
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organization_fields.json' + (page==null ? '' : '?page=' + page));
-        HttpResponse res = new Http().send(req);
+        String resBody = ZendeskAPI.sendRequest(req);
 
-        if (!ZendeskAPI.isSuccess(res)) {
-            throw new ZendeskException('Error getting Fields (' + res.getStatusCode() + ')');
-        }
-
-        OrganizationFieldsWrapper wrapper = (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), OrganizationFieldsWrapper.class);
-        return wrapper;
+        return (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(resBody), OrganizationFieldsWrapper.class);
     }
 
     public void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/organization_fields/' + fieldId + '.json');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error deleting Field ' + fieldId + ' (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
     public void reorderFields(Long[] orderedFieldIds) {
@@ -117,11 +104,7 @@ public with sharing class ZendeskOrganizationFields {
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organization_fields/reorder.json');
         req.setBody('{ "organization_field_ids": ' + JSON.serialize(orderedFieldIds) + '}');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error reordering Organization Fields (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
     }
 
     public Long createField(ZOrganizationField zfield) {
@@ -130,14 +113,9 @@ public with sharing class ZendeskOrganizationFields {
         HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/organization_fields.json');
         String fieldJson = JSON.serialize(zfield);
         req.setBody('{ "organization_field": ' + fieldJson + '}');
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error creating Field (' + res.getStatusCode() + ')');
-		}
-
-        OrganizationFieldWrapper resultWrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), OrganizationFieldWrapper.class);
-		// return the ID of the new field
+        OrganizationFieldWrapper resultWrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(resBody), OrganizationFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.organization_field == null) ? null : resultWrapper.organization_field.id);
     }
 
@@ -148,11 +126,7 @@ public with sharing class ZendeskOrganizationFields {
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organization_fields/' + fieldId + '.json');
 		String fieldJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zfield)));
 		req.setBody('{ "organization_field": ' + fieldJson + ' }');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error updating Field (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
     }
 
     // non-native API method

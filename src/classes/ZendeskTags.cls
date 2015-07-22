@@ -46,14 +46,9 @@ public with sharing class ZendeskTags {
 
 	public ListTagsWrapper listTags() {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tags.json');
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error listing Tags (' + res.getStatusCode() + ')');
-		}
-
-		ListTagsWrapper results = (ListTagsWrapper)JSON.deserialize(res.getBody(), ListTagsWrapper.class);
-		return results;
+		return (ListTagsWrapper)JSON.deserialize(resBody, ListTagsWrapper.class);
 	}
 
 	public TagsWrapper getTags(Entity entityType, Long recordId) {
@@ -64,15 +59,10 @@ public with sharing class ZendeskTags {
 		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/' + entityType.name() + '/' + recordId + '/tags.json' + (page==null ? '' : '?page=' + page));
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting Tags (' + res.getStatusCode() + ')');
-		}
+		String resBody = ZendeskAPI.sendRequest(req);
 
 		// { "tags": ["important", "customer"] }
-		TagsWrapper wrapper = (TagsWrapper)JSON.deserialize(res.getBody(), TagsWrapper.class);
-		return wrapper;
+		return (TagsWrapper)JSON.deserialize(resBody, TagsWrapper.class);
 	}
 
 	public void setTags(Entity entityType, Long recordId, String[] tags) {
@@ -80,11 +70,7 @@ public with sharing class ZendeskTags {
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/' + entityType.name() + '/' + recordId + '/tags.json');
 		req.setBody('{ "tags": ' + JSON.serialize(tags) + ' }');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error setting Tags (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public void addTags(Entity entityType, Long recordId, String[] tags) {
@@ -92,11 +78,7 @@ public with sharing class ZendeskTags {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/' + entityType.name() + '/' + recordId + '/tags.json');
 		req.setBody('{ "tags": ' + JSON.serialize(tags) + ' }');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error adding Tags (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public void removeTags(Entity entityType, Long recordId, String[] tags) {
@@ -104,10 +86,6 @@ public with sharing class ZendeskTags {
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/' + entityType.name() + '/' + recordId + '/tags.json');
 		req.setBody('{ "tags": ' + JSON.serialize(tags) + ' }');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error removing Tags (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 }

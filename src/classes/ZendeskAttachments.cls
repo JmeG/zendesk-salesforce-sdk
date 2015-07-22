@@ -36,14 +36,10 @@ public with sharing class ZendeskAttachments {
 			HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/uploads.json?filename=' + EncodingUtil.urlEncode(fileName, 'UTF-8'));
 			req.setHeader('Content-Type', fileContentType);
 			req.setBodyAsBlob(fileBody);
-			HttpResponse res = new Http().send(req);
-
-			if (!ZendeskAPI.isSuccess(res)) {
-				throw new ZendeskException('Error uploading Attachment (' + res.getStatusCode() + ')');
-			}
+			String resBody = ZendeskAPI.sendRequest(req);
 
 			// Extract the token from the response
-			Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(res.getBody());
+			Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(resBody);
 			if (jsonMap.containsKey('upload')) {
 				Map<String, Object> upload = (Map<String, Object>)jsonMap.get('upload');
 				zendeskAttachmentToken = (String)upload.get('token');
@@ -63,24 +59,16 @@ public with sharing class ZendeskAttachments {
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error deleting Attachment ' + attachmentId + ' (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public ZAttachment getAttachment(Long attachmentId) {
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting Attachment ' + attachmentId + ' (' + res.getStatusCode() + ')');
-		}
-
-		AttachmentWrapper resultWrapper = (AttachmentWrapper)JSON.deserialize(res.getBody(), AttachmentWrapper.class);
+		AttachmentWrapper resultWrapper = (AttachmentWrapper)JSON.deserialize(resBody, AttachmentWrapper.class);
 		return resultWrapper.attachment;
 	}
 
@@ -91,11 +79,7 @@ public with sharing class ZendeskAttachments {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + commentId + '/attachments/' + attachmentId + '/redact.json');
 		req.setBody('{}');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error redacting Comment Attachment (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 }

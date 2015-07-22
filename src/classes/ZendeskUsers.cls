@@ -80,13 +80,9 @@ public with sharing class ZendeskUsers {
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/users.json');
 		String reqBody = JSON.serialize(wrapper);
 		req.setBody(reqBody);
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error creating User (' + res.getStatusCode() + ')');
-		}
-
-		UserWrapper resultWrapper = (UserWrapper)JSON.deserialize(res.getBody(), UserWrapper.class);
+		UserWrapper resultWrapper = (UserWrapper)JSON.deserialize(resBody, UserWrapper.class);
 		return ((resultWrapper==null || resultWrapper.user == null) ? null : resultWrapper.user.id);
 	}
 
@@ -95,13 +91,9 @@ public with sharing class ZendeskUsers {
 
         HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/users/create_many.json');
         req.setBody('{ "users": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zusers)) + '}');
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error creating Users (' + res.getStatusCode() + ')');
-		}
-
-        UsersWrapper resultsWrapper = (UsersWrapper)JSON.deserialize(res.getBody(), UsersWrapper.class);
+        UsersWrapper resultsWrapper = (UsersWrapper)JSON.deserialize(resBody, UsersWrapper.class);
 		return ((resultsWrapper==null || resultsWrapper.users==null) ? null : resultsWrapper.users);
     }
 
@@ -110,11 +102,7 @@ public with sharing class ZendeskUsers {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/users/' + userId + '.json');
 		req.setBody('{ "user": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zuser)) + '}');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error updating User (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public void updateUsers(ZUser[] zusers) {
@@ -125,11 +113,7 @@ public with sharing class ZendeskUsers {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/users/update_many.json');
 		req.setBody('{ "users": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zusers)) + ' }');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error updating Users (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public void updateUsers(Long[] userIds, ZUser zuser) {
@@ -138,11 +122,7 @@ public with sharing class ZendeskUsers {
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/users/update_many.json?ids=' + ZendeskAPI.arrayToCSV(userIds));
 		req.setBody('{ "user": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zuser)) + ' }');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error updating Users (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public void updateUsers(String[] externalIds, ZUser zusers) {
@@ -151,11 +131,7 @@ public with sharing class ZendeskUsers {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/users/update_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
 		req.setBody('{ "user": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zusers)) + ' }');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error updating Users (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public void mergeUsers(Long sourceUserId, Long targetUserId) {
@@ -167,11 +143,7 @@ public with sharing class ZendeskUsers {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/users/' + sourceUserId + '/merge.json');
 		req.setBody('{ "user": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(u)) + '}');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error merging Users (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public Long getUserIdByEmail(String email) {
@@ -187,14 +159,9 @@ public with sharing class ZendeskUsers {
 
 		String encodedNameOrEmail = EncodingUtil.urlEncode(nameOrEmail, 'UTF-8');
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedNameOrEmail);
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error searching Users (' + res.getStatusCode() + ')');
-		}
-
-		UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(res.getBody(), UsersWrapper.class);
-		return wrapper;
+		return (UsersWrapper)JSON.deserialize(resBody, UsersWrapper.class);
 	}
 
 	public ZUser findUserByEmail(String email) {
@@ -203,13 +170,9 @@ public with sharing class ZendeskUsers {
 		// Make sure to set the email to lowercase because that's the way Zendesk will return it
 		String encodedEmail = EncodingUtil.urlEncode(email.toLowerCase(), 'UTF-8');
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/search.json?query=' + encodedEmail);
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error searching Users (' + res.getStatusCode() + ')');
-		}
-
-		UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(res.getBody(), UsersWrapper.class);
+		UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(resBody, UsersWrapper.class);
 		ZUser user = null;
 		if (wrapper != null && wrapper.users != null) {
 			for (ZUser obj : wrapper.users) {
@@ -277,39 +240,26 @@ public with sharing class ZendeskUsers {
 
 	// Helper method for getting Users
 	private UsersWrapper getUsers(HttpRequest req) {
-        HttpResponse res = new Http().send(req);
+        String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting Users (' + res.getStatusCode() + ')');
-		}
-
-        UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(res.getBody(), UsersWrapper.class);
-        return wrapper;
+        return (UsersWrapper)JSON.deserialize(resBody, UsersWrapper.class);
     }
 
 	public ZUser getUser(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '.json');
-        HttpResponse res = new Http().send(req);
+        String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting User ' + userId + ' (' + res.getStatusCode() + ')');
-		}
-
-        UserWrapper wrapper = (UserWrapper)JSON.deserialize(res.getBody(), UserWrapper.class);
+        UserWrapper wrapper = (UserWrapper)JSON.deserialize(resBody, UserWrapper.class);
         return wrapper.user;
     }
 
 	public ZUser getCurrentUser() {
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/me.json');
-        HttpResponse res = new Http().send(req);
+        String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting current User (' + res.getStatusCode() + ')');
-		}
-
-        UserWrapper wrapper = (UserWrapper)JSON.deserialize(res.getBody(), UserWrapper.class);
+        UserWrapper wrapper = (UserWrapper)JSON.deserialize(resBody, UserWrapper.class);
         return wrapper.user;
     }
 
@@ -317,46 +267,29 @@ public with sharing class ZendeskUsers {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '/related.json');
-        HttpResponse res = new Http().send(req);
+        String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting User related info ' + userId + ' (' + res.getStatusCode() + ')');
-		}
-
-		Map<String, Object> resultMap = (Map<String, Object>)JSON.deserializeUntyped(res.getBody());
-		return resultMap;
+		return (Map<String, Object>)JSON.deserializeUntyped(resBody);
 	}
 
 	public void deleteUser(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/users/' + userId + '.json');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error deleting Users ' + userId + ' (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public void deleteUsers(Long[] userIds) {
 		if (userIds == null || userIds.isEmpty()) { throw new ZendeskException('userIds parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/users/destroy_many.json?ids=' + ZendeskAPI.arrayToCSV(userIds));
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error deleting Users (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public void deleteUsers(String[] externalIds) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/users/destroy_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error deleting Users (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 }

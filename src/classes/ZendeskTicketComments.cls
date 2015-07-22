@@ -41,14 +41,9 @@ public with sharing class ZendeskTicketComments {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments.json' + (page==null ? '' : '?page=' + page));
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting Ticket Comments (' + res.getStatusCode() + ')');
-		}
-
-		TicketCommentsWrapper wrapper = (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), TicketCommentsWrapper.class);
-		return wrapper;
+		return (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketCommentsWrapper.class);
 	}
 
 	public void redactStringInComment(Long ticketId, Long ticketCommentId, String redactText) {
@@ -58,11 +53,7 @@ public with sharing class ZendeskTicketComments {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/redact.json');
 		req.setBody('{"text": "' + redactText + '"}');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error redacting Ticket Comment ' + ticketCommentId + ' (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public void makeCommentPrivate(Long ticketId, Long ticketCommentId) {
@@ -70,11 +61,7 @@ public with sharing class ZendeskTicketComments {
 		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/make_private.json');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error making Ticket Comment private ' + ticketCommentId + ' (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"

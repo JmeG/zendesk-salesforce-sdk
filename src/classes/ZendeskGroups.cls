@@ -70,29 +70,20 @@ public with sharing class ZendeskGroups {
 
 	// Private helper method to query multiple groups
 	private GroupsWrapper getGroupsInternal(HttpRequest req) {
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting Groups (' + res.getStatusCode() + ')');
-		}
-
-		GroupsWrapper wrapper = (GroupsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), GroupsWrapper.class);
-		return wrapper;
+		return (GroupsWrapper)JSON.deserialize(replaceReservedWords(resBody), GroupsWrapper.class);
 	}
 
 	public ZGroup getGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting Group ' + groupId + ' (' + res.getStatusCode() + ')');
-		}
+		String resBody = ZendeskAPI.sendRequest(req);
 
 		// use replaceReservedWords to work around JSON containing Salesforce keyword "group"
-		GroupWrapper resultWrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), GroupWrapper.class);
-		return resultWrapper.x_group;
+		GroupWrapper wrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(resBody), GroupWrapper.class);
+		return wrapper.x_group;
 	}
 
 	public Long createGroup(String name) {
@@ -108,14 +99,9 @@ public with sharing class ZendeskGroups {
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/groups.json');
 		req.setBody(gen.getAsString());
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error creating Group (' + res.getStatusCode() + ')');
-		}
-
-		GroupWrapper resultWrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), GroupWrapper.class);
-		// return the ID of the new Group
+		GroupWrapper resultWrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(resBody), GroupWrapper.class);
 		return ((resultWrapper==null || resultWrapper.x_group == null) ? null : resultWrapper.x_group.id);
 	}
 
@@ -134,22 +120,14 @@ public with sharing class ZendeskGroups {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
 		req.setBody(groupJSON);
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error updating Group ' + groupId + ' (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public void deleteGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error deleting Group ' + groupId + ' (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	// Retrieves all pages of groups. Uses the Group field "id" as the map key

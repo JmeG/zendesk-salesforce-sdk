@@ -65,13 +65,9 @@ public with sharing class ZendeskTicketFields {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting Ticket Field ' + fieldId + ' (' + res.getStatusCode() + ')');
-		}
-
-		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(res.getBody(), TicketFieldWrapper.class);
+		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
 		return wrapper.ticket_field;
 	}
 
@@ -83,25 +79,16 @@ public with sharing class ZendeskTicketFields {
 	// Get a specific page of User Fields
 	public TicketFieldsWrapper getFields(Long page) {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields.json' + (page==null ? '' : '?page=' + page));
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error getting Ticket Fields (' + res.getStatusCode() + ')');
-		}
-
-		TicketFieldsWrapper wrapper = (TicketFieldsWrapper)JSON.deserialize(res.getBody(), TicketFieldsWrapper.class);
-		return wrapper;
+		return (TicketFieldsWrapper)JSON.deserialize(resBody, TicketFieldsWrapper.class);
 	}
 
 	public void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error deleting Ticket Field ' + fieldId + ' (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	public Long createField(ZTicketField zfield) {
@@ -109,14 +96,9 @@ public with sharing class ZendeskTicketFields {
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/ticket_fields/.json');
 		req.setBody('{ "ticket_field": ' + JSON.serialize(zfield) + ' }');
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error creating Ticket Field (' + res.getStatusCode() + ')');
-		}
-
-		TicketFieldWrapper resultWrapper = (TicketFieldWrapper)JSON.deserialize(res.getBody(), TicketFieldWrapper.class);
-		// return the ID of the new field
+		TicketFieldWrapper resultWrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_field == null) ? null : resultWrapper.ticket_field.id);
 	}
 
@@ -126,11 +108,7 @@ public with sharing class ZendeskTicketFields {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
 		req.setBody('{ "ticket_field": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zfield)) + ' }');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error updating Ticket Field (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
 	// Retrieves all pages of ticket fields. Uses the field "id" as the map key

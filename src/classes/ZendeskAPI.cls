@@ -66,7 +66,15 @@ public with sharing class ZendeskAPI {
 		}
 	}
 
-	public static Boolean isSuccess(HttpResponse res) {
+	public static String sendRequest(HttpRequest req) {
+		HttpResponse res = new Http().send(req);
+		if (!isSuccess(res)) {
+			throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ')');
+		}
+		return res.getBody();
+	}
+
+	private static Boolean isSuccess(HttpResponse res) {
 		if (res == null) { throw new ZendeskException('res parameter must not be null'); }
 
 		System.debug(Logginglevel.INFO, '**RES_BODY=' + res.getBody());

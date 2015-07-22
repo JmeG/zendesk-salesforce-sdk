@@ -73,13 +73,9 @@ public with sharing class ZendeskUserFields {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
-        HttpResponse res = new Http().send(req);
+        String resBody = ZendeskAPI.sendRequest(req);
 
-        if (!ZendeskAPI.isSuccess(res)) {
-            throw new ZendeskException('Error getting User Field ' + fieldId + ' (' + res.getStatusCode() + ')');
-        }
-
-        UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), UserFieldWrapper.class);
+        UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(resBody), UserFieldWrapper.class);
         return wrapper.user_field;
     }
 
@@ -91,25 +87,16 @@ public with sharing class ZendeskUserFields {
     // Get a specific page of User Fields
     public UserFieldsWrapper getFields(Long page) {
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + page));
-        HttpResponse res = new Http().send(req);
+        String resBody = ZendeskAPI.sendRequest(req);
 
-        if (!ZendeskAPI.isSuccess(res)) {
-            throw new ZendeskException('Error getting User Fields (' + res.getStatusCode() + ')');
-        }
-
-        UserFieldsWrapper wrapper = (UserFieldsWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), UserFieldsWrapper.class);
-        return wrapper;
+        return (UserFieldsWrapper)JSON.deserialize(replaceReservedWords(resBody), UserFieldsWrapper.class);
     }
 
     public void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error deleting User Field ' + fieldId + ' (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
 	}
 
     public void reorderFields(Long[] orderedFieldIds) {
@@ -117,11 +104,7 @@ public with sharing class ZendeskUserFields {
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/user_fields/reorder.json');
         req.setBody('{ "user_field_ids": ' + JSON.serialize(orderedFieldIds) + '}');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error reordering User Fields (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
     }
 
     public Long createField(ZUserField zfield) {
@@ -129,13 +112,9 @@ public with sharing class ZendeskUserFields {
 
         HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/user_fields.json');
         req.setBody('{ "user_field": ' + unreplaceReservedWords(JSON.serialize(zfield)) + '}');
-		HttpResponse res = new Http().send(req);
+		String resBody = ZendeskAPI.sendRequest(req);
 
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error creating User Field (' + res.getStatusCode() + ')');
-		}
-
-        UserFieldWrapper resultWrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(res.getBody()), UserFieldWrapper.class);
+        UserFieldWrapper resultWrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(resBody), UserFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.user_field==null) ? null : resultWrapper.user_field.id);
     }
 
@@ -146,11 +125,7 @@ public with sharing class ZendeskUserFields {
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
 		String fieldJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zfield)));
 		req.setBody('{ "user_field": ' + fieldJson + ' }');
-		HttpResponse res = new Http().send(req);
-
-		if (!ZendeskAPI.isSuccess(res)) {
-			throw new ZendeskException('Error updating User Field (' + res.getStatusCode() + ')');
-		}
+		ZendeskAPI.sendRequest(req);
     }
 
     // non-native API method

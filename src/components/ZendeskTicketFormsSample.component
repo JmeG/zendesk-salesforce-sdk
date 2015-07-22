@@ -9,7 +9,7 @@
             <apex:pageBlock title="Ticket Forms" mode="edit">
                 <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
                 <apex:pageBlockButtons location="top">
-                    <apex:commandButton action="{!getForms}" value="Get All Ticket Forms" rerender="ticketFormsPanel" />
+                    <apex:commandButton action="{!getForms}" value="Get all Ticket Forms" rerender="ticketFormsPanel" />
                     <apex:commandButton action="{!getFormByID}" value="Get by ID" rerender="ticketFormsPanel" />
                 </apex:pageBlockButtons>
                 <apex:pageBlockSection title="" columns="1">
