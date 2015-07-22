@@ -31,7 +31,7 @@ public with sharing class ZendeskUsers {
 	private final ZendeskAPI zapi;
 
 	public class ZUser {
-		public Long id {get; private set;}
+		public Long id {get; set;}
 		public String name {get; set;}
 		public String email {get; set;}
 		public String phone {get; set;}
