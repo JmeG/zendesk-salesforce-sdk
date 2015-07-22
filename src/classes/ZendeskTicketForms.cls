@@ -29,14 +29,8 @@ public with sharing class ZendeskTicketForms {
 		public ZTicketForm ticket_form {get; set;}
 	}
 
-	public class TicketFormsWrapper {
+	public class TicketFormsWrapper extends ZendeskPagingSupport {
 		public ZTicketForm[] ticket_forms {get;set;}
-
-		// Paging support
-		public String next_page {get; set;}
-		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
-		public String previous_page {get; set;}
-		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	public ZendeskTicketForms(ZendeskAPI zapi) {

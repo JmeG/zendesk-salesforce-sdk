@@ -48,14 +48,8 @@ public with sharing class ZendeskTicketFields {
 		public String value {get; set;}
 	}
 
-	public class TicketFieldsWrapper {
+	public class TicketFieldsWrapper extends ZendeskPagingSupport {
 		public ZTicketField[] ticket_fields {get; set;}
-
-		// Paging support
-		public String next_page {get; set;}
-		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
-		public String previous_page {get; set;}
-		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	private class TicketFieldWrapper {

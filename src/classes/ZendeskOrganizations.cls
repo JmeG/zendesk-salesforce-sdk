@@ -37,14 +37,8 @@ public with sharing class ZendeskOrganizations {
 		public Map<String, String> organization_fields {get; set;}
 	}
 
-	public class OrganizationsWrapper {
+	public class OrganizationsWrapper extends ZendeskPagingSupport {
 		public ZOrganization[] organizations {get;set;}
-
-		// Paging support
-		public String next_page {get; set;}
-		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
-		public String previous_page {get; set;}
-		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	// Used to deserialize the result of a Organization create/update API call

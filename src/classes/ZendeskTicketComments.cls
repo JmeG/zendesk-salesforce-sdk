@@ -19,14 +19,8 @@ public with sharing class ZendeskTicketComments {
 		public DateTime created_at {get; private set;}
 	}
 
-	public class TicketCommentsWrapper {
+	public class TicketCommentsWrapper extends ZendeskPagingSupport {
 		public ZTicketComment[] comments {get; set;}
-
-		// Paging support
-		public String next_page {get; set;}
-		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
-		public String previous_page {get; set;}
-		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	private class TicketCommentWrapper {

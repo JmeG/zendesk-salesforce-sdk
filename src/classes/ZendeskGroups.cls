@@ -24,14 +24,8 @@ public with sharing class ZendeskGroups {
 		public ZGroup x_group {get; set;} // Use "x_group" in place of "group" which is a reserved keyword. Requires custom de/serialization.
 	}
 
-	public class GroupsWrapper {
+	public class GroupsWrapper extends ZendeskPagingSupport {
 		public ZGroup[] groups {get;set;}
-
-		// Paging support
-		public String next_page {get; set;}
-		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
-		public String previous_page {get; set;}
-		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	public ZendeskGroups(ZendeskAPI zapi) {

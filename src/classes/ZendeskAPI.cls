@@ -69,18 +69,13 @@ public with sharing class ZendeskAPI {
 	public static Boolean isSuccess(HttpResponse res) {
 		if (res == null) { throw new ZendeskException('res parameter must not be null'); }
 
+		System.debug(Logginglevel.INFO, '**RES_BODY=' + res.getBody());
 		Boolean isSuccess = (res.getStatusCode() != null && res.getStatusCode() >= 200 && res.getStatusCode() <= 299);
 		if (!isSuccess) {
 			System.debug(Logginglevel.ERROR, '**STATUS_CODE=' + res.getStatusCode());
 			System.debug(Logginglevel.ERROR, '**RESPONSE_BODY=' + res.getBody());
 		}
 		return isSuccess;
-	}
-
-	// pageURL looks like "https://test.zendesk.com/api/v2/tickets.json?page=2"
-	// simply return 2
-	public static Long getPageNumber(String pageUrl) {
-		return (String.isEmpty(pageUrl) ? null : Long.valueOf(pageUrl.substringAfterLast('page=').substringBefore('&')));
 	}
 
 	public static String arrayToCSV(Long[] longs) {

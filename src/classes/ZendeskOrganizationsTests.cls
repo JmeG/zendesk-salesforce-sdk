@@ -268,17 +268,6 @@ private class ZendeskOrganizationsTests {
         System.assert(true);
     }
 
-    static testMethod void testPaging() {
-        Test.startTest();
-        ZendeskOrganizations.OrganizationsWrapper wrapper = new ZendeskOrganizations.OrganizationsWrapper();
-        wrapper.next_page = 'https://test.zendesk.com/api/v2/organizations.json?page=2';
-        wrapper.previous_page = 'https://test.zendesk.com/api/v2/organizations.json?page=1';
-        Test.stopTest();
-
-        System.assertEquals(1, wrapper.previousPageNumber);
-        System.assertEquals(2, wrapper.nextPageNumber);
-    }
-
     static testMethod void testZOrganization() {
         String organizationJson = '{"url":"https://test.zendesk.com/api/v2/organizations/123.json","id":123,"name":"Zendesk","shared_tickets":false,"shared_comments":false,"external_id":null,"created_at":"2014-03-08T18:29:33Z","updated_at":"2014-03-08T18:29:33Z","domain_names":["zendesk.com"],"details":"","notes":"","group_id":null,"tags":["tag1","tag2"],"organization_fields":{"city":null,"customer":false,"customer_since":null,"employee_number":null,"street_address_1":null,"street_address_2":null,"website":null,"zip":null}}';
         ZendeskOrganizations.ZOrganization zorganization = (ZendeskOrganizations.ZOrganization)JSON.deserialize(organizationJson, ZendeskOrganizations.ZOrganization.class);

@@ -125,19 +125,6 @@ private class ZendeskGroupsTests {
         System.assertNotEquals(0, wrapper.groups.size());
     }
 
-    static testMethod void testPaging() {
-        Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
-
-        Test.startTest();
-        ZendeskGroups.GroupsWrapper wrapper = new ZendeskGroups.GroupsWrapper();
-        wrapper.next_page = 'https://test.zendesk.com/api/v2/groups.json?page=2';
-        wrapper.previous_page = 'https://test.zendesk.com/api/v2/groups.json?page=1';
-        Test.stopTest();
-
-        System.assertEquals(1, wrapper.previousPageNumber);
-        System.assertEquals(2, wrapper.nextPageNumber);
-    }
-
     static testMethod void testZGroup() {
         ZendeskGroups.ZGroup zgroup = new ZendeskGroups.ZGroup();
         zgroup.name = '';

@@ -44,13 +44,6 @@ private class ZendeskAPITests {
         Test.stopTest();
     }
 
-    static testMethod void testGetPageNumber() {
-        Test.startTest();
-        System.assertEquals(3, ZendeskAPI.getPageNumber('https://test.zendesk.com/api/v2/tickets.json?page=3'));
-        System.assertEquals(3, ZendeskAPI.getPageNumber('https://test.zendesk.com/api/v2/tickets.json?page=3&foo=bar'));
-        Test.stopTest();
-    }
-
     static testMethod void testArrayToCSV() {
         Test.startTest();
         System.assertEquals('1,2,3', ZendeskAPI.arrayToCSV(new Long[] { 1, 2, 3 }));

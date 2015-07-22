@@ -112,14 +112,8 @@ public with sharing class ZendeskTickets {
 		public String email {get; set;}
 	}
 
-	public class TicketsWrapper {
+	public class TicketsWrapper extends ZendeskPagingSupport {
 		public ZTicket[] tickets {get;set;}
-
-		// Paging support
-		public String next_page {get; set;}
-		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
-		public String previous_page {get; set;}
-		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	// Used to deserialize the result of a individual Ticket create/read/update API call

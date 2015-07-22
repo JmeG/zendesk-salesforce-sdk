@@ -47,14 +47,8 @@ public with sharing class ZendeskUsers {
 		public Map<String, String> user_fields {get; set;}
 	}
 
-	public class UsersWrapper {
+	public class UsersWrapper extends ZendeskPagingSupport {
 		public ZUser[] users {get;set;}
-
-		// Paging support
-		public String next_page {get; set;}
-		public Long nextPageNumber { get { return ZendeskAPI.getPageNumber(next_page); } private set; }
-		public String previous_page {get; set;}
-		public Long previousPageNumber { get { return ZendeskAPI.getPageNumber(previous_page); } private set; }
 	}
 
 	// Used to deserialize the result of a User create/update API call

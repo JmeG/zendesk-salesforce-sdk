@@ -118,17 +118,6 @@ private class ZendeskUserFieldsTests {
         System.assertNotEquals(null, fieldsMap.containsKey('Test'));
     }
 
-    static testMethod void testPaging() {
-        Test.startTest();
-        ZendeskUserFields.UserFieldsWrapper wrapper = new ZendeskUserFields.UserFieldsWrapper();
-        wrapper.next_page = 'https://test.zendesk.com/api/v2/user_fields.json?page=2';
-        wrapper.previous_page = 'https://test.zendesk.com/api/v2/user_fields.json?page=1';
-        Test.stopTest();
-
-        System.assertEquals(1, wrapper.previousPageNumber);
-        System.assertEquals(2, wrapper.nextPageNumber);
-    }
-
     static testMethod void testZUserField() {
         ZendeskUserFields.ZUserField zfield = new ZendeskUserFields.ZUserField();
         //zfield.id = 0;
