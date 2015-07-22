@@ -12,13 +12,13 @@ public class ZendeskTicketFields {
 
 	public class ZTicketField {
 		public Long id {get; private set;}
-		public String type {get; set;}
-		public String title {get; set;}
-		public String raw_title {get; set;}
-		public Boolean active {get; set;}
+		public String type;
+		public String title;
+		public String raw_title;
+		public Boolean active;
+		public ZCustomFieldOption[] custom_field_options;
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
-		public ZCustomFieldOption[] custom_field_options {get; set;}
 
 		// Get the picklist "value" matching the provided name
 		public String getOptionValue(String optname) {

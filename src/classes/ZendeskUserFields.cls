@@ -13,20 +13,20 @@ public class ZendeskUserFields {
 
     public class ZUserField {
 	    public Long id {get; private set;}
-        public String key {get; set;}
-	    public String type {get; set;}
-	    public String title {get; set;}
-	    public String raw_title {get; set;}
-        //public String description {get; set;}
-        //public String raw_description {get; set;}
-	    public Long position {get; set;}
-	    public Boolean active {get; set;}
-	    //public Boolean x_system {get; set;} // NOTE: "system" is reserved
-        //public String regexp_for_validation {get; set;}
-	    //public String tag {get; set;}
+        public String key;
+	    public String type;
+	    public String title;
+	    public String raw_title;
+	    public Long position;
+	    public Boolean active;
+        public String description;
+        public String raw_description;
+	    //public Boolean x_system; // NOTE: "system" is reserved
+        //public String regexp_for_validation;
+	    //public String tag;
+	    public ZCustomFieldOption[] custom_field_options;
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
-	    public ZCustomFieldOption[] custom_field_options {get; set;}
 
 	    // Get the picklist "value" matching the provided name
 	    public String getOptionValue(String optname) {
@@ -50,18 +50,18 @@ public class ZendeskUserFields {
 	}
 
     public class ZCustomFieldOption {
-		public Long id {get; set;}
-		public String name {get; set;}
-		public String raw_name {get; set;}
-		public String value {get; set;}
+		public Long id;
+		public String name;
+		public String raw_name;
+		public String value;
 	}
 
     public class UserFieldsWrapper extends ZendeskPagingSupport {
-        public ZUserField[] user_fields {get; set;}
+        public ZUserField[] user_fields;
     }
 
     private class UserFieldWrapper {
-        public ZUserField user_field {get; set;}
+        public ZUserField user_field;
     }
 
     public ZendeskUserFields(ZendeskAPI zapi) {

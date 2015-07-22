@@ -14,7 +14,7 @@ public class ZendeskGroups {
 
 	public class ZGroup {
 		public Long id {get; private set;}
-		public String name {get; set;}
+		public String name;
 		public Boolean deleted {get; private set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}

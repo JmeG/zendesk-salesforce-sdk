@@ -9,22 +9,22 @@ public class ZendeskTicketComments {
 
 	public class ZTicketComment {
 		public Long id {get; private set;}
-		public String type {get; set;}
-		public String body {get; set;}
-		public String html_body {get; set;}
-		public Boolean x_public {get; set;} // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
-		public Long author_id {get; set;}
-		public ZendeskAttachments.ZAttachment[] attachments {get; set;}
-		public ZendeskTickets.ZTicketVia via {get; set;}
+		public String type;
+		public String body;
+		public String html_body;
+		public Boolean x_public; // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
+		public Long author_id;
+		public ZendeskAttachments.ZAttachment[] attachments;
+		public ZendeskTickets.ZTicketVia via;
 		public DateTime created_at {get; private set;}
 	}
 
 	public class TicketCommentsWrapper extends ZendeskPagingSupport {
-		public ZTicketComment[] comments {get; set;}
+		public ZTicketComment[] comments;
 	}
 
 	private class TicketCommentWrapper {
-		public ZTicketComment comment {get;set;}
+		public ZTicketComment comment;
 	}
 
 	public ZendeskTicketComments(ZendeskAPI zapi) {

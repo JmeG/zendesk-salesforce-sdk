@@ -47,78 +47,78 @@ public class ZendeskTickets {
 	}
 
 	public class ZTicket {
-		public Long id {get; set;}
-		public String url {get; private set;}
-		public String external_id {get; set;}
-		public TicketType type {get; set;}
-		public String subject {get; set;}
+		public Long id;
+		public String url;
+		public String external_id;
+		public TicketType type;
+		public String subject;
+		public TicketPriority priority;
+		public String status;
+		public String recipient;
+		public Long requester_id;
+		public ZTicketRequester requester; // optional when creating a new ticket in place of requester_id
+		public Long submitter_id;
+		public Long assignee_id;
+		public Long group_id;
+		public List<Long> collaborator_ids;
+		public Long forum_topic_id;
+		public Long problem_id;
+		public DateTime due_at;
+		public List<String> tags;
+		public List<ZTicketCustomField> custom_fields;
+		public Long ticket_form_id;
+		public Long brand_id;
+		public ZTicketComment comment; // use for adding the ticket comment
 		public String description {get; private set;} // readonly. first comment on ticket
-		public TicketPriority priority {get; set;}
-		public String status {get; set;}
-		public String recipient {get; set;}
-		public Long requester_id {get; set;}
-		public ZTicketRequester requester {get; set;} // optional when creating a new ticket in place of requester_id
-		public Long submitter_id {get; set;}
-		public Long assignee_id {get; set;}
 		public Long organization_id {get; private set;}
-		public Long group_id {get; set;}
-		public List<Long> collaborator_ids {get; set;}
-		public Long forum_topic_id {get; set;}
-		public Long problem_id {get; set;}
-		public Boolean has_incidents {get; private set;}
-		public DateTime due_at {get; set;}
-		public List<String> tags {get; set;}
 		public ZTicketVia via {get; private set;}
-		public List<ZTicketCustomField> custom_fields {get; set;}
 		public ZTicketSatisfactionRating satisfaction_rating {get; private set;}
 		public List<Long> sharing_agreement_ids {get; private set;}
 		public List<Long> followup_ids {get; private set;}
-		public Long ticket_form_id {get; set;}
-		public Long brand_id {get; set;}
+		public Boolean has_incidents {get; private set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
-		public ZTicketComment comment {get; set;} // use for adding the ticket comment
 	}
 
 	public class ZTicketCustomField {
-		public Long id {get; set;}
-		public String value {get; set;}
+		public Long id;
+		public String value;
 
 		public ZTicketCustomField() {}
 		public ZTicketCustomField(Long id, String value) { this.id = id; this.value = value; }
 	}
 
 	public class ZTicketVia {
-		public String channel {get; set;}
-		//public String source {get; set;}
+		public String channel;
+		//public String source;
 	}
 
 	public class ZTicketSatisfactionRating {
-		public Long id {get; set;}
-		public String score {get; set;}
-		public String comment {get; set;}
+		public Long id;
+		public String score;
+		public String comment;
 	}
 
 	public class ZTicketComment {
-		public String body {get; set;}
-		public Boolean x_public {get; set;}  // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
-		public String uploads {get; set;}
+		public String body;
+		public Boolean x_public;  // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
+		public String uploads;
 	}
 
 	// { "locale_id": 8, "name": "Pablo", "email": "pablito@example.org" }
 	public class ZTicketRequester {
-		public Long locale_id {get; set;}
-		public String name {get; set;}
-		public String email {get; set;}
+		public Long locale_id;
+		public String name;
+		public String email;
 	}
 
 	public class TicketsWrapper extends ZendeskPagingSupport {
-		public ZTicket[] tickets {get;set;}
+		public ZTicket[] tickets;
 	}
 
 	// Used to deserialize the result of a individual Ticket create/read/update API call
 	private class TicketWrapper {
-		public ZTicket ticket {get; set;}
+		public ZTicket ticket;
 	}
 
 	public ZendeskTickets(ZendeskAPI zapi) {
