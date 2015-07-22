@@ -47,7 +47,7 @@ public with sharing class ZendeskTickets {
 	}
 
 	public class ZTicket {
-		public Long id {get; private set;}
+		public Long id {get; set;}
 		public String url {get; private set;}
 		public String external_id {get; set;}
 		public TicketType type {get; set;}
@@ -544,7 +544,7 @@ public with sharing class ZendeskTickets {
 		}
 	}
 
-	public TicketsWrapper autocompleteProblems(String autoCompleteText) {
+	public TicketsWrapper autoCompleteProblems(String autoCompleteText) {
 		if (String.isBlank(autoCompleteText) || autoCompleteText.length() < 2) { throw new ZendeskException('autoCompleteText parameter must at least 2 characters'); }
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/problems/autocomplete.json?text=' + autoCompleteText);
