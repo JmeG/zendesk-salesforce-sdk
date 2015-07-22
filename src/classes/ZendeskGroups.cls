@@ -70,7 +70,7 @@ public with sharing class ZendeskGroups {
 
 	// Private helper method to query multiple groups
 	private GroupsWrapper getGroupsInternal(HttpRequest req) {
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		return (GroupsWrapper)JSON.deserialize(replaceReservedWords(resBody), GroupsWrapper.class);
 	}
@@ -79,7 +79,7 @@ public with sharing class ZendeskGroups {
 		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		// use replaceReservedWords to work around JSON containing Salesforce keyword "group"
 		GroupWrapper wrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(resBody), GroupWrapper.class);
@@ -99,7 +99,7 @@ public with sharing class ZendeskGroups {
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/groups.json');
 		req.setBody(gen.getAsString());
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		GroupWrapper resultWrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(resBody), GroupWrapper.class);
 		return ((resultWrapper==null || resultWrapper.x_group == null) ? null : resultWrapper.x_group.id);
@@ -120,14 +120,14 @@ public with sharing class ZendeskGroups {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
 		req.setBody(groupJSON);
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public void deleteGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	// Retrieves all pages of groups. Uses the Group field "id" as the map key

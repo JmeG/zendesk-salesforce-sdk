@@ -36,7 +36,7 @@ public with sharing class ZendeskAttachments {
 			HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/uploads.json?filename=' + EncodingUtil.urlEncode(fileName, 'UTF-8'));
 			req.setHeader('Content-Type', fileContentType);
 			req.setBodyAsBlob(fileBody);
-			String resBody = ZendeskAPI.sendRequest(req);
+			String resBody = zapi.sendRequest(req);
 
 			// Extract the token from the response
 			Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(resBody);
@@ -59,14 +59,14 @@ public with sharing class ZendeskAttachments {
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public ZAttachment getAttachment(Long attachmentId) {
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		AttachmentWrapper resultWrapper = (AttachmentWrapper)JSON.deserialize(resBody, AttachmentWrapper.class);
 		return resultWrapper.attachment;
@@ -79,7 +79,7 @@ public with sharing class ZendeskAttachments {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + commentId + '/attachments/' + attachmentId + '/redact.json');
 		req.setBody('{}');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 }

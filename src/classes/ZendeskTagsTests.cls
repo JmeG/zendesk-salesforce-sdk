@@ -47,7 +47,7 @@ private class ZendeskTagsTests {
 
         Test.startTest();
         ZendeskTags ztags = new ZendeskTags(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTags.TagsWrapper wrapper = ztags.getTags(ZendeskTags.Entity.users, 123);
+        ZendeskTags.TagsWrapper wrapper = ztags.getTags(ZendeskTags.Resource.users, 123);
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper);
@@ -61,7 +61,7 @@ private class ZendeskTagsTests {
 
         Test.startTest();
         ZendeskTags ztags = new ZendeskTags(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ztags.setTags(ZendeskTags.Entity.users, 123, new String[] {'tag1', 'tag2'});
+        ztags.setTags(ZendeskTags.Resource.users, 123, new String[] {'tag1', 'tag2'});
         Test.stopTest();
 
         System.assert(true);
@@ -72,7 +72,7 @@ private class ZendeskTagsTests {
 
         Test.startTest();
         ZendeskTags ztags = new ZendeskTags(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ztags.addTags(ZendeskTags.Entity.users, 123, new String[] {'tag1', 'tag2'});
+        ztags.addTags(ZendeskTags.Resource.users, 123, new String[] {'tag1', 'tag2'});
         Test.stopTest();
 
         System.assert(true);
@@ -83,7 +83,7 @@ private class ZendeskTagsTests {
 
         Test.startTest();
         ZendeskTags ztags = new ZendeskTags(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ztags.removeTags(ZendeskTags.Entity.users, 123, new String[] {'tag1', 'tag2'});
+        ztags.removeTags(ZendeskTags.Resource.users, 123, new String[] {'tag1', 'tag2'});
         Test.stopTest();
 
         System.assert(true);

@@ -129,7 +129,7 @@ public with sharing class ZendeskTickets {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
 		return resultWrapper.ticket;
@@ -176,7 +176,7 @@ public with sharing class ZendeskTickets {
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/tickets.json');
 		req.setBody('{ "ticket": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zticket))) + ' }');
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
@@ -198,7 +198,7 @@ public with sharing class ZendeskTickets {
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/channels/twitter/tickets.json');
 		req.setBody(gen.getAsString());
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
@@ -209,7 +209,7 @@ public with sharing class ZendeskTickets {
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/tickets/create_many.json');
 		req.setBody('{ "tickets": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ztickets))) + ' }');
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		TicketsWrapper resultsWrapper = (TicketsWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketsWrapper.class);
 		return ((resultsWrapper==null || resultsWrapper.tickets==null) ? null : resultsWrapper.tickets);
@@ -324,7 +324,7 @@ public with sharing class ZendeskTickets {
 
 	// Helper method for getting tickets
 	private TicketsWrapper getTickets(HttpRequest req) {
-        String resBody = ZendeskAPI.sendRequest(req);
+        String resBody = zapi.sendRequest(req);
 
         return (TicketsWrapper)JSON.deserialize(resBody, TicketsWrapper.class);
     }
@@ -333,7 +333,7 @@ public with sharing class ZendeskTickets {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/collaborators.json');
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		return (ZendeskUsers.UsersWrapper)JSON.deserialize(resBody, ZendeskUsers.UsersWrapper.class);
     }
@@ -342,7 +342,7 @@ public with sharing class ZendeskTickets {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/channels/twitter/tickets/' + ticketId + '/statuses.json');
-        String resBody = ZendeskAPI.sendRequest(req);
+        String resBody = zapi.sendRequest(req);
 
 		return (Map<String, Object>)JSON.deserializeUntyped(resBody);
 	}
@@ -353,7 +353,7 @@ public with sharing class ZendeskTickets {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		req.setBody('{ "ticket": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zticket))) + ' }');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public void updateTickets(ZTicket[] ztickets) {
@@ -364,7 +364,7 @@ public with sharing class ZendeskTickets {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/update_many.json');
 		req.setBody('{ "tickets": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ztickets))) + ' }');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public void updateTickets(Long[] ticketIds, ZTicket zticket) {
@@ -373,7 +373,7 @@ public with sharing class ZendeskTickets {
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/update_many.json?ids=' + ZendeskAPI.arrayToCSV(ticketIds));
 		req.setBody('{ "ticket": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zticket))) + ' }');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	// helper method to add a new comment to a ticket
@@ -388,7 +388,7 @@ public with sharing class ZendeskTickets {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		req.setBody('{ "ticket": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ticket))) + ' }');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	// helper method to add a new comment to a ticket and change its status
@@ -405,7 +405,7 @@ public with sharing class ZendeskTickets {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
 		req.setBody('{ "ticket": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ticket))) + ' }');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public void mergeTickets(Long[] sourceTicketIds, String sourceComment, Long targetTicketId, String targetComment) {
@@ -422,28 +422,28 @@ public with sharing class ZendeskTickets {
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/tickets/' + targetTicketId + '/merge.json');
 		req.setBody(gen.getAsString());
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public void deleteTicket(Long ticketId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '.json');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public void deleteTickets(Long[] ticketIds) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/tickets/destroy_many.json?ids=' + ZendeskAPI.arrayToCSV(ticketIds));
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public Map<String, Object> getTicketRelatedInfo(Long ticketId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/related.json');
-        String resBody = ZendeskAPI.sendRequest(req);
+        String resBody = zapi.sendRequest(req);
 
 		return (Map<String, Object>)JSON.deserializeUntyped(resBody);
 	}
@@ -452,21 +452,21 @@ public with sharing class ZendeskTickets {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/mark_as_spam.json');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public void markTicketsAsSpam(Long[] ticketIds) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/mark_many_as_spam.json?ids=' + ZendeskAPI.arrayToCSV(ticketIds));
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public TicketsWrapper autoCompleteProblems(String autoCompleteText) {
 		if (String.isBlank(autoCompleteText) || autoCompleteText.length() < 2) { throw new ZendeskException('autoCompleteText parameter must at least 2 characters'); }
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/problems/autocomplete.json?text=' + autoCompleteText);
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		return (TicketsWrapper)JSON.deserialize(resBody, TicketsWrapper.class);
     }

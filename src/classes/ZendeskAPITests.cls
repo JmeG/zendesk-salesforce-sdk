@@ -28,7 +28,7 @@ private class ZendeskAPITests {
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json');
 
         Test.startTest();
-        String resBody = ZendeskAPI.sendRequest(req);
+        String resBody = zapi.sendRequest(req);
         Test.stopTest();
 
         System.assertNotEquals(null, resBody);

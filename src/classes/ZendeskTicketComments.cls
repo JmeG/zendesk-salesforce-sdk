@@ -41,7 +41,7 @@ public with sharing class ZendeskTicketComments {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments.json' + (page==null ? '' : '?page=' + page));
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		return (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketCommentsWrapper.class);
 	}
@@ -53,7 +53,7 @@ public with sharing class ZendeskTicketComments {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/redact.json');
 		req.setBody('{"text": "' + redactText + '"}');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public void makeCommentPrivate(Long ticketId, Long ticketCommentId) {
@@ -61,7 +61,7 @@ public with sharing class ZendeskTicketComments {
 		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/make_private.json');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"

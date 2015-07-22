@@ -65,7 +65,7 @@ public with sharing class ZendeskTicketFields {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
 		return wrapper.ticket_field;
@@ -79,7 +79,7 @@ public with sharing class ZendeskTicketFields {
 	// Get a specific page of User Fields
 	public TicketFieldsWrapper getFields(Long page) {
 		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields.json' + (page==null ? '' : '?page=' + page));
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		return (TicketFieldsWrapper)JSON.deserialize(resBody, TicketFieldsWrapper.class);
 	}
@@ -88,7 +88,7 @@ public with sharing class ZendeskTicketFields {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	public Long createField(ZTicketField zfield) {
@@ -96,7 +96,7 @@ public with sharing class ZendeskTicketFields {
 
 		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/ticket_fields/.json');
 		req.setBody('{ "ticket_field": ' + JSON.serialize(zfield) + ' }');
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
 		TicketFieldWrapper resultWrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_field == null) ? null : resultWrapper.ticket_field.id);
@@ -108,7 +108,7 @@ public with sharing class ZendeskTicketFields {
 
 		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
 		req.setBody('{ "ticket_field": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zfield)) + ' }');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
 	// Retrieves all pages of ticket fields. Uses the field "id" as the map key

@@ -73,7 +73,7 @@ public with sharing class ZendeskUserFields {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
-        String resBody = ZendeskAPI.sendRequest(req);
+        String resBody = zapi.sendRequest(req);
 
         UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(resBody), UserFieldWrapper.class);
         return wrapper.user_field;
@@ -87,7 +87,7 @@ public with sharing class ZendeskUserFields {
     // Get a specific page of User Fields
     public UserFieldsWrapper getFields(Long page) {
         HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/user_fields.json' + (page==null ? '' : '?page=' + page));
-        String resBody = ZendeskAPI.sendRequest(req);
+        String resBody = zapi.sendRequest(req);
 
         return (UserFieldsWrapper)JSON.deserialize(replaceReservedWords(resBody), UserFieldsWrapper.class);
     }
@@ -96,7 +96,7 @@ public with sharing class ZendeskUserFields {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
 	}
 
     public void reorderFields(Long[] orderedFieldIds) {
@@ -104,7 +104,7 @@ public with sharing class ZendeskUserFields {
 
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/user_fields/reorder.json');
         req.setBody('{ "user_field_ids": ' + JSON.serialize(orderedFieldIds) + '}');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
     }
 
     public Long createField(ZUserField zfield) {
@@ -112,7 +112,7 @@ public with sharing class ZendeskUserFields {
 
         HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/user_fields.json');
         req.setBody('{ "user_field": ' + unreplaceReservedWords(JSON.serialize(zfield)) + '}');
-		String resBody = ZendeskAPI.sendRequest(req);
+		String resBody = zapi.sendRequest(req);
 
         UserFieldWrapper resultWrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(resBody), UserFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.user_field==null) ? null : resultWrapper.user_field.id);
@@ -125,7 +125,7 @@ public with sharing class ZendeskUserFields {
         HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/user_fields/' + fieldId + '.json');
 		String fieldJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zfield)));
 		req.setBody('{ "user_field": ' + fieldJson + ' }');
-		ZendeskAPI.sendRequest(req);
+		zapi.sendRequest(req);
     }
 
     // non-native API method
