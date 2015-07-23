@@ -14,13 +14,13 @@ public class ZendeskTicketComments {
 		public String html_body {get;set;}
 		public Boolean x_public {get;set;} // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
 		public Long author_id {get;set;}
-		public ZendeskAttachments.ZAttachment[] attachments {get;set;}
+		public List<ZendeskAttachments.ZAttachment> attachments {get;set;}
 		public ZendeskTickets.ZTicketVia via {get;set;}
 		public DateTime created_at {get; private set;}
 	}
 
 	public class TicketCommentsWrapper extends ZendeskPagingSupport {
-		public ZTicketComment[] comments {get;set;}
+		public List<ZTicketComment> comments {get;set;}
 	}
 
 	private class TicketCommentWrapper {

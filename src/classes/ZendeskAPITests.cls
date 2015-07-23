@@ -45,10 +45,10 @@ private class ZendeskAPITests {
         Test.stopTest();
     }
 
-    static testMethod void testArrayToCSV() {
+    static testMethod void testToCSV() {
         Test.startTest();
-        System.assertEquals('1,2,3', ZendeskAPI.arrayToCSV(new Long[] { 1, 2, 3 }));
-        System.assertEquals('1,2,3', ZendeskAPI.arrayToCSV(new String[] { '1', '2', '3' }));
+        System.assertEquals('1,2,3', ZendeskAPI.toCSV(new Set<Long> { 1, 2, 3 }));
+        System.assertEquals('1,2,3', ZendeskAPI.toCSV(new Set<String> { '1', '2', '3' }));
         Test.stopTest();
     }
 

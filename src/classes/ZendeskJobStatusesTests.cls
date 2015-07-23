@@ -39,7 +39,7 @@ private class ZendeskJobStatusesTests {
 
         Test.startTest();
         ZendeskJobStatuses zjobs = new ZendeskJobStatuses(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskJobStatuses.JobStatus[] jobs = zjobs.getJobStatuses(new String[] {'abc123', 'abc345'});
+        ZendeskJobStatuses.JobStatus[] jobs = zjobs.getJobStatuses(new Set<String> {'abc123', 'abc345'});
         Test.stopTest();
 
         System.assertNotEquals(null, jobs);

@@ -71,7 +71,7 @@ private class ZendeskOrganizationsTests {
 
         Test.startTest();
 		ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskOrganizations.OrganizationsWrapper results = zorgs.getOrganizationsByIds(new Long[] {123, 456});
+		ZendeskOrganizations.OrganizationsWrapper results = zorgs.getOrganizationsByIds(new Set<Long> {123, 456});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -84,7 +84,7 @@ private class ZendeskOrganizationsTests {
 
         Test.startTest();
 		ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskOrganizations.OrganizationsWrapper results = zorgs.getOrganizationsByExternalIds(new String[] {'123', '456'});
+		ZendeskOrganizations.OrganizationsWrapper results = zorgs.getOrganizationsByExternalIds(new Set<String> {'123', '456'});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -224,7 +224,7 @@ private class ZendeskOrganizationsTests {
 
         Test.startTest();
 		ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskJobStatuses.JobStatus jobStatus = zorgs.updateOrganizations(new Long[] {123, 456}, zorg);
+		ZendeskJobStatuses.JobStatus jobStatus = zorgs.updateOrganizations(new Set<Long> {123, 456}, zorg);
         Test.stopTest();
 
         System.assert(true);
@@ -238,7 +238,7 @@ private class ZendeskOrganizationsTests {
 
         Test.startTest();
 		ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskJobStatuses.JobStatus jobStatus = zorgs.updateOrganizations(new String[] {'123', '456'}, zorg);
+		ZendeskJobStatuses.JobStatus jobStatus = zorgs.updateOrganizations(new Set<String> {'123', '456'}, zorg);
         Test.stopTest();
 
         System.assert(true);
@@ -260,7 +260,7 @@ private class ZendeskOrganizationsTests {
 
         Test.startTest();
         ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskJobStatuses.JobStatus jobStatus = zorgs.deleteOrganizations(new Long[] {123, 456});
+        ZendeskJobStatuses.JobStatus jobStatus = zorgs.deleteOrganizations(new Set<Long> {123, 456});
         Test.stopTest();
 
         System.assert(true);
@@ -271,7 +271,7 @@ private class ZendeskOrganizationsTests {
 
         Test.startTest();
         ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskJobStatuses.JobStatus jobStatus = zorgs.deleteOrganizations(new String[] {'123', '456'} );
+        ZendeskJobStatuses.JobStatus jobStatus = zorgs.deleteOrganizations(new Set<String> {'123', '456'} );
         Test.stopTest();
 
         System.assert(true);

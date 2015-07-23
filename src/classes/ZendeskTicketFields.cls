@@ -16,7 +16,7 @@ public class ZendeskTicketFields {
 		public String title {get;set;}
 		public String raw_title {get;set;}
 		public Boolean active {get;set;}
-		public ZCustomFieldOption[] custom_field_options {get;set;}
+		public List<ZCustomFieldOption> custom_field_options {get;set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
 
@@ -49,7 +49,7 @@ public class ZendeskTicketFields {
 	}
 
 	public class TicketFieldsWrapper extends ZendeskPagingSupport {
-		public ZTicketField[] ticket_fields {get;set;}
+		public List<ZTicketField> ticket_fields {get;set;}
 	}
 
 	private class TicketFieldWrapper {

@@ -24,7 +24,7 @@ public class ZendeskUserFields {
 	    //public Boolean x_system {get;set;} // NOTE: "system" is reserved
         //public String regexp_for_validation {get;set;}
 	    //public String tag {get;set;}
-	    public ZCustomFieldOption[] custom_field_options {get;set;}
+	    public List<ZCustomFieldOption> custom_field_options {get;set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
 
@@ -57,7 +57,7 @@ public class ZendeskUserFields {
 	}
 
     public class UserFieldsWrapper extends ZendeskPagingSupport {
-        public ZUserField[] user_fields {get;set;}
+        public List<ZUserField> user_fields {get;set;}
     }
 
     private class UserFieldWrapper {
@@ -99,7 +99,7 @@ public class ZendeskUserFields {
 		zapi.sendRequest(req);
 	}
 
-    public void reorderFields(Long[] orderedFieldIds) {
+    public void reorderFields(List<Long> orderedFieldIds) {
         if (orderedFieldIds == null || orderedFieldIds.size() < 2) { throw new ZendeskException('orderedFieldIds parameter contain at least 2 items'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/user_fields/reorder.json');

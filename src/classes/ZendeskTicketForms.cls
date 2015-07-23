@@ -22,7 +22,7 @@ public class ZendeskTicketForms {
 		public Boolean x_default {get;set;} // Use "x_default" in place of "default" which is a reserved keyword. Requires custom de/serialization.
 		public Boolean end_user_visible {get;set;}
 		public Long position {get;set;}
-		public Long[] ticket_field_ids {get;set;}
+		public List<Long> ticket_field_ids {get;set;}
 	}
 
 	private class TicketFormWrapper {
@@ -30,7 +30,7 @@ public class ZendeskTicketForms {
 	}
 
 	public class TicketFormsWrapper extends ZendeskPagingSupport {
-		public ZTicketForm[] ticket_forms {get;set;}
+		public List<ZTicketForm> ticket_forms {get;set;}
 	}
 
 	public ZendeskTicketForms(ZendeskAPI zapi) {
@@ -90,7 +90,7 @@ public class ZendeskTicketForms {
 		zapi.sendRequest(req);
 	}
 
-	public void reorderTicketForms(Long[] orderedTicketFormIds) {
+	public void reorderTicketForms(List<Long> orderedTicketFormIds) {
         if (orderedTicketFormIds == null || orderedTicketFormIds.size() < 2) { throw new ZendeskException('orderedTicketFormIds parameter contain at least 2 items'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/ticket_forms/reorder.json');

@@ -25,7 +25,7 @@ public class ZendeskGroups {
 	}
 
 	public class GroupsWrapper extends ZendeskPagingSupport {
-		public ZGroup[] groups {get;set;}
+		public List<ZGroup> groups {get;set;}
 	}
 
 	public ZendeskGroups(ZendeskAPI zapi) {

@@ -91,7 +91,7 @@ private class ZendeskTicketsTests {
 
         Test.startTest();
 		ZendeskTickets ztickets = new ZendeskTickets(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTickets.TicketsWrapper results = ztickets.getTicketsByIds(new Long[] {1,2});
+		ZendeskTickets.TicketsWrapper results = ztickets.getTicketsByIds(new Set<Long> {1,2});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -168,7 +168,7 @@ private class ZendeskTicketsTests {
         Test.startTest();
         ZendeskTickets ztickets = new ZendeskTickets(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTickets.ZTicket zt = new ZendeskTickets.ZTicket();
-        ZendeskJobStatuses.JobStatus jobStatus = ztickets.updateTickets(new Long[] { 123, 456 }, zt);
+        ZendeskJobStatuses.JobStatus jobStatus = ztickets.updateTickets(new Set<Long> { 123, 456 }, zt);
         Test.stopTest();
 
         System.assert(true);
@@ -180,7 +180,7 @@ private class ZendeskTicketsTests {
         Test.startTest();
         ZendeskTickets ztickets = new ZendeskTickets(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTickets.ZTicket zt = new ZendeskTickets.ZTicket();
-        ZendeskJobStatuses.JobStatus jobStatus = ztickets.mergeTickets(new Long[] { 123, 456 }, 'comment1', 789, 'comment2');
+        ZendeskJobStatuses.JobStatus jobStatus = ztickets.mergeTickets(new Set<Long> { 123, 456 }, 'comment1', 789, 'comment2');
         Test.stopTest();
 
         System.assert(true);
@@ -192,7 +192,7 @@ private class ZendeskTicketsTests {
         Test.startTest();
         ZendeskTickets ztickets = new ZendeskTickets(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTickets.ZTicket zt = new ZendeskTickets.ZTicket();
-        ztickets.deleteTickets(new Long[] { 123, 456 });
+        ztickets.deleteTickets(new Set<Long> { 123, 456 });
         Test.stopTest();
 
         System.assert(true);
@@ -227,7 +227,7 @@ private class ZendeskTicketsTests {
         Test.startTest();
         ZendeskTickets ztickets = new ZendeskTickets(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTickets.ZTicket zt = new ZendeskTickets.ZTicket();
-        ztickets.markTicketsAsSpam(new Long[] {123, 456});
+        ztickets.markTicketsAsSpam(new Set<Long> {123, 456});
         Test.stopTest();
 
         System.assert(true);

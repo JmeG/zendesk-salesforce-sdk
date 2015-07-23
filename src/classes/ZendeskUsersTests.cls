@@ -83,7 +83,7 @@ private class ZendeskUsersTests {
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskUsers.ZUser zu = new ZendeskUsers.ZUser();
-		zusers.updateUsers(new Long[] {123,456}, zu);
+		zusers.updateUsers(new Set<Long> {123,456}, zu);
         Test.stopTest();
 
 		System.assert(true);
@@ -95,7 +95,7 @@ private class ZendeskUsersTests {
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskUsers.ZUser zu = new ZendeskUsers.ZUser();
-		zusers.updateUsers(new String[] {'123','456'}, zu);
+		zusers.updateUsers(new Set<String> {'123','456'}, zu);
         Test.stopTest();
 
 		System.assert(true);
@@ -131,7 +131,7 @@ private class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsers.UsersWrapper results = zusers.getUsersByIds(new Long[] {123, 456});
+		ZendeskUsers.UsersWrapper results = zusers.getUsersByIds(new Set<Long> {123, 456});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -144,7 +144,7 @@ private class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsers.UsersWrapper results = zusers.getUsersByExternalIds(new String[] {'123', '456'});
+		ZendeskUsers.UsersWrapper results = zusers.getUsersByExternalIds(new Set<String> {'123', '456'});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -231,7 +231,7 @@ private class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		zusers.deleteUsers(new Long[] {123,456});
+		zusers.deleteUsers(new Set<Long> {123,456});
         Test.stopTest();
 
 		System.assert(true);
@@ -242,7 +242,7 @@ private class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		zusers.deleteUsers(new String[] {'123','456'});
+		zusers.deleteUsers(new Set<String> {'123','456'});
         Test.stopTest();
 
 		System.assert(true);

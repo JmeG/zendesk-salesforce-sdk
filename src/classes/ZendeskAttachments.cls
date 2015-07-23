@@ -14,7 +14,7 @@ public class ZendeskAttachments {
 		public String name {get;set;}
 		public String content_url {get;set;}
 		public String content_type {get;set;}
-		//public Object[] thumbnails {get;set;}
+		//public List<Object> thumbnails {get;set;}
 		public Long size {get;set;}
 	}
 
