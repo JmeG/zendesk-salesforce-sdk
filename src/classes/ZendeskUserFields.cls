@@ -6,9 +6,8 @@
 // PUT    /api/v2/user_fields/{id}.json
 // PUT    /api/v2/user_fields/reorder.json
 // DELETE /api/v2/user_fields/{id}.json
-public class ZendeskUserFields {
+public class ZendeskUserFields extends ZendeskResourceBase {
 
-    private final ZendeskAPI zapi;
     private Map<String, ZUserField> userFieldsMap {get; private set; }
 
     public class ZUserField {
@@ -65,7 +64,7 @@ public class ZendeskUserFields {
     }
 
     public ZendeskUserFields(ZendeskAPI zapi) {
-        this.zapi = zapi;
+        super(zapi);
         userFieldsMap = new Map<String, ZUserField>();
     }
 
@@ -73,9 +72,7 @@ public class ZendeskUserFields {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('GET', '/user_fields/' + fieldId + '.json');
-        String resBody = zapi.sendRequest(req);
-
-        UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(resBody), UserFieldWrapper.class);
+        UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), UserFieldWrapper.class);
         return wrapper.user_field;
     }
 
@@ -87,23 +84,20 @@ public class ZendeskUserFields {
     // Get a specific page of User Fields
     public UserFieldsWrapper getFields(Long page) {
         HttpRequest req = zapi.createRequest('GET', '/user_fields.json' + (page==null ? '' : '?page=' + page));
-        String resBody = zapi.sendRequest(req);
-
-        return (UserFieldsWrapper)JSON.deserialize(replaceReservedWords(resBody), UserFieldsWrapper.class);
+        return (UserFieldsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), UserFieldsWrapper.class);
     }
 
     public void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', '/user_fields/' + fieldId + '.json');
-		zapi.sendRequest(req);
+		zapi.sendRequest(zapi.createRequest('DELETE', '/user_fields/' + fieldId + '.json'));
 	}
 
     public void reorderFields(List<Long> orderedFieldIds) {
         if (orderedFieldIds == null || orderedFieldIds.size() < 2) { throw new ZendeskException('orderedFieldIds parameter contain at least 2 items'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/user_fields/reorder.json');
-        req.setBody('{ "user_field_ids": ' + JSON.serialize(orderedFieldIds) + '}');
+        req.setBody('{"user_field_ids": ' + JSON.serialize(orderedFieldIds) + '}');
 		zapi.sendRequest(req);
     }
 
@@ -111,10 +105,8 @@ public class ZendeskUserFields {
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('POST', '/user_fields.json');
-        req.setBody('{ "user_field": ' + unreplaceReservedWords(JSON.serialize(zfield)) + '}');
-		String resBody = zapi.sendRequest(req);
-
-        UserFieldWrapper resultWrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(resBody), UserFieldWrapper.class);
+        req.setBody('{"user_field": ' + unreplaceReservedWords(JSON.serialize(zfield)) + '}');
+        UserFieldWrapper resultWrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), UserFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.user_field==null) ? null : resultWrapper.user_field.id);
     }
 
@@ -123,8 +115,7 @@ public class ZendeskUserFields {
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/user_fields/' + fieldId + '.json');
-		String fieldJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zfield)));
-		req.setBody('{ "user_field": ' + fieldJson + ' }');
+		req.setBody('{"user_field": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zfield))) + '}');
 		zapi.sendRequest(req);
     }
 

@@ -5,9 +5,7 @@
 // PUT    /api/v2/tickets/{ticket_id}/comments/{comment_id}/attachments/{attachment_id}/redact.json
 // DELETE /api/v2/attachments/{id}.json
 // DELETE /api/v2/uploads/{token}.json
-public class ZendeskAttachments {
-
-	private final ZendeskAPI zapi;
+public class ZendeskAttachments extends ZendeskResourceBase {
 
 	public class ZAttachment {
 		public Long id {get; private set;}
@@ -23,7 +21,7 @@ public class ZendeskAttachments {
 	}
 
 	public ZendeskAttachments(ZendeskAPI zapi) {
-		this.zapi = zapi;
+		super(zapi);
 	}
 
 	public String uploadAttachment(String fileName, String fileContentType, Blob fileBody) {

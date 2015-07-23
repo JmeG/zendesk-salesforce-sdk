@@ -5,9 +5,8 @@
 // POST   /api/v2/ticket_fields.json
 // PUT    /api/v2/ticket_fields/{id}.json
 // DELETE /api/v2/ticket_fields/{id}.json
-public class ZendeskTicketFields {
+public class ZendeskTicketFields extends ZendeskResourceBase {
 
-	private final ZendeskAPI zapi;
 	private Map<Long, ZTicketField> fieldsMap {get; private set; }
 
 	public class ZTicketField {
@@ -57,7 +56,7 @@ public class ZendeskTicketFields {
 	}
 
 	public ZendeskTicketFields(ZendeskAPI zapi) {
-		this.zapi = zapi;
+		super(zapi);
 		fieldsMap = new Map<Long, ZTicketField>();
 	}
 

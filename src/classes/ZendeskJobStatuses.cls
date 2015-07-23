@@ -2,9 +2,7 @@
 // Currently supports the following API endpoints:
 // GET /api/v2/job_statuses/{id}.json
 // GET /api/v2/job_statuses/show_many.json?ids={ids}
-public class ZendeskJobStatuses {
-
-	private final ZendeskAPI zapi;
+public class ZendeskJobStatuses extends ZendeskResourceBase {
 
 	public class JobStatus {
 		public String id {get;set;}
@@ -34,7 +32,7 @@ public class ZendeskJobStatuses {
 	}
 
 	public ZendeskJobStatuses(ZendeskAPI zapi) {
-		this.zapi = zapi;
+		super(zapi);
 	}
 
 	public JobStatus getJobStatus(String jobId) {
@@ -50,7 +48,7 @@ public class ZendeskJobStatuses {
 	public List<JobStatus> getJobStatuses(Set<String> jobIds) {
 		if (jobIds == null || jobIds.isEmpty()) { throw new ZendeskException('jobIds parameter must not be null or empty'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/job_statuses/show_many.json?ids=' + ZendeskAPI.toCSV(jobIds));
+		HttpRequest req = zapi.createRequest('GET', '/job_statuses/show_many.json?ids=' + toCSV(jobIds));
 		String resBody = zapi.sendRequest(req);
 
 		JobStatusesWrapper wrapper = (JobStatusesWrapper)JSON.deserialize(resBody, JobStatusesWrapper.class);

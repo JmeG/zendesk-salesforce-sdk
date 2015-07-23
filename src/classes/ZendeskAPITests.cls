@@ -45,13 +45,6 @@ private class ZendeskAPITests {
         Test.stopTest();
     }
 
-    static testMethod void testToCSV() {
-        Test.startTest();
-        System.assertEquals('1,2,3', ZendeskAPI.toCSV(new Set<Long> { 1, 2, 3 }));
-        System.assertEquals('1,2,3', ZendeskAPI.toCSV(new Set<String> { '1', '2', '3' }));
-        Test.stopTest();
-    }
-
     static testMethod void testStripJsonNulls() {
         Account acct = new Account();
         acct.Name = 'test';

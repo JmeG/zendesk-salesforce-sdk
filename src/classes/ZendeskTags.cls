@@ -19,20 +19,18 @@ DELETE /api/v2/topics/{id}/tags.json
 DELETE /api/v2/organizations/{id}/tags.json
 DELETE /api/v2/users/{id}/tags.json
 */
-public class ZendeskTags {
-
-	private final ZendeskAPI zapi;
+public class ZendeskTags extends ZendeskResourceBase {
 
 	public enum Resource { tickets, topics, organizations, users }
 
 	// Used to deserialize the result of a getTags() API call
 	public class TagsWrapper extends ZendeskPagingSupport {
-		public String[] tags {get;set;}
+		public List<String> tags {get;set;}
 	}
 
 	// Used to deserialize the result of a listTags() API call
 	public class ListTagsWrapper extends ZendeskPagingSupport {
-		public ListTags[] tags {get;set;}
+		public List<ListTags> tags {get;set;}
 	}
 
 	public class ListTags {
@@ -41,7 +39,7 @@ public class ZendeskTags {
 	}
 
 	public ZendeskTags(ZendeskAPI zapi) {
-		this.zapi = zapi;
+		super(zapi);
 	}
 
 	public ListTagsWrapper listTags() {

@@ -7,9 +7,8 @@
 // POST   /api/v2/groups.json
 // PUT    /api/v2/groups/{id}.json
 // DELETE /api/v2/groups/{id}.json
-public class ZendeskGroups {
+public class ZendeskGroups extends ZendeskResourceBase {
 
-	private final ZendeskAPI zapi;
 	private Map<Long, ZGroup> groupsMap;
 
 	public class ZGroup {
@@ -29,7 +28,7 @@ public class ZendeskGroups {
 	}
 
 	public ZendeskGroups(ZendeskAPI zapi) {
-		this.zapi = zapi;
+		super(zapi);
 		groupsMap = new Map<Long, ZGroup>();
 	}
 
