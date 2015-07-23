@@ -57,8 +57,6 @@ private class ZendeskGroupsTests {
     static testMethod void testCreateGroup() {
         Test.setMock(HttpCalloutMock.class, new MockGroupResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
         ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         Long groupId = zgroups.createGroup('foo');

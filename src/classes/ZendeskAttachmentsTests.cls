@@ -76,8 +76,6 @@ private class ZendeskAttachmentsTests {
     static testMethod void testDeleteAttachmentException() {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
         ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		try {

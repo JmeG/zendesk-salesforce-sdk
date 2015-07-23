@@ -85,10 +85,8 @@ private class ZendeskTicketFormsTests {
     static testMethod void testReorderFields() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
-        ZendeskTicketForms zfields = new ZendeskTicketForms(zapi);
+        ZendeskTicketForms zfields = new ZendeskTicketForms(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zfields.reorderTicketForms(new Long[] { 123, 456 });
         Test.stopTest();
 

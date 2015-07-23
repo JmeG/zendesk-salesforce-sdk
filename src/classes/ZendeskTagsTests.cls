@@ -57,8 +57,6 @@ private class ZendeskTagsTests {
     static testMethod void testSetTags() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
         Test.startTest();
         ZendeskTags ztags = new ZendeskTags(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ztags.setTags(ZendeskTags.Resource.users, 123, new String[] {'tag1', 'tag2'});
