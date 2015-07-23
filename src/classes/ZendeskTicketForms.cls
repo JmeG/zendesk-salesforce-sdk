@@ -45,7 +45,7 @@ public class ZendeskTicketForms {
 
 	// Get a specific page of Ticket Forms
 	public TicketFormsWrapper getTicketForms(Long page) {
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms.json' + (page==null ? '' : '?page=' + page));
+		HttpRequest req = zapi.createRequest('GET', '/ticket_forms.json' + (page==null ? '' : '?page=' + page));
 		String resBody = zapi.sendRequest(req);
 
 		return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketFormsWrapper.class);
@@ -54,7 +54,7 @@ public class ZendeskTicketForms {
 	public ZTicketForm getTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_forms/' + ticketFormId + '.json');
+		HttpRequest req = zapi.createRequest('GET', '/ticket_forms/' + ticketFormId + '.json');
 		String resBody = zapi.sendRequest(req);
 
 		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketFormWrapper.class);
@@ -64,14 +64,14 @@ public class ZendeskTicketForms {
 	public void deleteTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_forms/' + ticketFormId + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', '/ticket_forms/' + ticketFormId + '.json');
 		zapi.sendRequest(req);
 	}
 
 	public Long createTicketForm(ZTicketForm ticketForm) {
 		if (ticketForm == null) { throw new ZendeskException('ticketForm parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/ticket_forms.json');
+        HttpRequest req = zapi.createRequest('POST', '/ticket_forms.json');
         String tformJson = unreplaceReservedWords(JSON.serialize(ticketForm));
         req.setBody('{ "ticket_form": ' + tformJson + '}');
 		String resBody = zapi.sendRequest(req);
@@ -84,7 +84,7 @@ public class ZendeskTicketForms {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
         if (ticketForm == null) { throw new ZendeskException('ticketForm parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_forms/' + ticketFormId + '.json');
+        HttpRequest req = zapi.createRequest('PUT', '/ticket_forms/' + ticketFormId + '.json');
 		String tformJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ticketForm)));
 		req.setBody('{ "ticket_form": ' + tformJson + ' }');
 		zapi.sendRequest(req);
@@ -93,7 +93,7 @@ public class ZendeskTicketForms {
 	public void reorderTicketForms(Long[] orderedTicketFormIds) {
         if (orderedTicketFormIds == null || orderedTicketFormIds.size() < 2) { throw new ZendeskException('orderedTicketFormIds parameter contain at least 2 items'); }
 
-        HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_forms/reorder.json');
+        HttpRequest req = zapi.createRequest('PUT', '/ticket_forms/reorder.json');
         req.setBody('{ "ticket_form_ids": ' + JSON.serialize(orderedTicketFormIds) + '}');
 		zapi.sendRequest(req);
     }
@@ -101,7 +101,7 @@ public class ZendeskTicketForms {
 	public Long cloneTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/ticket_forms/' + ticketFormId + '/clone.json');
+        HttpRequest req = zapi.createRequest('POST', '/ticket_forms/' + ticketFormId + '/clone.json');
 		String resBody = zapi.sendRequest(req);
 
         TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketFormWrapper.class);

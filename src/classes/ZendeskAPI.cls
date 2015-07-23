@@ -1,7 +1,6 @@
 // This class provides functionality for creating requests to interact with the Zendesk API
 public class ZendeskAPI {
 
-	public final static String BASE_PATH =  '/api/v2';
 	private final static String DEFAULT_USER_AGENT =  'Force.com Toolkit for Zendesk';
 
 	private String subdomain;
@@ -48,7 +47,7 @@ public class ZendeskAPI {
 		req.setMethod(reqMethod);
 		req.setTimeout(timeoutSeconds * 1000);
 		req.setHeader('Authorization', authorizationHeader);
-		req.setEndpoint('https://' + subdomain + '.zendesk.com' + path);
+		req.setEndpoint('https://' + subdomain + '.zendesk.com/api/v2' + path);
 		req.setHeader('Accept', 'application/json');
 		if (reqMethod == 'POST' || reqMethod == 'PUT') {
 			req.setHeader('Content-Type', 'application/json');
@@ -62,7 +61,7 @@ public class ZendeskAPI {
 
 	// Validate that the API login parameters are valid by simply trying to get our own user record
 	public Boolean canLogin() {
-        HttpResponse res = new Http().send(createRequest('GET', BASE_PATH + '/users/me.json'));
+        HttpResponse res = new Http().send(createRequest('GET', '/users/me.json'));
 		if (res.getStatusCode() == 200) {
 			return true;
 		} else {

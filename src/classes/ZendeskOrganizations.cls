@@ -51,47 +51,47 @@ public class ZendeskOrganizations {
 	}
 
 	public OrganizationsWrapper getOrganizations() {
-        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations.json');
+        HttpRequest req = zapi.createRequest('GET', '/organizations.json');
         return getOrganizations(req);
     }
 
     public OrganizationsWrapper getOrganizations(Long page) {
-        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations.json' + (page==null ? '' : '?page=' + page));
+        HttpRequest req = zapi.createRequest('GET', '/organizations.json' + (page==null ? '' : '?page=' + page));
         return getOrganizations(req);
     }
 
 	public OrganizationsWrapper getOrganizationsByIds(Long[] orgIds) {
 		if (orgIds == null || orgIds.isEmpty()) { throw new ZendeskException('orgIds parameter must not be null or empty'); }
 
-        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/show_many.json?ids=' + ZendeskAPI.arrayToCSV(orgIds));
+        HttpRequest req = zapi.createRequest('GET', '/organizations/show_many.json?ids=' + ZendeskAPI.arrayToCSV(orgIds));
         return getOrganizations(req);
     }
 
 	public OrganizationsWrapper getOrganizationsByExternalIds(String[] externalIds) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter must not be null or empty'); }
 
-        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/show_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
+        HttpRequest req = zapi.createRequest('GET', '/organizations/show_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
         return getOrganizations(req);
     }
 
 	public OrganizationsWrapper getOrganizations(String autoCompleteName) {
 		if (String.isBlank(autoCompleteName) || autoCompleteName.length() < 2) { throw new ZendeskException('autoCompleteName parameter must at least 2 characters'); }
 
-        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/autocomplete.json?name=' + autoCompleteName);
+        HttpRequest req = zapi.createRequest('GET', '/organizations/autocomplete.json?name=' + autoCompleteName);
         return getOrganizations(req);
     }
 
 	public OrganizationsWrapper searchOrganizations(String externalId) {
 		if (String.isBlank(externalId)) { throw new ZendeskException('externalId parameter must not be null or empty'); }
 
-        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/search.json?external_id=' + externalId);
+        HttpRequest req = zapi.createRequest('GET', '/organizations/search.json?external_id=' + externalId);
         return getOrganizations(req);
     }
 
 	public OrganizationsWrapper getUserOrganizations(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '/organizations.json');
+        HttpRequest req = zapi.createRequest('GET', '/users/' + userId + '/organizations.json');
         return getOrganizations(req);
     }
 
@@ -105,7 +105,7 @@ public class ZendeskOrganizations {
 	public ZOrganization getOrganization(Long orgId) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/' + orgId + '.json');
+        HttpRequest req = zapi.createRequest('GET', '/organizations/' + orgId + '.json');
         String resBody = zapi.sendRequest(req);
 
         OrganizationWrapper wrapper = (OrganizationWrapper)JSON.deserialize(resBody, OrganizationWrapper.class);
@@ -115,7 +115,7 @@ public class ZendeskOrganizations {
 	public Map<String, Object> getOrganizationRelatedInfo(Long orgId) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/organizations/' + orgId + '/related.json');
+        HttpRequest req = zapi.createRequest('GET', '/organizations/' + orgId + '/related.json');
         String resBody = zapi.sendRequest(req);
 
 		return (Map<String, Object>)JSON.deserializeUntyped(resBody);
@@ -124,7 +124,7 @@ public class ZendeskOrganizations {
 	public Long createOrganization(ZOrganization zorg) {
         if (zorg == null) { throw new ZendeskException('zorg parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/organizations.json');
+        HttpRequest req = zapi.createRequest('POST', '/organizations.json');
         req.setBody('{ "organization": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zorg)) + '}');
 		String resBody = zapi.sendRequest(req);
 
@@ -135,7 +135,7 @@ public class ZendeskOrganizations {
 	public ZendeskJobStatuses.JobStatus createOrganizations(ZOrganization[] zorgs) {
         if (zorgs == null || zorgs.isEmpty()) { throw new ZendeskException('zorgs parameter must not be null or empty'); }
 
-        HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/organizations/create_many.json');
+        HttpRequest req = zapi.createRequest('POST', '/organizations/create_many.json');
         req.setBody('{ "organizations": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zorgs)) + '}');
 		String resBody = zapi.sendRequest(req);
 
@@ -146,7 +146,7 @@ public class ZendeskOrganizations {
         if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
         if (zorg == null) { throw new ZendeskException('zorg parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organizations/' + orgId + '.json');
+        HttpRequest req = zapi.createRequest('PUT', '/organizations/' + orgId + '.json');
 		req.setBody('{ "organization": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zorg)) + ' }');
 		zapi.sendRequest(req);
     }
@@ -157,7 +157,7 @@ public class ZendeskOrganizations {
 			if (zorg.id == null && String.isEmpty(zorg.external_id)) { throw new ZendeskException('Each org must have either an id or external_id populated'); }
 		}
 
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organizations/update_many.json');
+		HttpRequest req = zapi.createRequest('PUT', '/organizations/update_many.json');
 		req.setBody('{ "organizations": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zorgs)) + ' }');
 		String resBody = zapi.sendRequest(req);
 
@@ -168,7 +168,7 @@ public class ZendeskOrganizations {
 		if (orgIds == null || orgIds.isEmpty()) { throw new ZendeskException('orgIds parameter must not be null or empty'); }
         if (zorg == null) { throw new ZendeskException('zorg parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organizations/update_many.json?ids=' + ZendeskAPI.arrayToCSV(orgIds));
+        HttpRequest req = zapi.createRequest('PUT', '/organizations/update_many.json?ids=' + ZendeskAPI.arrayToCSV(orgIds));
 		req.setBody('{ "organization": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zorg)) + ' }');
 		String resBody = zapi.sendRequest(req);
 
@@ -179,7 +179,7 @@ public class ZendeskOrganizations {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter must not be null or empty'); }
 		if (zorg == null) { throw new ZendeskException('zorg parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/organizations/update_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
+		HttpRequest req = zapi.createRequest('PUT', '/organizations/update_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
 		req.setBody('{ "organization": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zorg)) + ' }');
 		String resBody = zapi.sendRequest(req);
 
@@ -189,14 +189,14 @@ public class ZendeskOrganizations {
 	public void deleteOrganization(Long orgId) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/organizations/' + orgId + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', '/organizations/' + orgId + '.json');
 		zapi.sendRequest(req);
 	}
 
 	public ZendeskJobStatuses.JobStatus deleteOrganizations(Long[] orgIds) {
 		if (orgIds == null || orgIds.isEmpty()) { throw new ZendeskException('orgIds parameter must not be null or empty'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/organizations/destroy_many.json?ids=' + ZendeskAPI.arrayToCSV(orgIds));
+		HttpRequest req = zapi.createRequest('DELETE', '/organizations/destroy_many.json?ids=' + ZendeskAPI.arrayToCSV(orgIds));
 		String resBody = zapi.sendRequest(req);
 
 		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
@@ -205,7 +205,7 @@ public class ZendeskOrganizations {
 	public ZendeskJobStatuses.JobStatus deleteOrganizations(String[] externalIds) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter must not be null or empty'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/organizations/destroy_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
+		HttpRequest req = zapi.createRequest('DELETE', '/organizations/destroy_many.json?external_ids=' + ZendeskAPI.arrayToCSV(externalIds));
 		String resBody = zapi.sendRequest(req);
 
 		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);

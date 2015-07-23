@@ -33,7 +33,7 @@ public class ZendeskAttachments {
 
 		String zendeskAttachmentToken = null;
 		try {
-			HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/uploads.json?filename=' + EncodingUtil.urlEncode(fileName, 'UTF-8'));
+			HttpRequest req = zapi.createRequest('POST', '/uploads.json?filename=' + EncodingUtil.urlEncode(fileName, 'UTF-8'));
 			req.setHeader('Content-Type', fileContentType);
 			req.setBodyAsBlob(fileBody);
 			String resBody = zapi.sendRequest(req);
@@ -58,14 +58,14 @@ public class ZendeskAttachments {
 	public void deleteAttachment(Long attachmentId) {
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', '/attachments/' + attachmentId + '.json');
 		zapi.sendRequest(req);
 	}
 
 	public ZAttachment getAttachment(Long attachmentId) {
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/attachments/' + attachmentId + '.json');
+		HttpRequest req = zapi.createRequest('GET', '/attachments/' + attachmentId + '.json');
 		String resBody = zapi.sendRequest(req);
 
 		AttachmentWrapper resultWrapper = (AttachmentWrapper)JSON.deserialize(resBody, AttachmentWrapper.class);
@@ -77,7 +77,7 @@ public class ZendeskAttachments {
 		if (commentId == null) { throw new ZendeskException('commentId parameter must not be null'); }
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/tickets/' + ticketId + '/comments/' + commentId + '/attachments/' + attachmentId + '/redact.json');
+		HttpRequest req = zapi.createRequest('PUT', '/tickets/' + ticketId + '/comments/' + commentId + '/attachments/' + attachmentId + '/redact.json');
 		req.setBody('{}');
 		zapi.sendRequest(req);
 	}

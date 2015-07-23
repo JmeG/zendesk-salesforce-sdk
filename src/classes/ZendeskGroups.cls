@@ -38,7 +38,7 @@ public class ZendeskGroups {
 	}
 
 	public GroupsWrapper getGroups(Long page) {
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups.json' + (page==null ? '' : '?page=' + page));
+		HttpRequest req = zapi.createRequest('GET', '/groups.json' + (page==null ? '' : '?page=' + page));
 		return getGroupsInternal(req);
 	}
 
@@ -49,7 +49,7 @@ public class ZendeskGroups {
 
 	// Get all assignable groups by page number
 	public GroupsWrapper getAssignableGroups(Long page) {
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/assignable.json' + (page==null ? '' : '?page=' + page));
+		HttpRequest req = zapi.createRequest('GET', '/groups/assignable.json' + (page==null ? '' : '?page=' + page));
 		return getGroupsInternal(req);
 	}
 
@@ -64,7 +64,7 @@ public class ZendeskGroups {
 	public GroupsWrapper getUserGroups(Long userId, Long page) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users/' + userId + '/groups.json' + (page==null ? '' : '?page=' + page));
+		HttpRequest req = zapi.createRequest('GET', '/users/' + userId + '/groups.json' + (page==null ? '' : '?page=' + page));
 		return getGroupsInternal(req);
 	}
 
@@ -78,7 +78,7 @@ public class ZendeskGroups {
 	public ZGroup getGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
+		HttpRequest req = zapi.createRequest('GET', '/groups/' + groupId + '.json');
 		String resBody = zapi.sendRequest(req);
 
 		// use replaceReservedWords to work around JSON containing Salesforce keyword "group"
@@ -97,7 +97,7 @@ public class ZendeskGroups {
 		gen.writeEndObject();
 		gen.writeEndObject();
 
-		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/groups.json');
+		HttpRequest req = zapi.createRequest('POST', '/groups.json');
 		req.setBody(gen.getAsString());
 		String resBody = zapi.sendRequest(req);
 
@@ -118,7 +118,7 @@ public class ZendeskGroups {
 		gen.writeEndObject();
 		String groupJSON = gen.getAsString();
 
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
+		HttpRequest req = zapi.createRequest('PUT', '/groups/' + groupId + '.json');
 		req.setBody(groupJSON);
 		zapi.sendRequest(req);
 	}
@@ -126,7 +126,7 @@ public class ZendeskGroups {
 	public void deleteGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/groups/' + groupId + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', '/groups/' + groupId + '.json');
 		zapi.sendRequest(req);
 	}
 

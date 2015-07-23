@@ -16,7 +16,7 @@ private class ZendeskAPITests {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
         Test.startTest();
-        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json');
+        HttpRequest req = zapi.createRequest('GET', '/users.json');
         Test.stopTest();
 
         System.assertEquals('GET', req.getMethod());
@@ -25,7 +25,7 @@ private class ZendeskAPITests {
     static testMethod void testSendRequest() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-        HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/users.json');
+        HttpRequest req = zapi.createRequest('GET', '/users.json');
 
         Test.startTest();
         String resBody = zapi.sendRequest(req);

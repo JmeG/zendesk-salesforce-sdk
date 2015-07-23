@@ -40,7 +40,7 @@ public class ZendeskJobStatuses {
 	public JobStatus getJobStatus(String jobId) {
 		if (jobId == null) { throw new ZendeskException('jobId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/job_statuses/' + jobId + '.json');
+		HttpRequest req = zapi.createRequest('GET', '/job_statuses/' + jobId + '.json');
 		String resBody = zapi.sendRequest(req);
 
 		JobStatusWrapper wrapper = (JobStatusWrapper)JSON.deserialize(resBody, JobStatusWrapper.class);
@@ -50,7 +50,7 @@ public class ZendeskJobStatuses {
 	public JobStatus[] getJobStatuses(String[] jobIds) {
 		if (jobIds == null || jobIds.isEmpty()) { throw new ZendeskException('jobIds parameter must not be null or empty'); }
 
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/job_statuses/show_many.json?ids=' + ZendeskAPI.arrayToCSV(jobIds));
+		HttpRequest req = zapi.createRequest('GET', '/job_statuses/show_many.json?ids=' + ZendeskAPI.arrayToCSV(jobIds));
 		String resBody = zapi.sendRequest(req);
 
 		JobStatusesWrapper wrapper = (JobStatusesWrapper)JSON.deserialize(resBody, JobStatusesWrapper.class);

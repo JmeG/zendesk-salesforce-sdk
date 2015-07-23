@@ -64,7 +64,7 @@ public class ZendeskTicketFields {
 	public ZTicketField getField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
+		HttpRequest req = zapi.createRequest('GET', '/ticket_fields/' + fieldId + '.json');
 		String resBody = zapi.sendRequest(req);
 
 		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
@@ -78,7 +78,7 @@ public class ZendeskTicketFields {
 
 	// Get a specific page of User Fields
 	public TicketFieldsWrapper getFields(Long page) {
-		HttpRequest req = zapi.createRequest('GET', ZendeskAPI.BASE_PATH + '/ticket_fields.json' + (page==null ? '' : '?page=' + page));
+		HttpRequest req = zapi.createRequest('GET', '/ticket_fields.json' + (page==null ? '' : '?page=' + page));
 		String resBody = zapi.sendRequest(req);
 
 		return (TicketFieldsWrapper)JSON.deserialize(resBody, TicketFieldsWrapper.class);
@@ -87,14 +87,14 @@ public class ZendeskTicketFields {
 	public void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', '/ticket_fields/' + fieldId + '.json');
 		zapi.sendRequest(req);
 	}
 
 	public Long createField(ZTicketField zfield) {
 		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('POST', ZendeskAPI.BASE_PATH + '/ticket_fields/.json');
+		HttpRequest req = zapi.createRequest('POST', '/ticket_fields/.json');
 		req.setBody('{ "ticket_field": ' + JSON.serialize(zfield) + ' }');
 		String resBody = zapi.sendRequest(req);
 
@@ -106,7 +106,7 @@ public class ZendeskTicketFields {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', ZendeskAPI.BASE_PATH + '/ticket_fields/' + fieldId + '.json');
+		HttpRequest req = zapi.createRequest('PUT', '/ticket_fields/' + fieldId + '.json');
 		req.setBody('{ "ticket_field": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zfield)) + ' }');
 		zapi.sendRequest(req);
 	}
