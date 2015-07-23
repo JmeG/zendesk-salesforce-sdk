@@ -25,6 +25,7 @@ private class ZendeskAPITests {
     static testMethod void testSendRequest() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+        zapi.debugAll = true;
         HttpRequest req = zapi.createRequest('GET', '/users.json');
 
         Test.startTest();
