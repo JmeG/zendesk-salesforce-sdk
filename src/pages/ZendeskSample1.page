@@ -38,7 +38,7 @@
             </apex:pageBlock>
         </apex:outputpanel>
     </apex:form>
-        
+
     <c:ZendeskUserSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
     <c:ZendeskUserFieldsSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
     <c:ZendeskOrganizationsSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
@@ -47,5 +47,6 @@
     <c:ZendeskTicketFieldsSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
     <c:ZendeskTicketFormsSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
     <c:ZendeskGroupsSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
+    <c:ZendeskTagsSample subdomainParam="{!subdomain}" usernameParam="{!username}" pwdOrTokenParam="{!pwdOrToken}" authTypeParam="{!authType}" />
 
 </apex:page>
