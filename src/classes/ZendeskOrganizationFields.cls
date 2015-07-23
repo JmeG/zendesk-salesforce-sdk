@@ -13,18 +13,18 @@ public class ZendeskOrganizationFields {
 
     public class ZOrganizationField {
         public Long id {get; private set;}
-        public String key;
-	    public String type;
-	    public String title;
-	    public String raw_title;
-	    public Long position;
-	    public Boolean active;
-        public String description;
-        public String raw_description;
-	    //public Boolean x_system; // NOTE: "system" is reserved
-        //public String regexp_for_validation;
-	    //public String tag;
-	    public ZCustomFieldOption[] custom_field_options;
+        public String key {get;set;}
+	    public String type {get;set;}
+	    public String title {get;set;}
+	    public String raw_title {get;set;}
+	    public Long position {get;set;}
+	    public Boolean active {get;set;}
+        public String description {get;set;}
+        public String raw_description {get;set;}
+	    //public Boolean x_system {get;set;} // NOTE: "system" is reserved
+        //public String regexp_for_validation {get;set;}
+	    //public String tag {get;set;}
+	    public ZCustomFieldOption[] custom_field_options {get;set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
 
@@ -50,18 +50,18 @@ public class ZendeskOrganizationFields {
 	}
 
     public class ZCustomFieldOption {
-		public Long id {get; set;}
-		public String name {get; set;}
-		public String raw_name {get; set;}
-		public String value {get; set;}
+		public Long id {get;set;}
+		public String name {get;set;}
+		public String raw_name {get;set;}
+		public String value {get;set;}
 	}
 
     public class OrganizationFieldsWrapper extends ZendeskPagingSupport {
-        public ZOrganizationField[] organization_fields {get; set;}
+        public ZOrganizationField[] organization_fields {get;set;}
     }
 
     private class OrganizationFieldWrapper {
-        public ZOrganizationField organization_field {get; set;}
+        public ZOrganizationField organization_field {get;set;}
     }
 
     public ZendeskOrganizationFields(ZendeskAPI zapi) {

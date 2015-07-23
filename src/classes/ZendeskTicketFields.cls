@@ -12,11 +12,11 @@ public class ZendeskTicketFields {
 
 	public class ZTicketField {
 		public Long id {get; private set;}
-		public String type;
-		public String title;
-		public String raw_title;
-		public Boolean active;
-		public ZCustomFieldOption[] custom_field_options;
+		public String type {get;set;}
+		public String title {get;set;}
+		public String raw_title {get;set;}
+		public Boolean active {get;set;}
+		public ZCustomFieldOption[] custom_field_options {get;set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
 
@@ -43,13 +43,13 @@ public class ZendeskTicketFields {
 
 	public class ZCustomFieldOption {
 		public Long id {get; private set;}
-		public String name {get; set;}
-		public String raw_name {get; set;}
-		public String value {get; set;}
+		public String name {get;set;}
+		public String raw_name {get;set;}
+		public String value {get;set;}
 	}
 
 	public class TicketFieldsWrapper extends ZendeskPagingSupport {
-		public ZTicketField[] ticket_fields {get; set;}
+		public ZTicketField[] ticket_fields {get;set;}
 	}
 
 	private class TicketFieldWrapper {

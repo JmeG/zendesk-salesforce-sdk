@@ -31,16 +31,16 @@ public class ZendeskUsers {
 	private final ZendeskAPI zapi;
 
 	public class ZUser {
-		public Long id;
-		public String name;
-		public String email;
-		public String phone;
-		public String external_id;
-		public String alias;
-		public Boolean verified;
-		public String role;
-		public Long organization_id;
-		public Map<String, String> user_fields;
+		public Long id {get;set;}
+		public String name {get;set;}
+		public String email {get;set;}
+		public String phone {get;set;}
+		public String external_id {get;set;}
+		public String alias {get;set;}
+		public Boolean verified {get;set;}
+		public String role {get;set;}
+		public Long organization_id {get;set;}
+		public Map<String, String> user_fields {get;set;}
 		public Boolean active {get; private set;}
 		public DateTime last_login_at {get; private set;}
 		public DateTime created_at {get; private set;}

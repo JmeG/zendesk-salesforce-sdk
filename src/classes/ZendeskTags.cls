@@ -27,17 +27,17 @@ public class ZendeskTags {
 
 	// Used to deserialize the result of a getTags() API call
 	public class TagsWrapper extends ZendeskPagingSupport {
-		public String[] tags;
+		public String[] tags {get;set;}
 	}
 
 	// Used to deserialize the result of a listTags() API call
 	public class ListTagsWrapper extends ZendeskPagingSupport {
-		public ListTags[] tags;
+		public ListTags[] tags {get;set;}
 	}
 
 	public class ListTags {
-		public String name;
-		public Long count;
+		public String name {get;set;}
+		public Long count {get;set;}
 	}
 
 	public ZendeskTags(ZendeskAPI zapi) {

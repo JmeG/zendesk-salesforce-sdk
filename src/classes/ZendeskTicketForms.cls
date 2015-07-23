@@ -14,19 +14,19 @@ public class ZendeskTicketForms {
 
 	public class ZTicketForm {
 		public Long id {get; private set;}
-		public String name;
-		public String raw_name;
-		public String display_name;
-		public String raw_display_name;
-		public Boolean active;
-		public Boolean x_default; // Use "x_default" in place of "default" which is a reserved keyword. Requires custom de/serialization.
-		public Boolean end_user_visible;
-		public Long position;
-		public Long[] ticket_field_ids;
+		public String name {get;set;}
+		public String raw_name {get;set;}
+		public String display_name {get;set;}
+		public String raw_display_name {get;set;}
+		public Boolean active {get;set;}
+		public Boolean x_default {get;set;} // Use "x_default" in place of "default" which is a reserved keyword. Requires custom de/serialization.
+		public Boolean end_user_visible {get;set;}
+		public Long position {get;set;}
+		public Long[] ticket_field_ids {get;set;}
 	}
 
 	private class TicketFormWrapper {
-		public ZTicketForm ticket_form {get; set;}
+		public ZTicketForm ticket_form {get;set;}
 	}
 
 	public class TicketFormsWrapper extends ZendeskPagingSupport {

@@ -7,30 +7,30 @@ public class ZendeskJobStatuses {
 	private final ZendeskAPI zapi;
 
 	public class JobStatus {
-		public String id;
-		public String url;
-		public Integer total;
-		public Integer progress;
-		public String status;
-		public String message;
-		public List<JobStatusResults> results;
+		public String id {get;set;}
+		public String url {get;set;}
+		public Integer total {get;set;}
+		public Integer progress {get;set;}
+		public String status {get;set;}
+		public String message {get;set;}
+		public List<JobStatusResults> results {get;set;}
 	}
 
 	public class JobStatusResults {
-		public String title;
-		public String action;
-		public String errors;
-		public Integer id;
-		public Boolean success;
-		public String status;
+		public Integer id {get;set;}
+		public String title {get;set;}
+		public String action {get;set;}
+		public String errors {get;set;}
+		public Boolean success {get;set;}
+		public String status {get;set;}
 	}
 
 	private class JobStatusesWrapper {
-		public JobStatus[] job_statuses;
+		public JobStatus[] job_statuses {get;set;}
 	}
 
 	private class JobStatusWrapper {
-		public JobStatus job_status;
+		public JobStatus job_status {get;set;}
 	}
 
 	public ZendeskJobStatuses(ZendeskAPI zapi) {

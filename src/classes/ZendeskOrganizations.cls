@@ -22,17 +22,17 @@ public class ZendeskOrganizations {
 	private final ZendeskAPI zapi;
 
 	public class ZOrganization {
-		public Long id;
-		public String external_id;
-		public String name;
-		public String[] domain_names;
-		public String details;
-		public String notes;
-		public Long group_id;
-		public Boolean shared_tickets;
-		public Boolean shared_comments;
-		public String[] tags;
-		public Map<String, String> organization_fields;
+		public Long id {get;set;}
+		public String external_id {get;set;}
+		public String name {get;set;}
+		public String[] domain_names {get;set;}
+		public String details {get;set;}
+		public String notes {get;set;}
+		public Long group_id {get;set;}
+		public Boolean shared_tickets {get;set;}
+		public Boolean shared_comments {get;set;}
+		public String[] tags {get;set;}
+		public Map<String, String> organization_fields {get;set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
 	}

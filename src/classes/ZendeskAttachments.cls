@@ -11,15 +11,15 @@ public class ZendeskAttachments {
 
 	public class ZAttachment {
 		public Long id {get; private set;}
-		public String name;
-		public String content_url;
-		public String content_type;
-		//public Object[] thumbnails;
-		public Long size;
+		public String name {get;set;}
+		public String content_url {get;set;}
+		public String content_type {get;set;}
+		//public Object[] thumbnails {get;set;}
+		public Long size {get;set;}
 	}
 
 	private class AttachmentWrapper {
-		public ZAttachment attachment {get; set;}
+		public ZAttachment attachment {get;set;}
 	}
 
 	public ZendeskAttachments(ZendeskAPI zapi) {

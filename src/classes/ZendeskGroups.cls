@@ -14,14 +14,14 @@ public class ZendeskGroups {
 
 	public class ZGroup {
 		public Long id {get; private set;}
-		public String name;
+		public String name {get;set;}
 		public Boolean deleted {get; private set;}
 		public DateTime created_at {get; private set;}
 		public DateTime updated_at {get; private set;}
 	}
 
 	private class GroupWrapper {
-		public ZGroup x_group {get; set;} // Use "x_group" in place of "group" which is a reserved keyword. Requires custom de/serialization.
+		public ZGroup x_group {get;set;} // Use "x_group" in place of "group" which is a reserved keyword. Requires custom de/serialization.
 	}
 
 	public class GroupsWrapper extends ZendeskPagingSupport {
