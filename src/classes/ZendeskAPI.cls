@@ -4,11 +4,15 @@ public class ZendeskAPI {
 	public final static String BASE_PATH =  '/api/v2';
 	private final static String DEFAULT_USER_AGENT =  'Force.com Toolkit for Zendesk';
 
-	private String subdomain {get;set;}
-	private String username {get;set;}
-	private String passwordOrToken {get;set;}
-	private AuthType authenticationType {get;set;}
-	public String userAgent {get;set;}
+	private String subdomain;
+	private String username;
+	private String passwordOrToken;
+	private AuthType authenticationType;
+
+	// overridable properties
+	public String userAgent = DEFAULT_USER_AGENT;
+	public Integer timeoutSeconds = 30;
+	public Boolean debugOn = false;
 
 	public Enum AuthType { Password, Token }
 
@@ -26,8 +30,6 @@ public class ZendeskAPI {
 		this.username = username;
 		this.passwordOrToken = passwordOrToken;
 		this.authenticationType = authenticationType;
-
-		userAgent = DEFAULT_USER_AGENT;
 	}
 
 	public HttpRequest createRequest(String reqMethod, String path) {
@@ -44,7 +46,7 @@ public class ZendeskAPI {
 
 		HttpRequest req = new HttpRequest();
 		req.setMethod(reqMethod);
-		req.setTimeout(30000); // 30 seconds
+		req.setTimeout(timeoutSeconds * 1000);
 		req.setHeader('Authorization', authorizationHeader);
 		req.setEndpoint('https://' + subdomain + '.zendesk.com' + path);
 		req.setHeader('Accept', 'application/json');
@@ -71,8 +73,10 @@ public class ZendeskAPI {
 	public String sendRequest(HttpRequest req) {
 		HttpResponse res = new Http().send(req);
 
-		System.debug(Logginglevel.INFO, '**STATUS_CODE=' + res.getStatusCode());
-		System.debug(Logginglevel.INFO, '**RESPONSE_BODY=' + res.getBody());
+		if (debugOn) {
+			System.debug(Logginglevel.INFO, '**STATUS_CODE=' + res.getStatusCode());
+			System.debug(Logginglevel.INFO, '**RESPONSE_BODY=' + res.getBody());
+		}
 
 		if (!isSuccess(res)) {
 			ZendeskError zerr = safeGetError(res.getBody());
