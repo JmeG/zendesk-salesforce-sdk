@@ -36,6 +36,10 @@ public class ZendeskAPI {
 	}
 
 	public HttpRequest createRequest(String reqMethod, String path) {
+		return createRequest(reqMethod, path, null);
+	}
+
+	public HttpRequest createRequest(String reqMethod, String path, String body) {
 		if (String.isBlank(reqMethod)) { throw new ZendeskException('reqMethod parameter must not be empty'); }
 		if (String.isBlank(path)) { throw new ZendeskException('path parameter must not be empty'); }
 
@@ -58,6 +62,9 @@ public class ZendeskAPI {
 		}
 		if (!String.isEmpty(userAgent)) {
 			req.setHeader('User-Agent', userAgent);
+		}
+		if (body != null) {
+			req.setBody(body);
 		}
 
 		return req;
