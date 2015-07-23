@@ -11,7 +11,11 @@ public class ZendeskAPI {
 	// overridable properties
 	public String userAgent = DEFAULT_USER_AGENT;
 	public Integer timeoutSeconds = 30;
-	public Boolean debugOn = false;
+	public Boolean debugAll = false;
+	public Boolean debugRequest = false;
+	public Boolean debugResponseStatus = false;
+	public Boolean debugResponseBody = false;
+	public Boolean debugResponseHeaders = false;
 
 	public Enum AuthType { Password, Token }
 
@@ -70,10 +74,24 @@ public class ZendeskAPI {
 	}
 
 	public String sendRequest(HttpRequest req) {
+		if (debugAll || debugRequest) {
+			System.debug(Logginglevel.INFO, '**REQUEST=' + req);
+		}
 		HttpResponse res = new Http().send(req);
 
-		if (debugOn) {
+		if (debugAll || debugResponseHeaders) {
+			System.debug(res.getHeaderKeys());
+			for (String s : res.getHeaderKeys()) {
+				if (s != null) {
+					System.debug('header: "' + s + '" value: "' + res.getHeader(s) + '"');
+				}
+			}
+		}
+		if (debugAll || debugResponseStatus) {
+			System.debug(Logginglevel.INFO, '**STATUS=' + res.getStatus());
 			System.debug(Logginglevel.INFO, '**STATUS_CODE=' + res.getStatusCode());
+		}
+		if (debugAll || debugResponseBody) {
 			System.debug(Logginglevel.INFO, '**RESPONSE_BODY=' + res.getBody());
 		}
 
