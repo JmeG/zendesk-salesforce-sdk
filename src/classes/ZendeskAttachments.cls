@@ -56,17 +56,14 @@ public class ZendeskAttachments extends ZendeskResourceBase {
 	public void deleteAttachment(Long attachmentId) {
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', '/attachments/' + attachmentId + '.json');
-		zapi.sendRequest(req);
+		zapi.sendRequest(zapi.createRequest('DELETE', '/attachments/' + attachmentId + '.json'));
 	}
 
 	public ZAttachment getAttachment(Long attachmentId) {
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/attachments/' + attachmentId + '.json');
-		String resBody = zapi.sendRequest(req);
-
-		AttachmentWrapper resultWrapper = (AttachmentWrapper)JSON.deserialize(resBody, AttachmentWrapper.class);
+		AttachmentWrapper resultWrapper = (AttachmentWrapper)JSON.deserialize(zapi.sendRequest(req), AttachmentWrapper.class);
 		return resultWrapper.attachment;
 	}
 
@@ -75,9 +72,7 @@ public class ZendeskAttachments extends ZendeskResourceBase {
 		if (commentId == null) { throw new ZendeskException('commentId parameter must not be null'); }
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/tickets/' + ticketId + '/comments/' + commentId + '/attachments/' + attachmentId + '/redact.json');
-		req.setBody('{}');
-		zapi.sendRequest(req);
+		zapi.sendRequest(zapi.createRequest('PUT', '/tickets/' + ticketId + '/comments/' + commentId + '/attachments/' + attachmentId + '/redact.json', '{}'));
 	}
 
 }

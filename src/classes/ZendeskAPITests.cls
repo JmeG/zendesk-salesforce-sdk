@@ -44,15 +44,4 @@ private class ZendeskAPITests {
         System.assertEquals(true, zapi.canLogin());
         Test.stopTest();
     }
-
-    static testMethod void testStripJsonNulls() {
-        Account acct = new Account();
-        acct.Name = 'test';
-
-        Test.startTest();
-        String testJson = ZendeskAPI.stripJsonNulls(JSON.serialize(acct));
-        Test.stopTest();
-
-        System.assertEquals(false, testJson.containsIgnoreCase('null'));
-    }
 }

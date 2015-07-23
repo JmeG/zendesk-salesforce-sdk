@@ -115,7 +115,7 @@ public class ZendeskUserFields extends ZendeskResourceBase {
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/user_fields/' + fieldId + '.json');
-		req.setBody('{"user_field": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zfield))) + '}');
+		req.setBody('{"user_field": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(zfield))) + '}');
 		zapi.sendRequest(req);
     }
 
@@ -164,12 +164,14 @@ public class ZendeskUserFields extends ZendeskResourceBase {
     }
 
     // replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+    // Use when calling deserialize()
 	private String replaceReservedWords(String str) {
 		str = str.replaceAll('"system"\\s*:', '"x_system":');
 		return str;
 	}
 
 	// un-replace reserved keywords in the JSON string
+    // Use when calling serialize()
 	private String unreplaceReservedWords(String str) {
 		str = str.replaceAll('"x_system"\\s*:', '"system":');
 		return str;

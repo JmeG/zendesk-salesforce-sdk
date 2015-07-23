@@ -3,9 +3,7 @@
 // GET /api/v2/tickets/{ticket_id}/comments.json
 // PUT /api/v2/tickets/{ticket_id}/comments/{id}/redact.json
 // PUT /api/v2/tickets/{ticket_id}/comments/{id}/make_private.json
-public class ZendeskTicketComments {
-
-	private final ZendeskAPI zapi;
+public class ZendeskTicketComments extends ZendeskResourceBase {
 
 	public class ZTicketComment {
 		public Long id {get; private set;}
@@ -28,7 +26,7 @@ public class ZendeskTicketComments {
 	}
 
 	public ZendeskTicketComments(ZendeskAPI zapi) {
-		this.zapi = zapi;
+		super(zapi);
 	}
 
 	// Get the first page of Ticket Comments
@@ -41,9 +39,7 @@ public class ZendeskTicketComments {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/tickets/' + ticketId + '/comments.json' + (page==null ? '' : '?page=' + page));
-		String resBody = zapi.sendRequest(req);
-
-		return (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketCommentsWrapper.class);
+		return (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketCommentsWrapper.class);
 	}
 
 	public void redactStringInComment(Long ticketId, Long ticketCommentId, String redactText) {
@@ -60,17 +56,18 @@ public class ZendeskTicketComments {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/make_private.json');
-		zapi.sendRequest(req);
+		zapi.sendRequest(zapi.createRequest('PUT', '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/make_private.json'));
 	}
 
 	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+    // Use when calling deserialize()
 	private String replaceReservedWords(String str) {
 		str = str.replaceAll('"public"\\s*:', '"x_public":');
 		return str;
 	}
 
 	// un-replace reserved keywords in the JSON string
+    // Use when calling serialize()
 	//private String unreplaceReservedWords(String str) {
 	//	str = str.replaceAll('"x_public"\\s*:', '"public":');
 	//	return str;

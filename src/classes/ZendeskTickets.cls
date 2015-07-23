@@ -178,7 +178,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/tickets.json');
-		req.setBody('{ "ticket": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zticket))) + ' }');
+		req.setBody('{ "ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(zticket))) + ' }');
 		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
 	}
@@ -206,7 +206,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		if (ztickets == null || ztickets.isEmpty()) { throw new ZendeskException('ztickets parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/tickets/create_many.json');
-		req.setBody('{ "tickets": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ztickets))) + ' }');
+		req.setBody('{ "tickets": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ztickets))) + ' }');
 		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatuses.JobStatus.class);
 	}
 
@@ -331,7 +331,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/' + ticketId + '.json');
-		req.setBody('{ "ticket": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zticket))) + ' }');
+		req.setBody('{ "ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(zticket))) + ' }');
 		zapi.sendRequest(req);
 	}
 
@@ -342,7 +342,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		}
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/update_many.json');
-		req.setBody('{ "tickets": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ztickets))) + ' }');
+		req.setBody('{ "tickets": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ztickets))) + ' }');
 		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatuses.JobStatus.class);
 	}
 
@@ -351,7 +351,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
         if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/tickets/update_many.json?ids=' + toCSV(ticketIds));
-		req.setBody('{ "ticket": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zticket))) + ' }');
+		req.setBody('{ "ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(zticket))) + ' }');
 		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatuses.JobStatus.class);
 	}
 
@@ -366,7 +366,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		ticket.comment.x_public = isPublic;
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/' + ticketId + '.json');
-		req.setBody('{ "ticket": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ticket))) + ' }');
+		req.setBody('{ "ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ticket))) + ' }');
 		zapi.sendRequest(req);
 	}
 
@@ -383,7 +383,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		ticket.status = status.status;
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/' + ticketId + '.json');
-		req.setBody('{ "ticket": ' + unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ticket))) + ' }');
+		req.setBody('{ "ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ticket))) + ' }');
 		zapi.sendRequest(req);
 	}
 
@@ -444,12 +444,14 @@ public class ZendeskTickets extends ZendeskResourceBase {
     }
 
 	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+    // Use when calling deserialize()
 	private String replaceReservedWords(String str) {
 		str = str.replaceAll('"public"\\s*:', '"x_public":');
 		return str;
 	}
 
 	// un-replace reserved keywords in the JSON string
+    // Use when calling serialize()
 	private String unreplaceReservedWords(String str) {
 		str = str.replaceAll('"x_public"\\s*:', '"public":');
 		return str;

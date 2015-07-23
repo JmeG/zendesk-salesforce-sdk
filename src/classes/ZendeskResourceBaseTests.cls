@@ -18,4 +18,14 @@ private class ZendeskResourceBaseTests {
         Test.stopTest();
     }
 
+    static testMethod void testStripJsonNulls() {
+        Account acct = new Account();
+        acct.Name = 'test';
+
+        Test.startTest();
+        String testJson = ZendeskResourceBase.stripJsonNulls(JSON.serialize(acct));
+        Test.stopTest();
+
+        System.assertEquals(false, testJson.containsIgnoreCase('null'));
+    }
 }

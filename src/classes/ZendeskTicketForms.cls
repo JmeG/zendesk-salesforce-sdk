@@ -45,18 +45,14 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 	// Get a specific page of Ticket Forms
 	public TicketFormsWrapper getTicketForms(Long page) {
 		HttpRequest req = zapi.createRequest('GET', '/ticket_forms.json' + (page==null ? '' : '?page=' + page));
-		String resBody = zapi.sendRequest(req);
-
-		return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketFormsWrapper.class);
+		return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormsWrapper.class);
 	}
 
 	public ZTicketForm getTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/ticket_forms/' + ticketFormId + '.json');
-		String resBody = zapi.sendRequest(req);
-
-		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketFormWrapper.class);
+		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormWrapper.class);
 		return resultWrapper.ticket_form;
 	}
 
@@ -71,11 +67,8 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 		if (ticketForm == null) { throw new ZendeskException('ticketForm parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('POST', '/ticket_forms.json');
-        String tformJson = unreplaceReservedWords(JSON.serialize(ticketForm));
-        req.setBody('{ "ticket_form": ' + tformJson + '}');
-		String resBody = zapi.sendRequest(req);
-
-        TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketFormWrapper.class);
+        req.setBody('{ "ticket_form": ' + unreplaceReservedWords(JSON.serialize(ticketForm)) + '}');
+        TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
 	}
 
@@ -84,8 +77,7 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
         if (ticketForm == null) { throw new ZendeskException('ticketForm parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/ticket_forms/' + ticketFormId + '.json');
-		String tformJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(ticketForm)));
-		req.setBody('{ "ticket_form": ' + tformJson + ' }');
+		req.setBody('{ "ticket_form": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ticketForm))) + ' }');
 		zapi.sendRequest(req);
 	}
 
@@ -101,9 +93,7 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('POST', '/ticket_forms/' + ticketFormId + '/clone.json');
-		String resBody = zapi.sendRequest(req);
-
-        TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(resBody), TicketFormWrapper.class);
+        TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
 	}
 
@@ -132,12 +122,14 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 	}
 
 	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+    // Use when calling deserialize()
 	private String replaceReservedWords(String str) {
 		str = str.replaceAll('"default"\\s*:', '"x_default":');
 		return str;
 	}
 
 	// un-replace reserved keywords in the JSON string
+    // Use when calling serialize()
 	private String unreplaceReservedWords(String str) {
 		str = str.replaceAll('"x_default"\\s*:', '"default":');
 		return str;

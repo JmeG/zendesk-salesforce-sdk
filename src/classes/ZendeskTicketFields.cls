@@ -64,9 +64,7 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/ticket_fields/' + fieldId + '.json');
-		String resBody = zapi.sendRequest(req);
-
-		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
+		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldWrapper.class);
 		return wrapper.ticket_field;
 	}
 
@@ -78,9 +76,7 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 	// Get a specific page of User Fields
 	public TicketFieldsWrapper getFields(Long page) {
 		HttpRequest req = zapi.createRequest('GET', '/ticket_fields.json' + (page==null ? '' : '?page=' + page));
-		String resBody = zapi.sendRequest(req);
-
-		return (TicketFieldsWrapper)JSON.deserialize(resBody, TicketFieldsWrapper.class);
+		return (TicketFieldsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldsWrapper.class);
 	}
 
 	public void deleteField(Long fieldId) {
@@ -95,9 +91,7 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 
 		HttpRequest req = zapi.createRequest('POST', '/ticket_fields/.json');
 		req.setBody('{ "ticket_field": ' + JSON.serialize(zfield) + ' }');
-		String resBody = zapi.sendRequest(req);
-
-		TicketFieldWrapper resultWrapper = (TicketFieldWrapper)JSON.deserialize(resBody, TicketFieldWrapper.class);
+		TicketFieldWrapper resultWrapper = (TicketFieldWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_field == null) ? null : resultWrapper.ticket_field.id);
 	}
 
@@ -106,7 +100,7 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/ticket_fields/' + fieldId + '.json');
-		req.setBody('{ "ticket_field": ' + ZendeskAPI.stripJsonNulls(JSON.serialize(zfield)) + ' }');
+		req.setBody('{ "ticket_field": ' + stripJsonNulls(JSON.serialize(zfield)) + ' }');
 		zapi.sendRequest(req);
 	}
 

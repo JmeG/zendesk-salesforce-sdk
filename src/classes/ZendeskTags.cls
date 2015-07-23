@@ -57,10 +57,7 @@ public class ZendeskTags extends ZendeskResourceBase {
 		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/' + resourceType.name() + '/' + recordId + '/tags.json' + (page==null ? '' : '?page=' + page));
-		String resBody = zapi.sendRequest(req);
-
-		// { "tags": ["important", "customer"] }
-		return (TagsWrapper)JSON.deserialize(resBody, TagsWrapper.class);
+		return (TagsWrapper)JSON.deserialize(zapi.sendRequest(req), TagsWrapper.class);
 	}
 
 	public void setTags(Resource resourceType, Long recordId, String[] tags) {

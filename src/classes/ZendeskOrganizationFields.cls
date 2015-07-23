@@ -6,9 +6,8 @@
 // PUT    /api/v2/organization_fields/{id}.json
 // PUT    /api/v2/organization_fields/reorder.json
 // DELETE /api/v2/organization_fields/{id}.json
-public class ZendeskOrganizationFields {
+public class ZendeskOrganizationFields extends ZendeskResourceBase {
 
-    private final ZendeskAPI zapi;
     private Map<String, ZOrganizationField> fieldsMap {get; private set; }
 
     public class ZOrganizationField {
@@ -65,7 +64,7 @@ public class ZendeskOrganizationFields {
     }
 
     public ZendeskOrganizationFields(ZendeskAPI zapi) {
-        this.zapi = zapi;
+        super(zapi);
         fieldsMap = new Map<String, ZOrganizationField>();
     }
 
@@ -73,9 +72,7 @@ public class ZendeskOrganizationFields {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('GET', '/organization_fields/' + fieldId + '.json');
-        String resBody = zapi.sendRequest(req);
-
-        OrganizationFieldWrapper wrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(resBody), OrganizationFieldWrapper.class);
+        OrganizationFieldWrapper wrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldWrapper.class);
         return wrapper.organization_field;
     }
 
@@ -87,16 +84,13 @@ public class ZendeskOrganizationFields {
     // Get a specific page of Organization Fields
     public OrganizationFieldsWrapper getFields(Long page) {
         HttpRequest req = zapi.createRequest('GET', '/organization_fields.json' + (page==null ? '' : '?page=' + page));
-        String resBody = zapi.sendRequest(req);
-
-        return (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(resBody), OrganizationFieldsWrapper.class);
+        return (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldsWrapper.class);
     }
 
     public void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', '/organization_fields/' + fieldId + '.json');
-		zapi.sendRequest(req);
+		zapi.sendRequest(zapi.createRequest('DELETE', '/organization_fields/' + fieldId + '.json'));
 	}
 
     public void reorderFields(List<Long> orderedFieldIds) {
@@ -111,11 +105,8 @@ public class ZendeskOrganizationFields {
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('POST', '/organization_fields.json');
-        String fieldJson = JSON.serialize(zfield);
-        req.setBody('{ "organization_field": ' + fieldJson + '}');
-		String resBody = zapi.sendRequest(req);
-
-        OrganizationFieldWrapper resultWrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(resBody), OrganizationFieldWrapper.class);
+        req.setBody('{ "organization_field": ' + JSON.serialize(zfield) + '}');
+        OrganizationFieldWrapper resultWrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.organization_field == null) ? null : resultWrapper.organization_field.id);
     }
 
@@ -124,7 +115,7 @@ public class ZendeskOrganizationFields {
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/organization_fields/' + fieldId + '.json');
-		String fieldJson = unreplaceReservedWords(ZendeskAPI.stripJsonNulls(JSON.serialize(zfield)));
+		String fieldJson = unreplaceReservedWords(stripJsonNulls(JSON.serialize(zfield)));
 		req.setBody('{ "organization_field": ' + fieldJson + ' }');
 		zapi.sendRequest(req);
     }
@@ -174,12 +165,14 @@ public class ZendeskOrganizationFields {
     }
 
     // replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+    // Use when calling deserialize()
 	private String replaceReservedWords(String str) {
 		str = str.replaceAll('"system"\\s*:', '"x_system":');
 		return str;
 	}
 
 	// un-replace reserved keywords in the JSON string
+    // Use when calling serialize()
 	private String unreplaceReservedWords(String str) {
 		str = str.replaceAll('"x_system"\\s*:', '"system":');
 		return str;
