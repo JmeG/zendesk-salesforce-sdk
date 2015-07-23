@@ -46,4 +46,21 @@ private class ZendeskJobStatusesTests {
         System.assertEquals(2, jobs.size());
     }
 
+    static testMethod void testDeserialize() {
+        String resBody = '{ "id": "31a2e47012e20", "url": "https://test.zendesk.com/api/v2/job_statuses/31a2e4701.json", "total": 2, "progress": 2, "status": "completed", "message": "Completed", "results": [ { "status": "Failed Creating User ", "errors": "Name:  is too short" } ] }';
+        ZendeskJobStatuses.JobStatus jstatus = (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
+
+        System.assertNotEquals(null, jstatus);
+        System.assertNotEquals(null, jstatus.id);
+        System.assertNotEquals(null, jstatus.url);
+        System.assertNotEquals(null, jstatus.total);
+        System.assertNotEquals(null, jstatus.progress);
+        System.assertNotEquals(null, jstatus.status);
+        System.assertNotEquals(null, jstatus.message);
+        System.assertNotEquals(null, jstatus.results);
+        System.assertNotEquals(null, jstatus.results[0]);
+        System.assertNotEquals(null, jstatus.results[0].status);
+        System.assertNotEquals(null, jstatus.results[0].errors);
+    }
+
 }
