@@ -63,7 +63,7 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 	public ZTicketField getField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/ticket_fields/' + fieldId + '.json');
+		HttpRequest req = zapi.createRequest('GET', '/ticket_fields/'+fieldId+'.json');
 		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldWrapper.class);
 		return wrapper.ticket_field;
 	}
@@ -75,22 +75,22 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 
 	// Get a specific page of User Fields
 	public TicketFieldsWrapper getFields(Long page) {
-		HttpRequest req = zapi.createRequest('GET', '/ticket_fields.json' + (page==null ? '' : '?page=' + page));
+		HttpRequest req = zapi.createRequest('GET', '/ticket_fields.json', new Map<String, Object>{'page'=>page});
 		return (TicketFieldsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldsWrapper.class);
 	}
 
 	public void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', '/ticket_fields/' + fieldId + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', '/ticket_fields/'+fieldId+'.json');
 		zapi.sendRequest(req);
 	}
 
 	public Long createField(ZTicketField zfield) {
 		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('POST', '/ticket_fields/.json');
-		req.setBody('{ "ticket_field": ' + JSON.serialize(zfield) + ' }');
+		HttpRequest req = zapi.createRequest('POST', '/ticket_fields.json');
+		req.setBody('{"ticket_field": ' + JSON.serialize(zfield) + '}');
 		TicketFieldWrapper resultWrapper = (TicketFieldWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_field == null) ? null : resultWrapper.ticket_field.id);
 	}
@@ -99,8 +99,8 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/ticket_fields/' + fieldId + '.json');
-		req.setBody('{ "ticket_field": ' + stripJsonNulls(JSON.serialize(zfield)) + ' }');
+		HttpRequest req = zapi.createRequest('PUT', '/ticket_fields/'+fieldId+'.json');
+		req.setBody('{"ticket_field": ' + stripJsonNulls(JSON.serialize(zfield)) + '}');
 		zapi.sendRequest(req);
 	}
 

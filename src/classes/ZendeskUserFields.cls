@@ -71,7 +71,7 @@ public class ZendeskUserFields extends ZendeskResourceBase {
     public ZUserField getField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('GET', '/user_fields/' + fieldId + '.json');
+        HttpRequest req = zapi.createRequest('GET', '/user_fields/'+fieldId+'.json');
         UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), UserFieldWrapper.class);
         return wrapper.user_field;
     }
@@ -83,14 +83,14 @@ public class ZendeskUserFields extends ZendeskResourceBase {
 
     // Get a specific page of User Fields
     public UserFieldsWrapper getFields(Long page) {
-        HttpRequest req = zapi.createRequest('GET', '/user_fields.json' + (page==null ? '' : '?page=' + page));
+        HttpRequest req = zapi.createRequest('GET', '/user_fields.json', new Map<String, Object>{'page'=>page});
         return (UserFieldsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), UserFieldsWrapper.class);
     }
 
     public void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		zapi.sendRequest(zapi.createRequest('DELETE', '/user_fields/' + fieldId + '.json'));
+		zapi.sendRequest(zapi.createRequest('DELETE', '/user_fields/'+fieldId+'.json'));
 	}
 
     public void reorderFields(List<Long> orderedFieldIds) {
@@ -114,7 +114,7 @@ public class ZendeskUserFields extends ZendeskResourceBase {
         if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('PUT', '/user_fields/' + fieldId + '.json');
+        HttpRequest req = zapi.createRequest('PUT', '/user_fields/'+fieldId+'.json');
 		req.setBody('{"user_field": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(zfield))) + '}');
 		zapi.sendRequest(req);
     }

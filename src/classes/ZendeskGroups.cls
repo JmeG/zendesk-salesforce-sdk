@@ -37,7 +37,7 @@ public class ZendeskGroups extends ZendeskResourceBase {
 	}
 
 	public GroupsWrapper getGroups(Long page) {
-		return getGroupsInternal(zapi.createRequest('GET', '/groups.json' + (page==null ? '' : '?page=' + page)));
+		return getGroupsInternal(zapi.createRequest('GET', '/groups.json', new Map<String, Object>{'page'=>page}));
 	}
 
 	// Get all assignable groups
@@ -47,7 +47,7 @@ public class ZendeskGroups extends ZendeskResourceBase {
 
 	// Get all assignable groups by page number
 	public GroupsWrapper getAssignableGroups(Long page) {
-		return getGroupsInternal(zapi.createRequest('GET', '/groups/assignable.json' + (page==null ? '' : '?page=' + page)));
+		return getGroupsInternal(zapi.createRequest('GET', '/groups/assignable.json', new Map<String, Object>{'page'=>page}));
 	}
 
 	// Get the groups that a user is a member of
@@ -61,7 +61,7 @@ public class ZendeskGroups extends ZendeskResourceBase {
 	public GroupsWrapper getUserGroups(Long userId, Long page) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
-		return getGroupsInternal(zapi.createRequest('GET', '/users/' + userId + '/groups.json' + (page==null ? '' : '?page=' + page)));
+		return getGroupsInternal(zapi.createRequest('GET', '/users/'+userId+'/groups.json', new Map<String, Object>{'page'=>page}));
 	}
 
 	// Private helper method to query multiple groups
@@ -72,7 +72,7 @@ public class ZendeskGroups extends ZendeskResourceBase {
 	public ZGroup getGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/groups/' + groupId + '.json');
+		HttpRequest req = zapi.createRequest('GET', '/groups/'+groupId+'.json');
 		GroupWrapper wrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupWrapper.class);
 		return wrapper.x_group;
 	}
@@ -105,7 +105,7 @@ public class ZendeskGroups extends ZendeskResourceBase {
 		gen.writeEndObject();
 		gen.writeEndObject();
 
-		HttpRequest req = zapi.createRequest('PUT', '/groups/' + groupId + '.json');
+		HttpRequest req = zapi.createRequest('PUT', '/groups/'+groupId+'.json');
 		req.setBody(gen.getAsString());
 		zapi.sendRequest(req);
 	}
@@ -113,7 +113,7 @@ public class ZendeskGroups extends ZendeskResourceBase {
 	public void deleteGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
 
-		zapi.sendRequest(zapi.createRequest('DELETE', '/groups/' + groupId + '.json'));
+		zapi.sendRequest(zapi.createRequest('DELETE', '/groups/'+groupId+'.json'));
 	}
 
 	// Retrieves all pages of groups. Uses the Group field "id" as the map key

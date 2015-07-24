@@ -36,12 +36,21 @@ public class ZendeskAPI {
 	}
 
 	public HttpRequest createRequest(String reqMethod, String path) {
-		return createRequest(reqMethod, path, null);
+		return createRequest(reqMethod, path, null, null);
 	}
 
 	public HttpRequest createRequest(String reqMethod, String path, String body) {
+		return createRequest(reqMethod, path, body, null);
+	}
+
+	public HttpRequest createRequest(String reqMethod, String path, Map<String, Object> queryParams) {
+		return createRequest(reqMethod, path, null, queryParams);
+	}
+
+	public HttpRequest createRequest(String reqMethod, String path, String body, Map<String, Object> queryParams) {
 		if (String.isBlank(reqMethod)) { throw new ZendeskException('reqMethod parameter must not be empty'); }
 		if (String.isBlank(path)) { throw new ZendeskException('path parameter must not be empty'); }
+		if (!path.startsWith('/')) { throw new ZendeskException('path parameter must start with /'); }
 
 		Blob headerValue = null;
 		if (authenticationType == AuthType.Password) {
@@ -55,7 +64,7 @@ public class ZendeskAPI {
 		req.setMethod(reqMethod);
 		req.setTimeout(timeoutSeconds * 1000);
 		req.setHeader('Authorization', authorizationHeader);
-		req.setEndpoint('https://' + subdomain + '.zendesk.com/api/v2' + path);
+		req.setEndpoint(String.format('https://{0}.zendesk.com/api/v2{1}{2}', new List<String>{subdomain, path, buildQueryParamString(queryParams)}));
 		req.setHeader('Accept', 'application/json');
 		if (reqMethod == 'POST' || reqMethod == 'PUT') {
 			req.setHeader('Content-Type', 'application/json');
@@ -68,6 +77,21 @@ public class ZendeskAPI {
 		}
 
 		return req;
+	}
+
+	private String buildQueryParamString(Map<String, Object> queryParams) {
+		String str = '';
+		if (queryParams != null && !queryParams.isEmpty()) {
+			str = '?';
+			for (String key : queryParams.keySet()) {
+				Object obj = queryParams.get(key);
+				// TODO: should we omit query parameters where the value is null ?
+				String strVal = (obj==null ? '' : String.valueOf(obj));
+				str += String.format('{0}={1}&', new List<String>{key, strVal});
+			}
+		}
+		str = str.removeEnd('&');
+		return str;
 	}
 
 	// Validate that the API login parameters are valid by simply trying to get our own user record

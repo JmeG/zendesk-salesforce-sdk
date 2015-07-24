@@ -44,14 +44,14 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 
 	// Get a specific page of Ticket Forms
 	public TicketFormsWrapper getTicketForms(Long page) {
-		HttpRequest req = zapi.createRequest('GET', '/ticket_forms.json' + (page==null ? '' : '?page=' + page));
+		HttpRequest req = zapi.createRequest('GET', '/ticket_forms.json', new Map<String, Object>{'page'=>page});
 		return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormsWrapper.class);
 	}
 
 	public ZTicketForm getTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/ticket_forms/' + ticketFormId + '.json');
+		HttpRequest req = zapi.createRequest('GET', '/ticket_forms/'+ticketFormId+'.json');
 		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormWrapper.class);
 		return resultWrapper.ticket_form;
 	}
@@ -59,7 +59,7 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 	public void deleteTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', '/ticket_forms/' + ticketFormId + '.json');
+		HttpRequest req = zapi.createRequest('DELETE', '/ticket_forms/'+ticketFormId+'.json');
 		zapi.sendRequest(req);
 	}
 
@@ -67,7 +67,7 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 		if (ticketForm == null) { throw new ZendeskException('ticketForm parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('POST', '/ticket_forms.json');
-        req.setBody('{ "ticket_form": ' + unreplaceReservedWords(JSON.serialize(ticketForm)) + '}');
+        req.setBody('{"ticket_form": ' + unreplaceReservedWords(JSON.serialize(ticketForm)) + '}');
         TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
 	}
@@ -76,8 +76,8 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
         if (ticketForm == null) { throw new ZendeskException('ticketForm parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('PUT', '/ticket_forms/' + ticketFormId + '.json');
-		req.setBody('{ "ticket_form": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ticketForm))) + ' }');
+        HttpRequest req = zapi.createRequest('PUT', '/ticket_forms/'+ticketFormId+'.json');
+		req.setBody('{"ticket_form": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ticketForm))) + '}');
 		zapi.sendRequest(req);
 	}
 
@@ -85,14 +85,14 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
         if (orderedTicketFormIds == null || orderedTicketFormIds.size() < 2) { throw new ZendeskException('orderedTicketFormIds parameter contain at least 2 items'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/ticket_forms/reorder.json');
-        req.setBody('{ "ticket_form_ids": ' + JSON.serialize(orderedTicketFormIds) + '}');
+        req.setBody('{"ticket_form_ids": ' + JSON.serialize(orderedTicketFormIds) + '}');
 		zapi.sendRequest(req);
     }
 
 	public Long cloneTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('POST', '/ticket_forms/' + ticketFormId + '/clone.json');
+        HttpRequest req = zapi.createRequest('POST', '/ticket_forms/'+ticketFormId+'/clone.json');
         TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
 	}

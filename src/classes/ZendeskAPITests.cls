@@ -16,7 +16,7 @@ private class ZendeskAPITests {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
         Test.startTest();
-        HttpRequest req = zapi.createRequest('GET', '/users.json');
+        HttpRequest req = zapi.createRequest('GET', '/users.json', new Map<String, Object>{'page'=>'1'});
         Test.stopTest();
 
         System.assertEquals('GET', req.getMethod());

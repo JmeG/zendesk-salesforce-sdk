@@ -56,31 +56,31 @@ public class ZendeskTags extends ZendeskResourceBase {
 	public TagsWrapper getTags(Resource resourceType, Long recordId, Long page) {
 		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/' + resourceType.name() + '/' + recordId + '/tags.json' + (page==null ? '' : '?page=' + page));
+		HttpRequest req = zapi.createRequest('GET', '/'+resourceType.name()+'/'+recordId+'/tags.json', new Map<String, Object>{'page'=>page});
 		return (TagsWrapper)JSON.deserialize(zapi.sendRequest(req), TagsWrapper.class);
 	}
 
 	public void setTags(Resource resourceType, Long recordId, String[] tags) {
 		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('POST', '/' + resourceType.name() + '/' + recordId + '/tags.json');
-		req.setBody('{ "tags": ' + JSON.serialize(tags) + ' }');
+		HttpRequest req = zapi.createRequest('POST', '/'+resourceType.name()+'/'+recordId+'/tags.json');
+		req.setBody('{"tags": ' + JSON.serialize(tags) + '}');
 		zapi.sendRequest(req);
 	}
 
 	public void addTags(Resource resourceType, Long recordId, String[] tags) {
 		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/' + resourceType.name() + '/' + recordId + '/tags.json');
-		req.setBody('{ "tags": ' + JSON.serialize(tags) + ' }');
+		HttpRequest req = zapi.createRequest('PUT', '/'+resourceType.name()+'/'+recordId+'/tags.json');
+		req.setBody('{"tags": ' + JSON.serialize(tags) + '}');
 		zapi.sendRequest(req);
 	}
 
 	public void removeTags(Resource resourceType, Long recordId, String[] tags) {
 		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', '/' + resourceType.name() + '/' + recordId + '/tags.json');
-		req.setBody('{ "tags": ' + JSON.serialize(tags) + ' }');
+		HttpRequest req = zapi.createRequest('DELETE', '/'+resourceType.name()+'/'+recordId+'/tags.json');
+		req.setBody('{"tags": ' + JSON.serialize(tags) + '}');
 		zapi.sendRequest(req);
 	}
 }

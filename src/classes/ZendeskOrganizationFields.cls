@@ -71,7 +71,7 @@ public class ZendeskOrganizationFields extends ZendeskResourceBase {
     public ZOrganizationField getField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('GET', '/organization_fields/' + fieldId + '.json');
+        HttpRequest req = zapi.createRequest('GET', '/organization_fields/'+fieldId+'.json');
         OrganizationFieldWrapper wrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldWrapper.class);
         return wrapper.organization_field;
     }
@@ -83,14 +83,14 @@ public class ZendeskOrganizationFields extends ZendeskResourceBase {
 
     // Get a specific page of Organization Fields
     public OrganizationFieldsWrapper getFields(Long page) {
-        HttpRequest req = zapi.createRequest('GET', '/organization_fields.json' + (page==null ? '' : '?page=' + page));
+        HttpRequest req = zapi.createRequest('GET', '/organization_fields.json', new Map<String, Object>{'page'=>page});
         return (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldsWrapper.class);
     }
 
     public void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
 
-		zapi.sendRequest(zapi.createRequest('DELETE', '/organization_fields/' + fieldId + '.json'));
+		zapi.sendRequest(zapi.createRequest('DELETE', '/organization_fields/'+fieldId+'.json'));
 	}
 
     public void reorderFields(List<Long> orderedFieldIds) {
@@ -114,9 +114,9 @@ public class ZendeskOrganizationFields extends ZendeskResourceBase {
         if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('PUT', '/organization_fields/' + fieldId + '.json');
+        HttpRequest req = zapi.createRequest('PUT', '/organization_fields/'+fieldId+'.json');
 		String fieldJson = unreplaceReservedWords(stripJsonNulls(JSON.serialize(zfield)));
-		req.setBody('{ "organization_field": ' + fieldJson + ' }');
+		req.setBody('{ "organization_field": ' + fieldJson + '}');
 		zapi.sendRequest(req);
     }
 

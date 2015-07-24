@@ -38,7 +38,7 @@ public class ZendeskTicketComments extends ZendeskResourceBase {
 	public TicketCommentsWrapper getTicketComments(Long ticketId, Long page) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/tickets/' + ticketId + '/comments.json' + (page==null ? '' : '?page=' + page));
+		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'/comments.json', new Map<String, Object>{'page'=>page});
 		return (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketCommentsWrapper.class);
 	}
 
@@ -47,7 +47,7 @@ public class ZendeskTicketComments extends ZendeskResourceBase {
 		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter must not be null'); }
 		if (String.isBlank(redactText)) { throw new ZendeskException('redactText parameter must not be empty'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/redact.json');
+		HttpRequest req = zapi.createRequest('PUT', '/tickets/'+ticketId+'/comments/'+ticketCommentId+'/redact.json');
 		req.setBody('{"text": "' + redactText + '"}');
 		zapi.sendRequest(req);
 	}
@@ -56,7 +56,7 @@ public class ZendeskTicketComments extends ZendeskResourceBase {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter must not be null'); }
 
-		zapi.sendRequest(zapi.createRequest('PUT', '/tickets/' + ticketId + '/comments/' + ticketCommentId + '/make_private.json'));
+		zapi.sendRequest(zapi.createRequest('PUT', '/tickets/'+ticketId+'/comments/'+ticketCommentId+'/make_private.json'));
 	}
 
 	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
