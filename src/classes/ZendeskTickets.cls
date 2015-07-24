@@ -128,16 +128,6 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		super(zapi);
 	}
 
-	public ZTicket getTicket(Long ticketId) {
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
-
-		HttpRequest req = zapi.createRequest('GET', '/tickets/' + ticketId + '.json');
-		String resBody = zapi.sendRequest(req);
-
-		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(resBody, TicketWrapper.class);
-		return resultWrapper.ticket;
-	}
-
 	public Long createTicket(TicketType type, String subject, String commentText, Long requesterId) {
 		return createTicket(type, subject, commentText, null, requesterId, null, null, null, null);
 	}
@@ -208,6 +198,14 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		HttpRequest req = zapi.createRequest('POST', '/tickets/create_many.json');
 		req.setBody('{"tickets": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ztickets))) + '}');
 		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatuses.JobStatus.class);
+	}
+
+	public ZTicket getTicket(Long ticketId) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+
+		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'.json');
+		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(zapi.sendRequest(req), TicketWrapper.class);
+		return resultWrapper.ticket;
 	}
 
 	// /api/v2/tickets.json
