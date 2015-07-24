@@ -43,8 +43,8 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 	}
 
 	// Get a specific page of Ticket Forms
-	public TicketFormsWrapper getTicketForms(Long page) {
-		HttpRequest req = zapi.createRequest('GET', '/ticket_forms.json', new Map<String, Object>{'page'=>page});
+	public TicketFormsWrapper getTicketForms(Map<String, Object> queryParams) {
+		HttpRequest req = zapi.createRequest('GET', '/ticket_forms.json', queryParams);
 		return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormsWrapper.class);
 	}
 
@@ -113,7 +113,7 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 			}
 
 			while (!String.isEmpty(wrapper.next_page)) {
-				wrapper = getTicketForms(wrapper.nextPageNumber);
+				wrapper = getTicketForms(new Map<String, Object>{'page'=>wrapper.nextPageNumber});
 				for (ZTicketForm obj : wrapper.ticket_forms) {
 					ticketFormsMap.put(obj.id, obj);
 				}

@@ -74,8 +74,8 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 	}
 
 	// Get a specific page of User Fields
-	public TicketFieldsWrapper getFields(Long page) {
-		HttpRequest req = zapi.createRequest('GET', '/ticket_fields.json', new Map<String, Object>{'page'=>page});
+	public TicketFieldsWrapper getFields(Map<String, Object> queryParams) {
+		HttpRequest req = zapi.createRequest('GET', '/ticket_fields.json', queryParams);
 		return (TicketFieldsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldsWrapper.class);
 	}
 
@@ -120,7 +120,7 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 			}
 
 			while (!String.isEmpty(wrapper.next_page)) {
-				wrapper = getFields(wrapper.nextPageNumber);
+				wrapper = getFields(new Map<String, Object>{'page'=>wrapper.nextPageNumber});
 				for (ZTicketField obj : wrapper.ticket_fields) {
 					fieldsMap.put(obj.id, obj);
 				}

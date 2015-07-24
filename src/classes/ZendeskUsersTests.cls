@@ -118,7 +118,7 @@ private class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsers.UsersWrapper results = zusers.getUsers(1);
+		ZendeskUsers.UsersWrapper results = zusers.getUsers(new Map<String, Object>{'page'=>'2'});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);

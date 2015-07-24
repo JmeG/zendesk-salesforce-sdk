@@ -36,8 +36,8 @@ public class ZendeskGroups extends ZendeskResourceBase {
 		return getGroups(null);
 	}
 
-	public GroupsWrapper getGroups(Long page) {
-		return getGroupsInternal(zapi.createRequest('GET', '/groups.json', new Map<String, Object>{'page'=>page}));
+	public GroupsWrapper getGroups(Map<String, Object> queryParams) {
+		return getGroupsInternal(zapi.createRequest('GET', '/groups.json', queryParams));
 	}
 
 	// Get all assignable groups
@@ -46,8 +46,8 @@ public class ZendeskGroups extends ZendeskResourceBase {
 	}
 
 	// Get all assignable groups by page number
-	public GroupsWrapper getAssignableGroups(Long page) {
-		return getGroupsInternal(zapi.createRequest('GET', '/groups/assignable.json', new Map<String, Object>{'page'=>page}));
+	public GroupsWrapper getAssignableGroups(Map<String, Object> queryParams) {
+		return getGroupsInternal(zapi.createRequest('GET', '/groups/assignable.json', queryParams));
 	}
 
 	// Get the groups that a user is a member of
@@ -58,10 +58,10 @@ public class ZendeskGroups extends ZendeskResourceBase {
 	}
 
 	// Get the groups that a user is a member of
-	public GroupsWrapper getUserGroups(Long userId, Long page) {
+	public GroupsWrapper getUserGroups(Long userId, Map<String, Object> queryParams) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
-		return getGroupsInternal(zapi.createRequest('GET', '/users/'+userId+'/groups.json', new Map<String, Object>{'page'=>page}));
+		return getGroupsInternal(zapi.createRequest('GET', '/users/'+userId+'/groups.json', queryParams));
 	}
 
 	// Private helper method to query multiple groups
@@ -133,7 +133,7 @@ public class ZendeskGroups extends ZendeskResourceBase {
 			}
 
 			while (!String.isEmpty(wrapper.next_page)) {
-				wrapper = getGroups(wrapper.nextPageNumber);
+				wrapper = getGroups(new Map<String, Object>{'page'=>wrapper.nextPageNumber});
 				for (ZGroup obj : wrapper.groups) {
 					groupsMap.put(obj.id, obj);
 				}

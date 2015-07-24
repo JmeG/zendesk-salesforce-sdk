@@ -180,8 +180,8 @@ public class ZendeskUsers extends ZendeskResourceBase {
         return getUsers(zapi.createRequest('GET', '/users.json'));
     }
 
-    public UsersWrapper getUsers(Long page) {
-        return getUsers(zapi.createRequest('GET', '/users.json', new Map<String, Object>{'page'=>page}));
+    public UsersWrapper getUsers(Map<String, Object> queryParams) {
+        return getUsers(zapi.createRequest('GET', '/users.json', queryParams));
     }
 
 	public UsersWrapper getUsersByIds(Set<Long> userIds) {

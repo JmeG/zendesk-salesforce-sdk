@@ -53,10 +53,10 @@ public class ZendeskTags extends ZendeskResourceBase {
 		return getTags(resourceType, recordId, null);
 	}
 
-	public TagsWrapper getTags(Resource resourceType, Long recordId, Long page) {
+	public TagsWrapper getTags(Resource resourceType, Long recordId, Map<String, Object> queryParams) {
 		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/'+resourceType.name()+'/'+recordId+'/tags.json', new Map<String, Object>{'page'=>page});
+		HttpRequest req = zapi.createRequest('GET', '/'+resourceType.name()+'/'+recordId+'/tags.json', queryParams);
 		return (TagsWrapper)JSON.deserialize(zapi.sendRequest(req), TagsWrapper.class);
 	}
 

@@ -82,8 +82,8 @@ public class ZendeskUserFields extends ZendeskResourceBase {
     }
 
     // Get a specific page of User Fields
-    public UserFieldsWrapper getFields(Long page) {
-        HttpRequest req = zapi.createRequest('GET', '/user_fields.json', new Map<String, Object>{'page'=>page});
+    public UserFieldsWrapper getFields(Map<String, Object> queryParams) {
+        HttpRequest req = zapi.createRequest('GET', '/user_fields.json', queryParams);
         return (UserFieldsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), UserFieldsWrapper.class);
     }
 
@@ -155,7 +155,7 @@ public class ZendeskUserFields extends ZendeskResourceBase {
             }
 
             while (!String.isEmpty(wrapper.next_page)) {
-                wrapper = getFields(wrapper.nextPageNumber);
+                wrapper = getFields(new Map<String, Object>{'page'=>wrapper.nextPageNumber});
                 for (ZUserField obj : wrapper.user_fields) {
                     userFieldsMap.put(obj.key, obj);
                 }

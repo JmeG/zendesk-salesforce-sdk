@@ -73,12 +73,12 @@ private class ZendeskTicketsTests {
         System.assertNotEquals(null, jobStatus);
     }
 
-    static testMethod void testGetTicketsPage() {
+    static testMethod void testGetTicketsWithParams() {
         Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
 
         Test.startTest();
 		ZendeskTickets ztickets = new ZendeskTickets(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTickets.TicketsWrapper results = ztickets.getTickets(2);
+		ZendeskTickets.TicketsWrapper results = ztickets.getTickets(new Map<String, Object>{'page'=>2});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);

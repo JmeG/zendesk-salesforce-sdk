@@ -35,10 +35,10 @@ public class ZendeskTicketComments extends ZendeskResourceBase {
 	}
 
 	// Get a specific page of Ticket Comments
-	public TicketCommentsWrapper getTicketComments(Long ticketId, Long page) {
+	public TicketCommentsWrapper getTicketComments(Long ticketId, Map<String, Object> queryParams) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'/comments.json', new Map<String, Object>{'page'=>page});
+		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'/comments.json', queryParams);
 		return (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketCommentsWrapper.class);
 	}
 
