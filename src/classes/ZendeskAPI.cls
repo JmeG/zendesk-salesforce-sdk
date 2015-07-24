@@ -24,6 +24,19 @@ public class ZendeskAPI {
 		public String description;
 	}
 
+	public ZendeskAPI(String subdomain, String username, String password) {
+		if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
+		if (String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
+		if (String.isBlank(password)) { throw new ZendeskException('password parameter must not be empty'); }
+
+		this.subdomain = subdomain;
+		this.username = username;
+		this.passwordOrToken = password;
+		this.authenticationType = AuthType.Password;
+	}
+
+	// Use this constructor if you need to specify a Token instead of a Password
+	// This constructor will allow you to choose either method of authentication
 	public ZendeskAPI(String subdomain, String username, String passwordOrToken, AuthType authenticationType) {
 		if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
 		if (String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
