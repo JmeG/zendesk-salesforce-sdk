@@ -1,15 +1,6 @@
 // This class provides functionality to call the Zendesk Attachments API
 public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 
-	public class ZAttachment {
-		public Long id {get; private set;}
-		public String name {get;set;}
-		public String content_url {get;set;}
-		public String content_type {get;set;}
-		//public List<Object> thumbnails {get;set;}
-		public Long size {get;set;}
-	}
-
 	private class AttachmentWrapper {
 		public ZAttachment attachment {get;set;}
 	}

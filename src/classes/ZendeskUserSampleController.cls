@@ -8,7 +8,7 @@ public class ZendeskUserSampleController {
 	public String nameInput {get;set;}
 	public String emailInput {get;set;}
 
-	public ZendeskUsersAPI.ZUser[] users {get;set;}
+	public ZendeskTypes.ZUser[] users {get;set;}
 	public String pageMessage {get;set;}
 
 	public ZendeskUserSampleController() {}
@@ -18,9 +18,9 @@ public class ZendeskUserSampleController {
 		users = null;
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUsersAPI zusers = new ZendeskUsersAPI(zapi);
+			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zapi);
 
-			Long newUserId = zusers.createUser(nameInput, emailInput);
+			Long newUserId = zusers_api.createUser(nameInput, emailInput);
 
 			pageMessage = 'User created with ID: ' + newUserId;
 		}
@@ -35,15 +35,15 @@ public class ZendeskUserSampleController {
 		users = null;
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUsersAPI zusers = new ZendeskUsersAPI(zapi);
+			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zapi);
 
 			if (String.isEmpty(emailInput)) {
 				throw new ZendeskException('You must enter an email address');
 			}
 
-			ZendeskUsersAPI.ZUser u = zusers.findUserByEmail(emailInput);
+			ZendeskTypes.ZUser u = zusers_api.findUserByEmail(emailInput);
 			if (u != null) {
-				users = new ZendeskUsersAPI.ZUser[] { u };
+				users = new ZendeskTypes.ZUser[] { u };
 			}
 			else {
 				throw new ZendeskException('User not found');
@@ -60,7 +60,7 @@ public class ZendeskUserSampleController {
 		users = null;
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUsersAPI zusers = new ZendeskUsersAPI(zapi);
+			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zapi);
 
 			String searchStr = '';
 			if (String.isEmpty(nameInput) && String.isEmpty(emailInput)) {
@@ -71,7 +71,7 @@ public class ZendeskUserSampleController {
 				searchStr = nameInput;
 			}
 
-			ZendeskUsersAPI.UsersWrapper pagedUsers = zusers.findUsersByNameOrEmail(searchStr);
+			ZendeskUsersAPI.UsersWrapper pagedUsers = zusers_api.findUsersByNameOrEmail(searchStr);
 			users = pagedUsers.users;
 		}
 		catch(Exception e) {
@@ -85,9 +85,9 @@ public class ZendeskUserSampleController {
 		users = null;
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUsersAPI zusers = new ZendeskUsersAPI(zapi);
+			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zapi);
 
-			ZendeskUsersAPI.UsersWrapper pagedUsers = zusers.getUsers();
+			ZendeskUsersAPI.UsersWrapper pagedUsers = zusers_api.getUsers();
 			users = pagedUsers.users;
 		}
 		catch(Exception e) {

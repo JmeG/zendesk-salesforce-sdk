@@ -1,4 +1,4 @@
-public abstract class ZendeskResourceBase {
+public abstract class ZendeskResourceBase extends ZendeskTypes {
 
 	protected final ZendeskAPI zapi;
 

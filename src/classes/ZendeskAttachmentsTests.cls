@@ -90,7 +90,7 @@ public class ZendeskAttachmentsTests {
 
         Test.startTest();
         ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskAttachmentsAPI.ZAttachment za = zattach_api.getAttachment(123);
+        ZendeskTypes.ZAttachment za = zattach_api.getAttachment(123);
         Test.stopTest();
 
         System.assertNotEquals(null, za);
@@ -120,7 +120,7 @@ public class ZendeskAttachmentsTests {
     }
 
     static testMethod void testZAttachment() {
-        ZendeskAttachmentsAPI.ZAttachment obj = new ZendeskAttachmentsAPI.ZAttachment();
+        ZendeskTypes.ZAttachment obj = new ZendeskTypes.ZAttachment();
         obj.name = '';
         obj.content_url = '';
         obj.content_type = '';

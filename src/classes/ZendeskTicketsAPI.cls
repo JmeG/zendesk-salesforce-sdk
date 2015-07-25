@@ -1,88 +1,6 @@
 // This class provides functionality to call the Zendesk Tickets API
 public class ZendeskTicketsAPI extends ZendeskResourceBase {
 
-	public enum TicketType { question, incident, problem, task }
-	public enum TicketPriority { low, normal, high, urgent }
-
-	// NOTE: we can't use "new" since it's a reserved keyword
-	//public enum TicketStatus { new, open, pending, hold, solved, closed }
-	public class TicketStatus {
-		public String status {get; private set;}
-		public TicketStatus(String status) {
-			if (status == 'new' || status == 'open' || status == 'pending'
-			|| status == 'hold' || status == 'solved' || status == 'closed') {
-				this.status = status;
-			} else {
-				throw new ZendeskException('Invalid Ticket Status "' + status + '"');
-			}
-		}
-	}
-
-	public class ZTicket {
-		public Long id {get;set;}
-		public String url {get;set;}
-		public String external_id {get;set;}
-		public TicketType type {get;set;}
-		public String subject {get;set;}
-		public TicketPriority priority {get;set;}
-		public String status {get;set;}
-		public String recipient {get;set;}
-		public Long requester_id {get;set;}
-		public ZTicketRequester requester {get;set;} // optional when creating a new ticket in place of requester_id
-		public Long submitter_id {get;set;}
-		public Long assignee_id {get;set;}
-		public Long group_id {get;set;}
-		public List<Long> collaborator_ids {get;set;}
-		public Long forum_topic_id {get;set;}
-		public Long problem_id {get;set;}
-		public DateTime due_at {get;set;}
-		public List<String> tags {get;set;}
-		public List<ZTicketCustomField> custom_fields {get;set;}
-		public Long ticket_form_id {get;set;}
-		public Long brand_id {get;set;}
-		public ZTicketComment comment {get;set;} // use for adding the ticket comment
-		public String description {get; private set;} // readonly. first comment on ticket
-		public Long organization_id {get; private set;}
-		public ZTicketVia via {get; private set;}
-		public ZTicketSatisfactionRating satisfaction_rating {get; private set;}
-		public List<Long> sharing_agreement_ids {get; private set;}
-		public List<Long> followup_ids {get; private set;}
-		public Boolean has_incidents {get; private set;}
-		public DateTime created_at {get; private set;}
-		public DateTime updated_at {get; private set;}
-	}
-
-	public class ZTicketCustomField {
-		public Long id {get;set;}
-		public String value {get;set;}
-
-		public ZTicketCustomField() {}
-		public ZTicketCustomField(Long id, String value) { this.id = id; this.value = value; }
-	}
-
-	public class ZTicketVia {
-		public String channel {get;set;}
-		//public String source {get;set;}
-	}
-
-	public class ZTicketSatisfactionRating {
-		public Long id {get;set;}
-		public String score {get;set;}
-		public String comment {get;set;}
-	}
-
-	public class ZTicketComment {
-		public String body {get;set;}
-		public Boolean x_public {get;set;}  // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
-		public String uploads {get;set;}
-	}
-
-	public class ZTicketRequester {
-		public Long locale_id {get;set;}
-		public String name {get;set;}
-		public String email {get;set;}
-	}
-
 	public class TicketsWrapper extends ZendeskPagingBase {
 		public List<ZTicket> tickets {get;set;}
 	}
@@ -159,12 +77,12 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
 	}
 
-	public ZendeskJobStatusesAPI.ZJobStatus createTickets(List<ZTicket> ztickets) {
+	public ZendeskTypes.ZJobStatus createTickets(List<ZTicket> ztickets) {
 		if (ztickets == null || ztickets.isEmpty()) { throw new ZendeskException('ztickets parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/tickets/create_many.json');
 		req.setBody('{"tickets": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ztickets))) + '}');
-		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	public TicketWrapper getTicket(Long ticketId) {
@@ -306,7 +224,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		zapi.sendRequest(req);
 	}
 
-	public ZendeskJobStatusesAPI.ZJobStatus updateTickets(List<ZTicket> ztickets) {
+	public ZendeskTypes.ZJobStatus updateTickets(List<ZTicket> ztickets) {
 		if (ztickets == null || ztickets.isEmpty()) { throw new ZendeskException('ztickets parameter must not be null or empty'); }
 		for (ZTicket zticket : ztickets) {
 			if (zticket.id == null) { throw new ZendeskException('Each Ticket must have an id populated'); }
@@ -314,16 +232,16 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/update_many.json');
 		req.setBody('{"tickets": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ztickets))) + '}');
-		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
-	public ZendeskJobStatusesAPI.ZJobStatus updateTickets(Set<Long> ticketIds, ZTicket zticket) {
+	public ZendeskTypes.ZJobStatus updateTickets(Set<Long> ticketIds, ZTicket zticket) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter must not be null or empty'); }
         if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/tickets/update_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
 		req.setBody('{"ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(zticket))) + '}');
-		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	// helper method to add a new comment to a ticket
@@ -358,7 +276,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		zapi.sendRequest(req);
 	}
 
-	public ZendeskJobStatusesAPI.ZJobStatus mergeTickets(Set<Long> sourceTicketIds, String sourceComment, Long targetTicketId, String targetComment) {
+	public ZendeskTypes.ZJobStatus mergeTickets(Set<Long> sourceTicketIds, String sourceComment, Long targetTicketId, String targetComment) {
 		if (sourceTicketIds == null || sourceTicketIds.isEmpty()) { throw new ZendeskException('sourceTicketIds parameter must not be null or empty'); }
 		if (targetTicketId == null) { throw new ZendeskException('targetTicketId parameter must not be null'); }
 
@@ -372,7 +290,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zapi.createRequest('POST', '/tickets/'+targetTicketId+'/merge.json');
 		req.setBody(gen.getAsString());
-		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	public void deleteTicket(Long ticketId) {
@@ -400,11 +318,11 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		zapi.sendRequest(zapi.createRequest('PUT', '/tickets/'+ticketId+'/mark_as_spam.json'));
 	}
 
-	public ZendeskJobStatusesAPI.ZJobStatus markTicketsAsSpam(Set<Long> ticketIds) {
+	public ZendeskTypes.ZJobStatus markTicketsAsSpam(Set<Long> ticketIds) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/mark_many_as_spam.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
-		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	public TicketsWrapper autoCompleteProblems(String autoCompleteText) {

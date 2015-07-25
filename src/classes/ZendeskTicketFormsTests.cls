@@ -36,7 +36,7 @@ public class ZendeskTicketFormsTests {
 
         Test.startTest();
         ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTicketFormsAPI.ZTicketForm testObj = ztforms_api.getTicketForm(123);
+		ZendeskTypes.ZTicketForm testObj = ztforms_api.getTicketForm(123);
         Test.stopTest();
 
 		System.assertNotEquals(null, testObj);
@@ -59,7 +59,7 @@ public class ZendeskTicketFormsTests {
 
         Test.startTest();
         ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketFormsAPI.ZTicketForm zform = new ZendeskTicketFormsAPI.ZTicketForm();
+        ZendeskTypes.ZTicketForm zform = new ZendeskTypes.ZTicketForm();
         zform.name = 'create name';
         zform.ticket_field_ids = new Long[] { 123, 456 };
         Long newTicketFormId = ztforms_api.createTicketForm(zform);
@@ -73,7 +73,7 @@ public class ZendeskTicketFormsTests {
 
         Test.startTest();
         ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketFormsAPI.ZTicketForm zform = new ZendeskTicketFormsAPI.ZTicketForm();
+        ZendeskTypes.ZTicketForm zform = new ZendeskTypes.ZTicketForm();
         zform.name = 'update name';
         zform.ticket_field_ids = new Long[] { 456, 123 };
         ztforms_api.updateTicketForm(123, zform);
@@ -109,14 +109,14 @@ public class ZendeskTicketFormsTests {
 
         Test.startTest();
         ZendeskTicketFormsAPI zfields = new ZendeskTicketFormsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Map<Long, ZendeskTicketFormsAPI.ZTicketForm> fieldsMap = zfields.getAllTicketForms();
+        Map<Long, ZendeskTypes.ZTicketForm> fieldsMap = zfields.getAllTicketForms();
         Test.stopTest();
 
         System.assertNotEquals(null, fieldsMap.containsKey(123));
     }
 
     static testMethod void testZTicketForm() {
-        ZendeskTicketFormsAPI.ZTicketForm zticketform = new ZendeskTicketFormsAPI.ZTicketForm();
+        ZendeskTypes.ZTicketForm zticketform = new ZendeskTypes.ZTicketForm();
         zticketform.position = 0;
         zticketform.name = '';
         zticketform.raw_name = '';

@@ -82,7 +82,7 @@ public class ZendeskGroupsTests {
 
         Test.startTest();
         ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Map<Long, ZendeskGroupsAPI.ZGroup> fieldsMap = zgroups_api.getAllGroups();
+        Map<Long, ZendeskTypes.ZGroup> fieldsMap = zgroups_api.getAllGroups();
         Test.stopTest();
 
         System.assertNotEquals(null, fieldsMap.containsKey(123));
@@ -125,7 +125,7 @@ public class ZendeskGroupsTests {
     }
 
     static testMethod void testZGroup() {
-        ZendeskGroupsAPI.ZGroup zgroup = new ZendeskGroupsAPI.ZGroup();
+        ZendeskTypes.ZGroup zgroup = new ZendeskTypes.ZGroup();
         zgroup.name = '';
 
         /*

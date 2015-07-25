@@ -10,12 +10,7 @@ public class ZendeskTagsAPI extends ZendeskResourceBase {
 
 	// Used to deserialize the result of a listTags() API call
 	public class ListTagsWrapper extends ZendeskPagingBase {
-		public List<ListTags> tags {get;set;}
-	}
-
-	public class ListTags {
-		public String name {get;set;}
-		public Long count {get;set;}
+		public List<ZTag> tags {get;set;}
 	}
 
 	public ZendeskTagsAPI(ZendeskAPI zapi) {

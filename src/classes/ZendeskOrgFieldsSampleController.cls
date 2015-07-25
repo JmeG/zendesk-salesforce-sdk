@@ -9,7 +9,7 @@ public class ZendeskOrgFieldsSampleController {
 	public String searchText {get;set;}
 	public Long organizationFieldId {get;set;}
 	public String fieldOrderCSV {get;set;}
-	public Map<String, ZendeskOrganizationFieldsAPI.ZOrganizationField> fieldsMap {get;set;}
+	public Map<String, ZendeskTypes.ZOrganizationField> fieldsMap {get;set;}
 
 	public ZendeskOrgFieldsSampleController() {}
 
@@ -17,9 +17,9 @@ public class ZendeskOrgFieldsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskOrganizationFieldsAPI zfields = new ZendeskOrganizationFieldsAPI(zapi);
+			ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(zapi);
 
-			fieldsMap = zfields.getAllFields();
+			fieldsMap = zfields_api.getAllFields();
 		}
 		catch(Exception e) {
 			pageMessage = e.getMessage();
@@ -31,10 +31,10 @@ public class ZendeskOrgFieldsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskOrganizationFieldsAPI zfields = new ZendeskOrganizationFieldsAPI(zapi);
+			ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(zapi);
 
-			fieldsMap = new Map<String, ZendeskOrganizationFieldsAPI.ZOrganizationField>();
-			ZendeskOrganizationFieldsAPI.ZOrganizationField field = zfields.getFieldByKey(searchText);
+			fieldsMap = new Map<String, ZendeskTypes.ZOrganizationField>();
+			ZendeskTypes.ZOrganizationField field = zfields_api.getFieldByKey(searchText);
 			if (field != null) {
 				fieldsMap.put(field.key, field);
 			}
@@ -52,10 +52,10 @@ public class ZendeskOrgFieldsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskOrganizationFieldsAPI zfields = new ZendeskOrganizationFieldsAPI(zapi);
+			ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(zapi);
 
-			fieldsMap = new Map<String, ZendeskOrganizationFieldsAPI.ZOrganizationField>();
-			ZendeskOrganizationFieldsAPI.ZOrganizationField field = zfields.getField(organizationFieldId);
+			fieldsMap = new Map<String, ZendeskTypes.ZOrganizationField>();
+			ZendeskTypes.ZOrganizationField field = zfields_api.getField(organizationFieldId);
 			if (field != null) {
 				fieldsMap.put(field.key, field);
 			}
@@ -73,17 +73,17 @@ public class ZendeskOrgFieldsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskOrganizationFieldsAPI zfields = new ZendeskOrganizationFieldsAPI(zapi);
+			ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(zapi);
 
 			String[] splits = fieldOrderCSV.split(',');
 			List<Long> orderedFieldIds = new List<Long>();
 			for (String s : splits) {
 				orderedFieldIds.add(Long.valueOf(s.trim()));
 			}
-			zfields.reorderFields(orderedFieldIds);
+			zfields_api.reorderFields(orderedFieldIds);
 
 			// clear the fields list
-			fieldsMap = new Map<String, ZendeskOrganizationFieldsAPI.ZOrganizationField>();
+			fieldsMap = new Map<String, ZendeskTypes.ZOrganizationField>();
 		}
 		catch(Exception e) {
 			pageMessage = e.getMessage();

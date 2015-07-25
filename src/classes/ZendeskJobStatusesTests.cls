@@ -27,7 +27,7 @@ private class ZendeskJobStatusesTests {
 
         Test.startTest();
         ZendeskJobStatusesAPI zjobs_api = new ZendeskJobStatusesAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskJobStatusesAPI.ZJobStatus jstatus = zjobs_api.getJobStatus('abc123');
+        ZendeskTypes.ZJobStatus jstatus = zjobs_api.getJobStatus('abc123');
         Test.stopTest();
 
         System.assertNotEquals(null, jstatus);
@@ -39,7 +39,7 @@ private class ZendeskJobStatusesTests {
 
         Test.startTest();
         ZendeskJobStatusesAPI zjobs_api = new ZendeskJobStatusesAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        List<ZendeskJobStatusesAPI.ZJobStatus> jobs = zjobs_api.getJobStatuses(new Set<String> {'abc123', 'abc345'});
+        List<ZendeskTypes.ZJobStatus> jobs = zjobs_api.getJobStatuses(new Set<String> {'abc123', 'abc345'});
         Test.stopTest();
 
         System.assertNotEquals(null, jobs);
@@ -48,7 +48,7 @@ private class ZendeskJobStatusesTests {
 
     static testMethod void testDeserialize() {
         String resBody = '{ "id": "31a2e47012e20", "url": "https://test.zendesk.com/api/v2/job_statuses/31a2e4701.json", "total": 2, "progress": 2, "status": "completed", "message": "Completed", "results": [ { "status": "Failed Creating User ", "errors": "Name:  is too short" } ] }';
-        ZendeskJobStatusesAPI.ZJobStatus jstatus = (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(resBody, ZendeskJobStatusesAPI.ZJobStatus.class);
+        ZendeskTypes.ZJobStatus jstatus = (ZendeskTypes.ZJobStatus)JSON.deserialize(resBody, ZendeskTypes.ZJobStatus.class);
 
         System.assertNotEquals(null, jstatus);
         System.assertNotEquals(null, jstatus.id);

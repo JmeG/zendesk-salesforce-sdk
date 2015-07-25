@@ -3,14 +3,6 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 
 	private Map<Long, ZGroup> groupsMap;
 
-	public class ZGroup {
-		public Long id {get; private set;}
-		public String name {get;set;}
-		public Boolean deleted {get; private set;}
-		public DateTime created_at {get; private set;}
-		public DateTime updated_at {get; private set;}
-	}
-
 	public class GroupWrapper extends ZendeskSideLoadingBase {
 		public ZGroup x_group {get;set;} // Use "x_group" in place of "group" which is a reserved keyword. Requires custom de/serialization.
 	}

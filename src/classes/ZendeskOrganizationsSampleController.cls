@@ -7,7 +7,7 @@ public class ZendeskOrganizationsSampleController {
 
 	public String pageMessage {get;set;}
 	public Long organizationId {get;set;}
-	public ZendeskOrganizationsAPI.ZOrganization[] organizations {get;set;}
+	public ZendeskTypes.ZOrganization[] organizations {get;set;}
 
 	public ZendeskOrganizationsSampleController() {}
 
@@ -36,7 +36,7 @@ public class ZendeskOrganizationsSampleController {
 
 			ZendeskOrganizationsAPI.OrganizationWrapper wrapper = zorganizations.getOrganization(organizationId);
 			if (wrapper != null && wrapper.organization != null) {
-				organizations = new ZendeskOrganizationsAPI.ZOrganization[]{ wrapper.organization };
+				organizations = new ZendeskTypes.ZOrganization[]{ wrapper.organization };
 			}
 			else {
 				throw new ZendeskException('Organization "' + organizationId + '" not found');

@@ -66,8 +66,8 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
-        ZendeskJobStatusesAPI.ZJobStatus jobStatus = ztickets_api.createTickets(new ZendeskTicketsAPI.ZTicket[] { zt });
+        ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
+        ZendeskTypes.ZJobStatus jobStatus = ztickets_api.createTickets(new ZendeskTypes.ZTicket[] { zt });
         Test.stopTest();
 
         System.assertNotEquals(null, jobStatus);
@@ -154,9 +154,9 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
+        ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
         zt.id = 123;
-        ztickets_api.updateTickets(new ZendeskTicketsAPI.ZTicket[] { zt });
+        ztickets_api.updateTickets(new ZendeskTypes.ZTicket[] { zt });
         Test.stopTest();
 
         System.assert(true);
@@ -167,8 +167,8 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
-        ZendeskJobStatusesAPI.ZJobStatus jobStatus = ztickets_api.updateTickets(new Set<Long> { 123, 456 }, zt);
+        ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
+        ZendeskTypes.ZJobStatus jobStatus = ztickets_api.updateTickets(new Set<Long> { 123, 456 }, zt);
         Test.stopTest();
 
         System.assert(true);
@@ -179,8 +179,8 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
-        ZendeskJobStatusesAPI.ZJobStatus jobStatus = ztickets_api.mergeTickets(new Set<Long> { 123, 456 }, 'comment1', 789, 'comment2');
+        ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
+        ZendeskTypes.ZJobStatus jobStatus = ztickets_api.mergeTickets(new Set<Long> { 123, 456 }, 'comment1', 789, 'comment2');
         Test.stopTest();
 
         System.assert(true);
@@ -191,7 +191,7 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
+        ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
         ztickets_api.deleteTickets(new Set<Long> { 123, 456 });
         Test.stopTest();
 
@@ -214,7 +214,7 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
+        ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
         ztickets_api.markTicketAsSpam(123);
         Test.stopTest();
 
@@ -226,7 +226,7 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
+        ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
         ztickets_api.markTicketsAsSpam(new Set<Long> {123, 456});
         Test.stopTest();
 
@@ -273,7 +273,7 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Long newTicketId = ztickets_api.createTicket(ZendeskTicketsAPI.TicketType.question, 'subject', 'comment', 999);
+        Long newTicketId = ztickets_api.createTicket(ZendeskTypes.TicketType.question, 'subject', 'comment', 999);
 
         Test.stopTest();
 
@@ -285,7 +285,7 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Long newTicketId = ztickets_api.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 'attachmentToken', 123);
+        Long newTicketId = ztickets_api.createTicket(ZendeskTypes.TicketType.question, 'testsubj', 'testcomment', 'attachmentToken', 123);
 
         Test.stopTest();
 
@@ -297,7 +297,7 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Long newTicketId = ztickets_api.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 123, new List<ZendeskTicketsAPI.ZTicketCustomField>());
+        Long newTicketId = ztickets_api.createTicket(ZendeskTypes.TicketType.question, 'testsubj', 'testcomment', 123, new List<ZendeskTypes.ZTicketCustomField>());
 
         Test.stopTest();
 
@@ -309,7 +309,7 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Long newTicketId = ztickets_api.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 123, 234, 345, 456, new List<ZendeskTicketsAPI.ZTicketCustomField>());
+        Long newTicketId = ztickets_api.createTicket(ZendeskTypes.TicketType.question, 'testsubj', 'testcomment', 123, 234, 345, 456, new List<ZendeskTypes.ZTicketCustomField>());
 
         Test.stopTest();
 
@@ -321,7 +321,7 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Long newTicketId = ztickets_api.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 'token', 123,  new List<ZendeskTicketsAPI.ZTicketCustomField>());
+        Long newTicketId = ztickets_api.createTicket(ZendeskTypes.TicketType.question, 'testsubj', 'testcomment', 'token', 123,  new List<ZendeskTypes.ZTicketCustomField>());
 
         Test.stopTest();
 
@@ -363,7 +363,7 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
 		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTicketsAPI.ZTicket obj = new ZendeskTicketsAPI.ZTicket();
+		ZendeskTypes.ZTicket obj = new ZendeskTypes.ZTicket();
         obj.assignee_id = 555;
         ztickets_api.updateTicket(123, obj);
         Test.stopTest();
@@ -387,7 +387,7 @@ public class ZendeskTicketsTests {
 
         Test.startTest();
 		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ztickets_api.addTicketCommentAndChangeStatus(123, 'new comment', true, new ZendeskTicketsAPI.TicketStatus('open'));
+        ztickets_api.addTicketCommentAndChangeStatus(123, 'new comment', true, new ZendeskTypes.TicketStatus('open'));
         Test.stopTest();
 
         System.assert(true);
@@ -395,7 +395,7 @@ public class ZendeskTicketsTests {
 
     static testMethod void testZTicket() {
         String ticketJson = '{ "id": 35436, "url": "https://company.zendesk.com/api/v2/tickets/35436.json", "external_id": "ahg35h3jh", "created_at": "2009-07-20T22:55:29Z", "updated_at": "2011-05-05T10:38:52Z", "type": "incident", "subject": "Help, my printer is on fire!", "raw_subject": "{{dc.printer_on_fire}}", "description": "The fire is very colorful.", "priority": "high", "status": "open", "recipient": "support@company.com", "requester_id": 20978392, "submitter_id": 76872, "assignee_id": 235323, "organization_id": 509974, "group_id": 98738, "collaborator_ids": [35334, 234], "forum_topic_id": 72648221, "problem_id": 9873764, "has_incidents": false, "due_at": null, "tags": ["enterprise", "other_tag"], "via": { "channel": "web" }, "custom_fields": [ { "id": 27642, "value": "745" }, { "id": 27648, "value": "yes" } ], "satisfaction_rating": { "id": 1234, "score": "good", "comment": "Great support!" }, "sharing_agreement_ids": [84432] }';
-        ZendeskTicketsAPI.ZTicket zticket = (ZendeskTicketsAPI.ZTicket)JSON.deserialize(ticketJson, ZendeskTicketsAPI.ZTicket.class);
+        ZendeskTypes.ZTicket zticket = (ZendeskTypes.ZTicket)JSON.deserialize(ticketJson, ZendeskTypes.ZTicket.class);
         System.assertEquals(35436, zticket.id);
         System.assertNotEquals(null, zticket.url);
         System.assertNotEquals(null, zticket.external_id);
@@ -430,8 +430,8 @@ public class ZendeskTicketsTests {
         System.assertNotEquals(null, zticket.created_at);
         System.assertNotEquals(null, zticket.updated_at);
 
-        System.assertNotEquals(null, new ZendeskTicketsAPI.ZTicketCustomField());
-        System.assertNotEquals(null, new ZendeskTicketsAPI.ZTicketCustomField(1, 'val'));
+        System.assertNotEquals(null, new ZendeskTypes.ZTicketCustomField());
+        System.assertNotEquals(null, new ZendeskTypes.ZTicketCustomField(1, 'val'));
     }
 
 }

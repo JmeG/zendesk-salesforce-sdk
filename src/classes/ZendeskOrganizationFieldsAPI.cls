@@ -3,51 +3,6 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 
     private Map<String, ZOrganizationField> fieldsMap {get; private set; }
 
-    public class ZOrganizationField {
-        public Long id {get; private set;}
-        public String key {get;set;}
-	    public String type {get;set;}
-	    public String title {get;set;}
-	    public String raw_title {get;set;}
-	    public Long position {get;set;}
-	    public Boolean active {get;set;}
-        public String description {get;set;}
-        public String raw_description {get;set;}
-	    //public Boolean x_system {get;set;} // NOTE: "system" is reserved
-        //public String regexp_for_validation {get;set;}
-	    //public String tag {get;set;}
-	    public List<ZCustomFieldOption> custom_field_options {get;set;}
-		public DateTime created_at {get; private set;}
-		public DateTime updated_at {get; private set;}
-
-	    // Get the picklist "value" matching the provided name
-	    public String getOptionValue(String optname) {
-	        return getOptionValue(optname, false);
-	    }
-
-	    public String getOptionValue(String optname, Boolean errorIfNotFound) {
-	        String val = null;
-	        if (custom_field_options != null) {
-	            for (ZCustomFieldOption fo : custom_field_options) {
-	                if (fo.name.equalsIgnoreCase(optname)) {
-	                    val = fo.value;
-	                    break;
-	                }
-	            }
-	        }
-
-	        if (String.isEmpty(val) && errorIfNotFound) { throw new ZendeskException('Option value "' + optname + '" not found for field "' + this.title + '"'); }
-	        return val;
-	    }
-	}
-
-    public class ZCustomFieldOption {
-		public Long id {get;set;}
-		public String name {get;set;}
-		public String raw_name {get;set;}
-		public String value {get;set;}
-	}
-
     public class OrganizationFieldsWrapper extends ZendeskPagingBase {
         public List<ZOrganizationField> organization_fields {get;set;}
     }

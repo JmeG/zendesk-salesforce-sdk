@@ -57,14 +57,14 @@ private class ZendeskTicketCommentsTests {
     }
 
     static testMethod void testZTicketComment() {
-        ZendeskTicketCommentsAPI.ZTicketComment zcomment = new ZendeskTicketCommentsAPI.ZTicketComment();
+        ZendeskTypes.ZTicketComment zcomment = new ZendeskTypes.ZTicketComment();
         zcomment.type = '';
         zcomment.body = '';
         zcomment.html_body = '';
         zcomment.author_id = 0;
         zcomment.x_public = true;
-        zcomment.attachments = new ZendeskAttachmentsAPI.ZAttachment[1];
-        zcomment.via = new ZendeskTicketsAPI.ZTicketVia();
+        zcomment.attachments = new ZendeskTypes.ZAttachment[1];
+        zcomment.via = new ZendeskTypes.ZTicketVia();
 
         System.assert(true);
     }

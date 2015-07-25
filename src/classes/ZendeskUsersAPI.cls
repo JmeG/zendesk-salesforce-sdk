@@ -6,23 +6,6 @@
 // PUT    /api/v2/users/me/merge.json
 public class ZendeskUsersAPI extends ZendeskResourceBase {
 
-	public class ZUser {
-		public Long id {get;set;}
-		public String name {get;set;}
-		public String email {get;set;}
-		public String phone {get;set;}
-		public String external_id {get;set;}
-		public String alias {get;set;}
-		public Boolean verified {get;set;}
-		public String role {get;set;}
-		public Long organization_id {get;set;}
-		public Map<String, String> user_fields {get;set;}
-		public Boolean active {get; private set;}
-		public DateTime last_login_at {get; private set;}
-		public DateTime created_at {get; private set;}
-		public DateTime updated_at {get; private set;}
-	}
-
 	public class UsersWrapper extends ZendeskPagingBase {
 		public List<ZUser> users {get;set;}
 	}
@@ -56,12 +39,12 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 		return ((resultWrapper==null || resultWrapper.user == null) ? null : resultWrapper.user.id);
 	}
 
-	public ZendeskJobStatusesAPI.ZJobStatus createUsers(List<ZUser> zusers) {
+	public ZendeskTypes.ZJobStatus createUsers(List<ZUser> zusers) {
         if (zusers == null || zusers.isEmpty()) { throw new ZendeskException('zusers parameter must not be null or empty'); }
 
         HttpRequest req = zapi.createRequest('POST', '/users/create_many.json');
         req.setBody('{"users": ' + stripJsonNulls(JSON.serialize(zusers)) + '}');
-        return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
+        return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
     }
 
 	public void updateUser(Long userId, ZUser zuser) {
@@ -72,7 +55,7 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 		zapi.sendRequest(req);
 	}
 
-	public ZendeskJobStatusesAPI.ZJobStatus updateUsers(List<ZUser> zusers) {
+	public ZendeskTypes.ZJobStatus updateUsers(List<ZUser> zusers) {
 		if (zusers == null || zusers.isEmpty()) { throw new ZendeskException('zusers parameter must not be null or empty'); }
 		for (ZUser zuser : zusers) {
 			if (zuser.id == null && String.isEmpty(zuser.external_id)) { throw new ZendeskException('Each user must have either an id or external_id populated'); }
@@ -80,25 +63,25 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zapi.createRequest('PUT', '/users/update_many.json');
 		req.setBody('{"users": ' + stripJsonNulls(JSON.serialize(zusers)) + '}');
-		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
-	public ZendeskJobStatusesAPI.ZJobStatus updateUsers(Set<Long> userIds, ZUser zuser) {
+	public ZendeskTypes.ZJobStatus updateUsers(Set<Long> userIds, ZUser zuser) {
 		if (userIds == null || userIds.isEmpty()) { throw new ZendeskException('userIds parameter must not be null or empty'); }
         if (zuser == null) { throw new ZendeskException('zuser parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/users/update_many.json?ids=' + toCSV(userIds));
 		req.setBody('{"user": ' + stripJsonNulls(JSON.serialize(zuser)) + '}');
-		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
-	public ZendeskJobStatusesAPI.ZJobStatus updateUsers(Set<String> externalIds, ZUser zusers) {
+	public ZendeskTypes.ZJobStatus updateUsers(Set<String> externalIds, ZUser zusers) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter must not be null or empty'); }
 		if (zusers == null) { throw new ZendeskException('zusers parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/users/update_many.json?external_ids=' + toCSV(externalIds));
 		req.setBody('{"user": ' + stripJsonNulls(JSON.serialize(zusers)) + '}');
-		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	public void mergeUsers(Long sourceUserId, Long targetUserId) {

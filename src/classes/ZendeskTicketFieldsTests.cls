@@ -36,7 +36,7 @@ public class ZendeskTicketFieldsTests {
 
         Test.startTest();
         ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketFieldsAPI.ZTicketField testObj = zfields_api.getField(123);
+        ZendeskTypes.ZTicketField testObj = zfields_api.getField(123);
         System.assertNotEquals(null, testObj);
 
         String optVal = testObj.getOptionValue('Test');
@@ -60,7 +60,7 @@ public class ZendeskTicketFieldsTests {
 
         Test.startTest();
         ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketFieldsAPI.ZTicketField zfield = new ZendeskTicketFieldsAPI.ZTicketField();
+        ZendeskTypes.ZTicketField zfield = new ZendeskTypes.ZTicketField();
         zfield.type = 'create type';
         zfield.title = 'create title';
         Long fieldId = zfields_api.createField(zfield);
@@ -74,7 +74,7 @@ public class ZendeskTicketFieldsTests {
 
         Test.startTest();
         ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketFieldsAPI.ZTicketField zfield = new ZendeskTicketFieldsAPI.ZTicketField();
+        ZendeskTypes.ZTicketField zfield = new ZendeskTypes.ZTicketField();
         zfield.type = 'update type';
         zfield.title = 'update title';
         zfields_api.updateField(123, zfield);
@@ -88,14 +88,14 @@ public class ZendeskTicketFieldsTests {
 
         Test.startTest();
         ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Map<Long, ZendeskTicketFieldsAPI.ZTicketField> fieldsMap = zfields_api.getAllFields();
+        Map<Long, ZendeskTypes.ZTicketField> fieldsMap = zfields_api.getAllFields();
         Test.stopTest();
 
         System.assertNotEquals(null, fieldsMap.containsKey(123));
     }
 
     static testMethod void testZTicketField() {
-        ZendeskTicketFieldsAPI.ZTicketField zticketfield = new ZendeskTicketFieldsAPI.ZTicketField();
+        ZendeskTypes.ZTicketField zticketfield = new ZendeskTypes.ZTicketField();
         //zticketfield.id = 0;
         zticketfield.type = '';
         zticketfield.title = '';
@@ -103,7 +103,7 @@ public class ZendeskTicketFieldsTests {
         zticketfield.active = true;
         zticketfield.custom_field_options = null;
 
-        ZendeskTicketFieldsAPI.ZCustomFieldOption zcustomfieldoption = new ZendeskTicketFieldsAPI.ZCustomFieldOption();
+        ZendeskTypes.ZCustomFieldOption zcustomfieldoption = new ZendeskTypes.ZCustomFieldOption();
         //zcustomfieldoption.id = 0;
         zcustomfieldoption.name = '';
         zcustomfieldoption.raw_name = '';

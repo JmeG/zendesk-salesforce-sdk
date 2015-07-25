@@ -45,8 +45,8 @@ public class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
-		ZendeskJobStatusesAPI.ZJobStatus jobStatus = zusers_api.createUsers(new ZendeskUsersAPI.ZUser[] { zu });
+        ZendeskTypes.ZUser zu = new ZendeskTypes.ZUser();
+		ZendeskTypes.ZJobStatus jobStatus = zusers_api.createUsers(new ZendeskTypes.ZUser[] { zu });
         Test.stopTest();
 
 		System.assertNotEquals(null, jobStatus);
@@ -57,7 +57,7 @@ public class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
+        ZendeskTypes.ZUser zu = new ZendeskTypes.ZUser();
 		zusers_api.updateUser(123, zu);
         Test.stopTest();
 
@@ -69,9 +69,9 @@ public class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
+        ZendeskTypes.ZUser zu = new ZendeskTypes.ZUser();
         zu.id = 123;
-		zusers_api.updateUsers(new ZendeskUsersAPI.ZUser[] {zu});
+		zusers_api.updateUsers(new ZendeskTypes.ZUser[] {zu});
         Test.stopTest();
 
 		System.assert(true);
@@ -82,7 +82,7 @@ public class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
+        ZendeskTypes.ZUser zu = new ZendeskTypes.ZUser();
 		zusers_api.updateUsers(new Set<Long> {123,456}, zu);
         Test.stopTest();
 
@@ -94,7 +94,7 @@ public class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
+        ZendeskTypes.ZUser zu = new ZendeskTypes.ZUser();
 		zusers_api.updateUsers(new Set<String> {'123','456'}, zu);
         Test.stopTest();
 
@@ -106,7 +106,7 @@ public class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
+        ZendeskTypes.ZUser zu = new ZendeskTypes.ZUser();
 		zusers_api.mergeUsers(123, 456);
         Test.stopTest();
 
@@ -314,7 +314,7 @@ public class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.ZUser u = zusers_api.getCurrentUser();
+		ZendeskTypes.ZUser u = zusers_api.getCurrentUser();
         Test.stopTest();
 
 		System.assertNotEquals(null, u);
@@ -322,7 +322,7 @@ public class ZendeskUsersTests {
 
     static testMethod void testZUser() {
         String userJson = '{ "id": 35436, "name": "Johnny Agent", "external_id": "sai989sur98w9", "alias": "Mr. Johnny", "created_at": "2009-07-20T22:55:29Z", "updated_at": "2011-05-05T10:38:52Z", "active": true, "verified": true, "shared": false, "shared_agent": false, "locale": "en-US", "locale_id": 1, "time_zone": "Copenhagen", "last_login_at": "2011-05-05T10:38:52Z", "email": "johnny@example.com", "phone": "555-123-4567", "signature": "Have a nice day, Johnny", "details": "", "notes": "Johnny is a nice guy!", "organization_id": 57542, "role": "agent", "custom_role_id": 9373643, "moderator": true, "ticket_restriction": "assigned", "only_private_comments": false, "tags": ["enterprise", "other_tag"], "restricted_agent": true, "suspended": true, "user_fields": { "user_decimal": 5.1, "user_dropdown": "option_1", "user_date": "2012-07-23T00:00:00Z" } }';
-        ZendeskUsersAPI.ZUser zuser = (ZendeskUsersAPI.ZUser)JSON.deserialize(userJson, ZendeskUsersAPI.ZUser.class);
+        ZendeskTypes.ZUser zuser = (ZendeskTypes.ZUser)JSON.deserialize(userJson, ZendeskTypes.ZUser.class);
         System.assertEquals(35436, zuser.id);
         System.assertEquals('Johnny Agent', zuser.name);
         System.assertEquals('johnny@example.com', zuser.email);

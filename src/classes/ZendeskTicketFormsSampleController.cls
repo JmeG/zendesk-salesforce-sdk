@@ -7,7 +7,7 @@ public class ZendeskTicketFormsSampleController {
 
 	public String pageMessage {get;set;}
 	public Long ticketFormId {get;set;}
-	public Map<Long, ZendeskTicketFormsAPI.ZTicketForm> formsMap {get;set;}
+	public Map<Long, ZendeskTypes.ZTicketForm> formsMap {get;set;}
 
 	public ZendeskTicketFormsSampleController() {}
 
@@ -31,8 +31,8 @@ public class ZendeskTicketFormsSampleController {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskTicketFormsAPI zforms = new ZendeskTicketFormsAPI(zapi);
 
-			formsMap = new Map<Long, ZendeskTicketFormsAPI.ZTicketForm>();
-			ZendeskTicketFormsAPI.ZTicketForm tf = zforms.getTicketForm(ticketFormId);
+			formsMap = new Map<Long, ZendeskTypes.ZTicketForm>();
+			ZendeskTypes.ZTicketForm tf = zforms.getTicketForm(ticketFormId);
 			if (tf != null) {
 				formsMap.put(tf.id, tf);
 			}

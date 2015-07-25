@@ -36,7 +36,7 @@ public class ZendeskOrganizationFieldsTests {
 
         Test.startTest();
         ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskOrganizationFieldsAPI.ZOrganizationField testObj = zfields_api.getField(123);
+        ZendeskTypes.ZOrganizationField testObj = zfields_api.getField(123);
         System.assertNotEquals(null, testObj);
 
         String optVal = testObj.getOptionValue('Test');
@@ -49,7 +49,7 @@ public class ZendeskOrganizationFieldsTests {
 
         Test.startTest();
         ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskOrganizationFieldsAPI.ZOrganizationField testObj = zfields_api.getFieldByKey('custom_field_1');
+        ZendeskTypes.ZOrganizationField testObj = zfields_api.getFieldByKey('custom_field_1');
         Test.stopTest();
 
         System.assertNotEquals(null, testObj);
@@ -71,7 +71,7 @@ public class ZendeskOrganizationFieldsTests {
 
         Test.startTest();
         ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskOrganizationFieldsAPI.ZOrganizationField zfield = new ZendeskOrganizationFieldsAPI.ZOrganizationField();
+        ZendeskTypes.ZOrganizationField zfield = new ZendeskTypes.ZOrganizationField();
         zfield.key = 'create key';
         zfield.title = 'create title';
         Long fieldId = zfields_api.createField(zfield);
@@ -85,7 +85,7 @@ public class ZendeskOrganizationFieldsTests {
 
         Test.startTest();
         ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskOrganizationFieldsAPI.ZOrganizationField zfield = new ZendeskOrganizationFieldsAPI.ZOrganizationField();
+        ZendeskTypes.ZOrganizationField zfield = new ZendeskTypes.ZOrganizationField();
         zfield.key = 'update key';
         zfield.title = 'update title';
         zfields_api.updateField(123, zfield);
@@ -112,14 +112,14 @@ public class ZendeskOrganizationFieldsTests {
 
         Test.startTest();
         ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Map<String, ZendeskOrganizationFieldsAPI.ZOrganizationField> fieldsMap = zfields_api.getAllFields();
+        Map<String, ZendeskTypes.ZOrganizationField> fieldsMap = zfields_api.getAllFields();
         Test.stopTest();
 
         System.assertNotEquals(null, fieldsMap.containsKey('Test'));
     }
 
     static testMethod void testZOrganizationField() {
-        ZendeskOrganizationFieldsAPI.ZOrganizationField zfield = new ZendeskOrganizationFieldsAPI.ZOrganizationField();
+        ZendeskTypes.ZOrganizationField zfield = new ZendeskTypes.ZOrganizationField();
         //zfield.id = 0;
         zfield.type = '';
         zfield.title = '';
@@ -127,7 +127,7 @@ public class ZendeskOrganizationFieldsTests {
         zfield.active = true;
         zfield.custom_field_options = null;
 
-        ZendeskOrganizationFieldsAPI.ZCustomFieldOption zfieldoption = new ZendeskOrganizationFieldsAPI.ZCustomFieldOption();
+        ZendeskTypes.ZCustomFieldOption zfieldoption = new ZendeskTypes.ZCustomFieldOption();
         zfieldoption.id = 0;
         zfieldoption.name = '';
         zfieldoption.raw_name = '';
