@@ -21,7 +21,7 @@
         <name>CustomApplication</name>
     </types>
     <types>
-        <members>*</members>
+        <members>Zendesk_API</members>
         <name>CustomObject</name>
     </types>
     <types>
