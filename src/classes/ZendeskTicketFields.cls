@@ -1,10 +1,4 @@
 // This class provides functionality to call the Zendesk Ticket Fields API
-// Currently supports the following API endpoints:
-// GET    /api/v2/ticket_fields.json
-// GET    /api/v2/ticket_fields/{id}.json
-// POST   /api/v2/ticket_fields.json
-// PUT    /api/v2/ticket_fields/{id}.json
-// DELETE /api/v2/ticket_fields/{id}.json
 public class ZendeskTicketFields extends ZendeskResourceBase {
 
 	private Map<Long, ZTicketField> fieldsMap {get; private set; }
@@ -47,7 +41,7 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 		public String value {get;set;}
 	}
 
-	public class TicketFieldsWrapper extends ZendeskPagingSupport {
+	public class TicketFieldsWrapper extends ZendeskPagingBase {
 		public List<ZTicketField> ticket_fields {get;set;}
 	}
 

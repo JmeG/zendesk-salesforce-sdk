@@ -1,12 +1,4 @@
 // This class provides functionality to call the Zendesk Ticket Forms API
-// Currently supports the following API endpoints:
-// GET    /api/v2/ticket_forms.json
-// GET    /api/v2/ticket_forms/{id}.json
-// POST   /api/v2/ticket_forms.json
-// POST   /api/v2/ticket_forms/{id}/clone.json
-// PUT    /api/v2/ticket_forms/{id}.json
-// PUT    /api/v2/ticket_forms/reorder.json
-// DELETE /api/v2/ticket_forms/{id}.json
 public class ZendeskTicketForms extends ZendeskResourceBase {
 
 	private Map<Long, ZTicketForm> ticketFormsMap;
@@ -28,7 +20,7 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 		public ZTicketForm ticket_form {get;set;}
 	}
 
-	public class TicketFormsWrapper extends ZendeskPagingSupport {
+	public class TicketFormsWrapper extends ZendeskPagingBase {
 		public List<ZTicketForm> ticket_forms {get;set;}
 	}
 

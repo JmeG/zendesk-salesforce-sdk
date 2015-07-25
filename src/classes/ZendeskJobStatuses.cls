@@ -1,7 +1,4 @@
 // This class provides functionality to call the Zendesk Job Statuses API
-// Currently supports the following API endpoints:
-// GET /api/v2/job_statuses/{id}.json
-// GET /api/v2/job_statuses/show_many.json?ids={ids}
 public class ZendeskJobStatuses extends ZendeskResourceBase {
 
 	public class JobStatus {

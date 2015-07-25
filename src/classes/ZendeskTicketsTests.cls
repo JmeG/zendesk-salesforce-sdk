@@ -251,10 +251,10 @@ private class ZendeskTicketsTests {
 
         Test.startTest();
         ZendeskTickets ztickets = new ZendeskTickets(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTickets.ZTicket testObj = ztickets.getTicket(123);
+        ZendeskTickets.TicketWrapper wrapper = ztickets.getTicket(123);
         Test.stopTest();
 
-        System.assertNotEquals(null, testObj);
+        System.assertNotEquals(null, wrapper);
     }
 
     static testMethod void testDeleteTicket() {

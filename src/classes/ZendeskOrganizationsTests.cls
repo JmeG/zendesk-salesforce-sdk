@@ -147,11 +147,12 @@ private class ZendeskOrganizationsTests {
 
         Test.startTest();
 		ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskOrganizations.ZOrganization org = zorgs.getOrganization(123);
+		ZendeskOrganizations.OrganizationWrapper wrapper = zorgs.getOrganization(123);
         Test.stopTest();
 
-		System.assertNotEquals(null, org);
-        System.assertEquals(123, org.id);
+		System.assertNotEquals(null, wrapper);
+		System.assertNotEquals(null, wrapper.organization);
+        System.assertEquals(123, wrapper.organization.id);
     }
 
     static testMethod void testCreateOrganization() {

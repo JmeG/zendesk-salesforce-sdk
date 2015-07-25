@@ -33,9 +33,9 @@ public class ZendeskGroupsSampleController {
 			ZendeskGroups zgroups = new ZendeskGroups(zapi);
 
 			groupsMap = new Map<Long, ZendeskGroups.ZGroup>();
-			ZendeskGroups.ZGroup g = zgroups.getGroup(groupId);
-			if (g != null) {
-				groupsMap.put(g.id, g);
+			ZendeskGroups.GroupWrapper gw = zgroups.getGroup(groupId);
+			if (gw != null && gw.x_group != null) {
+				groupsMap.put(gw.x_group.id, gw.x_group);
 			}
 			else {
 				throw new ZendeskException('Group "' + groupId + '" not found');

@@ -1,26 +1,4 @@
 // This class provides functionality to call the Zendesk Users API
-// Currently supports the following API endpoints:
-// GET    /api/v2/users.json
-// GET    /api/v2/users/{id}.json
-// GET    /api/v2/users/search.json?query={query}
-// GET    /api/v2/users/me.json
-// GET    /api/v2/users/show_many.json?ids={ids}
-// GET    /api/v2/users/show_many.json?external_ids={external_ids}
-// GET    /api/v2/organizations/{id}/users.json
-// GET    /api/v2/groups/{id}/users.json
-// GET    /api/v2/users/{id}/related.json
-// GET    /api/v2/users/search.json?external_id={external_id}
-// GET    /api/v2/users/autocomplete.json?name={name}
-// POST   /api/v2/users.json
-// POST   /api/v2/users/create_many.json
-// PUT    /api/v2/users/{id}.json
-// PUT    /api/v2/users/{id}/merge.json
-// PUT    /api/v2/users/update_many.json
-// PUT    /api/v2/users/update_many.json?ids={ids}
-// PUT    /api/v2/users/update_many.json?external_ids={external_ids}
-// DELETE /api/v2/users/destroy_many.json?ids={ids}
-// DELETE /api/v2/users/destroy_many.json?external_ids={external_ids}
-// DELETE /api/v2/users/{id}.json
 // *************************************
 // TODO: Implement the following methods
 // POST   /api/v2/users/{user_id}/password.json
@@ -45,15 +23,12 @@ public class ZendeskUsers extends ZendeskResourceBase {
 		public DateTime updated_at {get; private set;}
 	}
 
-	public class UsersWrapper extends ZendeskPagingSupport {
+	public class UsersWrapper extends ZendeskPagingBase {
 		public List<ZUser> users {get;set;}
-
-		// Sideloadable fields; organizations, abilities, roles, identities, groups
-		public List<ZendeskOrganizations.ZOrganization> organizations {get; private set;}
 	}
 
 	// Used to deserialize the result of a User create/update API call
-	private class UserWrapper {
+	public class UserWrapper extends ZendeskSideLoadingBase {
 		public ZUser user {get;set;}
 	}
 
@@ -225,12 +200,11 @@ public class ZendeskUsers extends ZendeskResourceBase {
         return (UsersWrapper)JSON.deserialize(zapi.sendRequest(req), UsersWrapper.class);
     }
 
-	public ZUser getUser(Long userId) {
+	public UserWrapper getUser(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('GET', '/users/'+userId+'.json');
-        UserWrapper wrapper = (UserWrapper)JSON.deserialize(zapi.sendRequest(req), UserWrapper.class);
-        return wrapper.user;
+        return (UserWrapper)JSON.deserialize(zapi.sendRequest(req), UserWrapper.class);
     }
 
 	public ZUser getCurrentUser() {

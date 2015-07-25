@@ -44,4 +44,11 @@ private class ZendeskAPITests {
         System.assertEquals(true, zapi.canLogin());
         Test.stopTest();
     }
+
+    static testMethod void testConstructors() {
+        ZendeskAPI zapi1 = new ZendeskAPI('s', 'u', 'p');
+        ZendeskAPI zapi2 = new ZendeskAPI('s', 'u', 't', ZendeskAPI.AuthType.Token);
+
+        System.assert(true);
+    }
 }

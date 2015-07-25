@@ -301,11 +301,12 @@ private class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsers zusers = new ZendeskUsers(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsers.ZUser u = zusers.getUser(123);
+		ZendeskUsers.UserWrapper wrapper = zusers.getUser(123);
         Test.stopTest();
 
-		System.assertNotEquals(null, u);
-        System.assertEquals(123, u.id);
+		System.assertNotEquals(null, wrapper);
+		System.assertNotEquals(null, wrapper.user);
+        System.assertEquals(123, wrapper.user.id);
     }
 
     static testMethod void testGetCurrentUser() {

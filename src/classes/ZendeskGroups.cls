@@ -1,12 +1,4 @@
 // This class provides functionality to call the Zendesk Groups API
-// Currently supports the following API endpoints:
-// GET    /api/v2/groups.json
-// GET    /api/v2/users/{user_id}/groups.json
-// GET    /api/v2/groups/assignable.json
-// GET    /api/v2/groups/{id}.json
-// POST   /api/v2/groups.json
-// PUT    /api/v2/groups/{id}.json
-// DELETE /api/v2/groups/{id}.json
 public class ZendeskGroups extends ZendeskResourceBase {
 
 	private Map<Long, ZGroup> groupsMap;
@@ -19,11 +11,11 @@ public class ZendeskGroups extends ZendeskResourceBase {
 		public DateTime updated_at {get; private set;}
 	}
 
-	private class GroupWrapper {
+	public class GroupWrapper extends ZendeskSideLoadingBase {
 		public ZGroup x_group {get;set;} // Use "x_group" in place of "group" which is a reserved keyword. Requires custom de/serialization.
 	}
 
-	public class GroupsWrapper extends ZendeskPagingSupport {
+	public class GroupsWrapper extends ZendeskPagingBase {
 		public List<ZGroup> groups {get;set;}
 	}
 
@@ -69,12 +61,11 @@ public class ZendeskGroups extends ZendeskResourceBase {
 		return (GroupsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupsWrapper.class);
 	}
 
-	public ZGroup getGroup(Long groupId) {
+	public GroupWrapper getGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/groups/'+groupId+'.json');
-		GroupWrapper wrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupWrapper.class);
-		return wrapper.x_group;
+		return (GroupWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupWrapper.class);
 	}
 
 	public Long createGroup(String name) {

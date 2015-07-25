@@ -1,22 +1,4 @@
 // This class provides functionality to call the Zendesk Organizations API
-// Currently supports the following API endpoints:
-// GET    /api/v2/organizations.json
-// GET    /api/v2/organizations/{id}.json
-// GET    /api/v2/organizations/show_many.json?ids={ids}
-// GET    /api/v2/organizations/show_many.json?external_ids={external_ids}
-// GET    /api/v2/organizations/autocomplete.json?name={name}
-// GET    /api/v2/organizations/search.json?external_id={external_id}
-// GET    /api/v2/organizations/{id}/related.json
-// GET    /api/v2/users/{user_id}/organizations.json
-// POST   /api/v2/organizations.json
-// POST   /api/v2/organizations/create_many.json
-// PUT    /api/v2/organizations/{id}.json
-// PUT    /api/v2/organizations/update_many.json
-// PUT    /api/v2/organizations/update_many.json?ids={ids}
-// PUT    /api/v2/organizations/update_many.json?external_ids={external_ids}
-// DELETE /api/v2/organizations/{id}.json
-// DELETE /api/v2/organizations/destroy_many.json?ids={ids}
-// DELETE /api/v2/organizations/destroy_many.json?external_ids={external_ids}
 public class ZendeskOrganizations extends ZendeskResourceBase {
 
 	public class ZOrganization {
@@ -35,12 +17,11 @@ public class ZendeskOrganizations extends ZendeskResourceBase {
 		public DateTime updated_at {get; private set;}
 	}
 
-	public class OrganizationsWrapper extends ZendeskPagingSupport {
+	public class OrganizationsWrapper extends ZendeskPagingBase {
 		public List<ZOrganization> organizations {get;set;}
 	}
 
-	// Used to deserialize the result of a Organization create/update API call
-	private class OrganizationWrapper {
+	public class OrganizationWrapper {
 		public ZOrganization organization {get;set;}
 	}
 
@@ -52,8 +33,8 @@ public class ZendeskOrganizations extends ZendeskResourceBase {
         return getOrganizations(zapi.createRequest('GET', '/organizations.json'));
     }
 
-    public OrganizationsWrapper getOrganizations(Long page) {
-        return getOrganizations(zapi.createRequest('GET', '/organizations.json', new Map<String, Object>{'page'=>page}));
+    public OrganizationsWrapper getOrganizations(Map<String, Object> queryParams) {
+        return getOrganizations(zapi.createRequest('GET', '/organizations.json', queryParams));
     }
 
 	public OrganizationsWrapper getOrganizationsByIds(Set<Long> orgIds) {
@@ -91,12 +72,15 @@ public class ZendeskOrganizations extends ZendeskResourceBase {
         return (OrganizationsWrapper)JSON.deserialize(zapi.sendRequest(req), OrganizationsWrapper.class);
     }
 
-	public ZOrganization getOrganization(Long orgId) {
+	public OrganizationWrapper getOrganization(Long orgId) {
+		return getOrganization(orgId, null);
+    }
+
+	public OrganizationWrapper getOrganization(Long orgId, Map<String, Object> queryParams) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
 
-        HttpRequest req = zapi.createRequest('GET', '/organizations/'+orgId+'.json');
-        OrganizationWrapper wrapper = (OrganizationWrapper)JSON.deserialize(zapi.sendRequest(req), OrganizationWrapper.class);
-		return wrapper.organization;
+        HttpRequest req = zapi.createRequest('GET', '/organizations/'+orgId+'.json', queryParams);
+        return (OrganizationWrapper)JSON.deserialize(zapi.sendRequest(req), OrganizationWrapper.class);
     }
 
 	public Map<String, Object> getOrganizationRelatedInfo(Long orgId) {

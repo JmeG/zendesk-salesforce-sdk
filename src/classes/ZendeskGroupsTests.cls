@@ -36,11 +36,12 @@ private class ZendeskGroupsTests {
 
         Test.startTest();
         ZendeskGroups zgroups = new ZendeskGroups(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskGroups.ZGroup testObj = zgroups.getGroup(123);
+        ZendeskGroups.GroupWrapper wrapper = zgroups.getGroup(123);
         Test.stopTest();
 
-        System.assertNotEquals(null, testObj);
-        System.assertEquals(123, testObj.id);
+        System.assertNotEquals(null, wrapper);
+        System.assertNotEquals(null, wrapper.x_group);
+        System.assertEquals(123, wrapper.x_group.id);
     }
 
     static testMethod void testDeleteGroup() {

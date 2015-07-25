@@ -1,8 +1,4 @@
 // This class provides functionality to call the Zendesk Ticket Comments API
-// Currently supports the following API endpoints:
-// GET /api/v2/tickets/{ticket_id}/comments.json
-// PUT /api/v2/tickets/{ticket_id}/comments/{id}/redact.json
-// PUT /api/v2/tickets/{ticket_id}/comments/{id}/make_private.json
 public class ZendeskTicketComments extends ZendeskResourceBase {
 
 	public class ZTicketComment {
@@ -17,7 +13,7 @@ public class ZendeskTicketComments extends ZendeskResourceBase {
 		public DateTime created_at {get; private set;}
 	}
 
-	public class TicketCommentsWrapper extends ZendeskPagingSupport {
+	public class TicketCommentsWrapper extends ZendeskPagingBase {
 		public List<ZTicketComment> comments {get;set;}
 	}
 

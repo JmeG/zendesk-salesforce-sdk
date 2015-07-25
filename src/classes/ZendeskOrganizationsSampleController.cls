@@ -34,9 +34,9 @@ public class ZendeskOrganizationsSampleController {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
 			ZendeskOrganizations zorganizations = new ZendeskOrganizations(zapi);
 
-			ZendeskOrganizations.ZOrganization org = zorganizations.getOrganization(organizationId);
-			if (org != null) {
-				organizations = new ZendeskOrganizations.ZOrganization[]{ org };
+			ZendeskOrganizations.OrganizationWrapper wrapper = zorganizations.getOrganization(organizationId);
+			if (wrapper != null && wrapper.organization != null) {
+				organizations = new ZendeskOrganizations.ZOrganization[]{ wrapper.organization };
 			}
 			else {
 				throw new ZendeskException('Organization "' + organizationId + '" not found');

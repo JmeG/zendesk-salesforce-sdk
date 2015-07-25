@@ -1,30 +1,4 @@
 // This class provides functionality to call the Zendesk Tickets API
-// Currently supports the following API endpoints:
-// GET    /api/v2/tickets.json
-// GET    /api/v2/tickets/recent.json
-// GET    /api/v2/tickets/{id}.json
-// GET    /api/v2/tickets/{id}/related.json
-// GET    /api/v2/tickets/show_many.json?ids={ids}
-// GET    /api/v2/tickets/{id}/incidents.json
-// GET    /api/v2/tickets/{id}/collaborators.json
-// GET    /api/v2/users/{user_id}/tickets/requested.json
-// GET    /api/v2/users/{user_id}/tickets/ccd.json
-// GET    /api/v2/users/{user_id}/tickets/assigned.json
-// GET    /api/v2/organizations/{organization_id}/tickets.json
-// GET    /api/v2/problems.json
-// GET    /api/v2/channels/twitter/tickets/{id}/statuses.js
-// POST   /api/v2/tickets.json
-// POST   /api/v2/tickets/create_many.json
-// POST   /api/v2/tickets/{id}/merge.json
-// POST   /api/v2/problems/autocomplete.json?text={name}
-// POST   /api/v2/channels/twitter/tickets.json
-// PUT    /api/v2/tickets/{id}.json
-// PUT    /api/v2/tickets/update_many.json
-// PUT    /api/v2/tickets/update_many.json?ids={ids}
-// PUT    /api/v2/tickets/{id}/mark_as_spam.json
-// PUT    /api/v2/tickets/mark_many_as_spam.json?ids={ids}
-// DELETE /api/v2/tickets/{id}.json
-// DELETE /api/v2/tickets/destroy_many.json?ids={ids}
 public class ZendeskTickets extends ZendeskResourceBase {
 
 	public enum TicketType { question, incident, problem, task }
@@ -109,20 +83,12 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		public String email {get;set;}
 	}
 
-	public class TicketsWrapper extends ZendeskPagingSupport {
+	public class TicketsWrapper extends ZendeskPagingBase {
 		public List<ZTicket> tickets {get;set;}
-
-		// Sideloadable fields; users, groups, organizations, last_audits, metric_sets, sharing_agreements, incident_counts, ticket_forms
-		public List<ZendeskUsers.ZUser> users {get; private set;}
-		public List<ZendeskGroups.ZGroup> groups {get; private set;}
 	}
 
-	// Used to deserialize the result of a individual Ticket create/read/update API call
-	private class TicketWrapper {
+	public class TicketWrapper extends ZendeskSideLoadingBase {
 		public ZTicket ticket {get;set;}
-
-		// Sideloadable fields; users, groups, organizations, last_audits, metric_sets, sharing_agreements, incident_counts, ticket_forms
-		public List<ZendeskUsers.ZUser> users {get; private set;}
 	}
 
 	public ZendeskTickets(ZendeskAPI zapi) {
@@ -201,12 +167,18 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatuses.JobStatus.class);
 	}
 
-	public ZTicket getTicket(Long ticketId) {
+	public TicketWrapper getTicket(Long ticketId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'.json');
-		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(zapi.sendRequest(req), TicketWrapper.class);
-		return resultWrapper.ticket;
+		return (TicketWrapper)JSON.deserialize(zapi.sendRequest(req), TicketWrapper.class);
+	}
+
+	public TicketWrapper getTicket(Long ticketId, Map<String, Object> queryParams) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+
+		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'.json', queryParams);
+		return (TicketWrapper)JSON.deserialize(zapi.sendRequest(req), TicketWrapper.class);
 	}
 
 	// /api/v2/tickets.json

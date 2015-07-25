@@ -55,7 +55,7 @@ public class ZendeskOrganizationFields extends ZendeskResourceBase {
 		public String value {get;set;}
 	}
 
-    public class OrganizationFieldsWrapper extends ZendeskPagingSupport {
+    public class OrganizationFieldsWrapper extends ZendeskPagingBase {
         public List<ZOrganizationField> organization_fields {get;set;}
     }
 
@@ -76,14 +76,12 @@ public class ZendeskOrganizationFields extends ZendeskResourceBase {
         return wrapper.organization_field;
     }
 
-    // Get the first page of Organization Fields
     public OrganizationFieldsWrapper getFields() {
         return getFields(null);
     }
 
-    // Get a specific page of Organization Fields
-    public OrganizationFieldsWrapper getFields(Long page) {
-        HttpRequest req = zapi.createRequest('GET', '/organization_fields.json', new Map<String, Object>{'page'=>page});
+    public OrganizationFieldsWrapper getFields(Map<String, Object> queryParams) {
+        HttpRequest req = zapi.createRequest('GET', '/organization_fields.json', queryParams);
         return (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldsWrapper.class);
     }
 
@@ -156,7 +154,7 @@ public class ZendeskOrganizationFields extends ZendeskResourceBase {
             }
 
             while (!String.isEmpty(wrapper.next_page)) {
-                wrapper = getFields(wrapper.nextPageNumber);
+                wrapper = getFields(new Map<String, Object>{'page'=>wrapper.nextPageNumber});
                 for (ZOrganizationField obj : wrapper.organization_fields) {
                     fieldsMap.put(obj.key, obj);
                 }

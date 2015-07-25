@@ -1,35 +1,15 @@
 // This class provides functionality to call the Zendesk Tags API
-/*
-Currently supports the following API endpoints:
-GET    /api/v2/tags.json
-GET    /api/v2/tickets/{id}/tags.json
-GET    /api/v2/topics/{id}/tags.json
-GET    /api/v2/organizations/{id}/tags.json
-GET    /api/v2/users/{id}/tags.json
-POST   /api/v2/tickets/{id}/tags.json
-POST   /api/v2/topics/{id}/tags.json
-POST   /api/v2/organizations/{id}/tags.json
-POST   /api/v2/users/{id}/tags.json
-PUT    /api/v2/tickets/{id}/tags.json
-PUT    /api/v2/topics/{id}/tags.json
-PUT    /api/v2/organizations/{id}/tags.json
-PUT    /api/v2/users/{id}/tags.json
-DELETE /api/v2/tickets/{id}/tags.json
-DELETE /api/v2/topics/{id}/tags.json
-DELETE /api/v2/organizations/{id}/tags.json
-DELETE /api/v2/users/{id}/tags.json
-*/
 public class ZendeskTags extends ZendeskResourceBase {
 
 	public enum Resource { tickets, topics, organizations, users }
 
 	// Used to deserialize the result of a getTags() API call
-	public class TagsWrapper extends ZendeskPagingSupport {
+	public class TagsWrapper extends ZendeskPagingBase {
 		public List<String> tags {get;set;}
 	}
 
 	// Used to deserialize the result of a listTags() API call
-	public class ListTagsWrapper extends ZendeskPagingSupport {
+	public class ListTagsWrapper extends ZendeskPagingBase {
 		public List<ListTags> tags {get;set;}
 	}
 

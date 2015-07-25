@@ -1,11 +1,4 @@
 // This class provides functionality to call the Zendesk User Fields API
-// Currently supports the following API endpoints:
-// GET    /api/v2/user_fields.json
-// GET    /api/v2/user_fields/{id}.json
-// POST   /api/v2/user_fields.json
-// PUT    /api/v2/user_fields/{id}.json
-// PUT    /api/v2/user_fields/reorder.json
-// DELETE /api/v2/user_fields/{id}.json
 public class ZendeskUserFields extends ZendeskResourceBase {
 
     private Map<String, ZUserField> userFieldsMap {get; private set; }
@@ -55,7 +48,7 @@ public class ZendeskUserFields extends ZendeskResourceBase {
 		public String value {get;set;}
 	}
 
-    public class UserFieldsWrapper extends ZendeskPagingSupport {
+    public class UserFieldsWrapper extends ZendeskPagingBase {
         public List<ZUserField> user_fields {get;set;}
     }
 
