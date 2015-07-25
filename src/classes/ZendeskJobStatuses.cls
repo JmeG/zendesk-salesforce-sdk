@@ -1,17 +1,17 @@
 // This class provides functionality to call the Zendesk Job Statuses API
 public class ZendeskJobStatuses extends ZendeskResourceBase {
 
-	public class JobStatus {
+	public class ZJobStatus {
 		public String id {get;set;}
 		public String url {get;set;}
 		public Integer total {get;set;}
 		public Integer progress {get;set;}
 		public String status {get;set;}
 		public String message {get;set;}
-		public List<JobStatusResults> results {get;set;}
+		public List<ZJobStatusResults> results {get;set;}
 	}
 
-	public class JobStatusResults {
+	public class ZJobStatusResults {
 		public Integer id {get;set;}
 		public String title {get;set;}
 		public String action {get;set;}
@@ -21,11 +21,11 @@ public class ZendeskJobStatuses extends ZendeskResourceBase {
 	}
 
 	private class JobStatusesWrapper {
-		public List<JobStatus> job_statuses {get;set;}
+		public List<ZJobStatus> job_statuses {get;set;}
 	}
 
 	private class JobStatusWrapper {
-		public JobStatus job_status {get;set;}
+		public ZJobStatus job_status {get;set;}
 	}
 
 	public ZendeskJobStatuses(ZendeskAPI zapi) {
