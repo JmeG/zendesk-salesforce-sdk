@@ -114,6 +114,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
 
 		// Sideloadable fields; users, groups, organizations, last_audits, metric_sets, sharing_agreements, incident_counts, ticket_forms
 		public List<ZendeskUsers.ZUser> users {get; private set;}
+		public List<ZendeskGroups.ZGroup> groups {get; private set;}
 	}
 
 	// Used to deserialize the result of a individual Ticket create/read/update API call
