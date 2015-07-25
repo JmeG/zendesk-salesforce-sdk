@@ -29,12 +29,10 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 		ticketFormsMap = new Map<Long, ZTicketForm>();
 	}
 
-	// Get the first page of Ticket Forms
 	public TicketFormsWrapper getTicketForms() {
 		return getTicketForms(null);
 	}
 
-	// Get a specific page of Ticket Forms
 	public TicketFormsWrapper getTicketForms(Map<String, Object> queryParams) {
 		HttpRequest req = zapi.createRequest('GET', '/ticket_forms.json', queryParams);
 		return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormsWrapper.class);

@@ -25,12 +25,10 @@ public class ZendeskTicketComments extends ZendeskResourceBase {
 		super(zapi);
 	}
 
-	// Get the first page of Ticket Comments
 	public TicketCommentsWrapper getTicketComments(Long ticketId) {
 		return getTicketComments(ticketId, null);
 	}
 
-	// Get a specific page of Ticket Comments
 	public TicketCommentsWrapper getTicketComments(Long ticketId, Map<String, Object> queryParams) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 

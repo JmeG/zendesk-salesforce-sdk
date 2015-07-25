@@ -1,11 +1,4 @@
 // This class provides functionality to call the Zendesk Organization Fields API
-// Currently supports the following API endpoints:
-// GET    /api/v2/organization_fields.json
-// GET    /api/v2/organization_fields/{id}.json
-// POST   /api/v2/organization_fields.json
-// PUT    /api/v2/organization_fields/{id}.json
-// PUT    /api/v2/organization_fields/reorder.json
-// DELETE /api/v2/organization_fields/{id}.json
 public class ZendeskOrganizationFields extends ZendeskResourceBase {
 
     private Map<String, ZOrganizationField> fieldsMap {get; private set; }

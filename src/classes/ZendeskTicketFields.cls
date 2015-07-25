@@ -62,12 +62,10 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 		return wrapper.ticket_field;
 	}
 
-	// Get the first page of Ticket Fields
 	public TicketFieldsWrapper getFields() {
 		return getFields(null);
 	}
 
-	// Get a specific page of User Fields
 	public TicketFieldsWrapper getFields(Map<String, Object> queryParams) {
 		HttpRequest req = zapi.createRequest('GET', '/ticket_fields.json', queryParams);
 		return (TicketFieldsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldsWrapper.class);

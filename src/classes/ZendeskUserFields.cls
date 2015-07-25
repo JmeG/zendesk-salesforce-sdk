@@ -69,12 +69,10 @@ public class ZendeskUserFields extends ZendeskResourceBase {
         return wrapper.user_field;
     }
 
-    // Get the first page of User Fields
     public UserFieldsWrapper getFields() {
         return getFields(null);
     }
 
-    // Get a specific page of User Fields
     public UserFieldsWrapper getFields(Map<String, Object> queryParams) {
         HttpRequest req = zapi.createRequest('GET', '/user_fields.json', queryParams);
         return (UserFieldsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), UserFieldsWrapper.class);
