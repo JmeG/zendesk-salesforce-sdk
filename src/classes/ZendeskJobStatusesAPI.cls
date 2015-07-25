@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Job Statuses API
-public class ZendeskJobStatuses extends ZendeskResourceBase {
+public class ZendeskJobStatusesAPI extends ZendeskResourceBase {
 
 	public class ZJobStatus {
 		public String id {get;set;}
@@ -28,11 +28,11 @@ public class ZendeskJobStatuses extends ZendeskResourceBase {
 		public ZJobStatus job_status {get;set;}
 	}
 
-	public ZendeskJobStatuses(ZendeskAPI zapi) {
+	public ZendeskJobStatusesAPI(ZendeskAPI zapi) {
 		super(zapi);
 	}
 
-	public JobStatus getJobStatus(String jobId) {
+	public ZJobStatus getJobStatus(String jobId) {
 		if (jobId == null) { throw new ZendeskException('jobId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/job_statuses/'+jobId+'.json');
@@ -40,7 +40,7 @@ public class ZendeskJobStatuses extends ZendeskResourceBase {
 		return wrapper.job_status;
 	}
 
-	public List<JobStatus> getJobStatuses(Set<String> jobIds) {
+	public List<ZJobStatus> getJobStatuses(Set<String> jobIds) {
 		if (jobIds == null || jobIds.isEmpty()) { throw new ZendeskException('jobIds parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/job_statuses/show_many.json', new Map<String, Object>{'ids'=>toCSV(jobIds)});

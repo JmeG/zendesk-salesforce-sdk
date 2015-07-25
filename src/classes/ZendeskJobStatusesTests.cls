@@ -1,4 +1,4 @@
-// This class provides test coverage for the ZendeskJobStatuses class
+// This class provides test coverage for the ZendeskJobStatusesAPI class
 @isTest
 private class ZendeskJobStatusesTests {
 
@@ -26,8 +26,8 @@ private class ZendeskJobStatusesTests {
         Test.setMock(HttpCalloutMock.class, new MockStatusResponse());
 
         Test.startTest();
-        ZendeskJobStatuses zjobs = new ZendeskJobStatuses(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskJobStatuses.ZJobStatus jstatus = zjobs.getJobStatus('abc123');
+        ZendeskJobStatusesAPI zjobs = new ZendeskJobStatusesAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskJobStatusesAPI.ZJobStatus jstatus = zjobs.getJobStatus('abc123');
         Test.stopTest();
 
         System.assertNotEquals(null, jstatus);
@@ -38,8 +38,8 @@ private class ZendeskJobStatusesTests {
         Test.setMock(HttpCalloutMock.class, new MockStatusesResponse());
 
         Test.startTest();
-        ZendeskJobStatuses zjobs = new ZendeskJobStatuses(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        List<ZendeskJobStatuses.ZJobStatus> jobs = zjobs.getJobStatuses(new Set<String> {'abc123', 'abc345'});
+        ZendeskJobStatusesAPI zjobs = new ZendeskJobStatusesAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        List<ZendeskJobStatusesAPI.ZJobStatus> jobs = zjobs.getJobStatuses(new Set<String> {'abc123', 'abc345'});
         Test.stopTest();
 
         System.assertNotEquals(null, jobs);
@@ -48,7 +48,7 @@ private class ZendeskJobStatusesTests {
 
     static testMethod void testDeserialize() {
         String resBody = '{ "id": "31a2e47012e20", "url": "https://test.zendesk.com/api/v2/job_statuses/31a2e4701.json", "total": 2, "progress": 2, "status": "completed", "message": "Completed", "results": [ { "status": "Failed Creating User ", "errors": "Name:  is too short" } ] }';
-        ZendeskJobStatuses.ZJobStatus jstatus = (ZendeskJobStatuses.JobStatus)JSON.deserialize(resBody, ZendeskJobStatuses.JobStatus.class);
+        ZendeskJobStatusesAPI.ZJobStatus jstatus = (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(resBody, ZendeskJobStatusesAPI.ZJobStatus.class);
 
         System.assertNotEquals(null, jstatus);
         System.assertNotEquals(null, jstatus.id);

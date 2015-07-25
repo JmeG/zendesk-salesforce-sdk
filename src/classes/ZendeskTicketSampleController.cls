@@ -9,7 +9,7 @@ public class ZendeskTicketSampleController {
 	public String newTicketSubject {get;set;}
 	public String newTicketComment {get;set;}
 
-	public ZendeskTickets.ZTicket[] tickets {get;set;}
+	public ZendeskTicketsAPI.ZTicket[] tickets {get;set;}
 	public String pageMessage {get;set;}
 
 	public ZendeskTicketSampleController() {}
@@ -18,9 +18,9 @@ public class ZendeskTicketSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskTickets ztickets = new ZendeskTickets(zapi);
+			ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(zapi);
 
-			Long newTicketId = ztickets.createTicket(ZendeskTickets.TicketType.question, newTicketSubject, newTicketComment, requesterId);
+			Long newTicketId = ztickets.createTicket(ZendeskTicketsAPI.TicketType.question, newTicketSubject, newTicketComment, requesterId);
 
 			pageMessage = 'Ticket created with ID: ' + newTicketId;
 		}
@@ -35,9 +35,9 @@ public class ZendeskTicketSampleController {
 		tickets = null;
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskTickets ztickets = new ZendeskTickets(zapi);
+			ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(zapi);
 
-			ZendeskTickets.TicketsWrapper pagedTickets = ztickets.getTickets();
+			ZendeskTicketsAPI.TicketsWrapper pagedTickets = ztickets.getTickets();
 			tickets = pagedTickets.tickets;
 		}
 		catch(Exception e) {

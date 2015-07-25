@@ -1,4 +1,4 @@
-// This class provides test coverage for the ZendeskTicketComments class
+// This class provides test coverage for the ZendeskTicketCommentsAPI class
 @isTest
 private class ZendeskTicketCommentsTests {
 
@@ -25,8 +25,8 @@ private class ZendeskTicketCommentsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketCommentsResponse());
 
         Test.startTest();
-        ZendeskTicketComments zcomments = new ZendeskTicketComments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketComments.TicketCommentsWrapper wrapper = zcomments.getTicketComments(123);
+        ZendeskTicketCommentsAPI zcomments = new ZendeskTicketCommentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketCommentsAPI.TicketCommentsWrapper wrapper = zcomments.getTicketComments(123);
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper);
@@ -38,7 +38,7 @@ private class ZendeskTicketCommentsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTicketComments zcomments = new ZendeskTicketComments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketCommentsAPI zcomments = new ZendeskTicketCommentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zcomments.redactStringInComment(123, 456, 'redact me');
         Test.stopTest();
 
@@ -49,7 +49,7 @@ private class ZendeskTicketCommentsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTicketComments zcomments = new ZendeskTicketComments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketCommentsAPI zcomments = new ZendeskTicketCommentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zcomments.makeCommentPrivate(123, 456);
         Test.stopTest();
 
@@ -57,14 +57,14 @@ private class ZendeskTicketCommentsTests {
     }
 
     static testMethod void testZTicketComment() {
-        ZendeskTicketComments.ZTicketComment zcomment = new ZendeskTicketComments.ZTicketComment();
+        ZendeskTicketCommentsAPI.ZTicketComment zcomment = new ZendeskTicketCommentsAPI.ZTicketComment();
         zcomment.type = '';
         zcomment.body = '';
         zcomment.html_body = '';
         zcomment.author_id = 0;
         zcomment.x_public = true;
-        zcomment.attachments = new ZendeskAttachments.ZAttachment[1];
-        zcomment.via = new ZendeskTickets.ZTicketVia();
+        zcomment.attachments = new ZendeskAttachmentsAPI.ZAttachment[1];
+        zcomment.via = new ZendeskTicketsAPI.ZTicketVia();
 
         System.assert(true);
     }

@@ -1,4 +1,4 @@
-// This class provides test coverage for the ZendeskTicketFields class
+// This class provides test coverage for the ZendeskTicketFieldsAPI class
 @isTest
 public class ZendeskTicketFieldsTests {
 
@@ -35,8 +35,8 @@ public class ZendeskTicketFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
 
         Test.startTest();
-        ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketFields.ZTicketField testObj = zfields.getField(123);
+        ZendeskTicketFieldsAPI zfields = new ZendeskTicketFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketFieldsAPI.ZTicketField testObj = zfields.getField(123);
         System.assertNotEquals(null, testObj);
 
         String optVal = testObj.getOptionValue('Test');
@@ -48,7 +48,7 @@ public class ZendeskTicketFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketFieldsAPI zfields = new ZendeskTicketFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zfields.deleteField(123);
         Test.stopTest();
 
@@ -59,8 +59,8 @@ public class ZendeskTicketFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
 
         Test.startTest();
-        ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketFields.ZTicketField zfield = new ZendeskTicketFields.ZTicketField();
+        ZendeskTicketFieldsAPI zfields = new ZendeskTicketFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketFieldsAPI.ZTicketField zfield = new ZendeskTicketFieldsAPI.ZTicketField();
         zfield.type = 'create type';
         zfield.title = 'create title';
         Long fieldId = zfields.createField(zfield);
@@ -73,8 +73,8 @@ public class ZendeskTicketFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
 
         Test.startTest();
-        ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketFields.ZTicketField zfield = new ZendeskTicketFields.ZTicketField();
+        ZendeskTicketFieldsAPI zfields = new ZendeskTicketFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketFieldsAPI.ZTicketField zfield = new ZendeskTicketFieldsAPI.ZTicketField();
         zfield.type = 'update type';
         zfield.title = 'update title';
         zfields.updateField(123, zfield);
@@ -87,15 +87,15 @@ public class ZendeskTicketFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldsResponse());
 
         Test.startTest();
-        ZendeskTicketFields zfields = new ZendeskTicketFields(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Map<Long, ZendeskTicketFields.ZTicketField> fieldsMap = zfields.getAllFields();
+        ZendeskTicketFieldsAPI zfields = new ZendeskTicketFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        Map<Long, ZendeskTicketFieldsAPI.ZTicketField> fieldsMap = zfields.getAllFields();
         Test.stopTest();
 
         System.assertNotEquals(null, fieldsMap.containsKey(123));
     }
 
     static testMethod void testZTicketField() {
-        ZendeskTicketFields.ZTicketField zticketfield = new ZendeskTicketFields.ZTicketField();
+        ZendeskTicketFieldsAPI.ZTicketField zticketfield = new ZendeskTicketFieldsAPI.ZTicketField();
         //zticketfield.id = 0;
         zticketfield.type = '';
         zticketfield.title = '';
@@ -103,7 +103,7 @@ public class ZendeskTicketFieldsTests {
         zticketfield.active = true;
         zticketfield.custom_field_options = null;
 
-        ZendeskTicketFields.ZCustomFieldOption zcustomfieldoption = new ZendeskTicketFields.ZCustomFieldOption();
+        ZendeskTicketFieldsAPI.ZCustomFieldOption zcustomfieldoption = new ZendeskTicketFieldsAPI.ZCustomFieldOption();
         //zcustomfieldoption.id = 0;
         zcustomfieldoption.name = '';
         zcustomfieldoption.raw_name = '';

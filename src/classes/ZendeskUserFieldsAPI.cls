@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk User Fields API
-public class ZendeskUserFields extends ZendeskResourceBase {
+public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
 
     private Map<String, ZUserField> userFieldsMap {get; private set; }
 
@@ -56,7 +56,7 @@ public class ZendeskUserFields extends ZendeskResourceBase {
         public ZUserField user_field {get;set;}
     }
 
-    public ZendeskUserFields(ZendeskAPI zapi) {
+    public ZendeskUserFieldsAPI(ZendeskAPI zapi) {
         super(zapi);
         userFieldsMap = new Map<String, ZUserField>();
     }

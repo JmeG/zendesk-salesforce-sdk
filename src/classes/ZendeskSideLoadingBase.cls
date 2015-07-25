@@ -3,7 +3,7 @@ public abstract class ZendeskSideLoadingBase {
 
     // Sideloadable fields; users, groups, organizations, last_audits, metric_sets, sharing_agreements, incident_counts, ticket_forms
 
-    public List<ZendeskUsers.ZUser> users {get; private set;}
-    public List<ZendeskGroups.ZGroup> groups {get; private set;}
-    public List<ZendeskOrganizations.ZOrganization> organizations {get; private set;}
+    public List<ZendeskUsersAPI.ZUser> users {get; private set;}
+    public List<ZendeskGroupsAPI.ZGroup> groups {get; private set;}
+    public List<ZendeskOrganizationsAPI.ZOrganization> organizations {get; private set;}
 }

@@ -6,7 +6,7 @@ public class ZendeskTagsSampleController {
     public String authType {get;set;}
 
     public String pageMessage {get;set;}
-    public ZendeskTags.ListTags[] listTags {get;set;}
+    public ZendeskTagsAPI.ListTags[] listTags {get;set;}
 
     public ZendeskTagsSampleController() {}
 
@@ -14,9 +14,9 @@ public class ZendeskTagsSampleController {
         pageMessage = '';
         try {
             ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-            ZendeskTags ztags = new ZendeskTags(zapi);
+            ZendeskTagsAPI ztags = new ZendeskTagsAPI(zapi);
 
-            ZendeskTags.ListTagsWrapper wrapper = ztags.listTags();
+            ZendeskTagsAPI.ListTagsWrapper wrapper = ztags.listTags();
             listTags = wrapper.tags;
         }
         catch(Exception e) {

@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Organization Fields API
-public class ZendeskOrganizationFields extends ZendeskResourceBase {
+public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 
     private Map<String, ZOrganizationField> fieldsMap {get; private set; }
 
@@ -56,7 +56,7 @@ public class ZendeskOrganizationFields extends ZendeskResourceBase {
         public ZOrganizationField organization_field {get;set;}
     }
 
-    public ZendeskOrganizationFields(ZendeskAPI zapi) {
+    public ZendeskOrganizationFieldsAPI(ZendeskAPI zapi) {
         super(zapi);
         fieldsMap = new Map<String, ZOrganizationField>();
     }

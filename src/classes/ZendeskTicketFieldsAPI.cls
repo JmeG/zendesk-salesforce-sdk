@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Ticket Fields API
-public class ZendeskTicketFields extends ZendeskResourceBase {
+public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 
 	private Map<Long, ZTicketField> fieldsMap {get; private set; }
 
@@ -49,7 +49,7 @@ public class ZendeskTicketFields extends ZendeskResourceBase {
 		public ZTicketField ticket_field {get;set;}
 	}
 
-	public ZendeskTicketFields(ZendeskAPI zapi) {
+	public ZendeskTicketFieldsAPI(ZendeskAPI zapi) {
 		super(zapi);
 		fieldsMap = new Map<Long, ZTicketField>();
 	}

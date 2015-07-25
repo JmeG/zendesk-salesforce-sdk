@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Tags API
-public class ZendeskTags extends ZendeskResourceBase {
+public class ZendeskTagsAPI extends ZendeskResourceBase {
 
 	public enum Resource { tickets, topics, organizations, users }
 
@@ -18,7 +18,7 @@ public class ZendeskTags extends ZendeskResourceBase {
 		public Long count {get;set;}
 	}
 
-	public ZendeskTags(ZendeskAPI zapi) {
+	public ZendeskTagsAPI(ZendeskAPI zapi) {
 		super(zapi);
 	}
 

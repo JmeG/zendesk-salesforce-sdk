@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Groups API
-public class ZendeskGroups extends ZendeskResourceBase {
+public class ZendeskGroupsAPI extends ZendeskResourceBase {
 
 	private Map<Long, ZGroup> groupsMap;
 
@@ -19,7 +19,7 @@ public class ZendeskGroups extends ZendeskResourceBase {
 		public List<ZGroup> groups {get;set;}
 	}
 
-	public ZendeskGroups(ZendeskAPI zapi) {
+	public ZendeskGroupsAPI(ZendeskAPI zapi) {
 		super(zapi);
 		groupsMap = new Map<Long, ZGroup>();
 	}

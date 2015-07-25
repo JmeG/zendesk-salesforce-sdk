@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Ticket Forms API
-public class ZendeskTicketForms extends ZendeskResourceBase {
+public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 
 	private Map<Long, ZTicketForm> ticketFormsMap;
 
@@ -24,7 +24,7 @@ public class ZendeskTicketForms extends ZendeskResourceBase {
 		public List<ZTicketForm> ticket_forms {get;set;}
 	}
 
-	public ZendeskTicketForms(ZendeskAPI zapi) {
+	public ZendeskTicketFormsAPI(ZendeskAPI zapi) {
 		super(zapi);
 		ticketFormsMap = new Map<Long, ZTicketForm>();
 	}

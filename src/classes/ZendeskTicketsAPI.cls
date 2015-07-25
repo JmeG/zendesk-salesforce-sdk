@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Tickets API
-public class ZendeskTickets extends ZendeskResourceBase {
+public class ZendeskTicketsAPI extends ZendeskResourceBase {
 
 	public enum TicketType { question, incident, problem, task }
 	public enum TicketPriority { low, normal, high, urgent }
@@ -91,7 +91,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		public ZTicket ticket {get;set;}
 	}
 
-	public ZendeskTickets(ZendeskAPI zapi) {
+	public ZendeskTicketsAPI(ZendeskAPI zapi) {
 		super(zapi);
 	}
 
@@ -159,12 +159,12 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
 	}
 
-	public ZendeskJobStatuses.JobStatus createTickets(List<ZTicket> ztickets) {
+	public ZendeskJobStatusesAPI.ZJobStatus createTickets(List<ZTicket> ztickets) {
 		if (ztickets == null || ztickets.isEmpty()) { throw new ZendeskException('ztickets parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/tickets/create_many.json');
 		req.setBody('{"tickets": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ztickets))) + '}');
-		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatuses.JobStatus.class);
+		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
 	}
 
 	public TicketWrapper getTicket(Long ticketId) {
@@ -283,11 +283,11 @@ public class ZendeskTickets extends ZendeskResourceBase {
         return (TicketsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketsWrapper.class);
     }
 
-	public ZendeskUsers.UsersWrapper getTicketCollaborators(Long ticketId) {
+	public ZendeskUsersAPI.UsersWrapper getTicketCollaborators(Long ticketId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'/collaborators.json');
-		return (ZendeskUsers.UsersWrapper)JSON.deserialize(zapi.sendRequest(req), ZendeskUsers.UsersWrapper.class);
+		return (ZendeskUsersAPI.UsersWrapper)JSON.deserialize(zapi.sendRequest(req), ZendeskUsersAPI.UsersWrapper.class);
     }
 
 	public Map<String, Object> getTwicketStatus(Long ticketId) {
@@ -306,7 +306,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		zapi.sendRequest(req);
 	}
 
-	public ZendeskJobStatuses.JobStatus updateTickets(List<ZTicket> ztickets) {
+	public ZendeskJobStatusesAPI.ZJobStatus updateTickets(List<ZTicket> ztickets) {
 		if (ztickets == null || ztickets.isEmpty()) { throw new ZendeskException('ztickets parameter must not be null or empty'); }
 		for (ZTicket zticket : ztickets) {
 			if (zticket.id == null) { throw new ZendeskException('Each Ticket must have an id populated'); }
@@ -314,16 +314,16 @@ public class ZendeskTickets extends ZendeskResourceBase {
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/update_many.json');
 		req.setBody('{"tickets": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ztickets))) + '}');
-		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatuses.JobStatus.class);
+		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
 	}
 
-	public ZendeskJobStatuses.JobStatus updateTickets(Set<Long> ticketIds, ZTicket zticket) {
+	public ZendeskJobStatusesAPI.ZJobStatus updateTickets(Set<Long> ticketIds, ZTicket zticket) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter must not be null or empty'); }
         if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/tickets/update_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
 		req.setBody('{"ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(zticket))) + '}');
-		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatuses.JobStatus.class);
+		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
 	}
 
 	// helper method to add a new comment to a ticket
@@ -358,7 +358,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		zapi.sendRequest(req);
 	}
 
-	public ZendeskJobStatuses.JobStatus mergeTickets(Set<Long> sourceTicketIds, String sourceComment, Long targetTicketId, String targetComment) {
+	public ZendeskJobStatusesAPI.ZJobStatus mergeTickets(Set<Long> sourceTicketIds, String sourceComment, Long targetTicketId, String targetComment) {
 		if (sourceTicketIds == null || sourceTicketIds.isEmpty()) { throw new ZendeskException('sourceTicketIds parameter must not be null or empty'); }
 		if (targetTicketId == null) { throw new ZendeskException('targetTicketId parameter must not be null'); }
 
@@ -372,7 +372,7 @@ public class ZendeskTickets extends ZendeskResourceBase {
 
 		HttpRequest req = zapi.createRequest('POST', '/tickets/'+targetTicketId+'/merge.json');
 		req.setBody(gen.getAsString());
-		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatuses.JobStatus.class);
+		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
 	}
 
 	public void deleteTicket(Long ticketId) {
@@ -400,11 +400,11 @@ public class ZendeskTickets extends ZendeskResourceBase {
 		zapi.sendRequest(zapi.createRequest('PUT', '/tickets/'+ticketId+'/mark_as_spam.json'));
 	}
 
-	public ZendeskJobStatuses.JobStatus markTicketsAsSpam(Set<Long> ticketIds) {
+	public ZendeskJobStatusesAPI.ZJobStatus markTicketsAsSpam(Set<Long> ticketIds) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/mark_many_as_spam.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
-		return (ZendeskJobStatuses.JobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatuses.JobStatus.class);
+		return (ZendeskJobStatusesAPI.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskJobStatusesAPI.ZJobStatus.class);
 	}
 
 	public TicketsWrapper autoCompleteProblems(String autoCompleteText) {

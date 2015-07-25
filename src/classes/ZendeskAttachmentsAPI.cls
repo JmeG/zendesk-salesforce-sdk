@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Attachments API
-public class ZendeskAttachments extends ZendeskResourceBase {
+public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 
 	public class ZAttachment {
 		public Long id {get; private set;}
@@ -14,7 +14,7 @@ public class ZendeskAttachments extends ZendeskResourceBase {
 		public ZAttachment attachment {get;set;}
 	}
 
-	public ZendeskAttachments(ZendeskAPI zapi) {
+	public ZendeskAttachmentsAPI(ZendeskAPI zapi) {
 		super(zapi);
 	}
 

@@ -8,7 +8,7 @@ public class ZendeskGroupsSampleController {
 	public String pageMessage {get;set;}
 	public Long groupId {get;set;}
 	public Long userId {get;set;}
-	public Map<Long, ZendeskGroups.ZGroup> groupsMap {get;set;}
+	public Map<Long, ZendeskGroupsAPI.ZGroup> groupsMap {get;set;}
 
 	public ZendeskGroupsSampleController() {}
 
@@ -16,7 +16,7 @@ public class ZendeskGroupsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskGroups zgroups = new ZendeskGroups(zapi);
+			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zapi);
 
 			groupsMap = zgroups.getAllGroups();
 		}
@@ -30,10 +30,10 @@ public class ZendeskGroupsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskGroups zgroups = new ZendeskGroups(zapi);
+			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zapi);
 
-			groupsMap = new Map<Long, ZendeskGroups.ZGroup>();
-			ZendeskGroups.GroupWrapper gw = zgroups.getGroup(groupId);
+			groupsMap = new Map<Long, ZendeskGroupsAPI.ZGroup>();
+			ZendeskGroupsAPI.GroupWrapper gw = zgroups.getGroup(groupId);
 			if (gw != null && gw.x_group != null) {
 				groupsMap.put(gw.x_group.id, gw.x_group);
 			}
@@ -51,11 +51,11 @@ public class ZendeskGroupsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskGroups zgroups = new ZendeskGroups(zapi);
+			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zapi);
 
-			ZendeskGroups.GroupsWrapper wrapper = zgroups.getAssignableGroups();
-			groupsMap = new Map<Long, ZendeskGroups.ZGroup>();
-			for (ZendeskGroups.ZGroup grp : wrapper.groups) {
+			ZendeskGroupsAPI.GroupsWrapper wrapper = zgroups.getAssignableGroups();
+			groupsMap = new Map<Long, ZendeskGroupsAPI.ZGroup>();
+			for (ZendeskGroupsAPI.ZGroup grp : wrapper.groups) {
 				groupsMap.put(grp.id, grp);
 			}
 		}
@@ -69,11 +69,11 @@ public class ZendeskGroupsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskGroups zgroups = new ZendeskGroups(zapi);
+			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zapi);
 
-			ZendeskGroups.GroupsWrapper wrapper = zgroups.getUserGroups(userId);
-			groupsMap = new Map<Long, ZendeskGroups.ZGroup>();
-			for (ZendeskGroups.ZGroup grp : wrapper.groups) {
+			ZendeskGroupsAPI.GroupsWrapper wrapper = zgroups.getUserGroups(userId);
+			groupsMap = new Map<Long, ZendeskGroupsAPI.ZGroup>();
+			for (ZendeskGroupsAPI.ZGroup grp : wrapper.groups) {
 				groupsMap.put(grp.id, grp);
 			}
 		}

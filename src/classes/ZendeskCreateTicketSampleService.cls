@@ -25,19 +25,19 @@ global class ZendeskCreateTicketSampleService {
 			ZendeskAPI.AuthType zdAuthType = (settings.Authentication_Type__c=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token);
 
 			// Create a new Ticket object
-            ZendeskTickets.ZTicket zt = new ZendeskTickets.ZTicket();
-            zt.type = ZendeskTickets.TicketType.question;
+            ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
+            zt.type = ZendeskTicketsAPI.TicketType.question;
     		zt.subject = ticketSubject;
             // Create a new requester if one doesn't exist with this email address
-    		zt.requester = new ZendeskTickets.ZTicketRequester();
+    		zt.requester = new ZendeskTicketsAPI.ZTicketRequester();
             zt.requester.name = UserInfo.getName();
             zt.requester.email = UserInfo.getUserEmail();
             // Add a comment to the ticket
-            zt.comment = new ZendeskTickets.ZTicketComment();
+            zt.comment = new ZendeskTicketsAPI.ZTicketComment();
     		zt.comment.body = ticketComment;
 
 			ZendeskAPI zapi = new ZendeskAPI(settings.Subdomain__c, settings.Username__c, settings.Password_or_Token__c, zdAuthType);
-			ZendeskTickets zTickets = new ZendeskTickets(zapi);
+			ZendeskTicketsAPI zTickets = new ZendeskTicketsAPI(zapi);
 			Long ticketNum = zTickets.createTicket(zt);
 
 			// Return the newly created ticket number

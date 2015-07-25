@@ -7,7 +7,7 @@ public class ZendeskOrganizationsSampleController {
 
 	public String pageMessage {get;set;}
 	public Long organizationId {get;set;}
-	public ZendeskOrganizations.ZOrganization[] organizations {get;set;}
+	public ZendeskOrganizationsAPI.ZOrganization[] organizations {get;set;}
 
 	public ZendeskOrganizationsSampleController() {}
 
@@ -16,9 +16,9 @@ public class ZendeskOrganizationsSampleController {
 		organizations = null;
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskOrganizations zorganizations = new ZendeskOrganizations(zapi);
+			ZendeskOrganizationsAPI zorganizations = new ZendeskOrganizationsAPI(zapi);
 
-			ZendeskOrganizations.OrganizationsWrapper wrapper = zorganizations.getOrganizations();
+			ZendeskOrganizationsAPI.OrganizationsWrapper wrapper = zorganizations.getOrganizations();
 			organizations = wrapper.organizations;
 		}
 		catch(Exception e) {
@@ -32,11 +32,11 @@ public class ZendeskOrganizationsSampleController {
 		organizations = null;
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskOrganizations zorganizations = new ZendeskOrganizations(zapi);
+			ZendeskOrganizationsAPI zorganizations = new ZendeskOrganizationsAPI(zapi);
 
-			ZendeskOrganizations.OrganizationWrapper wrapper = zorganizations.getOrganization(organizationId);
+			ZendeskOrganizationsAPI.OrganizationWrapper wrapper = zorganizations.getOrganization(organizationId);
 			if (wrapper != null && wrapper.organization != null) {
-				organizations = new ZendeskOrganizations.ZOrganization[]{ wrapper.organization };
+				organizations = new ZendeskOrganizationsAPI.ZOrganization[]{ wrapper.organization };
 			}
 			else {
 				throw new ZendeskException('Organization "' + organizationId + '" not found');

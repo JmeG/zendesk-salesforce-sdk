@@ -7,7 +7,7 @@ public class ZendeskTicketFieldsSampleController {
 
 	public String pageMessage {get;set;}
 	public Long ticketFieldId {get;set;}
-	public Map<Long, ZendeskTicketFields.ZTicketField> fieldsMap {get;set;}
+	public Map<Long, ZendeskTicketFieldsAPI.ZTicketField> fieldsMap {get;set;}
 
 	public ZendeskTicketFieldsSampleController() {}
 
@@ -15,7 +15,7 @@ public class ZendeskTicketFieldsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
+			ZendeskTicketFieldsAPI zfields = new ZendeskTicketFieldsAPI(zapi);
 
 			fieldsMap = zfields.getAllFields();
 		}
@@ -29,10 +29,10 @@ public class ZendeskTicketFieldsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskTicketFields zfields = new ZendeskTicketFields(zapi);
+			ZendeskTicketFieldsAPI zfields = new ZendeskTicketFieldsAPI(zapi);
 
-			fieldsMap = new Map<Long, ZendeskTicketFields.ZTicketField>();
-			ZendeskTicketFields.ZTicketField field = zfields.getField(ticketFieldId);
+			fieldsMap = new Map<Long, ZendeskTicketFieldsAPI.ZTicketField>();
+			ZendeskTicketFieldsAPI.ZTicketField field = zfields.getField(ticketFieldId);
 			if (field != null) {
 				fieldsMap.put(field.id, field);
 			}

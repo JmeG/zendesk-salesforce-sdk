@@ -7,7 +7,7 @@ public class ZendeskTicketFormsSampleController {
 
 	public String pageMessage {get;set;}
 	public Long ticketFormId {get;set;}
-	public Map<Long, ZendeskTicketForms.ZTicketForm> formsMap {get;set;}
+	public Map<Long, ZendeskTicketFormsAPI.ZTicketForm> formsMap {get;set;}
 
 	public ZendeskTicketFormsSampleController() {}
 
@@ -15,7 +15,7 @@ public class ZendeskTicketFormsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskTicketForms zforms = new ZendeskTicketForms(zapi);
+			ZendeskTicketFormsAPI zforms = new ZendeskTicketFormsAPI(zapi);
 
 			formsMap = zforms.getAllTicketForms();
 		}
@@ -29,10 +29,10 @@ public class ZendeskTicketFormsSampleController {
 		pageMessage = '';
 		try {
 			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskTicketForms zforms = new ZendeskTicketForms(zapi);
+			ZendeskTicketFormsAPI zforms = new ZendeskTicketFormsAPI(zapi);
 
-			formsMap = new Map<Long, ZendeskTicketForms.ZTicketForm>();
-			ZendeskTicketForms.ZTicketForm tf = zforms.getTicketForm(ticketFormId);
+			formsMap = new Map<Long, ZendeskTicketFormsAPI.ZTicketForm>();
+			ZendeskTicketFormsAPI.ZTicketForm tf = zforms.getTicketForm(ticketFormId);
 			if (tf != null) {
 				formsMap.put(tf.id, tf);
 			}

@@ -1,4 +1,4 @@
-// This class provides test coverage for the ZendeskAttachments class
+// This class provides test coverage for the ZendeskAttachmentsAPI class
 @isTest
 public class ZendeskAttachmentsTests {
 
@@ -43,7 +43,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockCreateAttachmentResponse());
 
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		String attachId = zattach.uploadAttachment('filename.txt', 'fileContentType', Blob.valueOf('asdfasfdasdfasdfasdf'));
         Test.stopTest();
 
@@ -54,7 +54,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		try {
             zattach.uploadAttachment('filename.txt', 'fileContentType', Blob.valueOf('asdfasfdasdfasdfasdf'));
             System.assert(false); // throw an exception if we get here
@@ -66,7 +66,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zattach.deleteAttachment(123);
         Test.stopTest();
 
@@ -77,7 +77,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		try {
             zattach.deleteAttachment(123);
             System.assert(false); // throw an exception if we get here
@@ -89,8 +89,8 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockAttachmentResponse());
 
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskAttachments.ZAttachment za = zattach.getAttachment(123);
+        ZendeskAttachmentsAPI zattach = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI.ZAttachment za = zattach.getAttachment(123);
         Test.stopTest();
 
         System.assertNotEquals(null, za);
@@ -100,7 +100,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		try {
             zattach.getAttachment(123);
             System.assert(false); // throw an exception if we get here
@@ -112,7 +112,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskAttachments zattach = new ZendeskAttachments(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         zattach.redactCommentAttachment(123, 456, 789);
         Test.stopTest();
 
@@ -120,7 +120,7 @@ public class ZendeskAttachmentsTests {
     }
 
     static testMethod void testZAttachment() {
-        ZendeskAttachments.ZAttachment obj = new ZendeskAttachments.ZAttachment();
+        ZendeskAttachmentsAPI.ZAttachment obj = new ZendeskAttachmentsAPI.ZAttachment();
         obj.name = '';
         obj.content_url = '';
         obj.content_type = '';

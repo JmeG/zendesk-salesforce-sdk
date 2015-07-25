@@ -1,5 +1,5 @@
 // This class provides functionality to call the Zendesk Ticket Comments API
-public class ZendeskTicketComments extends ZendeskResourceBase {
+public class ZendeskTicketCommentsAPI extends ZendeskResourceBase {
 
 	public class ZTicketComment {
 		public Long id {get; private set;}
@@ -8,8 +8,8 @@ public class ZendeskTicketComments extends ZendeskResourceBase {
 		public String html_body {get;set;}
 		public Boolean x_public {get;set;} // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
 		public Long author_id {get;set;}
-		public List<ZendeskAttachments.ZAttachment> attachments {get;set;}
-		public ZendeskTickets.ZTicketVia via {get;set;}
+		public List<ZendeskAttachmentsAPI.ZAttachment> attachments {get;set;}
+		public ZendeskTicketsAPI.ZTicketVia via {get;set;}
 		public DateTime created_at {get; private set;}
 	}
 
@@ -21,7 +21,7 @@ public class ZendeskTicketComments extends ZendeskResourceBase {
 		public ZTicketComment comment {get;set;}
 	}
 
-	public ZendeskTicketComments(ZendeskAPI zapi) {
+	public ZendeskTicketCommentsAPI(ZendeskAPI zapi) {
 		super(zapi);
 	}
 
