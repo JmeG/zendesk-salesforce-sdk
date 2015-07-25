@@ -9,7 +9,6 @@ public abstract class ZendeskResourceBase {
 	// Realllly hacky way of stripping out nulls. Experimenting with this instead of using deserializeUntyped
 	// https://iwritecrappycode.wordpress.com/2014/07/16/stripping-nulls-from-a-json-object-in-apex/
 	public static string stripJsonNulls(String jsonString) {
-		System.debug('stripJsonNulls: input=' + jsonString);
 		if (!String.isEmpty(jsonString)) {
 			jsonString = jsonString.replaceAll('\"[^\"]*\":null',''); // basic removal of null values
 			jsonString = jsonString.replaceAll(',{2,}', ','); // remove duplicate/multiple commas
@@ -18,7 +17,6 @@ public abstract class ZendeskResourceBase {
 			jsonString = jsonString.replace('[,', '['); // prevent opening bracket from having a comma after it
 			jsonString = jsonString.replace(',]', ']'); // prevent closing bracket from having a comma before it
 		}
-		System.debug('stripJsonNulls: output=' + jsonString);
 		return jsonString;
 	}
 
