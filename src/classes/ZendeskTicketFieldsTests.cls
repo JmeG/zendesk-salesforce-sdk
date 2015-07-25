@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskTicketFields class
 @isTest
-private class ZendeskTicketFieldsTests {
+public class ZendeskTicketFieldsTests {
 
     public class MockOKResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {

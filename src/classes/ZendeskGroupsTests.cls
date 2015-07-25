@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskGroups class
 @isTest
-private class ZendeskGroupsTests {
+public class ZendeskGroupsTests {
 
     public class MockOKResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {

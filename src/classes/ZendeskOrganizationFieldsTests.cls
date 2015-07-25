@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskOrganizationFields class
 @isTest
-private class ZendeskOrganizationFieldsTests {
+public class ZendeskOrganizationFieldsTests {
 
     public class MockOKResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {

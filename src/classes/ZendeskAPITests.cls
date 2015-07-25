@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskAPI class
 @isTest
-private class ZendeskAPITests {
+public class ZendeskAPITests {
 
     public class MockUserResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
