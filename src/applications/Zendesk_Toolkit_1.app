@@ -2,5 +2,6 @@
 <CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
     <defaultLandingTab>standard-home</defaultLandingTab>
     <label>Zendesk Toolkit 1</label>
+    <tab>standard-Account</tab>
     <tab>Zendesk_Samples</tab>
 </CustomApplication>
