@@ -21,7 +21,7 @@ public class ZendeskOrganizations extends ZendeskResourceBase {
 		public List<ZOrganization> organizations {get;set;}
 	}
 
-	public class OrganizationWrapper {
+	public class OrganizationWrapper extends ZendeskSideLoadingBase {
 		public ZOrganization organization {get;set;}
 	}
 
