@@ -58,7 +58,7 @@ private class ZendeskOrganizationsTests {
 
         Test.startTest();
 		ZendeskOrganizations zorgs = new ZendeskOrganizations(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskOrganizations.OrganizationsWrapper results = zorgs.getOrganizations(2);
+		ZendeskOrganizations.OrganizationsWrapper results = zorgs.getOrganizations(new Map<String, Object>{'page'=>2});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
