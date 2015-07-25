@@ -44,9 +44,9 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
-		ZendeskJobStatusesAPI.ZJobStatus jobStatus = zusers.createUsers(new ZendeskUsersAPI.ZUser[] { zu });
+		ZendeskJobStatusesAPI.ZJobStatus jobStatus = zusers_api.createUsers(new ZendeskUsersAPI.ZUser[] { zu });
         Test.stopTest();
 
 		System.assertNotEquals(null, jobStatus);
@@ -56,9 +56,9 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
-		zusers.updateUser(123, zu);
+		zusers_api.updateUser(123, zu);
         Test.stopTest();
 
 		System.assert(true);
@@ -68,10 +68,10 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
         zu.id = 123;
-		zusers.updateUsers(new ZendeskUsersAPI.ZUser[] {zu});
+		zusers_api.updateUsers(new ZendeskUsersAPI.ZUser[] {zu});
         Test.stopTest();
 
 		System.assert(true);
@@ -81,9 +81,9 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
-		zusers.updateUsers(new Set<Long> {123,456}, zu);
+		zusers_api.updateUsers(new Set<Long> {123,456}, zu);
         Test.stopTest();
 
 		System.assert(true);
@@ -93,9 +93,9 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
-		zusers.updateUsers(new Set<String> {'123','456'}, zu);
+		zusers_api.updateUsers(new Set<String> {'123','456'}, zu);
         Test.stopTest();
 
 		System.assert(true);
@@ -105,9 +105,9 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskUsersAPI.ZUser zu = new ZendeskUsersAPI.ZUser();
-		zusers.mergeUsers(123, 456);
+		zusers_api.mergeUsers(123, 456);
         Test.stopTest();
 
 		System.assert(true);
@@ -117,8 +117,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = zusers.getUsers(new Map<String, Object>{'page'=>'2'});
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.UsersWrapper results = zusers_api.getUsers(new Map<String, Object>{'page'=>'2'});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -130,8 +130,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = zusers.getUsersByIds(new Set<Long> {123, 456});
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.UsersWrapper results = zusers_api.getUsersByIds(new Set<Long> {123, 456});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -143,8 +143,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = zusers.getUsersByExternalIds(new Set<String> {'123', '456'});
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.UsersWrapper results = zusers_api.getUsersByExternalIds(new Set<String> {'123', '456'});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -156,8 +156,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = zusers.getUsersByGroup(123);
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.UsersWrapper results = zusers_api.getUsersByGroup(123);
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -169,8 +169,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = zusers.getUsersByOrganization(123);
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.UsersWrapper results = zusers_api.getUsersByOrganization(123);
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -182,8 +182,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = zusers.getUsers('foo');
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.UsersWrapper results = zusers_api.getUsers('foo');
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -195,8 +195,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = zusers.searchUsers('foo123');
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.UsersWrapper results = zusers_api.searchUsers('foo123');
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -208,8 +208,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		Map<String, Object> results = zusers.getUserRelatedInfo(123);
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		Map<String, Object> results = zusers_api.getUserRelatedInfo(123);
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -219,8 +219,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		zusers.deleteUser(123);
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		zusers_api.deleteUser(123);
         Test.stopTest();
 
 		System.assert(true);
@@ -230,8 +230,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		zusers.deleteUsers(new Set<Long> {123,456});
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		zusers_api.deleteUsers(new Set<Long> {123,456});
         Test.stopTest();
 
 		System.assert(true);
@@ -241,8 +241,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		zusers.deleteUsers(new Set<String> {'123','456'});
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		zusers_api.deleteUsers(new Set<String> {'123','456'});
         Test.stopTest();
 
 		System.assert(true);
@@ -252,8 +252,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		Long userId = zusers.createUser('John Doe', 'jdoe@zendesk.com');
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		Long userId = zusers_api.createUser('John Doe', 'jdoe@zendesk.com');
         Test.stopTest();
 
 		System.assertNotEquals(null, userId);
@@ -263,8 +263,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		Long userId = zusers.getUserIdByEmail('foo@bar.com');
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		Long userId = zusers_api.getUserIdByEmail('foo@bar.com');
         Test.stopTest();
 
 		System.assertNotEquals(null, userId);
@@ -274,8 +274,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = zusers.findUsersByNameOrEmail('foo@bar.com');
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.UsersWrapper results = zusers_api.findUsersByNameOrEmail('foo@bar.com');
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -287,8 +287,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = zusers.getUsers();
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.UsersWrapper results = zusers_api.getUsers();
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -300,8 +300,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UserWrapper wrapper = zusers.getUser(123);
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.UserWrapper wrapper = zusers_api.getUser(123);
         Test.stopTest();
 
 		System.assertNotEquals(null, wrapper);
@@ -313,8 +313,8 @@ public class ZendeskUsersTests {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
 
         Test.startTest();
-		ZendeskUsersAPI zusers = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.ZUser u = zusers.getCurrentUser();
+		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.ZUser u = zusers_api.getCurrentUser();
         Test.stopTest();
 
 		System.assertNotEquals(null, u);

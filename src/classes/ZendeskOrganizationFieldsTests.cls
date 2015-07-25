@@ -35,8 +35,8 @@ public class ZendeskOrganizationFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldResponse());
 
         Test.startTest();
-        ZendeskOrganizationFieldsAPI zfields = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskOrganizationFieldsAPI.ZOrganizationField testObj = zfields.getField(123);
+        ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskOrganizationFieldsAPI.ZOrganizationField testObj = zfields_api.getField(123);
         System.assertNotEquals(null, testObj);
 
         String optVal = testObj.getOptionValue('Test');
@@ -48,8 +48,8 @@ public class ZendeskOrganizationFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldsResponse());
 
         Test.startTest();
-        ZendeskOrganizationFieldsAPI zfields = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskOrganizationFieldsAPI.ZOrganizationField testObj = zfields.getFieldByKey('custom_field_1');
+        ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskOrganizationFieldsAPI.ZOrganizationField testObj = zfields_api.getFieldByKey('custom_field_1');
         Test.stopTest();
 
         System.assertNotEquals(null, testObj);
@@ -59,8 +59,8 @@ public class ZendeskOrganizationFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskOrganizationFieldsAPI zfields = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        zfields.deleteField(123);
+        ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        zfields_api.deleteField(123);
         Test.stopTest();
 
         System.assert(true);
@@ -70,11 +70,11 @@ public class ZendeskOrganizationFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldResponse());
 
         Test.startTest();
-        ZendeskOrganizationFieldsAPI zfields = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskOrganizationFieldsAPI.ZOrganizationField zfield = new ZendeskOrganizationFieldsAPI.ZOrganizationField();
         zfield.key = 'create key';
         zfield.title = 'create title';
-        Long fieldId = zfields.createField(zfield);
+        Long fieldId = zfields_api.createField(zfield);
         Test.stopTest();
 
         System.assertNotEquals(null, fieldId);
@@ -84,11 +84,11 @@ public class ZendeskOrganizationFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldResponse());
 
         Test.startTest();
-        ZendeskOrganizationFieldsAPI zfields = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskOrganizationFieldsAPI.ZOrganizationField zfield = new ZendeskOrganizationFieldsAPI.ZOrganizationField();
         zfield.key = 'update key';
         zfield.title = 'update title';
-        zfields.updateField(123, zfield);
+        zfields_api.updateField(123, zfield);
         Test.stopTest();
 
         System.assert(true);
@@ -100,8 +100,8 @@ public class ZendeskOrganizationFieldsTests {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
         Test.startTest();
-        ZendeskOrganizationFieldsAPI zfields = new ZendeskOrganizationFieldsAPI(zapi);
-        zfields.reorderFields(new Long[] { 123, 456 });
+        ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(zapi);
+        zfields_api.reorderFields(new Long[] { 123, 456 });
         Test.stopTest();
 
         System.assert(true);
@@ -111,8 +111,8 @@ public class ZendeskOrganizationFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldsResponse());
 
         Test.startTest();
-        ZendeskOrganizationFieldsAPI zfields = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Map<String, ZendeskOrganizationFieldsAPI.ZOrganizationField> fieldsMap = zfields.getAllFields();
+        ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        Map<String, ZendeskOrganizationFieldsAPI.ZOrganizationField> fieldsMap = zfields_api.getAllFields();
         Test.stopTest();
 
         System.assertNotEquals(null, fieldsMap.containsKey('Test'));

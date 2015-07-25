@@ -54,8 +54,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Long newTicketId = ztickets.createTicketFromTweet(123123, 456456);
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        Long newTicketId = ztickets_api.createTicketFromTweet(123123, 456456);
         Test.stopTest();
 
         System.assertNotEquals(null, newTicketId);
@@ -65,9 +65,9 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
-        ZendeskJobStatusesAPI.ZJobStatus jobStatus = ztickets.createTickets(new ZendeskTicketsAPI.ZTicket[] { zt });
+        ZendeskJobStatusesAPI.ZJobStatus jobStatus = ztickets_api.createTickets(new ZendeskTicketsAPI.ZTicket[] { zt });
         Test.stopTest();
 
         System.assertNotEquals(null, jobStatus);
@@ -77,8 +77,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTicketsAPI.TicketsWrapper results = ztickets.getTickets(new Map<String, Object>{'page'=>2});
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskTicketsAPI.TicketsWrapper results = ztickets_api.getTickets(new Map<String, Object>{'page'=>2});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -90,8 +90,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTicketsAPI.TicketsWrapper results = ztickets.getTicketsByIds(new Set<Long> {1,2});
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskTicketsAPI.TicketsWrapper results = ztickets_api.getTicketsByIds(new Set<Long> {1,2});
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -103,8 +103,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTicketsAPI.TicketsWrapper results = ztickets.getTicketIncidents(123);
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskTicketsAPI.TicketsWrapper results = ztickets_api.getTicketIncidents(123);
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -116,8 +116,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTicketsAPI.TicketsWrapper results = ztickets.getTicketProblems();
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskTicketsAPI.TicketsWrapper results = ztickets_api.getTicketProblems();
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -129,8 +129,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = ztickets.getTicketCollaborators(123);
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskUsersAPI.UsersWrapper results = ztickets_api.getTicketCollaborators(123);
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -142,8 +142,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		Map<String, Object> results = ztickets.getTwicketStatus(123);
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		Map<String, Object> results = ztickets_api.getTwicketStatus(123);
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -153,10 +153,10 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
         zt.id = 123;
-        ztickets.updateTickets(new ZendeskTicketsAPI.ZTicket[] { zt });
+        ztickets_api.updateTickets(new ZendeskTicketsAPI.ZTicket[] { zt });
         Test.stopTest();
 
         System.assert(true);
@@ -166,9 +166,9 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
-        ZendeskJobStatusesAPI.ZJobStatus jobStatus = ztickets.updateTickets(new Set<Long> { 123, 456 }, zt);
+        ZendeskJobStatusesAPI.ZJobStatus jobStatus = ztickets_api.updateTickets(new Set<Long> { 123, 456 }, zt);
         Test.stopTest();
 
         System.assert(true);
@@ -178,9 +178,9 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
-        ZendeskJobStatusesAPI.ZJobStatus jobStatus = ztickets.mergeTickets(new Set<Long> { 123, 456 }, 'comment1', 789, 'comment2');
+        ZendeskJobStatusesAPI.ZJobStatus jobStatus = ztickets_api.mergeTickets(new Set<Long> { 123, 456 }, 'comment1', 789, 'comment2');
         Test.stopTest();
 
         System.assert(true);
@@ -190,9 +190,9 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
-        ztickets.deleteTickets(new Set<Long> { 123, 456 });
+        ztickets_api.deleteTickets(new Set<Long> { 123, 456 });
         Test.stopTest();
 
         System.assert(true);
@@ -202,8 +202,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		Map<String, Object> results = ztickets.getTicketRelatedInfo(123);
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		Map<String, Object> results = ztickets_api.getTicketRelatedInfo(123);
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -213,9 +213,9 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
-        ztickets.markTicketAsSpam(123);
+        ztickets_api.markTicketAsSpam(123);
         Test.stopTest();
 
         System.assert(true);
@@ -225,9 +225,9 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskTicketsAPI.ZTicket zt = new ZendeskTicketsAPI.ZTicket();
-        ztickets.markTicketsAsSpam(new Set<Long> {123, 456});
+        ztickets_api.markTicketsAsSpam(new Set<Long> {123, 456});
         Test.stopTest();
 
         System.assert(true);
@@ -237,8 +237,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTicketsAPI.TicketsWrapper results = ztickets.autocompleteProblems('foo');
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskTicketsAPI.TicketsWrapper results = ztickets_api.autocompleteProblems('foo');
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -250,8 +250,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTicketsAPI.TicketWrapper wrapper = ztickets.getTicket(123);
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskTicketsAPI.TicketWrapper wrapper = ztickets_api.getTicket(123);
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper);
@@ -261,8 +261,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ztickets.deleteTicket(123);
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ztickets_api.deleteTicket(123);
         Test.stopTest();
 
         System.assert(true);
@@ -272,8 +272,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Long newTicketId = ztickets.createTicket(ZendeskTicketsAPI.TicketType.question, 'subject', 'comment', 999);
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        Long newTicketId = ztickets_api.createTicket(ZendeskTicketsAPI.TicketType.question, 'subject', 'comment', 999);
 
         Test.stopTest();
 
@@ -284,8 +284,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Long newTicketId = ztickets.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 'attachmentToken', 123);
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        Long newTicketId = ztickets_api.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 'attachmentToken', 123);
 
         Test.stopTest();
 
@@ -296,8 +296,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Long newTicketId = ztickets.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 123, new List<ZendeskTicketsAPI.ZTicketCustomField>());
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        Long newTicketId = ztickets_api.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 123, new List<ZendeskTicketsAPI.ZTicketCustomField>());
 
         Test.stopTest();
 
@@ -308,8 +308,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Long newTicketId = ztickets.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 123, 234, 345, 456, new List<ZendeskTicketsAPI.ZTicketCustomField>());
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        Long newTicketId = ztickets_api.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 123, 234, 345, 456, new List<ZendeskTicketsAPI.ZTicketCustomField>());
 
         Test.stopTest();
 
@@ -320,8 +320,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketResponse());
 
         Test.startTest();
-        ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Long newTicketId = ztickets.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 'token', 123,  new List<ZendeskTicketsAPI.ZTicketCustomField>());
+        ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        Long newTicketId = ztickets_api.createTicket(ZendeskTicketsAPI.TicketType.question, 'testsubj', 'testcomment', 'token', 123,  new List<ZendeskTicketsAPI.ZTicketCustomField>());
 
         Test.stopTest();
 
@@ -332,8 +332,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTicketsAPI.TicketsWrapper results = ztickets.getTickets();
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskTicketsAPI.TicketsWrapper results = ztickets_api.getTickets();
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -345,12 +345,12 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskTicketsAPI.TicketsWrapper results = ztickets.getTicketsByOrgId(123);
-        results = ztickets.getTicketsByRequesterId(123);
-        results = ztickets.getTicketsByCCUserId(123);
-        results = ztickets.getTicketsByAssigneeId(123);
-        results = ztickets.getRecentTickets();
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskTicketsAPI.TicketsWrapper results = ztickets_api.getTicketsByOrgId(123);
+        results = ztickets_api.getTicketsByRequesterId(123);
+        results = ztickets_api.getTicketsByCCUserId(123);
+        results = ztickets_api.getTicketsByAssigneeId(123);
+        results = ztickets_api.getRecentTickets();
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -362,10 +362,10 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
 		ZendeskTicketsAPI.ZTicket obj = new ZendeskTicketsAPI.ZTicket();
         obj.assignee_id = 555;
-        ztickets.updateTicket(123, obj);
+        ztickets_api.updateTicket(123, obj);
         Test.stopTest();
 
         System.assert(true);
@@ -375,8 +375,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ztickets.addTicketComment(123, 'new comment', true);
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ztickets_api.addTicketComment(123, 'new comment', true);
         Test.stopTest();
 
         System.assert(true);
@@ -386,8 +386,8 @@ public class ZendeskTicketsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-		ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ztickets.addTicketCommentAndChangeStatus(123, 'new comment', true, new ZendeskTicketsAPI.TicketStatus('open'));
+		ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ztickets_api.addTicketCommentAndChangeStatus(123, 'new comment', true, new ZendeskTicketsAPI.TicketStatus('open'));
         Test.stopTest();
 
         System.assert(true);

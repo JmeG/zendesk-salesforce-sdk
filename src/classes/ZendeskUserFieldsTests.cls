@@ -35,8 +35,8 @@ public class ZendeskUserFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockUserFieldResponse());
 
         Test.startTest();
-        ZendeskUserFieldsAPI zfields = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskUserFieldsAPI.ZUserField testObj = zfields.getField(123);
+        ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskUserFieldsAPI.ZUserField testObj = zfields_api.getField(123);
         System.assertNotEquals(null, testObj);
 
         String optVal = testObj.getOptionValue('Test');
@@ -48,8 +48,8 @@ public class ZendeskUserFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockUserFieldsResponse());
 
         Test.startTest();
-        ZendeskUserFieldsAPI zfields = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskUserFieldsAPI.ZUserField testObj = zfields.getFieldByKey('custom_field_1');
+        ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskUserFieldsAPI.ZUserField testObj = zfields_api.getFieldByKey('custom_field_1');
         Test.stopTest();
 
         System.assertNotEquals(null, testObj);
@@ -59,8 +59,8 @@ public class ZendeskUserFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskUserFieldsAPI zfields = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        zfields.deleteField(123);
+        ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        zfields_api.deleteField(123);
         Test.stopTest();
 
         System.assert(true);
@@ -70,11 +70,11 @@ public class ZendeskUserFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockUserFieldResponse());
 
         Test.startTest();
-        ZendeskUserFieldsAPI zfields = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskUserFieldsAPI.ZUserField zfield = new ZendeskUserFieldsAPI.ZUserField();
         zfield.key = 'create key';
         zfield.title = 'create title';
-        Long fieldId = zfields.createField(zfield);
+        Long fieldId = zfields_api.createField(zfield);
         Test.stopTest();
 
         System.assertNotEquals(null, fieldId);
@@ -84,11 +84,11 @@ public class ZendeskUserFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockUserFieldResponse());
 
         Test.startTest();
-        ZendeskUserFieldsAPI zfields = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
         ZendeskUserFieldsAPI.ZUserField zfield = new ZendeskUserFieldsAPI.ZUserField();
         zfield.key = 'update key';
         zfield.title = 'update title';
-        zfields.updateField(123, zfield);
+        zfields_api.updateField(123, zfield);
         Test.stopTest();
 
         System.assert(true);
@@ -100,8 +100,8 @@ public class ZendeskUserFieldsTests {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
         Test.startTest();
-        ZendeskUserFieldsAPI zfields = new ZendeskUserFieldsAPI(zapi);
-        zfields.reorderFields(new Long[] { 123, 456 });
+        ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zapi);
+        zfields_api.reorderFields(new Long[] { 123, 456 });
         Test.stopTest();
 
         System.assert(true);
@@ -111,8 +111,8 @@ public class ZendeskUserFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockUserFieldsResponse());
 
         Test.startTest();
-        ZendeskUserFieldsAPI zfields = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        Map<String, ZendeskUserFieldsAPI.ZUserField> fieldsMap = zfields.getAllFields();
+        ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        Map<String, ZendeskUserFieldsAPI.ZUserField> fieldsMap = zfields_api.getAllFields();
         Test.stopTest();
 
         System.assertNotEquals(null, fieldsMap.containsKey('Test'));
