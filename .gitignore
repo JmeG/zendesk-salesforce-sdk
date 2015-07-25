@@ -13,3 +13,5 @@ config/.org_metadata
 config/.session
 
 config/.lightning
+
+*.txt
