@@ -25,7 +25,7 @@
         <name>CustomObject</name>
     </types>
     <types>
-        <members>*</members>
+        <members>Zendesk_Samples</members>
         <name>CustomTab</name>
     </types>
     <version>34.0</version>
