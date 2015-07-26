@@ -293,4 +293,13 @@ public abstract class ZendeskTypes {
         public Integer calendar {get; private set;}
         public Integer business {get; private set;}
     }
+
+    public class ZSearchResult {
+        public Long id {get; private set;}
+        public String name {get; private set;}
+		public DateTime created_at {get; private set;}
+		public DateTime updated_at {get; private set;}
+		public String result_type {get; private set;}
+		public String url {get; private set;}
+    }
 }
