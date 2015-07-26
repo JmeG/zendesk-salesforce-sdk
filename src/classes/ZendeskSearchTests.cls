@@ -17,7 +17,7 @@ public class ZendeskSearchTests {
 
         Test.startTest();
         ZendeskSearchAPI search_api = new ZendeskSearchAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskSearchAPI.SearchResultsWrapper searchWrapper = search_api.search('foo', null);
+        ZendeskSearchAPI.SearchResultsWrapper searchWrapper = search_api.search('foo');
         Test.stopTest();
 
         System.assertNotEquals(null, searchWrapper);
@@ -28,7 +28,7 @@ public class ZendeskSearchTests {
 
         Test.startTest();
         ZendeskSearchAPI search_api = new ZendeskSearchAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskSearchAPI.SearchResultsWrapper searchWrapper = search_api.searchForums('foo', null);
+        ZendeskSearchAPI.SearchResultsWrapper searchWrapper = search_api.searchForums('foo');
         Test.stopTest();
 
         System.assertNotEquals(null, searchWrapper);
