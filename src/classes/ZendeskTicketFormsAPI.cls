@@ -18,21 +18,20 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 		ticketFormsMap = new Map<Long, ZTicketForm>();
 	}
 
-	public TicketFormsWrapper getTicketForms() {
-		return getTicketForms(null);
-	}
-
-	public TicketFormsWrapper getTicketForms(Map<String, Object> queryParams) {
-		HttpRequest req = zapi.createRequest('GET', '/ticket_forms.json', queryParams);
-		return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormsWrapper.class);
-	}
-
 	public ZTicketForm getTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/ticket_forms/'+ticketFormId+'.json');
 		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormWrapper.class);
 		return resultWrapper.ticket_form;
+	}
+
+	public TicketFormsWrapper getTicketForms() {
+		return getTicketForms(null);
+	}
+	public TicketFormsWrapper getTicketForms(Map<String, Object> queryParams) {
+		HttpRequest req = zapi.createRequest('GET', '/ticket_forms.json', queryParams);
+		return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormsWrapper.class);
 	}
 
 	public void deleteTicketForm(Long ticketFormId) {

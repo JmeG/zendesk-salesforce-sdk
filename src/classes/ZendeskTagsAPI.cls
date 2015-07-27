@@ -29,7 +29,6 @@ public class ZendeskTagsAPI extends ZendeskResourceBase {
 	public TagsWrapper getTags(Resource resourceType, Long recordId) {
 		return getTags(resourceType, recordId, null);
 	}
-
 	public TagsWrapper getTags(Resource resourceType, Long recordId, Map<String, Object> queryParams) {
 		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 

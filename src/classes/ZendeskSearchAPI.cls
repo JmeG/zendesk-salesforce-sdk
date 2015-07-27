@@ -16,7 +16,6 @@ public class ZendeskSearchAPI extends ZendeskResourceBase {
 	public SearchResultsWrapper search(String searchString) {
 		return search(searchString, null);
 	}
-
 	public SearchResultsWrapper search(String searchString, Map<String, Object> queryParams) {
 		if (String.isEmpty(searchString)) { throw new ZendeskException('searchString parameter must not be null or empty'); }
 
@@ -29,7 +28,6 @@ public class ZendeskSearchAPI extends ZendeskResourceBase {
 	public SearchResultsWrapper searchForums(String searchString) {
 		return searchForums(searchString, null);
 	}
-
 	public SearchResultsWrapper searchForums(String searchString, Map<String, Object> queryParams) {
 		if (String.isEmpty(searchString)) { throw new ZendeskException('searchString parameter must not be null or empty'); }
 

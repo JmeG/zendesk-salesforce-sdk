@@ -15,6 +15,116 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		super(zapi);
 	}
 
+	public TicketWrapper getTicket(Long ticketId) {
+		return getTicket(ticketId, null);
+	}
+	public TicketWrapper getTicket(Long ticketId, Map<String, Object> queryParams) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+
+		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'.json', queryParams);
+		return (TicketWrapper)JSON.deserialize(zapi.sendRequest(req), TicketWrapper.class);
+	}
+
+	// /api/v2/tickets.json
+	public TicketsWrapper getTickets() {
+        return getTickets(null);
+    }
+    public TicketsWrapper getTickets(Map<String, Object> queryParams) {
+        return getTicketsHelper(zapi.createRequest('GET', '/tickets.json', queryParams));
+    }
+
+	// /api/v2/organizations/{organization_id}/tickets.json
+	public TicketsWrapper getTicketsByOrgId(Long orgId) {
+        return getTicketsByOrgId(orgId, null);
+    }
+	public TicketsWrapper getTicketsByOrgId(Long orgId, Map<String, Object> queryParams) {
+		if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
+
+        return getTicketsHelper(zapi.createRequest('GET', '/organizations/'+orgId+'/tickets.json', queryParams));
+    }
+
+	// /api/v2/users/{user_id}/tickets/requested.json
+	public TicketsWrapper getTicketsByRequesterId(Long requesterId) {
+        return getTicketsByRequesterId(requesterId, null);
+    }
+	public TicketsWrapper getTicketsByRequesterId(Long requesterId, Map<String, Object> queryParams) {
+		if (requesterId == null) { throw new ZendeskException('requesterId parameter must not be null'); }
+
+        return getTicketsHelper(zapi.createRequest('GET', '/users/'+requesterId+'/tickets/requested.json', queryParams));
+    }
+
+	// /api/v2/users/{user_id}/tickets/ccd.json
+	public TicketsWrapper getTicketsByCCUserId(Long userId) {
+        return getTicketsByCCUserId(userId, null);
+    }
+	public TicketsWrapper getTicketsByCCUserId(Long userId, Map<String, Object> queryParams) {
+		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
+
+        return getTicketsHelper(zapi.createRequest('GET', '/users/'+userId+'/tickets/ccd.json', queryParams));
+    }
+
+	// /api/v2/users/{user_id}/tickets/assigned.json
+	public TicketsWrapper getTicketsByAssigneeId(Long assigneeId) {
+        return getTicketsByAssigneeId(assigneeId, null);
+    }
+	public TicketsWrapper getTicketsByAssigneeId(Long assigneeId, Map<String, Object> queryParams) {
+		if (assigneeId == null) { throw new ZendeskException('assigneeId parameter must not be null'); }
+
+        return getTicketsHelper(zapi.createRequest('GET', '/users/'+assigneeId+'/tickets/assigned.json', queryParams));
+    }
+
+	// /api/v2/tickets/recent.json
+	public TicketsWrapper getRecentTickets() {
+		return getRecentTickets(null);
+    }
+	public TicketsWrapper getRecentTickets(Map<String, Object> queryParams) {
+        return getTicketsHelper(zapi.createRequest('GET', '/users/tickets/recent.json', queryParams));
+    }
+
+	// /api/v2/tickets/show_many.json?ids={ids}
+	public TicketsWrapper getTicketsByIds(Set<Long> ticketIds) {
+		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter must not be null or empty'); }
+
+        return getTicketsHelper(zapi.createRequest('GET', '/tickets/show_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)}));
+    }
+
+	// /api/v2/tickets/{id}/incidents.json
+	public TicketsWrapper getTicketIncidents(Long ticketId) {
+        return getTicketIncidents(ticketId, null);
+    }
+	public TicketsWrapper getTicketIncidents(Long ticketId, Map<String, Object> queryParams) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+
+        return getTicketsHelper(zapi.createRequest('GET', '/tickets/'+ticketId+'/incidents.json', queryParams));
+    }
+
+	// /api/v2/problems.json
+	public TicketsWrapper getTicketProblems() {
+        return getTicketProblems(null);
+    }
+	public TicketsWrapper getTicketProblems(Map<String, Object> queryParams) {
+        return getTicketsHelper(zapi.createRequest('GET', '/tickets/problem.json', queryParams));
+    }
+
+	// Helper method for getting tickets
+	private TicketsWrapper getTicketsHelper(HttpRequest req) {
+        return (TicketsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketsWrapper.class);
+    }
+
+	public ZendeskUsersAPI.UsersWrapper getTicketCollaborators(Long ticketId) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+
+		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'/collaborators.json');
+		return (ZendeskUsersAPI.UsersWrapper)JSON.deserialize(zapi.sendRequest(req), ZendeskUsersAPI.UsersWrapper.class);
+    }
+
+	public Map<String, Object> getTwicketStatus(Long ticketId) {
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+
+        HttpRequest req = zapi.createRequest('GET', '/channels/twitter/tickets/'+ticketId+'/statuses.json');
+		return (Map<String, Object>)JSON.deserializeUntyped(zapi.sendRequest(req));
+	}
+
 	public Long createTicket(TicketType type, String subject, String commentText, Long requesterId) {
 		return createTicket(type, subject, commentText, null, requesterId, null, null, null, null);
 	}
@@ -85,136 +195,6 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		HttpRequest req = zapi.createRequest('POST', '/tickets/create_many.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketsWrapper(ztickets)))));
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
-	}
-
-	public TicketWrapper getTicket(Long ticketId) {
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
-
-		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'.json');
-		return (TicketWrapper)JSON.deserialize(zapi.sendRequest(req), TicketWrapper.class);
-	}
-
-	public TicketWrapper getTicket(Long ticketId, Map<String, Object> queryParams) {
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
-
-		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'.json', queryParams);
-		return (TicketWrapper)JSON.deserialize(zapi.sendRequest(req), TicketWrapper.class);
-	}
-
-	// /api/v2/tickets.json
-	public TicketsWrapper getTickets() {
-        return getTickets(zapi.createRequest('GET', '/tickets.json'));
-    }
-
-	// /api/v2/tickets.json
-    public TicketsWrapper getTickets(Map<String, Object> queryParams) {
-        return getTickets(zapi.createRequest('GET', '/tickets.json', queryParams));
-    }
-
-	// /api/v2/organizations/{organization_id}/tickets.json
-	public TicketsWrapper getTicketsByOrgId(Long orgId) {
-        return getTicketsByOrgId(orgId, null);
-    }
-
-	// /api/v2/organizations/{organization_id}/tickets.json
-	public TicketsWrapper getTicketsByOrgId(Long orgId, Map<String, Object> queryParams) {
-		if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
-
-        return getTickets(zapi.createRequest('GET', '/organizations/'+orgId+'/tickets.json', queryParams));
-    }
-
-	// /api/v2/users/{user_id}/tickets/requested.json
-	public TicketsWrapper getTicketsByRequesterId(Long requesterId) {
-        return getTicketsByRequesterId(requesterId, null);
-    }
-
-	// /api/v2/users/{user_id}/tickets/requested.json
-	public TicketsWrapper getTicketsByRequesterId(Long requesterId, Map<String, Object> queryParams) {
-		if (requesterId == null) { throw new ZendeskException('requesterId parameter must not be null'); }
-
-        return getTickets(zapi.createRequest('GET', '/users/'+requesterId+'/tickets/requested.json', queryParams));
-    }
-
-	// /api/v2/users/{user_id}/tickets/ccd.json
-	public TicketsWrapper getTicketsByCCUserId(Long userId) {
-        return getTicketsByCCUserId(userId, null);
-    }
-
-	// /api/v2/users/{user_id}/tickets/ccd.json
-	public TicketsWrapper getTicketsByCCUserId(Long userId, Map<String, Object> queryParams) {
-		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
-
-        return getTickets(zapi.createRequest('GET', '/users/'+userId+'/tickets/ccd.json', queryParams));
-    }
-
-	// /api/v2/users/{user_id}/tickets/assigned.json
-	public TicketsWrapper getTicketsByAssigneeId(Long assigneeId) {
-        return getTicketsByAssigneeId(assigneeId, null);
-    }
-
-	// /api/v2/users/{user_id}/tickets/assigned.json
-	public TicketsWrapper getTicketsByAssigneeId(Long assigneeId, Map<String, Object> queryParams) {
-		if (assigneeId == null) { throw new ZendeskException('assigneeId parameter must not be null'); }
-
-        return getTickets(zapi.createRequest('GET', '/users/'+assigneeId+'/tickets/assigned.json', queryParams));
-    }
-
-	// /api/v2/tickets/recent.json
-	public TicketsWrapper getRecentTickets() {
-		return getRecentTickets(null);
-    }
-
-	// /api/v2/tickets/recent.json
-	public TicketsWrapper getRecentTickets(Map<String, Object> queryParams) {
-        return getTickets(zapi.createRequest('GET', '/users/tickets/recent.json', queryParams));
-    }
-
-	// /api/v2/tickets/show_many.json?ids={ids}
-	public TicketsWrapper getTicketsByIds(Set<Long> ticketIds) {
-		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter must not be null or empty'); }
-
-        return getTickets(zapi.createRequest('GET', '/tickets/show_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)}));
-    }
-
-	// /api/v2/tickets/{id}/incidents.json
-	public TicketsWrapper getTicketIncidents(Long ticketId) {
-        return getTicketIncidents(ticketId, null);
-    }
-
-	// /api/v2/tickets/{id}/incidents.json
-	public TicketsWrapper getTicketIncidents(Long ticketId, Map<String, Object> queryParams) {
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
-
-        return getTickets(zapi.createRequest('GET', '/tickets/'+ticketId+'/incidents.json', queryParams));
-    }
-
-	// /api/v2/problems.json
-	public TicketsWrapper getTicketProblems() {
-        return getTicketProblems(null);
-    }
-
-	// /api/v2/problems.json
-	public TicketsWrapper getTicketProblems(Map<String, Object> queryParams) {
-        return getTickets(zapi.createRequest('GET', '/tickets/problem.json', queryParams));
-    }
-
-	// Helper method for getting tickets
-	private TicketsWrapper getTickets(HttpRequest req) {
-        return (TicketsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketsWrapper.class);
-    }
-
-	public ZendeskUsersAPI.UsersWrapper getTicketCollaborators(Long ticketId) {
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
-
-		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'/collaborators.json');
-		return (ZendeskUsersAPI.UsersWrapper)JSON.deserialize(zapi.sendRequest(req), ZendeskUsersAPI.UsersWrapper.class);
-    }
-
-	public Map<String, Object> getTwicketStatus(Long ticketId) {
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
-
-        HttpRequest req = zapi.createRequest('GET', '/channels/twitter/tickets/'+ticketId+'/statuses.json');
-		return (Map<String, Object>)JSON.deserializeUntyped(zapi.sendRequest(req));
 	}
 
 	public void updateTicket(Long ticketId, ZTicket zticket) {

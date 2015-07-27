@@ -29,7 +29,6 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
     public OrganizationFieldsWrapper getFields() {
         return getFields(null);
     }
-
     public OrganizationFieldsWrapper getFields(Map<String, Object> queryParams) {
         HttpRequest req = zapi.createRequest('GET', '/organization_fields.json', queryParams);
         return (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldsWrapper.class);

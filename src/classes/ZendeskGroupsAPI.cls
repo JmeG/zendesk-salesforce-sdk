@@ -16,10 +16,16 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 		groupsMap = new Map<Long, ZGroup>();
 	}
 
+	public GroupWrapper getGroup(Long groupId) {
+		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
+
+		HttpRequest req = zapi.createRequest('GET', '/groups/'+groupId+'.json');
+		return (GroupWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupWrapper.class);
+	}
+
 	public GroupsWrapper getGroups() {
 		return getGroups(null);
 	}
-
 	public GroupsWrapper getGroups(Map<String, Object> queryParams) {
 		return getGroupsInternal(zapi.createRequest('GET', '/groups.json', queryParams));
 	}
@@ -51,13 +57,6 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 	// Private helper method to query multiple groups
 	private GroupsWrapper getGroupsInternal(HttpRequest req) {
 		return (GroupsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupsWrapper.class);
-	}
-
-	public GroupWrapper getGroup(Long groupId) {
-		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
-
-		HttpRequest req = zapi.createRequest('GET', '/groups/'+groupId+'.json');
-		return (GroupWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupWrapper.class);
 	}
 
 	public Long createGroup(String name) {

@@ -2,7 +2,7 @@
 public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 
 	private Map<Long, ZTicketField> fieldsMap {get; private set; }
-	
+
 	private class TicketFieldWrapper {
 		public ZTicketField ticket_field {get;set;}
 		public TicketFieldWrapper(ZTicketField ticket_field) { this.ticket_field = ticket_field; }
@@ -29,7 +29,6 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 	public TicketFieldsWrapper getFields() {
 		return getFields(null);
 	}
-
 	public TicketFieldsWrapper getFields(Map<String, Object> queryParams) {
 		HttpRequest req = zapi.createRequest('GET', '/ticket_fields.json', queryParams);
 		return (TicketFieldsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldsWrapper.class);

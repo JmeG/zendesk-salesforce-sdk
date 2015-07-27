@@ -26,10 +26,10 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
         return wrapper.user_field;
     }
 
+    // /api/v2/user_fields.json
     public UserFieldsWrapper getFields() {
         return getFields(null);
     }
-
     public UserFieldsWrapper getFields(Map<String, Object> queryParams) {
         HttpRequest req = zapi.createRequest('GET', '/user_fields.json', queryParams);
         return (UserFieldsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), UserFieldsWrapper.class);

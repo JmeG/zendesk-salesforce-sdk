@@ -9,6 +9,14 @@ public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 		super(zapi);
 	}
 
+	public ZAttachment getAttachment(Long attachmentId) {
+		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
+
+		HttpRequest req = zapi.createRequest('GET', '/attachments/'+attachmentId+'.json');
+		AttachmentWrapper resultWrapper = (AttachmentWrapper)JSON.deserialize(zapi.sendRequest(req), AttachmentWrapper.class);
+		return resultWrapper.attachment;
+	}
+
 	public String uploadAttachment(String fileName, String fileContentType, Blob fileBody) {
 		if (String.isBlank(fileName)) { throw new ZendeskException('fileName parameter must not be empty'); }
 		if (String.isBlank(fileContentType)) { throw new ZendeskException('fileContentType parameter must not be empty'); }
@@ -42,14 +50,6 @@ public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
 
 		zapi.sendRequest(zapi.createRequest('DELETE', '/attachments/'+attachmentId+'.json'));
-	}
-
-	public ZAttachment getAttachment(Long attachmentId) {
-		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
-
-		HttpRequest req = zapi.createRequest('GET', '/attachments/'+attachmentId+'.json');
-		AttachmentWrapper resultWrapper = (AttachmentWrapper)JSON.deserialize(zapi.sendRequest(req), AttachmentWrapper.class);
-		return resultWrapper.attachment;
 	}
 
 	public void redactCommentAttachment(Long ticketId, Long commentId, Long attachmentId) {
