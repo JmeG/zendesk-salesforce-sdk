@@ -20,7 +20,7 @@ global class ZendeskCreateTicketSampleService {
 	webService static String createNewZendeskTicket(String ticketSubject, String ticketComment) {
 		try {
             // Retrieve the Zendesk API details from the custom settings object
-            Zendesk_API__c settings = Zendesk_API__c.getOrgDefaults();
+            Zendesk_API__c settings = Zendesk_API__c.getInstance();
     		if (settings == null) { throw new ZendeskException('Zendesk_API custom settings are null'); }
 			ZendeskAPI.AuthType zdAuthType = (settings.Authentication_Type__c=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token);
 

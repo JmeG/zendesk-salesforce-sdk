@@ -8,7 +8,7 @@ public class ZendeskSample1Controller {
 	public String pageMessage {get;set;}
 
 	public ZendeskSample1Controller() {
-		Zendesk_API__c settings = Zendesk_API__c.getOrgDefaults();
+		Zendesk_API__c settings = Zendesk_API__c.getInstance();
 		if (settings != null) {
 			subdomain = settings.Subdomain__c;
 			username = settings.Username__c;
