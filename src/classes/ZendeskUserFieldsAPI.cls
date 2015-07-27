@@ -3,12 +3,14 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
 
     private Map<String, ZUserField> userFieldsMap {get; private set; }
 
-    public class UserFieldsWrapper extends ZendeskPagingBase {
-        public List<ZUserField> user_fields {get;set;}
-    }
-
     private class UserFieldWrapper {
         public ZUserField user_field {get;set;}
+		public UserFieldWrapper(ZUserField user_field) { this.user_field = user_field; }
+    }
+
+    public class UserFieldsWrapper extends ZendeskPagingBase {
+        public List<ZUserField> user_fields {get;set;}
+		public UserFieldsWrapper(List<ZUserField> user_fields) { this.user_fields = user_fields; }
     }
 
     public ZendeskUserFieldsAPI(ZendeskAPI zapi) {
@@ -51,7 +53,7 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('POST', '/user_fields.json');
-        req.setBody('{"user_field": ' + unreplaceReservedWords(JSON.serialize(zfield)) + '}');
+        req.setBody(unreplaceReservedWords(JSON.serialize(new UserFieldWrapper(zfield))));
         UserFieldWrapper resultWrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), UserFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.user_field==null) ? null : resultWrapper.user_field.id);
     }
@@ -61,7 +63,7 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/user_fields/'+fieldId+'.json');
-		req.setBody('{"user_field": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(zfield))) + '}');
+		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new UserFieldWrapper(zfield)))));
 		zapi.sendRequest(req);
     }
 

@@ -1,12 +1,14 @@
 // This class provides functionality to call the Zendesk Tickets API
 public class ZendeskTicketsAPI extends ZendeskResourceBase {
 
-	public class TicketsWrapper extends ZendeskPagingBase {
-		public List<ZTicket> tickets {get;set;}
-	}
-
 	public class TicketWrapper extends ZendeskSideLoadingBase {
 		public ZTicket ticket {get;set;}
+		public TicketWrapper(ZTicket ticket) { this.ticket = ticket; }
+	}
+
+	public class TicketsWrapper extends ZendeskPagingBase {
+		public List<ZTicket> tickets {get;set;}
+		public TicketsWrapper(List<ZTicket> tickets) { this.tickets = tickets; }
 	}
 
 	public ZendeskTicketsAPI(ZendeskAPI zapi) {
@@ -53,7 +55,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/tickets.json');
-		req.setBody('{"ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(zticket))) + '}');
+		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(zticket)))));
 		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
 	}
@@ -81,7 +83,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		if (ztickets == null || ztickets.isEmpty()) { throw new ZendeskException('ztickets parameter must not be null or empty'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/tickets/create_many.json');
-		req.setBody('{"tickets": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ztickets))) + '}');
+		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketsWrapper(ztickets)))));
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
@@ -220,7 +222,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/'+ticketId+'.json');
-		req.setBody('{"ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(zticket))) + '}');
+		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(zticket)))));
 		zapi.sendRequest(req);
 	}
 
@@ -231,7 +233,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		}
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/update_many.json');
-		req.setBody('{"tickets": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ztickets))) + '}');
+		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketsWrapper(ztickets)))));
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
@@ -240,7 +242,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
         if (zticket == null) { throw new ZendeskException('zticket parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/tickets/update_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
-		req.setBody('{"ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(zticket))) + '}');
+		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(zticket)))));
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
@@ -255,7 +257,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		ticket.comment.x_public = isPublic;
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/'+ticketId+'.json');
-		req.setBody('{"ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ticket))) + '}');
+		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(ticket)))));
 		zapi.sendRequest(req);
 	}
 
@@ -272,7 +274,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		ticket.status = status.status;
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/'+ticketId+'.json');
-		req.setBody('{"ticket": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ticket))) + '}');
+		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(ticket)))));
 		zapi.sendRequest(req);
 	}
 

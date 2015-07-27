@@ -1,12 +1,12 @@
 // This class provides functionality to call the Zendesk Ticket Metrics API
 public class ZendeskTicketMetricsAPI extends ZendeskResourceBase {
 
-	public class TicketMetricsWrapper extends ZendeskPagingBase {
-		public List<ZTicketMetrics> ticket_metrics {get;set;}
-	}
-
 	private class TicketMetricWrapper {
 		public ZTicketMetrics ticket_metric {get;set;}
+	}
+
+	public class TicketMetricsWrapper extends ZendeskPagingBase {
+		public List<ZTicketMetrics> ticket_metrics {get;set;}
 	}
 
 	public ZendeskTicketMetricsAPI(ZendeskAPI zapi) {

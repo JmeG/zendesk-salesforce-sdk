@@ -3,12 +3,14 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 
     private Map<String, ZOrganizationField> fieldsMap {get; private set; }
 
-    public class OrganizationFieldsWrapper extends ZendeskPagingBase {
-        public List<ZOrganizationField> organization_fields {get;set;}
-    }
-
     private class OrganizationFieldWrapper {
         public ZOrganizationField organization_field {get;set;}
+		public OrganizationFieldWrapper(ZOrganizationField organization_field) { this.organization_field = organization_field; }
+    }
+
+    public class OrganizationFieldsWrapper extends ZendeskPagingBase {
+        public List<ZOrganizationField> organization_fields {get;set;}
+		public OrganizationFieldsWrapper(List<ZOrganizationField> organization_fields) { this.organization_fields = organization_fields; }
     }
 
     public ZendeskOrganizationFieldsAPI(ZendeskAPI zapi) {
@@ -51,7 +53,7 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('POST', '/organization_fields.json');
-        req.setBody('{ "organization_field": ' + JSON.serialize(zfield) + '}');
+        req.setBody(JSON.serialize(new OrganizationFieldWrapper(zfield)));
         OrganizationFieldWrapper resultWrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.organization_field == null) ? null : resultWrapper.organization_field.id);
     }
@@ -61,8 +63,7 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
         if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/organization_fields/'+fieldId+'.json');
-		String fieldJson = unreplaceReservedWords(stripJsonNulls(JSON.serialize(zfield)));
-		req.setBody('{ "organization_field": ' + fieldJson + '}');
+		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new OrganizationFieldWrapper(zfield)))));
 		zapi.sendRequest(req);
     }
 

@@ -2,13 +2,15 @@
 public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 
 	private Map<Long, ZTicketField> fieldsMap {get; private set; }
+	
+	private class TicketFieldWrapper {
+		public ZTicketField ticket_field {get;set;}
+		public TicketFieldWrapper(ZTicketField ticket_field) { this.ticket_field = ticket_field; }
+	}
 
 	public class TicketFieldsWrapper extends ZendeskPagingBase {
 		public List<ZTicketField> ticket_fields {get;set;}
-	}
-
-	private class TicketFieldWrapper {
-		public ZTicketField ticket_field {get;set;}
+		public TicketFieldsWrapper(List<ZTicketField> ticket_fields) { this.ticket_fields = ticket_fields; }
 	}
 
 	public ZendeskTicketFieldsAPI(ZendeskAPI zapi) {
@@ -44,7 +46,7 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/ticket_fields.json');
-		req.setBody('{"ticket_field": ' + JSON.serialize(zfield) + '}');
+		req.setBody(JSON.serialize(new TicketFieldWrapper(zfield)));
 		TicketFieldWrapper resultWrapper = (TicketFieldWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_field == null) ? null : resultWrapper.ticket_field.id);
 	}
@@ -54,7 +56,7 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/ticket_fields/'+fieldId+'.json');
-		req.setBody('{"ticket_field": ' + stripJsonNulls(JSON.serialize(zfield)) + '}');
+		req.setBody(stripJsonNulls(JSON.serialize(new TicketFieldWrapper(zfield))));
 		zapi.sendRequest(req);
 	}
 

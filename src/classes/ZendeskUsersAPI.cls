@@ -6,13 +6,14 @@
 // PUT    /api/v2/users/me/merge.json
 public class ZendeskUsersAPI extends ZendeskResourceBase {
 
-	public class UsersWrapper extends ZendeskPagingBase {
-		public List<ZUser> users {get;set;}
-	}
-
-	// Used to deserialize the result of a User create/update API call
 	public class UserWrapper extends ZendeskSideLoadingBase {
 		public ZUser user {get;set;}
+		public UserWrapper(ZUser user) { this.user = user; }
+	}
+
+	public class UsersWrapper extends ZendeskPagingBase {
+		public List<ZUser> users {get;set;}
+		public UsersWrapper(List<ZUser> users) { this.users = users; }
 	}
 
 	public ZendeskUsersAPI(ZendeskAPI zapi) {
@@ -34,7 +35,7 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 		if (zuser == null) { throw new ZendeskException('zuser parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/users.json');
-		req.setBody('{"user": ' + stripJsonNulls(JSON.serialize(zuser)) + '}');
+		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
 		UserWrapper resultWrapper = (UserWrapper)JSON.deserialize(zapi.sendRequest(req), UserWrapper.class);
 		return ((resultWrapper==null || resultWrapper.user == null) ? null : resultWrapper.user.id);
 	}
@@ -43,7 +44,7 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
         if (zusers == null || zusers.isEmpty()) { throw new ZendeskException('zusers parameter must not be null or empty'); }
 
         HttpRequest req = zapi.createRequest('POST', '/users/create_many.json');
-        req.setBody('{"users": ' + stripJsonNulls(JSON.serialize(zusers)) + '}');
+        req.setBody(stripJsonNulls(JSON.serialize(new UsersWrapper(zusers))));
         return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
     }
 
@@ -51,7 +52,7 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 		if (zuser == null) { throw new ZendeskException('zuser parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/users/'+userId+'.json');
-		req.setBody('{"user": ' + stripJsonNulls(JSON.serialize(zuser)) + '}');
+		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
 		zapi.sendRequest(req);
 	}
 
@@ -62,7 +63,7 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 		}
 
 		HttpRequest req = zapi.createRequest('PUT', '/users/update_many.json');
-		req.setBody('{"users": ' + stripJsonNulls(JSON.serialize(zusers)) + '}');
+		req.setBody(stripJsonNulls(JSON.serialize(new UsersWrapper(zusers))));
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
@@ -71,16 +72,16 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
         if (zuser == null) { throw new ZendeskException('zuser parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/users/update_many.json?ids=' + toCSV(userIds));
-		req.setBody('{"user": ' + stripJsonNulls(JSON.serialize(zuser)) + '}');
+		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
-	public ZendeskTypes.ZJobStatus updateUsers(Set<String> externalIds, ZUser zusers) {
+	public ZendeskTypes.ZJobStatus updateUsers(Set<String> externalIds, ZUser zuser) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter must not be null or empty'); }
-		if (zusers == null) { throw new ZendeskException('zusers parameter must not be null'); }
+		if (zuser == null) { throw new ZendeskException('zuser parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/users/update_many.json?external_ids=' + toCSV(externalIds));
-		req.setBody('{"user": ' + stripJsonNulls(JSON.serialize(zusers)) + '}');
+		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
@@ -92,7 +93,7 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 		u.id = targetUserId;
 
 		HttpRequest req = zapi.createRequest('PUT', '/users/'+sourceUserId+'/merge.json');
-		req.setBody('{"user": ' + stripJsonNulls(JSON.serialize(u)) + '}');
+		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(u))));
 		zapi.sendRequest(req);
 	}
 

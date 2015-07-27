@@ -6,11 +6,13 @@ public class ZendeskTagsAPI extends ZendeskResourceBase {
 	// Used to deserialize the result of a getTags() API call
 	public class TagsWrapper extends ZendeskPagingBase {
 		public List<String> tags {get;set;}
+		public TagsWrapper(List<String> tags) { this.tags = tags; }
 	}
 
 	// Used to deserialize the result of a listTags() API call
 	public class ListTagsWrapper extends ZendeskPagingBase {
 		public List<ZTag> tags {get;set;}
+		public ListTagsWrapper(List<ZTag> tags) { this.tags = tags; }
 	}
 
 	public ZendeskTagsAPI(ZendeskAPI zapi) {
@@ -39,7 +41,7 @@ public class ZendeskTagsAPI extends ZendeskResourceBase {
 		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/'+resourceType.name()+'/'+recordId+'/tags.json');
-		req.setBody('{"tags": ' + JSON.serialize(tags) + '}');
+		req.setBody(JSON.serialize(new TagsWrapper(tags)));
 		zapi.sendRequest(req);
 	}
 
@@ -47,7 +49,7 @@ public class ZendeskTagsAPI extends ZendeskResourceBase {
 		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/'+resourceType.name()+'/'+recordId+'/tags.json');
-		req.setBody('{"tags": ' + JSON.serialize(tags) + '}');
+		req.setBody(JSON.serialize(new TagsWrapper(tags)));
 		zapi.sendRequest(req);
 	}
 
@@ -55,7 +57,7 @@ public class ZendeskTagsAPI extends ZendeskResourceBase {
 		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', '/'+resourceType.name()+'/'+recordId+'/tags.json');
-		req.setBody('{"tags": ' + JSON.serialize(tags) + '}');
+		req.setBody(JSON.serialize(new TagsWrapper(tags)));
 		zapi.sendRequest(req);
 	}
 }

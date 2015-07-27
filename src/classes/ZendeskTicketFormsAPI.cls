@@ -5,10 +5,12 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 
 	private class TicketFormWrapper {
 		public ZTicketForm ticket_form {get;set;}
+		public TicketFormWrapper(ZTicketForm ticket_form) { this.ticket_form = ticket_form; }
 	}
 
 	public class TicketFormsWrapper extends ZendeskPagingBase {
 		public List<ZTicketForm> ticket_forms {get;set;}
+		public TicketFormsWrapper(List<ZTicketForm> ticket_forms) { this.ticket_forms = ticket_forms; }
 	}
 
 	public ZendeskTicketFormsAPI(ZendeskAPI zapi) {
@@ -44,7 +46,7 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 		if (ticketForm == null) { throw new ZendeskException('ticketForm parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('POST', '/ticket_forms.json');
-        req.setBody('{"ticket_form": ' + unreplaceReservedWords(JSON.serialize(ticketForm)) + '}');
+        req.setBody(unreplaceReservedWords(JSON.serialize(new TicketFormWrapper(ticketForm))));
         TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
 	}
@@ -54,7 +56,7 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
         if (ticketForm == null) { throw new ZendeskException('ticketForm parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/ticket_forms/'+ticketFormId+'.json');
-		req.setBody('{"ticket_form": ' + unreplaceReservedWords(stripJsonNulls(JSON.serialize(ticketForm))) + '}');
+		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketFormWrapper(ticketForm)))));
 		zapi.sendRequest(req);
 	}
 

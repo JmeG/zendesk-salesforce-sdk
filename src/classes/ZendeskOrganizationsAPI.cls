@@ -1,12 +1,14 @@
 // This class provides functionality to call the Zendesk Organizations API
 public class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 
-	public class OrganizationsWrapper extends ZendeskPagingBase {
-		public List<ZOrganization> organizations {get;set;}
-	}
-
 	public class OrganizationWrapper extends ZendeskSideLoadingBase {
 		public ZOrganization organization {get;set;}
+		public OrganizationWrapper(ZOrganization organization) { this.organization = organization; }
+	}
+
+	public class OrganizationsWrapper extends ZendeskPagingBase {
+		public List<ZOrganization> organizations {get;set;}
+		public OrganizationsWrapper(List<ZOrganization> organizations) { this.organizations = organizations; }
 	}
 
 	public ZendeskOrganizationsAPI(ZendeskAPI zapi) {
@@ -84,7 +86,7 @@ public class ZendeskOrganizationsAPI extends ZendeskResourceBase {
         if (zorg == null) { throw new ZendeskException('zorg parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('POST', '/organizations.json');
-        req.setBody('{ "organization": ' + stripJsonNulls(JSON.serialize(zorg)) + '}');
+        req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
         OrganizationWrapper resultWrapper = (OrganizationWrapper)JSON.deserialize(zapi.sendRequest(req), OrganizationWrapper.class);
 		return ((resultWrapper==null || resultWrapper.organization==null) ? null : resultWrapper.organization.id);
     }
@@ -93,7 +95,7 @@ public class ZendeskOrganizationsAPI extends ZendeskResourceBase {
         if (zorgs == null || zorgs.isEmpty()) { throw new ZendeskException('zorgs parameter must not be null or empty'); }
 
         HttpRequest req = zapi.createRequest('POST', '/organizations/create_many.json');
-        req.setBody('{ "organizations": ' + stripJsonNulls(JSON.serialize(zorgs)) + '}');
+        req.setBody(stripJsonNulls(JSON.serialize(new OrganizationsWrapper(zorgs))));
         return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
     }
 
@@ -102,7 +104,7 @@ public class ZendeskOrganizationsAPI extends ZendeskResourceBase {
         if (zorg == null) { throw new ZendeskException('zorg parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/organizations/'+orgId+'.json');
-		req.setBody('{ "organization": ' + stripJsonNulls(JSON.serialize(zorg)) + '}');
+		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
 		zapi.sendRequest(req);
     }
 
@@ -113,7 +115,7 @@ public class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 		}
 
 		HttpRequest req = zapi.createRequest('PUT', '/organizations/update_many.json');
-		req.setBody('{ "organizations": ' + stripJsonNulls(JSON.serialize(zorgs)) + '}');
+		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationsWrapper(zorgs))));
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
@@ -122,7 +124,7 @@ public class ZendeskOrganizationsAPI extends ZendeskResourceBase {
         if (zorg == null) { throw new ZendeskException('zorg parameter must not be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/organizations/update_many.json', new Map<String, Object>{'ids'=>toCSV(orgIds)});
-		req.setBody('{ "organization": ' + stripJsonNulls(JSON.serialize(zorg)) + '}');
+		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
@@ -131,7 +133,7 @@ public class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 		if (zorg == null) { throw new ZendeskException('zorg parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/organizations/update_many.json', new Map<String, Object>{'external_ids'=>toCSV(externalIds)});
-		req.setBody('{ "organization": ' + stripJsonNulls(JSON.serialize(zorg)) + '}');
+		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
@@ -154,5 +156,4 @@ public class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 		HttpRequest req = zapi.createRequest('DELETE', '/organizations/destroy_many.json', new Map<String, Object>{'external_ids'=>toCSV(externalIds)});
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
-
 }
