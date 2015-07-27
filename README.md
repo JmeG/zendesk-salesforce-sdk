@@ -27,5 +27,5 @@ There are two mechanisms for installing the toolkit: as an unmanaged package, or
         $ git reset --hard HEAD
 
 4. In Eclipse, right click your project in the project explorer and click 'Refresh'. This causes Eclipse to scan the project directory tree for changes, and the plugin syncs changes to Force.com.
-5. In your DE environment, go to **Setup | App Setup | Create | Apps**, click 'Edit' next to the Zendesk Toolkit 1 app, scroll down, click the 'Visible' box next to System Administrator and hit 'Save'. Now go to **Setup | Administration Setup | Manage Users | Profiles**, click on System Administrator, Object Settings, set 'Zendesk Samples' to 'Default On' and hit 'Save'. 'Zendesk Toolkit 1' should now be available in the dropdown list of apps (top right).
+5. In your DE environment, go to **Setup | App Setup | Create | Apps**, click 'Edit' next to the Zendesk Toolkit app, scroll down, click the 'Visible' box next to System Administrator and hit 'Save'. Now go to **Setup | Administration Setup | Manage Users | Profiles**, click on System Administrator, Object Settings, set 'Zendesk Samples' to 'Default On' and hit 'Save'. 'Zendesk Toolkit' should now be available in the dropdown list of apps (top right).
 6. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://yoursubdomain.zendesk.com as a new remote site.
