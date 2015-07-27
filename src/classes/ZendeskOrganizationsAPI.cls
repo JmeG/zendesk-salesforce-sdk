@@ -33,10 +33,16 @@ public class ZendeskOrganizationsAPI extends ZendeskResourceBase {
         return getOrganizations(zapi.createRequest('GET', '/organizations/show_many.json', new Map<String, Object>{'external_ids'=>toCSV(externalIds)}));
     }
 
-	public OrganizationsWrapper getOrganizations(String autoCompleteName) {
-		if (String.isBlank(autoCompleteName) || autoCompleteName.length() < 2) { throw new ZendeskException('autoCompleteName parameter must at least 2 characters'); }
+	public OrganizationsWrapper getOrganizationsByName(String name) {
+		return getOrganizationsByName(name, null);
+	}
 
-        return getOrganizations(zapi.createRequest('GET', '/organizations/autocomplete.json', new Map<String, Object>{'name'=>urlEncode(autoCompleteName)}));
+	public OrganizationsWrapper getOrganizationsByName(String name, Map<String, Object> queryParams) {
+		if (String.isBlank(name) || name.length() < 2) { throw new ZendeskException('name parameter must at least 2 characters'); }
+
+		if (queryParams == null) { queryParams = new Map<String, Object>(); }
+		queryParams.put('name', urlEncode(name));
+        return getOrganizations(zapi.createRequest('GET', '/organizations/autocomplete.json', queryParams));
     }
 
 	public OrganizationsWrapper searchOrganizations(String externalId) {

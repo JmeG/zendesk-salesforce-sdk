@@ -92,12 +92,12 @@ public class ZendeskOrganizationsTests {
         System.assertNotEquals(0, results.organizations.size());
     }
 
-    static testMethod void testGetOrganizationsAutocomplete() {
+    static testMethod void testGetOrganizationsByName() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
 		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.getOrganizations('foo');
+		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.getOrganizationsByName('foo');
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
