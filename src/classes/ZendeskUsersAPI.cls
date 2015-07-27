@@ -42,7 +42,6 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 
 	public ZendeskTypes.ZJobStatus createUsers(List<ZUser> zusers) {
         if (zusers == null || zusers.isEmpty()) { throw new ZendeskException('zusers parameter must not be null or empty'); }
-
         HttpRequest req = zapi.createRequest('POST', '/users/create_many.json');
         req.setBody(stripJsonNulls(JSON.serialize(new UsersWrapper(zusers))));
         return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
@@ -108,19 +107,15 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 	public UsersWrapper findUsersByNameOrEmail(String nameOrEmail) {
 		if (String.isBlank(nameOrEmail)) { throw new ZendeskException('nameOrEmail parameter must not be empty'); }
 
-		String encodedNameOrEmail = urlEncode(nameOrEmail);
-		HttpRequest req = zapi.createRequest('GET', '/users/search.json?query=' + encodedNameOrEmail);
+		HttpRequest req = zapi.createRequest('GET', '/users/search.json?query=' + urlEncode(nameOrEmail));
 		return (UsersWrapper)JSON.deserialize(zapi.sendRequest(req), UsersWrapper.class);
 	}
 
 	public ZUser findUserByEmail(String email) {
 		if (String.isBlank(email)) { throw new ZendeskException('email parameter must not be empty'); }
 
-		// Make sure to set the email to lowercase because that's the way Zendesk will return it
-		String encodedEmail = urlEncode(email.toLowerCase());
-		HttpRequest req = zapi.createRequest('GET', '/users/search.json?query=' + encodedEmail);
-		String resBody = zapi.sendRequest(req);
-
+		// Set the email to lowercase because that's how Zendesk stores it
+		String resBody = zapi.sendRequest(zapi.createRequest('GET', '/users/search.json', new Map<String, Object>{'query'=>urlEncode(email.toLowerCase())}));
 		UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(resBody, UsersWrapper.class);
 		ZUser user = null;
 		if (wrapper != null && wrapper.users != null) {
@@ -176,15 +171,21 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
     }
 
 	public UsersWrapper getUsersByGroup(Long groupId) {
+		return getUsersByGroup(groupId, null);
+    }
+	public UsersWrapper getUsersByGroup(Long groupId, Map<String, Object> queryParams) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
 
-        return getUsersHelper(zapi.createRequest('GET', '/groups/'+groupId+'/users.json'));
+        return getUsersHelper(zapi.createRequest('GET', '/groups/'+groupId+'/users.json', queryParams));
     }
 
 	public UsersWrapper getUsersByOrganization(Long orgId) {
+		return getUsersByOrganization(orgId, null);
+    }
+	public UsersWrapper getUsersByOrganization(Long orgId, Map<String, Object> queryParams) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter must not be null'); }
 
-        return getUsersHelper(zapi.createRequest('GET', '/organizations/'+orgId+'/users.json'));
+        return getUsersHelper(zapi.createRequest('GET', '/organizations/'+orgId+'/users.json', queryParams));
     }
 
 	public UsersWrapper getUsers(String autoCompleteName) {

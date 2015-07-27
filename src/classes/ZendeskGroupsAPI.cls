@@ -34,8 +34,6 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 	public GroupsWrapper getAssignableGroups() {
 		return getAssignableGroups(null);
 	}
-
-	// Get all assignable groups by page number
 	public GroupsWrapper getAssignableGroups(Map<String, Object> queryParams) {
 		return getGroupsInternal(zapi.createRequest('GET', '/groups/assignable.json', queryParams));
 	}
@@ -46,8 +44,6 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 
 		return getUserGroups(userId, null);
 	}
-
-	// Get the groups that a user is a member of
 	public GroupsWrapper getUserGroups(Long userId, Map<String, Object> queryParams) {
 		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
 
