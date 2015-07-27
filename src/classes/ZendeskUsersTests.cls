@@ -321,7 +321,7 @@ public class ZendeskUsersTests {
     }
 
     static testMethod void testZUser() {
-        String userJson = '{ "id": 35436, "name": "Johnny Agent", "external_id": "sai989sur98w9", "alias": "Mr. Johnny", "created_at": "2009-07-20T22:55:29Z", "updated_at": "2011-05-05T10:38:52Z", "active": true, "verified": true, "shared": false, "shared_agent": false, "locale": "en-US", "locale_id": 1, "time_zone": "Copenhagen", "last_login_at": "2011-05-05T10:38:52Z", "email": "johnny@example.com", "phone": "555-123-4567", "signature": "Have a nice day, Johnny", "details": "", "notes": "Johnny is a nice guy!", "organization_id": 57542, "role": "agent", "custom_role_id": 9373643, "moderator": true, "ticket_restriction": "assigned", "only_private_comments": false, "tags": ["enterprise", "other_tag"], "restricted_agent": true, "suspended": true, "user_fields": { "user_decimal": 5.1, "user_dropdown": "option_1", "user_date": "2012-07-23T00:00:00Z" } }';
+        String userJson = '{ "id": 35436, "name": "Johnny Agent", "external_id": "sai989sur98w9", "alias": "Mr. Johnny", "created_at": "2009-07-20T22:55:29Z", "updated_at": "2011-05-05T10:38:52Z", "active": true, "verified": true, "shared": false, "shared_agent": false, "locale": "en-US", "locale_id": 1, "time_zone": "Copenhagen", "last_login_at": "2011-05-05T10:38:52Z", "email": "johnny@example.com", "phone": "555-123-4567", "signature": "Have a nice day, Johnny", "details": "bla bla", "notes": "Johnny is a nice guy!", "organization_id": 57542, "role": "agent", "custom_role_id": 9373643, "moderator": true, "ticket_restriction": "assigned", "only_private_comments": false, "tags": ["enterprise", "other_tag"], "restricted_agent": true, "suspended": true, "user_fields": { "user_decimal": 5.1, "user_dropdown": "option_1", "user_date": "2012-07-23T00:00:00Z" } }';
         ZendeskTypes.ZUser zuser = (ZendeskTypes.ZUser)JSON.deserialize(userJson, ZendeskTypes.ZUser.class);
         System.assertEquals(35436, zuser.id);
         System.assertEquals('Johnny Agent', zuser.name);
@@ -337,5 +337,19 @@ public class ZendeskUsersTests {
         System.assertNotEquals(null, zuser.user_fields);
         System.assertNotEquals(null, zuser.created_at);
         System.assertNotEquals(null, zuser.updated_at);
+        System.assertEquals(true, zuser.verified);
+        System.assertEquals(true, zuser.moderator);
+        System.assertEquals(false, zuser.only_private_comments);
+        System.assertEquals(true, zuser.restricted_agent);
+        System.assertEquals(true, zuser.suspended);
+        System.assertEquals(null, zuser.chat_only);
+        System.assertEquals(false, zuser.shared);
+        System.assertEquals(false, zuser.shared_agent);
+        System.assertNotEquals(null, zuser.signature);
+        System.assertNotEquals(null, zuser.details);
+        System.assertNotEquals(null, zuser.notes);
+        System.assertNotEquals(null, zuser.time_zone);
+        System.assertNotEquals(null, zuser.locale);
+        System.assertNotEquals(null, zuser.tags);
     }
 }

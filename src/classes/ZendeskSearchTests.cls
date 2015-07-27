@@ -33,4 +33,16 @@ public class ZendeskSearchTests {
 
         System.assertNotEquals(null, searchWrapper);
     }
+
+    static testMethod void testZSearchResult() {
+        String resultJson = '{ "id": 111, "url": "https://test.zendesk.com/api/v2/groups/211.json", "created_at": "2009-07-20T22:55:29Z", "updated_at": "2011-05-05T10:38:52Z", "result_type": "groups", "name": "foo"}';
+        ZendeskTypes.ZSearchResult sresult = (ZendeskTypes.ZSearchResult)JSON.deserialize(resultJson, ZendeskTypes.ZSearchResult.class);
+        System.assertEquals(111, sresult.id);
+        System.assertNotEquals(null, sresult.url);
+        System.assertNotEquals(null, sresult.created_at);
+        System.assertNotEquals(null, sresult.updated_at);
+        System.assertNotEquals(null, sresult.result_type);
+        System.assertNotEquals(null, sresult.name);
+    }
+
 }
