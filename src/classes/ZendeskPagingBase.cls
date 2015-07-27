@@ -6,7 +6,21 @@ public abstract class ZendeskPagingBase extends ZendeskSideLoadingBase {
     public String previous_page;
     public Long previousPageNumber { get { return getPageNumber(previous_page); } private set; }
 
+    // URL could look like this
+    // next_page":"https://test.zendesk.com/api/v2/organizations/25378250/tickets.json?include=users%2Cgroups&page=2&per_page=10&sort_order=desc"
     private static Long getPageNumber(String pageUrl) {
-        return (String.isEmpty(pageUrl) ? null : Long.valueOf(pageUrl.substringAfterLast('page=').substringBefore('&')));
+        Long page = null;
+        if (!String.isEmpty(pageUrl)) {
+            String qparams = pageUrl.substringAfter('?');
+            String[] splits = qparams.split('&');
+            for (String s : splits) {
+                if (s.startsWith('page=')) {
+                    page = Long.valueOf(s.substringAfter('page='));
+                    break;
+                }
+            }
+        }
+
+        return page;
     }
 }
