@@ -107,7 +107,7 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 	public UsersWrapper findUsersByNameOrEmail(String nameOrEmail) {
 		if (String.isBlank(nameOrEmail)) { throw new ZendeskException('nameOrEmail parameter must not be empty'); }
 
-		String encodedNameOrEmail = EncodingUtil.urlEncode(nameOrEmail, 'UTF-8');
+		String encodedNameOrEmail = urlEncode(nameOrEmail);
 		HttpRequest req = zapi.createRequest('GET', '/users/search.json?query=' + encodedNameOrEmail);
 		return (UsersWrapper)JSON.deserialize(zapi.sendRequest(req), UsersWrapper.class);
 	}
@@ -116,7 +116,7 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 		if (String.isBlank(email)) { throw new ZendeskException('email parameter must not be empty'); }
 
 		// Make sure to set the email to lowercase because that's the way Zendesk will return it
-		String encodedEmail = EncodingUtil.urlEncode(email.toLowerCase(), 'UTF-8');
+		String encodedEmail = urlEncode(email.toLowerCase());
 		HttpRequest req = zapi.createRequest('GET', '/users/search.json?query=' + encodedEmail);
 		String resBody = zapi.sendRequest(req);
 
@@ -169,13 +169,13 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 	public UsersWrapper getUsers(String autoCompleteName) {
 		if (String.isBlank(autoCompleteName) || autoCompleteName.length() < 2) { throw new ZendeskException('autoCompleteName parameter must at least 2 characters'); }
 
-        return getUsers(zapi.createRequest('GET', '/users/autocomplete.json', new Map<String, Object>{'name'=>autoCompleteName}));
+        return getUsers(zapi.createRequest('GET', '/users/autocomplete.json', new Map<String, Object>{'name'=>urlEncode(autoCompleteName)}));
     }
 
 	public UsersWrapper searchUsers(String externalId) {
 		if (String.isBlank(externalId)) { throw new ZendeskException('externalId parameter must not be null or empty'); }
 
-        return getUsers(zapi.createRequest('GET', '/users/search.json', new Map<String, Object>{'external_id'=>externalId}));
+        return getUsers(zapi.createRequest('GET', '/users/search.json', new Map<String, Object>{'external_id'=>urlEncode(externalId)}));
     }
 
 	// Helper method for getting Users

@@ -20,6 +20,10 @@ public abstract class ZendeskResourceBase extends ZendeskTypes {
 		return jsonString;
 	}
 
+	public static String urlEncode(String str) {
+		return (str == null ? null : EncodingUtil.urlEncode(str, 'UTF-8'));
+	}
+
     public static String toCSV(List<Long> longs) {
 		String csv = '';
 		if (longs != null && !longs.isEmpty()) {

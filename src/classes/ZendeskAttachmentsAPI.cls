@@ -16,7 +16,7 @@ public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 
 		String zendeskAttachmentToken = null;
 		try {
-			HttpRequest req = zapi.createRequest('POST', '/uploads.json', new Map<String, Object>{'filename'=>EncodingUtil.urlEncode(fileName, 'UTF-8')});
+			HttpRequest req = zapi.createRequest('POST', '/uploads.json', new Map<String, Object>{'filename'=>urlEncode(fileName)});
 			req.setHeader('Content-Type', fileContentType);
 			req.setBodyAsBlob(fileBody);
 			String resBody = zapi.sendRequest(req);

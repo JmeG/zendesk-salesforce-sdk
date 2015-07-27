@@ -21,7 +21,7 @@ public class ZendeskSearchAPI extends ZendeskResourceBase {
 		if (String.isEmpty(searchString)) { throw new ZendeskException('searchString parameter must not be null or empty'); }
 
 		if (queryParams == null) { queryParams = new Map<String, Object>(); }
-		queryParams.put('query', EncodingUtil.urlEncode(searchString, 'UTF-8'));
+		queryParams.put('query', urlEncode(searchString));
 		HttpRequest req = zapi.createRequest('GET', '/search.json', queryParams);
 		return (SearchResultsWrapper)JSON.deserialize(zapi.sendRequest(req), SearchResultsWrapper.class);
 	}
@@ -34,7 +34,7 @@ public class ZendeskSearchAPI extends ZendeskResourceBase {
 		if (String.isEmpty(searchString)) { throw new ZendeskException('searchString parameter must not be null or empty'); }
 
 		if (queryParams == null) { queryParams = new Map<String, Object>(); }
-		queryParams.put('query', EncodingUtil.urlEncode(searchString, 'UTF-8'));
+		queryParams.put('query', urlEncode(searchString));
 		HttpRequest req = zapi.createRequest('GET', '/portal/search.json', queryParams);
 		return (SearchResultsWrapper)JSON.deserialize(zapi.sendRequest(req), SearchResultsWrapper.class);
 	}
