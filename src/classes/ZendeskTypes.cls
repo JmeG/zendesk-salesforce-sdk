@@ -251,8 +251,21 @@ public abstract class ZendeskTypes {
         public String external_id {get;set;}
         public String alias {get;set;}
         public Boolean verified {get;set;}
+        public Boolean moderator {get;set;}
+        public Boolean only_private_comments {get;set;}
+        public Boolean restricted_agent {get;set;}
+        public Boolean suspended {get;set;}
+        public Boolean chat_only {get;set;}
+        public Boolean shared {get;set;}
+        public Boolean shared_agent {get;set;}
         public String role {get;set;}
+        public String signature {get;set;}
+        public String details {get;set;}
+        public String notes {get;set;}
+        public String time_zone {get;set;}
+        public String locale {get;set;}
         public Long organization_id {get;set;}
+        public List<String> tags {get;set;}
         public Map<String, String> user_fields {get;set;}
         public Boolean active {get; private set;}
         public DateTime last_login_at {get; private set;}
