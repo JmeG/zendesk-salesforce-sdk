@@ -432,6 +432,11 @@ public class ZendeskTicketsTests {
 
         System.assertNotEquals(null, new ZendeskTypes.ZTicketCustomField());
         System.assertNotEquals(null, new ZendeskTypes.ZTicketCustomField(1, 'val'));
+
+        ZendeskTypes.ZTicketRequester tr = new ZendeskTypes.ZTicketRequester();
+        tr.locale_id = 123;
+        tr.name = 'Name';
+        tr.email = 'email@test.com';
     }
 
 }

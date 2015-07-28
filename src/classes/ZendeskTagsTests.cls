@@ -86,4 +86,12 @@ public class ZendeskTagsTests {
 
         System.assert(true);
     }
+
+    static testMethod void testZTag() {
+        String tagJson = '{"name":"important", "count":47}';
+        ZendeskTypes.ZTag tag = (ZendeskTypes.ZTag)JSON.deserialize(tagJson, ZendeskTypes.ZTag.class);
+
+        System.assertEquals(47, tag.count);
+        System.assertEquals('important', tag.name);
+    }
 }

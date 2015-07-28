@@ -82,5 +82,9 @@ public class ZendeskTicketMetricsTests {
         System.assertNotEquals(null, zmetric.agent_wait_time_in_minutes);
         System.assertNotEquals(null, zmetric.requester_wait_time_in_minutes);
         System.assertNotEquals(null, zmetric.on_hold_time_in_minutes);
+
+        ZendeskTypes.ZTicketMetricsTime metricTime = zmetric.first_resolution_time_in_minutes;
+        System.assertNotEquals(null, metricTime.calendar);
+        System.assertNotEquals(null, metricTime.business);
     }
 }
