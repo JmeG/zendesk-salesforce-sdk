@@ -315,4 +315,16 @@ public abstract class ZendeskTypes {
 		public String result_type {get; private set;}
 		public String url {get; private set;}
     }
+
+    public class ZSatisfactionRating {
+    	public Long id {get; private set;}
+    	public Long assignee_id {get; private set;}
+    	public Long group_id {get; private set;}
+    	public Long requester_id {get; private set;}
+    	public Long ticket_id {get; private set;}
+    	public String score {get;set;}
+    	public String comment {get;set;}
+    	public String updated_at {get; private set;}
+    	public String created_at {get; private set;}
+    }
 }
