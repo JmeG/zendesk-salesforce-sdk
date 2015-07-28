@@ -44,17 +44,6 @@ public class ZendeskUserFieldsTests {
         Test.stopTest();
     }
 
-    static testMethod void testGetFieldByKey() {
-        Test.setMock(HttpCalloutMock.class, new MockUserFieldsResponse());
-
-        Test.startTest();
-        ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTypes.ZUserField testObj = zfields_api.getFieldByKey('custom_field_1');
-        Test.stopTest();
-
-        System.assertNotEquals(null, testObj);
-    }
-
     static testMethod void testDeleteField() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 

@@ -1,8 +1,6 @@
 // This class provides functionality to call the Zendesk Organization Fields API
 public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 
-    private Map<String, ZOrganizationField> fieldsMap {get; private set; }
-
     private class OrganizationFieldWrapper {
         public ZOrganizationField organization_field {get;set;}
 		public OrganizationFieldWrapper(ZOrganizationField organization_field) { this.organization_field = organization_field; }
@@ -15,7 +13,6 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 
     public ZendeskOrganizationFieldsAPI(ZendeskAPI zapi) {
         super(zapi);
-        fieldsMap = new Map<String, ZOrganizationField>();
     }
 
     public ZOrganizationField getField(Long fieldId) {
@@ -66,35 +63,9 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 		zapi.sendRequest(req);
     }
 
-    // non-native API method
-    public ZOrganizationField getFieldByKey(String key) {
-        if (String.isBlank(key)) { throw new ZendeskException('key parameter must not be empty'); }
-
-        if (fieldsMap.isEmpty()) {
-            loadAll();
-        }
-
-        ZOrganizationField obj = null;
-        if (fieldsMap.containsKey(key)) {
-            obj = fieldsMap.get(key);
-        }
-
-        return obj;
-    }
-
     // Retrieves all pages of organization fields. Uses the field "key" as the map key
     public Map<String, ZOrganizationField> getAllFields() {
-        if (fieldsMap.isEmpty()) {
-            loadAll();
-        }
-        return fieldsMap;
-    }
-
-    // Returns a list of all custom Organization Fields in your account. Fields are returned in the order
-    // that you specify in your Organization Fields configuration in Zendesk. Clients should cache this
-    // resource for the duration of their API usage and map the key for each Organization Field to the values
-    // returned under the organization_fields attribute on the Organization resource.
-    private void loadAll() {
+        Map<String, ZOrganizationField> fieldsMap = new Map<String, ZUserField>();
         OrganizationFieldsWrapper wrapper = getFields();
         if (wrapper != null && wrapper.organization_fields != null) {
             for (ZOrganizationField obj : wrapper.organization_fields) {
@@ -108,6 +79,7 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
                 }
             }
         }
+        return fieldsMap;
     }
 
     // replace reserved keywords in the JSON string and map them to field names prefixed with "x_"

@@ -1,8 +1,6 @@
 // This class provides functionality to call the Zendesk User Fields API
 public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
 
-    private Map<String, ZUserField> userFieldsMap {get; private set; }
-
     private class UserFieldWrapper {
         public ZUserField user_field {get;set;}
 		public UserFieldWrapper(ZUserField user_field) { this.user_field = user_field; }
@@ -15,7 +13,6 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
 
     public ZendeskUserFieldsAPI(ZendeskAPI zapi) {
         super(zapi);
-        userFieldsMap = new Map<String, ZUserField>();
     }
 
     public ZUserField getField(Long fieldId) {
@@ -67,48 +64,23 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
 		zapi.sendRequest(req);
     }
 
-    // non-native API method
-    public ZUserField getFieldByKey(String key) {
-        if (String.isBlank(key)) { throw new ZendeskException('key parameter must not be empty'); }
-
-        if (userFieldsMap.isEmpty()) {
-            loadAll();
-        }
-
-        ZUserField obj = null;
-        if (userFieldsMap.containsKey(key)) {
-            obj = userFieldsMap.get(key);
-        }
-
-        return obj;
-    }
-
     // Retrieves all pages of user fields. Uses the field "key" as the map key
     public Map<String, ZUserField> getAllFields() {
-        if (userFieldsMap.isEmpty()) {
-            loadAll();
-        }
-        return userFieldsMap;
-    }
-
-    // Returns a list of all custom User Fields in your account. Fields are returned in the order
-    // that you specify in your User Fields configuration in Zendesk. Clients should cache this
-    // resource for the duration of their API usage and map the key for each User Field to the values
-    // returned under the user_fields attribute on the User resource.
-    private void loadAll() {
+        Map<String, ZUserField> fieldsMap = new Map<String, ZUserField>();
         UserFieldsWrapper wrapper = getFields();
         if (wrapper != null && wrapper.user_fields != null) {
             for (ZUserField obj : wrapper.user_fields) {
-                userFieldsMap.put(obj.key, obj);
+                fieldsMap.put(obj.key, obj);
             }
 
             while (!String.isEmpty(wrapper.next_page)) {
                 wrapper = getFields(new Map<String, Object>{'page'=>wrapper.nextPageNumber});
                 for (ZUserField obj : wrapper.user_fields) {
-                    userFieldsMap.put(obj.key, obj);
+                    fieldsMap.put(obj.key, obj);
                 }
             }
         }
+        return fieldsMap;
     }
 
     // replace reserved keywords in the JSON string and map them to field names prefixed with "x_"

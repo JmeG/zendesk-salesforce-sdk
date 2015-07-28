@@ -44,17 +44,6 @@ public class ZendeskOrganizationFieldsTests {
         Test.stopTest();
     }
 
-    static testMethod void testGetOrganizationFieldByKey() {
-        Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldsResponse());
-
-        Test.startTest();
-        ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-        ZendeskTypes.ZOrganizationField testObj = zfields_api.getFieldByKey('custom_field_1');
-        Test.stopTest();
-
-        System.assertNotEquals(null, testObj);
-    }
-
     static testMethod void testDeleteField() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
