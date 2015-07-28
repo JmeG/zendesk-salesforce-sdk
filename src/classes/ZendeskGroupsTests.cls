@@ -125,22 +125,21 @@ public class ZendeskGroupsTests {
     }
 
     static testMethod void testZGroup() {
-        ZendeskTypes.ZGroup zgroup = new ZendeskTypes.ZGroup();
-        zgroup.name = '';
+        String groupJson = '{'
+          + '"url": "https://test.zendesk.com/api/v2/groups/12345.json",'
+          + '"id": 12345,'
+          + '"name": "Marketing",'
+          + '"deleted": false,'
+          + '"created_at": "2014-09-26T01:43:11Z",'
+          + '"updated_at": "2014-09-26T01:43:11Z"'
+          + '}';
 
-        /*
-        String json = '{'
-          + '"group": {
-          + '"url": "https://z3njgibsontest1.zendesk.com/api/v2/groups/21468420.json",
-          + '"id": 21468420,
-          + '"name": "Marketing",
-          + '"deleted": false,
-          + '"created_at": "2014-09-26T01:43:11Z",
-          + '"updated_at": "2014-09-26T01:43:11Z"
-          + '}'
-        + '}';
-        */
-
-        System.assert(true);
+        ZendeskTypes.ZGroup zgroup = (ZendeskTypes.ZGroup)JSON.deserialize(groupJson, ZendeskTypes.ZGroup.class);
+        System.assertEquals(12345, zgroup.id);
+        System.assertEquals('Marketing', zgroup.name);
+        System.assertEquals(false, zgroup.deleted);
+        System.assertNotEquals(null, zgroup.created_at);
+        System.assertNotEquals(null, zgroup.updated_at);
     }
+
 }

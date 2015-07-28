@@ -5,10 +5,12 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 
 	public class GroupWrapper extends ZendeskSideLoadingBase {
 		public ZGroup x_group {get;set;} // Use "x_group" in place of "group" which is a reserved keyword. Requires custom de/serialization.
+		public GroupWrapper(ZGroup x_group) { this.x_group = x_group; }
 	}
 
 	public class GroupsWrapper extends ZendeskPagingBase {
 		public List<ZGroup> groups {get;set;}
+		public GroupsWrapper(List<ZGroup> groups) { this.groups = groups; }
 	}
 
 	public ZendeskGroupsAPI(ZendeskAPI zapi) {

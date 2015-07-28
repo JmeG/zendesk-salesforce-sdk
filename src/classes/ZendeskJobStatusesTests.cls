@@ -47,8 +47,34 @@ private class ZendeskJobStatusesTests {
     }
 
     static testMethod void testDeserialize() {
-        String resBody = '{ "id": "31a2e47012e20", "url": "https://test.zendesk.com/api/v2/job_statuses/31a2e4701.json", "total": 2, "progress": 2, "status": "completed", "message": "Completed", "results": [ { "status": "Failed Creating User ", "errors": "Name:  is too short" } ] }';
-        ZendeskTypes.ZJobStatus jstatus = (ZendeskTypes.ZJobStatus)JSON.deserialize(resBody, ZendeskTypes.ZJobStatus.class);
+        String jsonStr = '{'+
+		'    \"id\":       \"8b726e606741012ffc2d782bcb7848fe\",'+
+		'    \"url\":      \"https://company.zendesk.com/api/v2/job_statuses/8b726e606741012ffc2d782bcb7848fe.json\",'+
+		'    \"total\":    2,'+
+		'    \"progress\": 2,'+
+		'    \"status\":   \"completed\",'+
+		'    \"message\":  \"Completed at Fri Apr 13 02:51:53 +0000 2012\",'+
+		'    \"results\": ['+
+		'      {'+
+		'        \"title\":   \"I accidentally the whole bottle\",'+
+		'        \"action\":  \"update\",'+
+		'        \"errors\":  \"\",'+
+		'        \"id\":      380,'+
+		'        \"success\": true,'+
+		'        \"status\":  \"Updated\"'+
+		'      },'+
+		'      {'+
+		'        \"title\":   \"Printer on fire\",'+
+		'        \"action\":  \"update\",'+
+		'        \"errors\":  \"\",'+
+		'        \"id\":      90,'+
+		'        \"success\": true,'+
+		'        \"status\":  \"Updated\"'+
+		'      }'+
+		'    ]'+
+		'  }';
+
+        ZendeskTypes.ZJobStatus jstatus = (ZendeskTypes.ZJobStatus)JSON.deserialize(jsonStr, ZendeskTypes.ZJobStatus.class);
 
         System.assertNotEquals(null, jstatus);
         System.assertNotEquals(null, jstatus.id);
@@ -59,8 +85,12 @@ private class ZendeskJobStatusesTests {
         System.assertNotEquals(null, jstatus.message);
         System.assertNotEquals(null, jstatus.results);
         System.assertNotEquals(null, jstatus.results[0]);
-        System.assertNotEquals(null, jstatus.results[0].status);
+        System.assertNotEquals(null, jstatus.results[0].title);
+        System.assertNotEquals(null, jstatus.results[0].action);
         System.assertNotEquals(null, jstatus.results[0].errors);
+        System.assertNotEquals(null, jstatus.results[0].id);
+        System.assertNotEquals(null, jstatus.results[0].success);
+        System.assertNotEquals(null, jstatus.results[0].status);
     }
 
 }
