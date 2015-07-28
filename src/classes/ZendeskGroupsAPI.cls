@@ -57,36 +57,39 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 		return (GroupsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupsWrapper.class);
 	}
 
+	// Simplified createGroup method that takes the only relevant parameter "name"
 	public Long createGroup(String name) {
 		if (String.isBlank(name)) { throw new ZendeskException('name parameter must not be empty'); }
 
-		JSONGenerator gen = JSON.createGenerator(true);
-		gen.writeStartObject();
-		gen.writeFieldName('group');
-		gen.writeStartObject();
-		gen.writeObjectField('name', name);
-		gen.writeEndObject();
-		gen.writeEndObject();
+		ZGroup g = new ZGroup();
+		g.name = name;
+		return createGroup(g);
+	}
 
-		HttpRequest req = zapi.createRequest('POST', '/groups.json', gen.getAsString());
+	public Long createGroup(ZGroup x_group) {
+		if (x_group == null) { throw new ZendeskException('x_group parameter must not be null'); }
+
+		HttpRequest req = zapi.createRequest('POST', '/groups.json');
+		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group)))));
 		GroupWrapper resultWrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupWrapper.class);
 		return ((resultWrapper==null || resultWrapper.x_group == null) ? null : resultWrapper.x_group.id);
 	}
 
+	// Simplified method for updating a group name
 	public void updateGroupName(Long groupId, String newName) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
-		if (String.isBlank(newName)) { throw new ZendeskException('name parameter must not be empty'); }
+		if (String.isBlank(newName)) { throw new ZendeskException('newName parameter must not be empty'); }
 
-		JSONGenerator gen = JSON.createGenerator(true);
-		gen.writeStartObject();
-		gen.writeFieldName('group');
-		gen.writeStartObject();
-		gen.writeObjectField('name', newName);
-		gen.writeEndObject();
-		gen.writeEndObject();
+		ZGroup g = new ZGroup();
+		g.name = newName;
+		updateGroup(groupId, g);
+	}
+
+	public void updateGroup(Long groupId, ZGroup x_group) {
+		if (x_group == null) { throw new ZendeskException('x_group parameter must not be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/groups/'+groupId+'.json');
-		req.setBody(gen.getAsString());
+		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group)))));
 		zapi.sendRequest(req);
 	}
 
@@ -128,11 +131,10 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 		return str;
 	}
 
-	// **currently not used. We'll use this if we serialize a ZGroup object for create/update calls
 	// un-replace reserved keywords in the JSON string
     // Use when calling serialize()
-	//private String unreplaceReservedWords(String str) {
-	//	str = str.replaceAll('"x_group"\\s*:', '"group":');
-	//	return str;
-	//}
+	private String unreplaceReservedWords(String str) {
+		str = str.replaceAll('"x_group"\\s*:', '"group":');
+		return str;
+	}
 }
