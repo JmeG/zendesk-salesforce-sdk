@@ -23,6 +23,13 @@ public class ZendeskSatisfactionRatingsAPI extends ZendeskResourceBase {
         return (SatisfactionRatingWrapper)JSON.deserialize(zapi.sendRequest(req), SatisfactionRatingWrapper.class);
     }
 
+	/*
+	Filters:
+	 score=received | received_with_comment | received_without_comment | good | good_with_comment | good_without_comment | bad | bad_with_comment | bad_without_comment
+	 start_time: Time of the oldest satisfaction rating to retrieve in Unix epoch time
+	 end_time: Time of the most recent satisfaction rating to retrieve in Unix epoch time
+	*/
+
     // GET /api/v2/satisfaction_ratings.json
     public SatisfactionRatingsWrapper getSatisfactionRatings() {
         return getSatisfactionRatings(null);
