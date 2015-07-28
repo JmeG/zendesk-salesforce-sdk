@@ -1,12 +1,12 @@
 // This class provides functionality to call the Zendesk Ticket Comments API
 public class ZendeskTicketCommentsAPI extends ZendeskResourceBase {
 
-	public class TicketCommentsWrapper extends ZendeskPagingBase {
-		public List<ZTicketComment> comments {get;set;}
-	}
-
 	private class TicketCommentWrapper {
 		public ZTicketComment comment {get;set;}
+	}
+	
+	public class TicketCommentsWrapper extends ZendeskPagingBase {
+		public List<ZTicketComment> comments {get;set;}
 	}
 
 	public ZendeskTicketCommentsAPI(ZendeskAPI zapi) {
