@@ -1,0 +1,144 @@
+<apex:page controller="ZendeskTicketDetailController" action="{!init}" tabStyle="Zendesk_OrgSearch__tab">
+    <apex:form >
+        <apex:pageBlock title="Zendesk Ticket Detail" id="block" mode="detail">
+
+            <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
+
+            <apex:pageBlockSection id="resultsBlock" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Status" />
+                    <apex:outputText value="{!ui_ticket.ticket.status}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Type" />
+                    <apex:outputText value="{!ui_ticket.ticket.type}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Created Via" />
+                    <apex:outputText value="{!ui_ticket.createdVia}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Priority" />
+                    <apex:outputText value="{!ui_ticket.ticket.priority}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Organization" />
+                    <apex:outputLink value="/apex/ZendeskOrgDetail?id={!ui_ticket.ticket.organization_id}">{!ui_ticket.orgName}</apex:outputLink>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Tags" />
+                    <apex:outputText value="{!ui_ticket.tags}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Has Incidents" />
+                    <c:ZendeskOutputCheckbox value="{!ui_ticket.ticket.has_incidents}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Due At" />
+                    <apex:outputText value="{!ui_ticket.ticket.due_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Requested By" />
+                    <apex:outputLink value="/apex/ZendeskUserDetail?id={!ui_ticket.ticket.requester_id}">{!ui_ticket.requestedBy}</apex:outputLink>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Assigned To" />
+                    <apex:outputLink value="/apex/ZendeskUserDetail?id={!ui_ticket.ticket.assignee_id}">{!ui_ticket.assignedTo}</apex:outputLink>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Group" />
+                    <apex:outputText value="{!ui_ticket.groupName}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Subject" />
+                    <apex:outputText value="{!ui_ticket.ticket.subject}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Created" />
+                    <apex:outputText value="{!ui_ticket.ticket.created_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Last Updated" />
+                    <apex:outputText value="{!ui_ticket.ticket.updated_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="External ID" />
+                    <apex:outputText value="{!ui_ticket.ticket.external_id}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="Ticket Metrics" id="metrics" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Created" />
+                    <apex:outputText value="{!ticketMetrics.created_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Updated" />
+                    <apex:outputText value="{!ticketMetrics.updated_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Assigned" />
+                    <apex:outputText value="{!ticketMetrics.assigned_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Solved" />
+                    <apex:outputText value="{!ticketMetrics.solved_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Group Stations" />
+                    <apex:outputText value="{!ticketMetrics.group_stations}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Assignee Stations" />
+                    <apex:outputText value="{!ticketMetrics.assignee_stations}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Reopens" />
+                    <apex:outputText value="{!ticketMetrics.reopens}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Replies" />
+                    <apex:outputText value="{!ticketMetrics.replies}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Last Comment Added" />
+                    <apex:outputText value="{!ticketMetrics.latest_comment_added_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Status Updated" />
+                    <apex:outputText value="{!ticketMetrics.status_updated_at}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <apex:outputPanel id="commentsPanel">
+                <apex:pageBlockSection title="Ticket Comments" id="commentsSection" columns="1">
+                    <apex:pageBlockTable value="{!ui_ticketComments}" var="c" rendered="{!NOT(ISNULL(ui_ticketComments))}">
+                        <apex:column headerValue="ID" value="{!c.comment.id}"/>
+                        <apex:column headerValue="Created">
+                            <apex:outputText value="{0,date,full}">
+                                <apex:param value="{!c.comment.created_at}" />
+                            </apex:outputText>
+                        </apex:column>
+                        <apex:column headerValue="Author">
+                            <apex:outputLink value="/apex/ZendeskUserDetail?id={!c.comment.author_id}">{!c.authorName}</apex:outputLink>
+                        </apex:column>
+                        <apex:column headerValue="Is Public">
+                            <c:ZendeskOutputCheckbox value="{!c.comment.x_public}" />
+                        </apex:column>
+                        <apex:column headerValue="Has Attachments">
+                            <c:ZendeskOutputCheckbox value="{!c.hasAttachments}" />
+                        </apex:column>
+                        <apex:column headerValue="Body" value="{!c.comment.body}"/>
+                        <apex:facet name="footer">
+                            <apex:outputPanel>
+                                <apex:commandButton value="<< prev page" action="{!prevCommentsPage}" rendered="{!NOT(ISNULL(previous_page))}" rerender="commentsPanel" />
+                                <apex:commandButton value="next page >>" action="{!nextCommentsPage}" rendered="{!NOT(ISNULL(next_page))}" rerender="commentsPanel" />
+                            </apex:outputPanel>
+                        </apex:facet>
+                    </apex:pageBlockTable>
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

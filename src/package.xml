@@ -17,7 +17,7 @@
         <name>ApexTrigger</name>
     </types>
     <types>
-        <members>Zendesk_Toolkit_1</members>
+        <members>Zendesk_Toolkit</members>
         <name>CustomApplication</name>
     </types>
     <types>
@@ -26,6 +26,7 @@
     </types>
     <types>
         <members>Zendesk_Samples</members>
+        <members>Zendesk_OrgSearch</members>
         <name>CustomTab</name>
     </types>
     <version>34.0</version>

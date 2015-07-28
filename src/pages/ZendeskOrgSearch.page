@@ -1,0 +1,38 @@
+<apex:page controller="ZendeskOrgSearchController" tabStyle="Zendesk_OrgSearch__tab">
+    <apex:form >
+        <apex:outputPanel id="organizationsPanel">
+            <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
+            <apex:pageBlock title="Zendesk Organization Search - {!subdomain}.zendesk.com" mode="edit">
+                <apex:pageBlockSection title="" columns="1">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Name" />
+                        <apex:outputPanel layout="block">
+                            <apex:inputText value="{!searchText}" />
+                            <apex:commandButton action="{!search}" value="Search" rerender="organizationsPanel" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+
+                <apex:outputPanel id="searchResults">
+                    <apex:pageBlockSection title="Organizations" columns="1">
+                        <apex:pageBlockTable value="{!ui_orgs}" var="ui_org">
+                            <apex:column headerValue="ID">
+                                <apex:outputLink value="/apex/ZendeskOrgDetail?id={!ui_org.org.id}">{!ui_org.org.id}</apex:outputLink>
+                            </apex:column>
+                            <apex:column value="{!ui_org.org.name}" headerValue="Name"/>
+                            <apex:column value="{!ui_org.domains}" headerValue="Domains"/>
+                            <apex:column value="{!ui_org.tags}" headerValue="Tags" rendered="false"/>
+                            <apex:column value="{!ui_org.org.created_at}" headerValue="Created"/>
+                            <apex:facet name="footer">
+                                <apex:outputPanel>
+                                    <apex:commandButton value="<< prev page" action="{!prevPage}" rendered="{!NOT(ISNULL(previous_page))}" rerender="searchResults" />
+                                    <apex:commandButton value="next page >>" action="{!nextPage}" rendered="{!NOT(ISNULL(next_page))}" rerender="searchResults" />
+                                </apex:outputPanel>
+                            </apex:facet>
+                        </apex:pageBlockTable>
+                    </apex:pageBlockSection>
+                </apex:outputPanel>
+            </apex:pageBlock>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

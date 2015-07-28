@@ -1,0 +1,35 @@
+<apex:page controller="ZendeskUsersController" action="{!init}" tabStyle="Zendesk_OrgSearch__tab">
+    <apex:form >
+        <apex:pageBlock title="Zendesk Users" id="block" mode="detail">
+
+            <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
+
+            <apex:outputPanel id="usersPanel">
+                <apex:pageBlockSection title="Users" id="usersSection" columns="1" collapsible="false">
+                    <apex:pageBlockTable value="{!ui_users}" var="u" rendered="{!NOT(ISNULL(ui_users))}">
+                        <apex:column headerValue="ID">
+                            <apex:outputLink value="/apex/ZendeskUserDetail?id={!u.user.id}">{!u.user.id}</apex:outputLink>
+                        </apex:column>
+                        <apex:column headerValue="Name" value="{!u.user.name}"/>
+                        <apex:column headerValue="Email" value="{!u.user.email}"/>
+                        <apex:column headerValue="Phone" value="{!u.user.phone}"/>
+                        <apex:column headerValue="Role" value="{!u.user.role}"/>
+                        <apex:column headerValue="Timezone" value="{!u.user.time_zone}"/>
+                        <apex:column headerValue="Created">
+                            <apex:outputText value="{0,date,full}">
+                                <apex:param value="{!u.user.created_at}" />
+                            </apex:outputText>
+                        </apex:column>
+                        <apex:facet name="footer">
+                            <apex:outputPanel >
+                                <apex:commandButton value="<< prev page" action="{!prevPage}" rendered="{!NOT(ISNULL(previous_page))}" rerender="usersPanel" />
+                                <apex:commandButton value="next page >>" action="{!nextPage}" rendered="{!NOT(ISNULL(next_page))}" rerender="usersPanel" />
+                            </apex:outputPanel>
+                        </apex:facet>
+                    </apex:pageBlockTable>
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

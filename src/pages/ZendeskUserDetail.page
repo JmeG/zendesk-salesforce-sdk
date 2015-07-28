@@ -1,0 +1,80 @@
+<apex:page controller="ZendeskUserDetailController" action="{!init}" tabStyle="Zendesk_OrgSearch__tab">
+    <apex:form >
+        <apex:pageBlock title="Zendesk User Detail" id="block" mode="detail">
+
+            <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
+
+            <apex:pageBlockSection id="resultsBlock" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Name" />
+                    <apex:outputText value="{!ui_user.user.name}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Email" />
+                    <apex:outputText value="{!ui_user.user.email}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Phone" />
+                    <apex:outputText value="{!ui_user.user.phone}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Role" />
+                    <apex:outputText value="{!ui_user.user.role}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Organization" />
+                    <apex:outputLink value="/apex/ZendeskOrgDetail?id={!ui_user.user.organization_id}">{!ui_user.orgName}</apex:outputLink>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Verified" />
+                    <c:ZendeskOutputCheckbox value="{!ui_user.user.verified}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Alias" />
+                    <apex:outputText value="{!ui_user.user.alias}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Timezone" />
+                    <apex:outputText value="{!ui_user.user.time_zone}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Locale" />
+                    <apex:outputText value="{!ui_user.user.locale}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Suspended" />
+                    <c:ZendeskOutputCheckbox value="{!ui_user.user.suspended}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Active" />
+                    <c:ZendeskOutputCheckbox value="{!ui_user.user.active}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Notes" />
+                    <apex:outputText value="{!ui_user.user.notes}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Details" />
+                    <apex:outputText value="{!ui_user.user.details}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Last Login" />
+                    <apex:outputText value="{!ui_user.user.last_login_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Created" />
+                    <apex:outputText value="{!ui_user.user.created_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Last Updated" />
+                    <apex:outputText value="{!ui_user.user.updated_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="External ID" />
+                    <apex:outputText value="{!ui_user.user.external_id}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
