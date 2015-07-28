@@ -27,12 +27,11 @@ public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 			HttpRequest req = zapi.createRequest('POST', '/uploads.json', new Map<String, Object>{'filename'=>urlEncode(fileName)});
 			req.setHeader('Content-Type', fileContentType);
 			req.setBodyAsBlob(fileBody);
-			String resBody = zapi.sendRequest(req);
+			Map<String, Object> responseMap = (Map<String, Object>)JSON.deserializeUntyped(zapi.sendRequest(req));
 
 			// Extract the token from the response
-			Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(resBody);
 			if (jsonMap.containsKey('upload')) {
-				Map<String, Object> upload = (Map<String, Object>)jsonMap.get('upload');
+				Map<String, Object> upload = (Map<String, Object>)responseMap.get('upload');
 				zendeskAttachmentToken = (String)upload.get('token');
 			}
 			else {
