@@ -47,12 +47,12 @@ public class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 	public OrganizationsWrapper autocompleteSearch(String name) {
 		return autocompleteSearch(name, null);
 	}
-	public OrganizationsWrapper autocompleteSearch(String name, Map<String, Object> queryParams) {
+	public OrganizationsWrapper autocompleteSearch(String name, Map<String, Object> additionalParams) {
 		if (String.isBlank(name) || name.length() < 2) { throw new ZendeskException('name parameter must at least 2 characters'); }
 
-		if (queryParams == null) { queryParams = new Map<String, Object>(); }
-		queryParams.put('name', urlEncode(name));
-        return getOrganizationsHelper(zapi.createRequest('GET', '/organizations/autocomplete.json', queryParams));
+		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
+		additionalParams.put('name', urlEncode(name));
+        return getOrganizationsHelper(zapi.createRequest('GET', '/organizations/autocomplete.json', additionalParams));
     }
 
 	public OrganizationsWrapper searchOrganizationsByExternalId(String externalId) {

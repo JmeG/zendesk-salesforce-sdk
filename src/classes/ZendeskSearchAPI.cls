@@ -13,27 +13,27 @@ public class ZendeskSearchAPI extends ZendeskResourceBase {
 	// sort_by => 'updated_at', 'created_at', 'priority', 'status', or 'ticket_type'. Defaults to sorting by relevance.
 	// sort_order => 'asc' or 'desc'. Defaults to 'desc'.
 
-	public SearchResultsWrapper search(String searchString) {
-		return search(searchString, null);
+	public SearchResultsWrapper search(String query) {
+		return search(query, null);
 	}
-	public SearchResultsWrapper search(String searchString, Map<String, Object> queryParams) {
-		if (String.isEmpty(searchString)) { throw new ZendeskException('searchString parameter must not be null or empty'); }
+	public SearchResultsWrapper search(String query, Map<String, Object> additionalParams) {
+		if (String.isEmpty(query)) { throw new ZendeskException('query parameter must not be null or empty'); }
 
-		if (queryParams == null) { queryParams = new Map<String, Object>(); }
-		queryParams.put('query', urlEncode(searchString));
-		HttpRequest req = zapi.createRequest('GET', '/search.json', queryParams);
+		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
+		additionalParams.put('query', urlEncode(searchString));
+		HttpRequest req = zapi.createRequest('GET', '/search.json', additionalParams);
 		return (SearchResultsWrapper)JSON.deserialize(zapi.sendRequest(req), SearchResultsWrapper.class);
 	}
 
-	public SearchResultsWrapper searchForums(String searchString) {
-		return searchForums(searchString, null);
+	public SearchResultsWrapper searchForums(String query) {
+		return searchForums(query, null);
 	}
-	public SearchResultsWrapper searchForums(String searchString, Map<String, Object> queryParams) {
-		if (String.isEmpty(searchString)) { throw new ZendeskException('searchString parameter must not be null or empty'); }
+	public SearchResultsWrapper searchForums(String query, Map<String, Object> additionalParams) {
+		if (String.isEmpty(query)) { throw new ZendeskException('query parameter must not be null or empty'); }
 
-		if (queryParams == null) { queryParams = new Map<String, Object>(); }
-		queryParams.put('query', urlEncode(searchString));
-		HttpRequest req = zapi.createRequest('GET', '/portal/search.json', queryParams);
+		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
+		additionalParams.put('query', urlEncode(query));
+		HttpRequest req = zapi.createRequest('GET', '/portal/search.json', additionalParams);
 		return (SearchResultsWrapper)JSON.deserialize(zapi.sendRequest(req), SearchResultsWrapper.class);
 	}
 
