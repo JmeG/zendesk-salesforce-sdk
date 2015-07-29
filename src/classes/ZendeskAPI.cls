@@ -98,7 +98,6 @@ public class ZendeskAPI {
 			str = '?';
 			for (String key : queryParams.keySet()) {
 				Object obj = queryParams.get(key);
-				// TODO: should we omit query parameters where the value is null ?
 				String strVal = (obj==null ? '' : String.valueOf(obj));
 				str += String.format('{0}={1}&', new List<String>{key, strVal});
 			}
@@ -127,28 +126,28 @@ public class ZendeskAPI {
 
 		// Debug the response
 		if (debugAll || debugResponseHeaders) {
-			System.debug(res.getHeaderKeys());
+			System.debug(LoggingLevel.INFO, '**HeaderKeys=' + res.getHeaderKeys());
 			for (String s : res.getHeaderKeys()) {
 				if (s != null) {
-					System.debug('header: "' + s + '" value: "' + res.getHeader(s) + '"');
+					System.debug(LoggingLevel.INFO, 'header: "' + s + '" value: "' + res.getHeader(s) + '"');
 				}
 			}
 		}
 		if (debugAll || debugResponseStatus) {
-			System.debug(Logginglevel.INFO, '**STATUS=' + res.getStatus());
-			System.debug(Logginglevel.INFO, '**STATUS_CODE=' + res.getStatusCode());
+			System.debug(LoggingLevel.INFO, '**STATUS=' + res.getStatus());
+			System.debug(LoggingLevel.INFO, '**STATUS_CODE=' + res.getStatusCode());
 		}
 		if (debugAll || debugResponseBody) {
-			System.debug(Logginglevel.INFO, '**RESPONSE_BODY=' + res.getBody());
+			System.debug(LoggingLevel.INFO, '**RESPONSE_BODY=' + res.getBody());
 		}
 
 		// Validate the response
 		if (!isSuccess(res)) {
 			ZendeskError zerr = safeGetError(res.getBody());
 			if (zerr != null && !String.isEmpty(zerr.error)) {
-				throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ') ' + zerr.error + ' ' + zerr.description);
+				throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ') ' + res.getStatus() + ': '+ zerr.error + ' ' + zerr.description);
 			} else {
-				throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ')');
+				throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ') ' + res.getStatus());
 			}
 		}
 
