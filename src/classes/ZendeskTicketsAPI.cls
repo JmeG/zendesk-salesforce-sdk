@@ -307,10 +307,10 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
-	public TicketsWrapper autoCompleteProblems(String autoCompleteText) {
-		if (String.isBlank(autoCompleteText) || autoCompleteText.length() < 2) { throw new ZendeskException('autoCompleteText parameter must at least 2 characters'); }
+	public TicketsWrapper autocompleteProblems(String text) {
+		if (String.isBlank(text) || text.length() < 2) { throw new ZendeskException('text parameter must at least 2 characters'); }
 
-		HttpRequest req = zapi.createRequest('POST', '/problems/autocomplete.json', new Map<String, Object>{'text'=>autoCompleteText});
+		HttpRequest req = zapi.createRequest('POST', '/problems/autocomplete.json', new Map<String, Object>{'text'=>text});
 		return (TicketsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketsWrapper.class);
     }
 

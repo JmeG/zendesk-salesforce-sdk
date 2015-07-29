@@ -188,13 +188,13 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
         return getUsersHelper(zapi.createRequest('GET', '/organizations/'+orgId+'/users.json', queryParams));
     }
 
-	public UsersWrapper getUsers(String autoCompleteName) {
-		if (String.isBlank(autoCompleteName) || autoCompleteName.length() < 2) { throw new ZendeskException('autoCompleteName parameter must at least 2 characters'); }
+	public UsersWrapper autocompleteSearch(String name) {
+		if (String.isBlank(name) || name.length() < 2) { throw new ZendeskException('name parameter must at least 2 characters'); }
 
-        return getUsersHelper(zapi.createRequest('GET', '/users/autocomplete.json', new Map<String, Object>{'name'=>urlEncode(autoCompleteName)}));
+        return getUsersHelper(zapi.createRequest('GET', '/users/autocomplete.json', new Map<String, Object>{'name'=>urlEncode(name)}));
     }
 
-	public UsersWrapper searchUsers(String externalId) {
+	public UsersWrapper searchUsersByExternalId(String externalId) {
 		if (String.isBlank(externalId)) { throw new ZendeskException('externalId parameter must not be null or empty'); }
 
         return getUsersHelper(zapi.createRequest('GET', '/users/search.json', new Map<String, Object>{'external_id'=>urlEncode(externalId)}));

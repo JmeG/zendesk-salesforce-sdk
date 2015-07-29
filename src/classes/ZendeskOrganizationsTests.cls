@@ -92,12 +92,12 @@ public class ZendeskOrganizationsTests {
         System.assertNotEquals(0, results.organizations.size());
     }
 
-    static testMethod void testGetOrganizationsByName() {
+    static testMethod void testAutocompleteSearch() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
 		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.getOrganizationsByName('foo');
+		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.autocompleteSearch('foo');
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -110,7 +110,7 @@ public class ZendeskOrganizationsTests {
 
         Test.startTest();
 		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.searchOrganizations('abc123');
+		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.searchOrganizationsByExternalId('abc123');
         Test.stopTest();
 
 		System.assertNotEquals(null, results);

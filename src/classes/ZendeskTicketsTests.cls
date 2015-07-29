@@ -233,7 +233,7 @@ public class ZendeskTicketsTests {
         System.assert(true);
     }
 
-    static testMethod void testAutoCompleteProblems() {
+    static testMethod void testAutocompleteProblems() {
         Test.setMock(HttpCalloutMock.class, new MockTicketsResponse());
 
         Test.startTest();

@@ -183,7 +183,7 @@ public class ZendeskUsersTests {
 
         Test.startTest();
 		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = zusers_api.getUsers('foo');
+		ZendeskUsersAPI.UsersWrapper results = zusers_api.autocompleteSearch('foo');
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
@@ -191,12 +191,12 @@ public class ZendeskUsersTests {
         System.assertEquals(1, results.users.size());
     }
 
-    static testMethod void testSearchUsers() {
+    static testMethod void testAutocompleteSearch() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
 		ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
-		ZendeskUsersAPI.UsersWrapper results = zusers_api.searchUsers('foo123');
+		ZendeskUsersAPI.UsersWrapper results = zusers_api.autocompleteSearch('foo123');
         Test.stopTest();
 
 		System.assertNotEquals(null, results);
