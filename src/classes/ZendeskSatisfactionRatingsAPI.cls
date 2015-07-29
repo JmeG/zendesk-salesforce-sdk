@@ -17,7 +17,7 @@ public class ZendeskSatisfactionRatingsAPI extends ZendeskResourceBase {
 
     // GET /api/v2/satisfaction_ratings/{id}.json
     public SatisfactionRatingWrapper getSatisfactionRating(Long satRatingId) {
-        if (satRatingId == null) { throw new ZendeskException('satRatingId parameter must not be null'); }
+        if (satRatingId == null) { throw new ZendeskException('satRatingId parameter cannot be null'); }
 
         HttpRequest req = zapi.createRequest('GET', '/satisfaction_ratings/'+satRatingId+'.json');
         return (SatisfactionRatingWrapper)JSON.deserialize(zapi.sendRequest(req), SatisfactionRatingWrapper.class);
@@ -41,8 +41,8 @@ public class ZendeskSatisfactionRatingsAPI extends ZendeskResourceBase {
 
 	// POST /api/v2/tickets/{ticket_id}/satisfaction_rating.json
 	public void createSatisfactionRating(ZSatisfactionRating satRating, Long ticketId) {
-		if (satRating == null) { throw new ZendeskException('satRating parameter must not be null'); }
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+		if (satRating == null) { throw new ZendeskException('satRating parameter cannot be null'); }
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/tickets/'+ticketId+'/satisfaction_rating.json');
 		req.setBody(JSON.serialize(new SatisfactionRatingWrapper(satRating)));

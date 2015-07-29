@@ -19,7 +19,7 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 	}
 
 	public ZTicketField getField(Long fieldId) {
-		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/ticket_fields/'+fieldId+'.json');
 		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldWrapper.class);
@@ -35,14 +35,14 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 	}
 
 	public void deleteField(Long fieldId) {
-		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', '/ticket_fields/'+fieldId+'.json');
 		zapi.sendRequest(req);
 	}
 
 	public Long createField(ZTicketField zfield) {
-		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
+		if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/ticket_fields.json');
 		req.setBody(JSON.serialize(new TicketFieldWrapper(zfield)));
@@ -51,8 +51,8 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 	}
 
 	public void updateField(Long fieldId, ZTicketField zfield) {
-		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
-		if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
+		if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/ticket_fields/'+fieldId+'.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new TicketFieldWrapper(zfield))));

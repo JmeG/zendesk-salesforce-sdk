@@ -19,7 +19,7 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 	}
 
 	public GroupWrapper getGroup(Long groupId) {
-		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
+		if (groupId == null) { throw new ZendeskException('groupId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/groups/'+groupId+'.json');
 		return (GroupWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupWrapper.class);
@@ -42,12 +42,12 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 
 	// Get the groups that a user is a member of
 	public GroupsWrapper getUserGroups(Long userId) {
-		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
+		if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
 		return getUserGroups(userId, null);
 	}
 	public GroupsWrapper getUserGroups(Long userId, Map<String, Object> queryParams) {
-		if (userId == null) { throw new ZendeskException('userId parameter must not be null'); }
+		if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
 		return getGroupsInternal(zapi.createRequest('GET', '/users/'+userId+'/groups.json', queryParams));
 	}
@@ -67,7 +67,7 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 	}
 
 	public Long createGroup(ZGroup x_group) {
-		if (x_group == null) { throw new ZendeskException('x_group parameter must not be null'); }
+		if (x_group == null) { throw new ZendeskException('x_group parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/groups.json');
 		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group)))));
@@ -77,7 +77,7 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 
 	// Simplified method for updating a group name
 	public void updateGroupName(Long groupId, String newName) {
-		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
+		if (groupId == null) { throw new ZendeskException('groupId parameter cannot be null'); }
 		if (String.isBlank(newName)) { throw new ZendeskException('newName parameter must not be empty'); }
 
 		ZGroup g = new ZGroup();
@@ -86,7 +86,7 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 	}
 
 	public void updateGroup(Long groupId, ZGroup x_group) {
-		if (x_group == null) { throw new ZendeskException('x_group parameter must not be null'); }
+		if (x_group == null) { throw new ZendeskException('x_group parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/groups/'+groupId+'.json');
 		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group)))));
@@ -94,7 +94,7 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 	}
 
 	public void deleteGroup(Long groupId) {
-		if (groupId == null) { throw new ZendeskException('groupId parameter must not be null'); }
+		if (groupId == null) { throw new ZendeskException('groupId parameter cannot be null'); }
 
 		zapi.sendRequest(zapi.createRequest('DELETE', '/groups/'+groupId+'.json'));
 	}

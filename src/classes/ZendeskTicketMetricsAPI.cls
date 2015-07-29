@@ -19,7 +19,7 @@ public class ZendeskTicketMetricsAPI extends ZendeskResourceBase {
 	}
 
 	public ZTicketMetrics getTicketMetrics(Long ticketMetricId) {
-		if (ticketMetricId == null) { throw new ZendeskException('ticketMetricId parameter must not be null'); }
+		if (ticketMetricId == null) { throw new ZendeskException('ticketMetricId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/ticket_metrics/'+ticketMetricId+'.json');
 		TicketMetricWrapper wrapper = (TicketMetricWrapper)JSON.deserialize(zapi.sendRequest(req), TicketMetricWrapper.class);
@@ -27,7 +27,7 @@ public class ZendeskTicketMetricsAPI extends ZendeskResourceBase {
 	}
 
 	public ZTicketMetrics getTicketMetricsByTicketId(Long ticketId) {
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'/metrics.json');
 		TicketMetricWrapper wrapper = (TicketMetricWrapper)JSON.deserialize(zapi.sendRequest(req), TicketMetricWrapper.class);

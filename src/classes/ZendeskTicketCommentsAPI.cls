@@ -18,15 +18,15 @@ public class ZendeskTicketCommentsAPI extends ZendeskResourceBase {
 	}
 
 	public TicketCommentsWrapper getTicketComments(Long ticketId, Map<String, Object> queryParams) {
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'/comments.json', queryParams);
 		return (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketCommentsWrapper.class);
 	}
 
 	public void redactStringInComment(Long ticketId, Long ticketCommentId, String redactText) {
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
-		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter must not be null'); }
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
+		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter cannot be null'); }
 		if (String.isBlank(redactText)) { throw new ZendeskException('redactText parameter must not be empty'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/tickets/'+ticketId+'/comments/'+ticketCommentId+'/redact.json');
@@ -35,8 +35,8 @@ public class ZendeskTicketCommentsAPI extends ZendeskResourceBase {
 	}
 
 	public void makeCommentPrivate(Long ticketId, Long ticketCommentId) {
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
-		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter must not be null'); }
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
+		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter cannot be null'); }
 
 		zapi.sendRequest(zapi.createRequest('PUT', '/tickets/'+ticketId+'/comments/'+ticketCommentId+'/make_private.json'));
 	}

@@ -62,7 +62,7 @@ public abstract class ZendeskResourceBase extends ZendeskTypes {
 	}
 
 	public static String serializeJsonNoNulls(Object obj, Set<String> fieldsToNull) {
-		if (obj == null) { throw new ZendeskException('obj parameter must not be null'); }
+		if (obj == null) { throw new ZendeskException('obj parameter cannot be null'); }
 
 		Map<String, Object> fieldsMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(obj));
 		System.debug('**fieldsMap=' + fieldsMap);

@@ -155,7 +155,7 @@ public class ZendeskAPI {
 	}
 
 	private Boolean isSuccess(HttpResponse res) {
-		if (res == null) { throw new ZendeskException('res parameter must not be null'); }
+		if (res == null) { throw new ZendeskException('res parameter cannot be null'); }
 
 		Boolean isSuccess = (res.getStatusCode() != null && res.getStatusCode() >= 200 && res.getStatusCode() <= 299);
 		return isSuccess;

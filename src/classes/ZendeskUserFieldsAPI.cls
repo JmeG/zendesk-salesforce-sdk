@@ -16,7 +16,7 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
     }
 
     public ZUserField getField(Long fieldId) {
-		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
         HttpRequest req = zapi.createRequest('GET', '/user_fields/'+fieldId+'.json');
         UserFieldWrapper wrapper = (UserFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), UserFieldWrapper.class);
@@ -33,7 +33,7 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
     }
 
     public void deleteField(Long fieldId) {
-		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
 		zapi.sendRequest(zapi.createRequest('DELETE', '/user_fields/'+fieldId+'.json'));
 	}
@@ -47,7 +47,7 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
     }
 
     public Long createField(ZUserField zfield) {
-        if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
+        if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
         HttpRequest req = zapi.createRequest('POST', '/user_fields.json');
         req.setBody(unreplaceReservedWords(JSON.serialize(new UserFieldWrapper(zfield))));
@@ -56,8 +56,8 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
     }
 
     public void updateField(Long fieldId, ZUserField zfield) {
-        if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
-        if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
+        if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
+        if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/user_fields/'+fieldId+'.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new UserFieldWrapper(zfield)))));

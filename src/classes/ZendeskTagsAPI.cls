@@ -30,14 +30,14 @@ public class ZendeskTagsAPI extends ZendeskResourceBase {
 		return getTags(resourceType, recordId, null);
 	}
 	public TagsWrapper getTags(Resource resourceType, Long recordId, Map<String, Object> queryParams) {
-		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
+		if (recordId == null) { throw new ZendeskException('recordId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/'+resourceType.name()+'/'+recordId+'/tags.json', queryParams);
 		return (TagsWrapper)JSON.deserialize(zapi.sendRequest(req), TagsWrapper.class);
 	}
 
 	public void setTags(Resource resourceType, Long recordId, String[] tags) {
-		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
+		if (recordId == null) { throw new ZendeskException('recordId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('POST', '/'+resourceType.name()+'/'+recordId+'/tags.json');
 		req.setBody(JSON.serialize(new TagsWrapper(tags)));
@@ -45,7 +45,7 @@ public class ZendeskTagsAPI extends ZendeskResourceBase {
 	}
 
 	public void addTags(Resource resourceType, Long recordId, String[] tags) {
-		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
+		if (recordId == null) { throw new ZendeskException('recordId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('PUT', '/'+resourceType.name()+'/'+recordId+'/tags.json');
 		req.setBody(JSON.serialize(new TagsWrapper(tags)));
@@ -53,7 +53,7 @@ public class ZendeskTagsAPI extends ZendeskResourceBase {
 	}
 
 	public void removeTags(Resource resourceType, Long recordId, String[] tags) {
-		if (recordId == null) { throw new ZendeskException('recordId parameter must not be null'); }
+		if (recordId == null) { throw new ZendeskException('recordId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('DELETE', '/'+resourceType.name()+'/'+recordId+'/tags.json');
 		req.setBody(JSON.serialize(new TagsWrapper(tags)));

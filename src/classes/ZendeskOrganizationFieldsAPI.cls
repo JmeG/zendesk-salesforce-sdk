@@ -16,7 +16,7 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
     }
 
     public ZOrganizationField getField(Long fieldId) {
-		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
         HttpRequest req = zapi.createRequest('GET', '/organization_fields/'+fieldId+'.json');
         OrganizationFieldWrapper wrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldWrapper.class);
@@ -32,7 +32,7 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
     }
 
     public void deleteField(Long fieldId) {
-		if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
+		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
 		zapi.sendRequest(zapi.createRequest('DELETE', '/organization_fields/'+fieldId+'.json'));
 	}
@@ -46,7 +46,7 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
     }
 
     public Long createField(ZOrganizationField zfield) {
-        if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
+        if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
         HttpRequest req = zapi.createRequest('POST', '/organization_fields.json');
         req.setBody(JSON.serialize(new OrganizationFieldWrapper(zfield)));
@@ -55,8 +55,8 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
     }
 
     public void updateField(Long fieldId, ZOrganizationField zfield) {
-        if (fieldId == null) { throw new ZendeskException('fieldId parameter must not be null'); }
-        if (zfield == null) { throw new ZendeskException('zfield parameter must not be null'); }
+        if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
+        if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
         HttpRequest req = zapi.createRequest('PUT', '/organization_fields/'+fieldId+'.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new OrganizationFieldWrapper(zfield)))));

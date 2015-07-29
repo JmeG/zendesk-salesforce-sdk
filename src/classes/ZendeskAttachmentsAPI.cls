@@ -10,7 +10,7 @@ public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 	}
 
 	public ZAttachment getAttachment(Long attachmentId) {
-		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
+		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter cannot be null'); }
 
 		HttpRequest req = zapi.createRequest('GET', '/attachments/'+attachmentId+'.json');
 		AttachmentWrapper resultWrapper = (AttachmentWrapper)JSON.deserialize(zapi.sendRequest(req), AttachmentWrapper.class);
@@ -20,7 +20,7 @@ public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 	public String uploadAttachment(String fileName, String fileContentType, Blob fileBody) {
 		if (String.isBlank(fileName)) { throw new ZendeskException('fileName parameter must not be empty'); }
 		if (String.isBlank(fileContentType)) { throw new ZendeskException('fileContentType parameter must not be empty'); }
-		if (fileBody == null) { throw new ZendeskException('fileBody parameter must not be null'); }
+		if (fileBody == null) { throw new ZendeskException('fileBody parameter cannot be null'); }
 
 		String zendeskAttachmentToken = null;
 		try {
@@ -46,15 +46,15 @@ public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 	}
 
 	public void deleteAttachment(Long attachmentId) {
-		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
+		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter cannot be null'); }
 
 		zapi.sendRequest(zapi.createRequest('DELETE', '/attachments/'+attachmentId+'.json'));
 	}
 
 	public void redactCommentAttachment(Long ticketId, Long commentId, Long attachmentId) {
-		if (ticketId == null) { throw new ZendeskException('ticketId parameter must not be null'); }
-		if (commentId == null) { throw new ZendeskException('commentId parameter must not be null'); }
-		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter must not be null'); }
+		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
+		if (commentId == null) { throw new ZendeskException('commentId parameter cannot be null'); }
+		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter cannot be null'); }
 
 		zapi.sendRequest(zapi.createRequest('PUT', '/tickets/'+ticketId+'/comments/'+commentId+'/attachments/'+attachmentId+'/redact.json', '{}'));
 	}
