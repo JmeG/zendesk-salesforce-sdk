@@ -65,7 +65,7 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 
     // Retrieves all pages of organization fields. Uses the field "key" as the map key
     public Map<String, ZOrganizationField> getAllFields() {
-        Map<String, ZOrganizationField> fieldsMap = new Map<String, ZUserField>();
+        Map<String, ZOrganizationField> fieldsMap = new Map<String, ZOrganizationField>();
         OrganizationFieldsWrapper wrapper = getFields();
         if (wrapper != null && wrapper.organization_fields != null) {
             for (ZOrganizationField obj : wrapper.organization_fields) {
