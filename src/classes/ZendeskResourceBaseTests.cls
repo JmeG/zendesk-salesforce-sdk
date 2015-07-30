@@ -28,4 +28,14 @@ private class ZendeskResourceBaseTests {
 
         System.assertEquals(false, testJson.containsIgnoreCase('null'));
     }
+
+    static testMethod void testGetEpochTime() {
+        DateTime dt = DateTime.newInstance(2015, 7, 1);
+
+        Test.startTest();
+        Long epoch = ZendeskResourceBase.getUnixEpochTime(dt);
+        Test.stopTest();
+
+        System.assertEquals(1435734000, epoch);
+    }
 }
