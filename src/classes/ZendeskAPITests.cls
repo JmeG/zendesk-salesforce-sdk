@@ -14,10 +14,7 @@ public class ZendeskAPITests {
 
     static testMethod void testCreateRequest() {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-
-        Test.startTest();
         HttpRequest req = zapi.createRequest('GET', '/users.json', new Map<String, Object>{'page'=>'1'});
-        Test.stopTest();
 
         System.assertEquals('GET', req.getMethod());
     }
@@ -27,22 +24,16 @@ public class ZendeskAPITests {
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
         zapi.debugAll = true;
         HttpRequest req = zapi.createRequest('GET', '/users.json');
-
-        Test.startTest();
         String resBody = zapi.sendRequest(req);
-        Test.stopTest();
 
         System.assertNotEquals(null, resBody);
     }
 
     static testMethod void testCanLogin() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
-
         ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
 
-        Test.startTest();
         System.assertEquals(true, zapi.canLogin());
-        Test.stopTest();
     }
 
     static testMethod void testConstructors() {
@@ -50,5 +41,15 @@ public class ZendeskAPITests {
         ZendeskAPI zapi2 = new ZendeskAPI('s', 'u', 't', ZendeskAPI.AuthType.Token);
 
         System.assert(true);
+    }
+
+    static testMethod void testGetQueryStringMap() {
+        String url = 'https://test.zendesk.com/api/v2/organizations/25378250/tickets.json?include=users%2Cgroups&page=2&per_page=10&sort_order=desc';
+        Map<String, String> qmap = ZendeskAPI.getQueryStringMap(url);
+
+        System.assertNotEquals(null, qmap);
+        System.assertEquals(4, qmap.size());
+        System.assertEquals(true, qmap.containsKey('per_page'));
+        System.assertEquals('10', qmap.get('per_page'));
     }
 }
