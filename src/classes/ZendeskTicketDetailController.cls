@@ -6,7 +6,7 @@ public class ZendeskTicketDetailController {
     private String username;
     private String pwdOrToken;
     private String authType;
-    private ZendeskAPI zapi;
+    private ZendeskConnection zconn;
     private final Long ticketId;
 
     public String pageMessage {get;set;}
@@ -91,10 +91,10 @@ public class ZendeskTicketDetailController {
                 pwdOrToken = settings.Password_or_Token__c;
                 authType = settings.Authentication_Type__c;
 
-                zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-                zapi.debugResponseStatus = true;
-                zapi.debugResponseBody = true;
-                zapi.debugRequest = true;
+                zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+                zconn.debugResponseStatus = true;
+                zconn.debugResponseBody = true;
+                zconn.debugRequest = true;
             }
             else {
                 pageMessage = 'Zendesk API settings are not configured';
@@ -128,7 +128,7 @@ public class ZendeskTicketDetailController {
             ticketMetrics = null;
             ui_ticketComments = new List<UITicketComment>();
 
-            ZendeskTicketsAPI tickets_api = new ZendeskTicketsAPI(zapi);
+            ZendeskTicketsAPI tickets_api = new ZendeskTicketsAPI(zconn);
             ZendeskTicketsAPI.TicketWrapper ticketWrapper = tickets_api.getTicket(ticketId, new Map<String, Object>{'include'=>'users,groups,metric_sets'});
             if (ticketWrapper != null && ticketWrapper.ticket != null) {
                 Map<Long, String> userMap = new Map<Long, String>();
@@ -151,7 +151,7 @@ public class ZendeskTicketDetailController {
                 ui_ticket = new UITicket(ticketWrapper.ticket, userMap, groupMap);
 
                 if (ticketWrapper.ticket.organization_id != null) {
-                    ZendeskOrganizationsAPI orgs_api = new ZendeskOrganizationsAPI(zapi);
+                    ZendeskOrganizationsAPI orgs_api = new ZendeskOrganizationsAPI(zconn);
                     ZendeskOrganizationsAPI.OrganizationWrapper orgwrapper = orgs_api.getOrganization(ticketWrapper.ticket.organization_id);
                     if (orgwrapper != null && orgwrapper.organization != null) {
                         ui_ticket.orgName = orgwrapper.organization.name;
@@ -175,7 +175,7 @@ public class ZendeskTicketDetailController {
         ui_ticketComments = new List<UITicketComment>();
 
         // Get the ticket comments
-        ZendeskTicketCommentsAPI comments_api = new ZendeskTicketCommentsAPI(zapi);
+        ZendeskTicketCommentsAPI comments_api = new ZendeskTicketCommentsAPI(zconn);
         Map<String, Object> qParams = new Map<String, Object> {'per_page'=>COMMENTS_PER_PAGE, 'include'=>'users'};
         if (page != null) {
             qParams.put('page', page);

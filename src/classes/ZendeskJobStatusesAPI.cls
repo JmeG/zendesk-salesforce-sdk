@@ -9,23 +9,23 @@ public class ZendeskJobStatusesAPI extends ZendeskResourceBase {
 		public List<ZJobStatus> job_statuses {get;set;}
 	}
 
-	public ZendeskJobStatusesAPI(ZendeskAPI zapi) {
-		super(zapi);
+	public ZendeskJobStatusesAPI(ZendeskConnection zconn) {
+		super(zconn);
 	}
 
 	public ZJobStatus getJobStatus(String jobId) {
 		if (jobId == null) { throw new ZendeskException('jobId parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/job_statuses/'+jobId+'.json');
-		JobStatusWrapper wrapper = (JobStatusWrapper)JSON.deserialize(zapi.sendRequest(req), JobStatusWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/job_statuses/'+jobId+'.json');
+		JobStatusWrapper wrapper = (JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), JobStatusWrapper.class);
 		return wrapper.job_status;
 	}
 
 	public List<ZJobStatus> getJobStatuses(Set<String> jobIds) {
 		if (jobIds == null || jobIds.isEmpty()) { throw new ZendeskException('jobIds parameter cannot be null or empty'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/job_statuses/show_many.json', new Map<String, Object>{'ids'=>toCSV(jobIds)});
-		JobStatusesWrapper wrapper = (JobStatusesWrapper)JSON.deserialize(zapi.sendRequest(req), JobStatusesWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/job_statuses/show_many.json', new Map<String, Object>{'ids'=>toCSV(jobIds)});
+		JobStatusesWrapper wrapper = (JobStatusesWrapper)JSON.deserialize(zconn.sendRequest(req), JobStatusesWrapper.class);
 		return wrapper.job_statuses;
 	}
 }

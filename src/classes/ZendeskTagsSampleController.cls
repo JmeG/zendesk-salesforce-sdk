@@ -13,8 +13,8 @@ public class ZendeskTagsSampleController {
     public PageReference listTags() {
         pageMessage = '';
         try {
-            ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-            ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(zapi);
+            ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+            ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(zconn);
 
             ZendeskTagsAPI.ListTagsWrapper wrapper = ztags_api.listTags();
             listTags = wrapper.tags;

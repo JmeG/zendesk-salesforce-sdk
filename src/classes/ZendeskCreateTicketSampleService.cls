@@ -22,7 +22,7 @@ global class ZendeskCreateTicketSampleService {
             // Retrieve the Zendesk API details from the custom settings object
             Zendesk_API__c settings = Zendesk_API__c.getInstance();
     		if (settings == null) { throw new ZendeskException('Zendesk_API custom settings are null'); }
-			ZendeskAPI.AuthType zdAuthType = (settings.Authentication_Type__c=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token);
+			ZendeskConnection.AuthType zdAuthType = (settings.Authentication_Type__c=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token);
 
 			// Create a new Ticket object
             ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
@@ -36,8 +36,8 @@ global class ZendeskCreateTicketSampleService {
             zt.comment = new ZendeskTypes.ZTicketComment();
     		zt.comment.body = ticketComment;
 
-			ZendeskAPI zapi = new ZendeskAPI(settings.Subdomain__c, settings.Username__c, settings.Password_or_Token__c, zdAuthType);
-			ZendeskTicketsAPI zTickets = new ZendeskTicketsAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(settings.Subdomain__c, settings.Username__c, settings.Password_or_Token__c, zdAuthType);
+			ZendeskTicketsAPI zTickets = new ZendeskTicketsAPI(zconn);
 			Long ticketNum = zTickets.createTicket(zt);
 
 			// Return the newly created ticket number

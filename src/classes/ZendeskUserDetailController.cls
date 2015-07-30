@@ -4,7 +4,7 @@ public class ZendeskUserDetailController {
     private String username;
     private String pwdOrToken;
     private String authType;
-    private ZendeskAPI zapi;
+    private ZendeskConnection zconn;
     private final Long userId;
 
     public String pageMessage {get;set;}
@@ -34,10 +34,10 @@ public class ZendeskUserDetailController {
                 pwdOrToken = settings.Password_or_Token__c;
                 authType = settings.Authentication_Type__c;
 
-                zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-                zapi.debugResponseStatus = true;
-                zapi.debugResponseBody = true;
-                zapi.debugRequest = true;
+                zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+                zconn.debugResponseStatus = true;
+                zconn.debugResponseBody = true;
+                zconn.debugRequest = true;
             }
             else {
                 pageMessage = 'Zendesk API settings are not configured';
@@ -56,13 +56,13 @@ public class ZendeskUserDetailController {
         try {
             ui_user = null;
 
-            ZendeskUsersAPI users_api = new ZendeskUsersAPI(zapi);
+            ZendeskUsersAPI users_api = new ZendeskUsersAPI(zconn);
             ZendeskUsersAPI.UserWrapper userWrapper = users_api.getUser(userId);
             if (userWrapper != null && userWrapper.user != null) {
                 ui_user = new UIUser(userWrapper.user);
 
                 if (userWrapper.user.organization_id != null) {
-                    ZendeskOrganizationsAPI orgs_api = new ZendeskOrganizationsAPI(zapi);
+                    ZendeskOrganizationsAPI orgs_api = new ZendeskOrganizationsAPI(zconn);
                     ZendeskOrganizationsAPI.OrganizationWrapper orgWrapper = orgs_api.getOrganization(userWrapper.user.organization_id);
                     if (orgWrapper != null && orgWrapper.organization != null) {
                         ui_user.orgName = orgWrapper.organization.name;

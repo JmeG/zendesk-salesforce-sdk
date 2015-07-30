@@ -1,8 +1,8 @@
 // This class provides functionality to call the Zendesk Search API
 public class ZendeskSearchAPI extends ZendeskResourceBase {
 
-    public ZendeskSearchAPI(ZendeskAPI zapi) {
-        super(zapi);
+    public ZendeskSearchAPI(ZendeskConnection zconn) {
+        super(zconn);
     }
 
 	public class SearchResultsWrapper extends ZendeskPagingBase {
@@ -21,8 +21,8 @@ public class ZendeskSearchAPI extends ZendeskResourceBase {
 
 		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
 		additionalParams.put('query', urlEncode(query));
-		HttpRequest req = zapi.createRequest('GET', '/search.json', additionalParams);
-		return (SearchResultsWrapper)JSON.deserialize(zapi.sendRequest(req), SearchResultsWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/search.json', additionalParams);
+		return (SearchResultsWrapper)JSON.deserialize(zconn.sendRequest(req), SearchResultsWrapper.class);
 	}
 
 	public SearchResultsWrapper searchForums(String query) {
@@ -33,8 +33,8 @@ public class ZendeskSearchAPI extends ZendeskResourceBase {
 
 		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
 		additionalParams.put('query', urlEncode(query));
-		HttpRequest req = zapi.createRequest('GET', '/portal/search.json', additionalParams);
-		return (SearchResultsWrapper)JSON.deserialize(zapi.sendRequest(req), SearchResultsWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/portal/search.json', additionalParams);
+		return (SearchResultsWrapper)JSON.deserialize(zconn.sendRequest(req), SearchResultsWrapper.class);
 	}
 
 }

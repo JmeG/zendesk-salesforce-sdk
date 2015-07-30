@@ -7,7 +7,7 @@ public class ZendeskOrgDetailController {
     private String pwdOrToken;
     private String authType;
     private final Long orgId;
-    private ZendeskAPI zapi;
+    private ZendeskConnection zconn;
 
     public String pageMessage {get;set;}
     public UIOrg ui_org {get; private set;}
@@ -86,10 +86,10 @@ public class ZendeskOrgDetailController {
                 pwdOrToken = settings.Password_or_Token__c;
                 authType = settings.Authentication_Type__c;
 
-                zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-                zapi.debugResponseStatus = true;
-                zapi.debugResponseBody = true;
-                zapi.debugRequest = true;
+                zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+                zconn.debugResponseStatus = true;
+                zconn.debugResponseBody = true;
+                zconn.debugRequest = true;
             }
             else {
                 pageMessage = 'Zendesk API settings are not configured';
@@ -121,7 +121,7 @@ public class ZendeskOrgDetailController {
         ui_tickets = new List<UITicket>();
 
         // Get Tickets for the Organization
-        ZendeskTicketsAPI tickets_api = new ZendeskTicketsAPI(zapi);
+        ZendeskTicketsAPI tickets_api = new ZendeskTicketsAPI(zconn);
         Map<String, Object> qparams = new Map<String, Object>{'include'=>'users,groups', 'sort_order'=>'desc', 'per_page'=>TICKETS_PER_PAGE};
         if (page != null) {
             qparams.put('page', page);
@@ -158,7 +158,7 @@ public class ZendeskOrgDetailController {
             ui_org = null;
 
             // Search for the Organization by external_id
-            ZendeskOrganizationsAPI orgs_api = new ZendeskOrganizationsAPI(zapi);
+            ZendeskOrganizationsAPI orgs_api = new ZendeskOrganizationsAPI(zconn);
             ZendeskOrganizationsAPI.OrganizationWrapper orgWrapper = orgs_api.getOrganization(orgId);
             if (orgWrapper != null && orgWrapper.organization != null) {
                 ZendeskTypes.ZOrganization zorg = orgWrapper.organization;
@@ -166,7 +166,7 @@ public class ZendeskOrgDetailController {
 
                 // Get the Group associated with the Organization
                 if (zorg.group_id != null) {
-                    ZendeskGroupsAPI groups_api = new ZendeskGroupsAPI(zapi);
+                    ZendeskGroupsAPI groups_api = new ZendeskGroupsAPI(zconn);
                     ZendeskGroupsAPI.GroupWrapper groupWrapper = groups_api.getGroup(zorg.group_id);
                     if (groupWrapper != null && groupWrapper.x_group != null) {
                         ui_org.groupName = groupWrapper.x_group.name;

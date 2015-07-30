@@ -3,13 +3,13 @@
 private class ZendeskResourceBaseTests {
 
     //public class Test1 extends ZendeskResourceBase {
-    //    public Test1(ZendeskAPI zapi) {
-    //		super(zapi);
+    //    public Test1(ZendeskConnection zconn) {
+    //		super(zconn);
     //	}
     //}
 
     static testMethod void testToCSV() {
-        //Test1 t1 = new Test1(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        //Test1 t1 = new Test1(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 
         Test.startTest();
         System.assertEquals('1,2,3', ZendeskResourceBase.toCSV(new Set<Long> { 1, 2, 3 }));

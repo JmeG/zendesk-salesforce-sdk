@@ -35,7 +35,7 @@ public class ZendeskSatisfactionRatingsTests {
         Test.setMock(HttpCalloutMock.class, new MockSatisfactionRatingResponse());
 
         Test.startTest();
-        ZendeskSatisfactionRatingsAPI zsat_api = new ZendeskSatisfactionRatingsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskSatisfactionRatingsAPI zsat_api = new ZendeskSatisfactionRatingsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         ZendeskSatisfactionRatingsAPI.SatisfactionRatingWrapper wrapper = zsat_api.getSatisfactionRating(123);
         Test.stopTest();
 
@@ -48,7 +48,7 @@ public class ZendeskSatisfactionRatingsTests {
         Test.setMock(HttpCalloutMock.class, new MockSatisfactionRatingsResponse());
 
         Test.startTest();
-        ZendeskSatisfactionRatingsAPI zsat_api = new ZendeskSatisfactionRatingsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskSatisfactionRatingsAPI zsat_api = new ZendeskSatisfactionRatingsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         ZendeskSatisfactionRatingsAPI.SatisfactionRatingsWrapper wrapper = zsat_api.getSatisfactionRatings();
         Test.stopTest();
 
@@ -60,7 +60,7 @@ public class ZendeskSatisfactionRatingsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskSatisfactionRatingsAPI zsat_api = new ZendeskSatisfactionRatingsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskSatisfactionRatingsAPI zsat_api = new ZendeskSatisfactionRatingsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         ZendeskTypes.ZSatisfactionRating satRating = new ZendeskTypes.ZSatisfactionRating();
         satRating.score = 'good';
         satRating.comment = 'my comment';

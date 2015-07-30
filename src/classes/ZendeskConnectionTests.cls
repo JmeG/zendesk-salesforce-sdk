@@ -1,6 +1,6 @@
-// This class provides test coverage for the ZendeskAPI class
+// This class provides test coverage for the ZendeskConnection  class
 @isTest
-public class ZendeskAPITests {
+public class ZendeskConnectionTests {
 
     public class MockUserResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
@@ -13,39 +13,39 @@ public class ZendeskAPITests {
     }
 
     static testMethod void testCreateRequest() {
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-        HttpRequest req = zapi.createRequest('GET', '/users.json', new Map<String, Object>{'page'=>'1'});
+        ZendeskConnection zconn = new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password);
+        HttpRequest req = zconn.createRequest('GET', '/users.json', new Map<String, Object>{'page'=>'1'});
 
         System.assertEquals('GET', req.getMethod());
     }
 
     static testMethod void testSendRequest() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
-        zapi.debugAll = true;
-        HttpRequest req = zapi.createRequest('GET', '/users.json');
-        String resBody = zapi.sendRequest(req);
+        ZendeskConnection zconn = new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password);
+        zconn.debugAll = true;
+        HttpRequest req = zconn.createRequest('GET', '/users.json');
+        String resBody = zconn.sendRequest(req);
 
         System.assertNotEquals(null, resBody);
     }
 
     static testMethod void testCanLogin() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
-        ZendeskAPI zapi = new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password);
+        ZendeskConnection zconn = new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password);
 
-        System.assertEquals(true, zapi.canLogin());
+        System.assertEquals(true, zconn.canLogin());
     }
 
     static testMethod void testConstructors() {
-        ZendeskAPI zapi1 = new ZendeskAPI('s', 'u', 'p');
-        ZendeskAPI zapi2 = new ZendeskAPI('s', 'u', 't', ZendeskAPI.AuthType.Token);
+        ZendeskConnection zconn1 = new ZendeskConnection('s', 'u', 'p');
+        ZendeskConnection zconn2 = new ZendeskConnection('s', 'u', 't', ZendeskConnection.AuthType.Token);
 
         System.assert(true);
     }
 
     static testMethod void testGetQueryStringMap() {
         String url = 'https://test.zendesk.com/api/v2/organizations/25378250/tickets.json?include=users%2Cgroups&page=2&per_page=10&sort_order=desc';
-        Map<String, String> qmap = ZendeskAPI.getQueryStringMap(url);
+        Map<String, String> qmap = ZendeskConnection.getQueryStringMap(url);
 
         System.assertNotEquals(null, qmap);
         System.assertEquals(4, qmap.size());

@@ -43,7 +43,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockCreateAttachmentResponse());
 
         Test.startTest();
-        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		String attachId = zattach_api.uploadAttachment('filename.txt', 'fileContentType', Blob.valueOf('asdfasfdasdfasdfasdf'));
         Test.stopTest();
 
@@ -54,7 +54,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
         Test.startTest();
-        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		try {
             zattach_api.uploadAttachment('filename.txt', 'fileContentType', Blob.valueOf('asdfasfdasdfasdfasdf'));
             System.assert(false); // throw an exception if we get here
@@ -66,7 +66,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         zattach_api.deleteAttachment(123);
         Test.stopTest();
 
@@ -77,7 +77,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
         Test.startTest();
-        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		try {
             zattach_api.deleteAttachment(123);
             System.assert(false); // throw an exception if we get here
@@ -89,7 +89,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockAttachmentResponse());
 
         Test.startTest();
-        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         ZendeskTypes.ZAttachment za = zattach_api.getAttachment(123);
         Test.stopTest();
 
@@ -100,7 +100,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
         Test.startTest();
-        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		try {
             zattach_api.getAttachment(123);
             System.assert(false); // throw an exception if we get here
@@ -112,7 +112,7 @@ public class ZendeskAttachmentsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskAttachmentsAPI zattach_api = new ZendeskAttachmentsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         zattach_api.redactCommentAttachment(123, 456, 789);
         Test.stopTest();
 

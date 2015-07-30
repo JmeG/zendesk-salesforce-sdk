@@ -44,7 +44,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.getOrganizations();
         Test.stopTest();
 
@@ -57,7 +57,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.getOrganizations(new Map<String, Object>{'page'=>2});
         Test.stopTest();
 
@@ -70,7 +70,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.getOrganizationsByIds(new Set<Long> {123, 456});
         Test.stopTest();
 
@@ -83,7 +83,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.getOrganizationsByExternalIds(new Set<String> {'123', '456'});
         Test.stopTest();
 
@@ -96,7 +96,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.autocompleteSearch('foo');
         Test.stopTest();
 
@@ -109,7 +109,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.searchOrganizationsByExternalId('abc123');
         Test.stopTest();
 
@@ -122,7 +122,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskOrganizationsAPI.OrganizationsWrapper results = zorgs_api.getUserOrganizations(123);
         Test.stopTest();
 
@@ -135,7 +135,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationResponse());
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		Map<String, Object> results = zorgs_api.getOrganizationRelatedInfo(123);
         Test.stopTest();
 
@@ -146,7 +146,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationResponse());
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskOrganizationsAPI.OrganizationWrapper wrapper = zorgs_api.getOrganization(123);
         Test.stopTest();
 
@@ -162,7 +162,7 @@ public class ZendeskOrganizationsTests {
         zorg.name = 'new org';
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		Long newOrgId = zorgs_api.createOrganization(zorg);
         Test.stopTest();
 
@@ -178,7 +178,7 @@ public class ZendeskOrganizationsTests {
         zorg2.name = 'new org 2';
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskTypes.ZJobStatus jobStatus = zorgs_api.createOrganizations(new ZendeskTypes.ZOrganization[] {zorg1, zorg2});
         Test.stopTest();
 
@@ -192,7 +192,7 @@ public class ZendeskOrganizationsTests {
         zorg.name = 'new org name';
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		zorgs_api.updateOrganization(123, zorg);
         Test.stopTest();
 
@@ -210,7 +210,7 @@ public class ZendeskOrganizationsTests {
         zorg2.name = 'new name 2';
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskTypes.ZJobStatus jobStatus = zorgs_api.updateOrganizations(new ZendeskTypes.ZOrganization[] {zorg1, zorg2});
         Test.stopTest();
 
@@ -224,7 +224,7 @@ public class ZendeskOrganizationsTests {
         zorg.notes = 'new notes';
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskTypes.ZJobStatus jobStatus = zorgs_api.updateOrganizations(new Set<Long> {123, 456}, zorg);
         Test.stopTest();
 
@@ -238,7 +238,7 @@ public class ZendeskOrganizationsTests {
         zorg.notes = 'new notes';
 
         Test.startTest();
-		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+		ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
 		ZendeskTypes.ZJobStatus jobStatus = zorgs_api.updateOrganizations(new Set<String> {'123', '456'}, zorg);
         Test.stopTest();
 
@@ -249,7 +249,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         zorgs_api.deleteOrganization(123);
         Test.stopTest();
 
@@ -260,7 +260,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
-        ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         ZendeskTypes.ZJobStatus jobStatus = zorgs_api.deleteOrganizations(new Set<Long> {123, 456});
         Test.stopTest();
 
@@ -271,7 +271,7 @@ public class ZendeskOrganizationsTests {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
-        ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskOrganizationsAPI zorgs_api = new ZendeskOrganizationsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         ZendeskTypes.ZJobStatus jobStatus = zorgs_api.deleteOrganizations(new Set<String> {'123', '456'} );
         Test.stopTest();
 

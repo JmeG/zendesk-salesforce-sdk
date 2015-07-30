@@ -6,7 +6,7 @@ public class ZendeskOrgSearchController {
     private String username;
     private String pwdOrToken;
     private String authType;
-    private ZendeskAPI zapi;
+    private ZendeskConnection zconn;
 
     public String pageMessage {get;set;}
     public String searchText {get;set;}
@@ -36,10 +36,10 @@ public class ZendeskOrgSearchController {
                 pwdOrToken = settings.Password_or_Token__c;
                 authType = settings.Authentication_Type__c;
 
-                zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-                zapi.debugResponseStatus = true;
-                zapi.debugResponseBody = true;
-                zapi.debugRequest = true;
+                zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+                zconn.debugResponseStatus = true;
+                zconn.debugResponseBody = true;
+                zconn.debugRequest = true;
             }
             else {
                 pageMessage = 'Zendesk API settings are not configured';
@@ -69,7 +69,7 @@ public class ZendeskOrgSearchController {
 
     public void doSearch(Long page) {
         try {
-            ZendeskOrganizationsAPI zorganizations = new ZendeskOrganizationsAPI(zapi);
+            ZendeskOrganizationsAPI zorganizations = new ZendeskOrganizationsAPI(zconn);
             ZendeskOrganizationsAPI.OrganizationsWrapper orgsWrapper = null;
 
             Map<String, Object> qparams = new Map<String, Object>{'per_page'=>ORGS_PER_PAGE};

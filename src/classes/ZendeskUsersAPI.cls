@@ -16,8 +16,8 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 		public UsersWrapper(List<ZUser> users) { this.users = users; }
 	}
 
-	public ZendeskUsersAPI(ZendeskAPI zapi) {
-		super(zapi);
+	public ZendeskUsersAPI(ZendeskConnection zconn) {
+		super(zconn);
 	}
 
 	public Long createUser(String name, String email) {
@@ -34,25 +34,25 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 	public Long createUser(ZUser zuser) {
 		if (zuser == null) { throw new ZendeskException('zuser parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('POST', '/users.json');
+		HttpRequest req = zconn.createRequest('POST', '/users.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
-		UserWrapper resultWrapper = (UserWrapper)JSON.deserialize(zapi.sendRequest(req), UserWrapper.class);
+		UserWrapper resultWrapper = (UserWrapper)JSON.deserialize(zconn.sendRequest(req), UserWrapper.class);
 		return ((resultWrapper==null || resultWrapper.user == null) ? null : resultWrapper.user.id);
 	}
 
 	public ZendeskTypes.ZJobStatus createUsers(List<ZUser> zusers) {
         if (zusers == null || zusers.isEmpty()) { throw new ZendeskException('zusers parameter cannot be null or empty'); }
-        HttpRequest req = zapi.createRequest('POST', '/users/create_many.json');
+        HttpRequest req = zconn.createRequest('POST', '/users/create_many.json');
         req.setBody(stripJsonNulls(JSON.serialize(new UsersWrapper(zusers))));
-        return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+        return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
     }
 
 	public void updateUser(Long userId, ZUser zuser) {
 		if (zuser == null) { throw new ZendeskException('zuser parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/users/'+userId+'.json');
+		HttpRequest req = zconn.createRequest('PUT', '/users/'+userId+'.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
 	}
 
 	public ZendeskTypes.ZJobStatus updateUsers(List<ZUser> zusers) {
@@ -61,27 +61,27 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 			if (zuser.id == null && String.isEmpty(zuser.external_id)) { throw new ZendeskException('Each user must have either an id or external_id populated'); }
 		}
 
-		HttpRequest req = zapi.createRequest('PUT', '/users/update_many.json');
+		HttpRequest req = zconn.createRequest('PUT', '/users/update_many.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new UsersWrapper(zusers))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	public ZendeskTypes.ZJobStatus updateUsers(Set<Long> userIds, ZUser zuser) {
 		if (userIds == null || userIds.isEmpty()) { throw new ZendeskException('userIds parameter cannot be null or empty'); }
         if (zuser == null) { throw new ZendeskException('zuser parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('PUT', '/users/update_many.json?ids=' + toCSV(userIds));
+        HttpRequest req = zconn.createRequest('PUT', '/users/update_many.json?ids=' + toCSV(userIds));
 		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	public ZendeskTypes.ZJobStatus updateUsers(Set<String> externalIds, ZUser zuser) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter cannot be null or empty'); }
 		if (zuser == null) { throw new ZendeskException('zuser parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/users/update_many.json?external_ids=' + toCSV(externalIds));
+		HttpRequest req = zconn.createRequest('PUT', '/users/update_many.json?external_ids=' + toCSV(externalIds));
 		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	public void mergeUsers(Long sourceUserId, Long targetUserId) {
@@ -91,9 +91,9 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 		ZUser u = new ZUser();
 		u.id = targetUserId;
 
-		HttpRequest req = zapi.createRequest('PUT', '/users/'+sourceUserId+'/merge.json');
+		HttpRequest req = zconn.createRequest('PUT', '/users/'+sourceUserId+'/merge.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(u))));
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
 	}
 
 	public Long getUserIdByEmail(String email) {
@@ -107,15 +107,15 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 	public UsersWrapper findUsersByNameOrEmail(String nameOrEmail) {
 		if (String.isBlank(nameOrEmail)) { throw new ZendeskException('nameOrEmail parameter must not be empty'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/users/search.json?query=' + urlEncode(nameOrEmail));
-		return (UsersWrapper)JSON.deserialize(zapi.sendRequest(req), UsersWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/users/search.json?query=' + urlEncode(nameOrEmail));
+		return (UsersWrapper)JSON.deserialize(zconn.sendRequest(req), UsersWrapper.class);
 	}
 
 	public ZUser findUserByEmail(String email) {
 		if (String.isBlank(email)) { throw new ZendeskException('email parameter must not be empty'); }
 
 		// Set the email to lowercase because that's how Zendesk stores it
-		String resBody = zapi.sendRequest(zapi.createRequest('GET', '/users/search.json', new Map<String, Object>{'query'=>urlEncode(email.toLowerCase())}));
+		String resBody = zconn.sendRequest(zconn.createRequest('GET', '/users/search.json', new Map<String, Object>{'query'=>urlEncode(email.toLowerCase())}));
 		UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(resBody, UsersWrapper.class);
 		ZUser user = null;
 		if (wrapper != null && wrapper.users != null) {
@@ -133,41 +133,41 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 	public UserWrapper getUser(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('GET', '/users/'+userId+'.json');
-        return (UserWrapper)JSON.deserialize(zapi.sendRequest(req), UserWrapper.class);
+        HttpRequest req = zconn.createRequest('GET', '/users/'+userId+'.json');
+        return (UserWrapper)JSON.deserialize(zconn.sendRequest(req), UserWrapper.class);
     }
 
 	public ZUser getCurrentUser() {
-        HttpRequest req = zapi.createRequest('GET', '/users/me.json');
-        UserWrapper wrapper = (UserWrapper)JSON.deserialize(zapi.sendRequest(req), UserWrapper.class);
+        HttpRequest req = zconn.createRequest('GET', '/users/me.json');
+        UserWrapper wrapper = (UserWrapper)JSON.deserialize(zconn.sendRequest(req), UserWrapper.class);
         return wrapper.user;
     }
 
 	public Map<String, Object> getUserRelatedInfo(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('GET', '/users/'+userId+'/related.json');
-		return (Map<String, Object>)JSON.deserializeUntyped(zapi.sendRequest(req));
+        HttpRequest req = zconn.createRequest('GET', '/users/'+userId+'/related.json');
+		return (Map<String, Object>)JSON.deserializeUntyped(zconn.sendRequest(req));
 	}
 
 	// /api/v2/users.json
 	public UsersWrapper getUsers() {
-        return getUsersHelper(zapi.createRequest('GET', '/users.json'));
+        return getUsersHelper(zconn.createRequest('GET', '/users.json'));
     }
     public UsersWrapper getUsers(Map<String, Object> queryParams) {
-        return getUsersHelper(zapi.createRequest('GET', '/users.json', queryParams));
+        return getUsersHelper(zconn.createRequest('GET', '/users.json', queryParams));
     }
 
 	public UsersWrapper getUsersByIds(Set<Long> userIds) {
 		if (userIds == null || userIds.isEmpty()) { throw new ZendeskException('userIds parameter cannot be null or empty'); }
 
-        return getUsersHelper(zapi.createRequest('GET', '/users/show_many.json', new Map<String, Object>{'ids'=>toCSV(userIds)}));
+        return getUsersHelper(zconn.createRequest('GET', '/users/show_many.json', new Map<String, Object>{'ids'=>toCSV(userIds)}));
     }
 
 	public UsersWrapper getUsersByExternalIds(Set<String> externalIds) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter cannot be null or empty'); }
 
-        return getUsersHelper(zapi.createRequest('GET', '/users/show_many.json', new Map<String, Object>{'external_ids'=>toCSV(externalIds)}));
+        return getUsersHelper(zconn.createRequest('GET', '/users/show_many.json', new Map<String, Object>{'external_ids'=>toCSV(externalIds)}));
     }
 
 	public UsersWrapper getUsersByGroup(Long groupId) {
@@ -176,7 +176,7 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 	public UsersWrapper getUsersByGroup(Long groupId, Map<String, Object> queryParams) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter cannot be null'); }
 
-        return getUsersHelper(zapi.createRequest('GET', '/groups/'+groupId+'/users.json', queryParams));
+        return getUsersHelper(zconn.createRequest('GET', '/groups/'+groupId+'/users.json', queryParams));
     }
 
 	public UsersWrapper getUsersByOrganization(Long orgId) {
@@ -185,41 +185,41 @@ public class ZendeskUsersAPI extends ZendeskResourceBase {
 	public UsersWrapper getUsersByOrganization(Long orgId, Map<String, Object> queryParams) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter cannot be null'); }
 
-        return getUsersHelper(zapi.createRequest('GET', '/organizations/'+orgId+'/users.json', queryParams));
+        return getUsersHelper(zconn.createRequest('GET', '/organizations/'+orgId+'/users.json', queryParams));
     }
 
 	public UsersWrapper autocompleteSearch(String name) {
 		if (String.isBlank(name) || name.length() < 2) { throw new ZendeskException('name parameter must at least 2 characters'); }
 
-        return getUsersHelper(zapi.createRequest('GET', '/users/autocomplete.json', new Map<String, Object>{'name'=>urlEncode(name)}));
+        return getUsersHelper(zconn.createRequest('GET', '/users/autocomplete.json', new Map<String, Object>{'name'=>urlEncode(name)}));
     }
 
 	public UsersWrapper searchUsersByExternalId(String externalId) {
 		if (String.isBlank(externalId)) { throw new ZendeskException('externalId parameter cannot be null or empty'); }
 
-        return getUsersHelper(zapi.createRequest('GET', '/users/search.json', new Map<String, Object>{'external_id'=>urlEncode(externalId)}));
+        return getUsersHelper(zconn.createRequest('GET', '/users/search.json', new Map<String, Object>{'external_id'=>urlEncode(externalId)}));
     }
 
 	// Helper method for getting Users
 	private UsersWrapper getUsersHelper(HttpRequest req) {
-        return (UsersWrapper)JSON.deserialize(zapi.sendRequest(req), UsersWrapper.class);
+        return (UsersWrapper)JSON.deserialize(zconn.sendRequest(req), UsersWrapper.class);
     }
 
 	public void deleteUser(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
-		zapi.sendRequest(zapi.createRequest('DELETE', '/users/'+userId+'.json'));
+		zconn.sendRequest(zconn.createRequest('DELETE', '/users/'+userId+'.json'));
 	}
 
 	public void deleteUsers(Set<Long> userIds) {
 		if (userIds == null || userIds.isEmpty()) { throw new ZendeskException('userIds parameter cannot be null or empty'); }
 
-		zapi.sendRequest(zapi.createRequest('DELETE', '/users/destroy_many.json', new Map<String, Object>{'ids'=>toCSV(userIds)}));
+		zconn.sendRequest(zconn.createRequest('DELETE', '/users/destroy_many.json', new Map<String, Object>{'ids'=>toCSV(userIds)}));
 	}
 
 	public void deleteUsers(Set<String> externalIds) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter cannot be null or empty'); }
 
-		zapi.sendRequest(zapi.createRequest('DELETE', '/users/destroy_many.json', new Map<String, Object>{'external_ids'=>toCSV(externalIds)}));
+		zconn.sendRequest(zconn.createRequest('DELETE', '/users/destroy_many.json', new Map<String, Object>{'external_ids'=>toCSV(externalIds)}));
 	}
 }

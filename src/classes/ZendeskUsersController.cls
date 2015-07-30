@@ -6,7 +6,7 @@ public class ZendeskUsersController {
     private String username;
     private String pwdOrToken;
     private String authType;
-    private ZendeskAPI zapi;
+    private ZendeskConnection zconn;
     private final Long orgId;
     private final Long groupId;
 
@@ -38,10 +38,10 @@ public class ZendeskUsersController {
                 pwdOrToken = settings.Password_or_Token__c;
                 authType = settings.Authentication_Type__c;
 
-                zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-                zapi.debugResponseStatus = true;
-                zapi.debugResponseBody = true;
-                zapi.debugRequest = true;
+                zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+                zconn.debugResponseStatus = true;
+                zconn.debugResponseBody = true;
+                zconn.debugRequest = true;
             }
             else {
                 pageMessage = 'Zendesk API settings are not configured';
@@ -73,7 +73,7 @@ public class ZendeskUsersController {
         ui_users = new List<UIUser>();
 
         // Get the ticket comments
-        ZendeskUsersAPI users_api = new ZendeskUsersAPI(zapi);
+        ZendeskUsersAPI users_api = new ZendeskUsersAPI(zconn);
         Map<String, Object> qParams = new Map<String, Object> {'per_page'=>PER_PAGE};
         if (page != null) {
             qParams.put('page', page);

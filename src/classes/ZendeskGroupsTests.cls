@@ -35,7 +35,7 @@ public class ZendeskGroupsTests {
         Test.setMock(HttpCalloutMock.class, new MockGroupResponse());
 
         Test.startTest();
-        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         ZendeskGroupsAPI.GroupWrapper wrapper = zgroups_api.getGroup(123);
         Test.stopTest();
 
@@ -48,7 +48,7 @@ public class ZendeskGroupsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         zgroups_api.deleteGroup(123);
         Test.stopTest();
 
@@ -59,7 +59,7 @@ public class ZendeskGroupsTests {
         Test.setMock(HttpCalloutMock.class, new MockGroupResponse());
 
         Test.startTest();
-        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         Long groupId = zgroups_api.createGroup('foo');
         Test.stopTest();
 
@@ -70,7 +70,7 @@ public class ZendeskGroupsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         zgroups_api.updateGroupName(123, 'foo');
         Test.stopTest();
 
@@ -81,7 +81,7 @@ public class ZendeskGroupsTests {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
         Test.startTest();
-        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         Map<Long, ZendeskTypes.ZGroup> fieldsMap = zgroups_api.getAllGroups();
         Test.stopTest();
 
@@ -92,7 +92,7 @@ public class ZendeskGroupsTests {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
         Test.startTest();
-        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         ZendeskGroupsAPI.GroupsWrapper wrapper = zgroups_api.getGroups();
         Test.stopTest();
 
@@ -104,7 +104,7 @@ public class ZendeskGroupsTests {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
         Test.startTest();
-        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         ZendeskGroupsAPI.GroupsWrapper wrapper = zgroups_api.getAssignableGroups();
         Test.stopTest();
 
@@ -116,7 +116,7 @@ public class ZendeskGroupsTests {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
         Test.startTest();
-        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskGroupsAPI zgroups_api = new ZendeskGroupsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         ZendeskGroupsAPI.GroupsWrapper wrapper = zgroups_api.getUserGroups(123);
         Test.stopTest();
 

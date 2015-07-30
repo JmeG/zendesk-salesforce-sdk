@@ -17,8 +17,8 @@ public class ZendeskUserSampleController {
 		pageMessage = '';
 		users = null;
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zconn);
 
 			Long newUserId = zusers_api.createUser(nameInput, emailInput);
 
@@ -34,8 +34,8 @@ public class ZendeskUserSampleController {
 		pageMessage = '';
 		users = null;
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zconn);
 
 			if (String.isEmpty(emailInput)) {
 				throw new ZendeskException('You must enter an email address');
@@ -59,8 +59,8 @@ public class ZendeskUserSampleController {
 		pageMessage = '';
 		users = null;
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zconn);
 
 			String searchStr = '';
 			if (String.isEmpty(nameInput) && String.isEmpty(emailInput)) {
@@ -84,8 +84,8 @@ public class ZendeskUserSampleController {
 		pageMessage = '';
 		users = null;
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zconn);
 
 			ZendeskUsersAPI.UsersWrapper pagedUsers = zusers_api.getUsers();
 			users = pagedUsers.users;

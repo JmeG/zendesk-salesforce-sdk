@@ -13,16 +13,16 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 		public TicketFormsWrapper(List<ZTicketForm> ticket_forms) { this.ticket_forms = ticket_forms; }
 	}
 
-	public ZendeskTicketFormsAPI(ZendeskAPI zapi) {
-		super(zapi);
+	public ZendeskTicketFormsAPI(ZendeskConnection zconn) {
+		super(zconn);
 		ticketFormsMap = new Map<Long, ZTicketForm>();
 	}
 
 	public ZTicketForm getTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/ticket_forms/'+ticketFormId+'.json');
-		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/ticket_forms/'+ticketFormId+'.json');
+		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormWrapper.class);
 		return resultWrapper.ticket_form;
 	}
 
@@ -30,23 +30,23 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 		return getTicketForms(null);
 	}
 	public TicketFormsWrapper getTicketForms(Map<String, Object> queryParams) {
-		HttpRequest req = zapi.createRequest('GET', '/ticket_forms.json', queryParams);
-		return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormsWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/ticket_forms.json', queryParams);
+		return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormsWrapper.class);
 	}
 
 	public void deleteTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', '/ticket_forms/'+ticketFormId+'.json');
-		zapi.sendRequest(req);
+		HttpRequest req = zconn.createRequest('DELETE', '/ticket_forms/'+ticketFormId+'.json');
+		zconn.sendRequest(req);
 	}
 
 	public Long createTicketForm(ZTicketForm ticketForm) {
 		if (ticketForm == null) { throw new ZendeskException('ticketForm parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('POST', '/ticket_forms.json');
+        HttpRequest req = zconn.createRequest('POST', '/ticket_forms.json');
         req.setBody(unreplaceReservedWords(JSON.serialize(new TicketFormWrapper(ticketForm))));
-        TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormWrapper.class);
+        TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
 	}
 
@@ -54,24 +54,24 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
         if (ticketForm == null) { throw new ZendeskException('ticketForm parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('PUT', '/ticket_forms/'+ticketFormId+'.json');
+        HttpRequest req = zconn.createRequest('PUT', '/ticket_forms/'+ticketFormId+'.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketFormWrapper(ticketForm)))));
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
 	}
 
 	public void reorderTicketForms(List<Long> orderedTicketFormIds) {
         if (orderedTicketFormIds == null || orderedTicketFormIds.size() < 2) { throw new ZendeskException('orderedTicketFormIds parameter contain at least 2 items'); }
 
-        HttpRequest req = zapi.createRequest('PUT', '/ticket_forms/reorder.json');
+        HttpRequest req = zconn.createRequest('PUT', '/ticket_forms/reorder.json');
         req.setBody('{"ticket_form_ids": ' + JSON.serialize(orderedTicketFormIds) + '}');
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
     }
 
 	public Long cloneTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('POST', '/ticket_forms/'+ticketFormId+'/clone.json');
-        TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketFormWrapper.class);
+        HttpRequest req = zconn.createRequest('POST', '/ticket_forms/'+ticketFormId+'/clone.json');
+        TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
 	}
 

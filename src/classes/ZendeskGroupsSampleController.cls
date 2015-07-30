@@ -15,8 +15,8 @@ public class ZendeskGroupsSampleController {
 	public PageReference getGroups() {
 		pageMessage = '';
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zconn);
 
 			groupsMap = zgroups.getAllGroups();
 		}
@@ -29,8 +29,8 @@ public class ZendeskGroupsSampleController {
 	public PageReference getGroupById() {
 		pageMessage = '';
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zconn);
 
 			groupsMap = new Map<Long, ZendeskTypes.ZGroup>();
 			ZendeskGroupsAPI.GroupWrapper gw = zgroups.getGroup(groupId);
@@ -50,8 +50,8 @@ public class ZendeskGroupsSampleController {
 	public PageReference getAssignableGroups() {
 		pageMessage = '';
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zconn);
 
 			ZendeskGroupsAPI.GroupsWrapper wrapper = zgroups.getAssignableGroups();
 			groupsMap = new Map<Long, ZendeskTypes.ZGroup>();
@@ -68,8 +68,8 @@ public class ZendeskGroupsSampleController {
 	public PageReference getUserGroups() {
 		pageMessage = '';
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zconn);
 
 			ZendeskGroupsAPI.GroupsWrapper wrapper = zgroups.getUserGroups(userId);
 			groupsMap = new Map<Long, ZendeskTypes.ZGroup>();

@@ -11,15 +11,15 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 		public OrganizationFieldsWrapper(List<ZOrganizationField> organization_fields) { this.organization_fields = organization_fields; }
     }
 
-    public ZendeskOrganizationFieldsAPI(ZendeskAPI zapi) {
-        super(zapi);
+    public ZendeskOrganizationFieldsAPI(ZendeskConnection zconn) {
+        super(zconn);
     }
 
     public ZOrganizationField getField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('GET', '/organization_fields/'+fieldId+'.json');
-        OrganizationFieldWrapper wrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldWrapper.class);
+        HttpRequest req = zconn.createRequest('GET', '/organization_fields/'+fieldId+'.json');
+        OrganizationFieldWrapper wrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationFieldWrapper.class);
         return wrapper.organization_field;
     }
 
@@ -27,30 +27,30 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
         return getFields(null);
     }
     public OrganizationFieldsWrapper getFields(Map<String, Object> queryParams) {
-        HttpRequest req = zapi.createRequest('GET', '/organization_fields.json', queryParams);
-        return (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldsWrapper.class);
+        HttpRequest req = zconn.createRequest('GET', '/organization_fields.json', queryParams);
+        return (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationFieldsWrapper.class);
     }
 
     public void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
-		zapi.sendRequest(zapi.createRequest('DELETE', '/organization_fields/'+fieldId+'.json'));
+		zconn.sendRequest(zconn.createRequest('DELETE', '/organization_fields/'+fieldId+'.json'));
 	}
 
     public void reorderFields(List<Long> orderedFieldIds) {
         if (orderedFieldIds == null || orderedFieldIds.size() < 2) { throw new ZendeskException('orderedFieldIds parameter contain at least 2 items'); }
 
-        HttpRequest req = zapi.createRequest('PUT', '/organization_fields/reorder.json');
+        HttpRequest req = zconn.createRequest('PUT', '/organization_fields/reorder.json');
         req.setBody('{ "organization_field_ids": ' + JSON.serialize(orderedFieldIds) + '}');
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
     }
 
     public Long createField(ZOrganizationField zfield) {
         if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('POST', '/organization_fields.json');
+        HttpRequest req = zconn.createRequest('POST', '/organization_fields.json');
         req.setBody(JSON.serialize(new OrganizationFieldWrapper(zfield)));
-        OrganizationFieldWrapper resultWrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), OrganizationFieldWrapper.class);
+        OrganizationFieldWrapper resultWrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.organization_field == null) ? null : resultWrapper.organization_field.id);
     }
 
@@ -58,9 +58,9 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
         if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
         if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('PUT', '/organization_fields/'+fieldId+'.json');
+        HttpRequest req = zconn.createRequest('PUT', '/organization_fields/'+fieldId+'.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new OrganizationFieldWrapper(zfield)))));
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
     }
 
     // Retrieves all pages of organization fields. Uses the field "key" as the map key

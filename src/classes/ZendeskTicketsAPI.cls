@@ -11,8 +11,8 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		public TicketsWrapper(List<ZTicket> tickets) { this.tickets = tickets; }
 	}
 
-	public ZendeskTicketsAPI(ZendeskAPI zapi) {
-		super(zapi);
+	public ZendeskTicketsAPI(ZendeskConnection zconn) {
+		super(zconn);
 	}
 
 	public TicketWrapper getTicket(Long ticketId) {
@@ -21,8 +21,8 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 	public TicketWrapper getTicket(Long ticketId, Map<String, Object> queryParams) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'.json', queryParams);
-		return (TicketWrapper)JSON.deserialize(zapi.sendRequest(req), TicketWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/tickets/'+ticketId+'.json', queryParams);
+		return (TicketWrapper)JSON.deserialize(zconn.sendRequest(req), TicketWrapper.class);
 	}
 
 	// /api/v2/tickets.json
@@ -30,7 +30,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
         return getTickets(null);
     }
     public TicketsWrapper getTickets(Map<String, Object> queryParams) {
-        return getTicketsHelper(zapi.createRequest('GET', '/tickets.json', queryParams));
+        return getTicketsHelper(zconn.createRequest('GET', '/tickets.json', queryParams));
     }
 
 	// /api/v2/organizations/{organization_id}/tickets.json
@@ -40,7 +40,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 	public TicketsWrapper getTicketsByOrgId(Long orgId, Map<String, Object> queryParams) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter cannot be null'); }
 
-        return getTicketsHelper(zapi.createRequest('GET', '/organizations/'+orgId+'/tickets.json', queryParams));
+        return getTicketsHelper(zconn.createRequest('GET', '/organizations/'+orgId+'/tickets.json', queryParams));
     }
 
 	// /api/v2/users/{user_id}/tickets/requested.json
@@ -50,7 +50,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 	public TicketsWrapper getTicketsByRequesterId(Long requesterId, Map<String, Object> queryParams) {
 		if (requesterId == null) { throw new ZendeskException('requesterId parameter cannot be null'); }
 
-        return getTicketsHelper(zapi.createRequest('GET', '/users/'+requesterId+'/tickets/requested.json', queryParams));
+        return getTicketsHelper(zconn.createRequest('GET', '/users/'+requesterId+'/tickets/requested.json', queryParams));
     }
 
 	// /api/v2/users/{user_id}/tickets/ccd.json
@@ -60,7 +60,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 	public TicketsWrapper getTicketsByCCUserId(Long userId, Map<String, Object> queryParams) {
 		if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
-        return getTicketsHelper(zapi.createRequest('GET', '/users/'+userId+'/tickets/ccd.json', queryParams));
+        return getTicketsHelper(zconn.createRequest('GET', '/users/'+userId+'/tickets/ccd.json', queryParams));
     }
 
 	// /api/v2/users/{user_id}/tickets/assigned.json
@@ -70,7 +70,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 	public TicketsWrapper getTicketsByAssigneeId(Long assigneeId, Map<String, Object> queryParams) {
 		if (assigneeId == null) { throw new ZendeskException('assigneeId parameter cannot be null'); }
 
-        return getTicketsHelper(zapi.createRequest('GET', '/users/'+assigneeId+'/tickets/assigned.json', queryParams));
+        return getTicketsHelper(zconn.createRequest('GET', '/users/'+assigneeId+'/tickets/assigned.json', queryParams));
     }
 
 	// /api/v2/tickets/recent.json
@@ -78,14 +78,14 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		return getRecentTickets(null);
     }
 	public TicketsWrapper getRecentTickets(Map<String, Object> queryParams) {
-        return getTicketsHelper(zapi.createRequest('GET', '/users/tickets/recent.json', queryParams));
+        return getTicketsHelper(zconn.createRequest('GET', '/users/tickets/recent.json', queryParams));
     }
 
 	// /api/v2/tickets/show_many.json?ids={ids}
 	public TicketsWrapper getTicketsByIds(Set<Long> ticketIds) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter cannot be null or empty'); }
 
-        return getTicketsHelper(zapi.createRequest('GET', '/tickets/show_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)}));
+        return getTicketsHelper(zconn.createRequest('GET', '/tickets/show_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)}));
     }
 
 	// /api/v2/tickets/{id}/incidents.json
@@ -95,7 +95,7 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 	public TicketsWrapper getTicketIncidents(Long ticketId, Map<String, Object> queryParams) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
-        return getTicketsHelper(zapi.createRequest('GET', '/tickets/'+ticketId+'/incidents.json', queryParams));
+        return getTicketsHelper(zconn.createRequest('GET', '/tickets/'+ticketId+'/incidents.json', queryParams));
     }
 
 	// /api/v2/problems.json
@@ -103,26 +103,26 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
         return getTicketProblems(null);
     }
 	public TicketsWrapper getTicketProblems(Map<String, Object> queryParams) {
-        return getTicketsHelper(zapi.createRequest('GET', '/tickets/problem.json', queryParams));
+        return getTicketsHelper(zconn.createRequest('GET', '/tickets/problem.json', queryParams));
     }
 
 	// Helper method for getting tickets
 	private TicketsWrapper getTicketsHelper(HttpRequest req) {
-        return (TicketsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketsWrapper.class);
+        return (TicketsWrapper)JSON.deserialize(zconn.sendRequest(req), TicketsWrapper.class);
     }
 
 	public ZendeskUsersAPI.UsersWrapper getTicketCollaborators(Long ticketId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'/collaborators.json');
-		return (ZendeskUsersAPI.UsersWrapper)JSON.deserialize(zapi.sendRequest(req), ZendeskUsersAPI.UsersWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/tickets/'+ticketId+'/collaborators.json');
+		return (ZendeskUsersAPI.UsersWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskUsersAPI.UsersWrapper.class);
     }
 
 	public Map<String, Object> getTwicketStatus(Long ticketId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('GET', '/channels/twitter/tickets/'+ticketId+'/statuses.json');
-		return (Map<String, Object>)JSON.deserializeUntyped(zapi.sendRequest(req));
+        HttpRequest req = zconn.createRequest('GET', '/channels/twitter/tickets/'+ticketId+'/statuses.json');
+		return (Map<String, Object>)JSON.deserializeUntyped(zconn.sendRequest(req));
 	}
 
 	public Long createTicket(TicketType type, String subject, String commentText, Long requesterId) {
@@ -164,9 +164,9 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 	public Long createTicket(ZTicket zticket) {
 		if (zticket == null) { throw new ZendeskException('zticket parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('POST', '/tickets.json');
+		HttpRequest req = zconn.createRequest('POST', '/tickets.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(zticket)))));
-		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketWrapper.class);
+		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
 	}
 
@@ -184,26 +184,26 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		gen.writeEndObject();
 		gen.writeEndObject();
 
-		HttpRequest req = zapi.createRequest('POST', '/channels/twitter/tickets.json', gen.getAsString());
-		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketWrapper.class);
+		HttpRequest req = zconn.createRequest('POST', '/channels/twitter/tickets.json', gen.getAsString());
+		TicketWrapper resultWrapper = (TicketWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket == null) ? null : resultWrapper.ticket.id);
 	}
 
 	public ZendeskTypes.ZJobStatus createTickets(List<ZTicket> ztickets) {
 		if (ztickets == null || ztickets.isEmpty()) { throw new ZendeskException('ztickets parameter cannot be null or empty'); }
 
-		HttpRequest req = zapi.createRequest('POST', '/tickets/create_many.json');
+		HttpRequest req = zconn.createRequest('POST', '/tickets/create_many.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketsWrapper(ztickets)))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	public void updateTicket(Long ticketId, ZTicket zticket) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 		if (zticket == null) { throw new ZendeskException('zticket parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/tickets/'+ticketId+'.json');
+		HttpRequest req = zconn.createRequest('PUT', '/tickets/'+ticketId+'.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(zticket)))));
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
 	}
 
 	public ZendeskTypes.ZJobStatus updateTickets(List<ZTicket> ztickets) {
@@ -212,18 +212,18 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 			if (zticket.id == null) { throw new ZendeskException('Each Ticket must have an id populated'); }
 		}
 
-		HttpRequest req = zapi.createRequest('PUT', '/tickets/update_many.json');
+		HttpRequest req = zconn.createRequest('PUT', '/tickets/update_many.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketsWrapper(ztickets)))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	public ZendeskTypes.ZJobStatus updateTickets(Set<Long> ticketIds, ZTicket zticket) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter cannot be null or empty'); }
         if (zticket == null) { throw new ZendeskException('zticket parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('PUT', '/tickets/update_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
+        HttpRequest req = zconn.createRequest('PUT', '/tickets/update_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(zticket)))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	// helper method to add a new comment to a ticket
@@ -236,9 +236,9 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		ticket.comment.body = commentText;
 		ticket.comment.x_public = isPublic;
 
-		HttpRequest req = zapi.createRequest('PUT', '/tickets/'+ticketId+'.json');
+		HttpRequest req = zconn.createRequest('PUT', '/tickets/'+ticketId+'.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(ticket)))));
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
 	}
 
 	// helper method to add a new comment to a ticket and change its status
@@ -253,9 +253,9 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
 		ticket.comment.x_public = isPublic;
 		ticket.status = status.status;
 
-		HttpRequest req = zapi.createRequest('PUT', '/tickets/'+ticketId+'.json');
+		HttpRequest req = zconn.createRequest('PUT', '/tickets/'+ticketId+'.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(ticket)))));
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
 	}
 
 	public ZendeskTypes.ZJobStatus mergeTickets(Set<Long> sourceTicketIds, String sourceComment, Long targetTicketId, String targetComment) {
@@ -270,48 +270,48 @@ public class ZendeskTicketsAPI extends ZendeskResourceBase {
         if (!String.isEmpty(sourceComment)) { gen.writeStringField('source_comment', sourceComment); }
         gen.writeEndObject();
 
-		HttpRequest req = zapi.createRequest('POST', '/tickets/'+targetTicketId+'/merge.json');
+		HttpRequest req = zconn.createRequest('POST', '/tickets/'+targetTicketId+'/merge.json');
 		req.setBody(gen.getAsString());
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	public void deleteTicket(Long ticketId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
-		zapi.sendRequest(zapi.createRequest('DELETE', '/tickets/'+ticketId+'.json'));
+		zconn.sendRequest(zconn.createRequest('DELETE', '/tickets/'+ticketId+'.json'));
 	}
 
 	public void deleteTickets(Set<Long> ticketIds) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter cannot be null or empty'); }
 
-		zapi.sendRequest(zapi.createRequest('DELETE', '/tickets/destroy_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)}));
+		zconn.sendRequest(zconn.createRequest('DELETE', '/tickets/destroy_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)}));
 	}
 
 	public Map<String, Object> getTicketRelatedInfo(Long ticketId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
-        HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'/related.json');
-		return (Map<String, Object>)JSON.deserializeUntyped(zapi.sendRequest(req));
+        HttpRequest req = zconn.createRequest('GET', '/tickets/'+ticketId+'/related.json');
+		return (Map<String, Object>)JSON.deserializeUntyped(zconn.sendRequest(req));
 	}
 
 	public void markTicketAsSpam(Long ticketId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
-		zapi.sendRequest(zapi.createRequest('PUT', '/tickets/'+ticketId+'/mark_as_spam.json'));
+		zconn.sendRequest(zconn.createRequest('PUT', '/tickets/'+ticketId+'/mark_as_spam.json'));
 	}
 
 	public ZendeskTypes.ZJobStatus markTicketsAsSpam(Set<Long> ticketIds) {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter cannot be null or empty'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/tickets/mark_many_as_spam.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zapi.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		HttpRequest req = zconn.createRequest('PUT', '/tickets/mark_many_as_spam.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}
 
 	public TicketsWrapper autocompleteProblems(String text) {
 		if (String.isBlank(text) || text.length() < 2) { throw new ZendeskException('text parameter must at least 2 characters'); }
 
-		HttpRequest req = zapi.createRequest('POST', '/problems/autocomplete.json', new Map<String, Object>{'text'=>text});
-		return (TicketsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketsWrapper.class);
+		HttpRequest req = zconn.createRequest('POST', '/problems/autocomplete.json', new Map<String, Object>{'text'=>text});
+		return (TicketsWrapper)JSON.deserialize(zconn.sendRequest(req), TicketsWrapper.class);
     }
 
 	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"

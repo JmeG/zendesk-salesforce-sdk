@@ -17,8 +17,8 @@ public class ZendeskUserFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZUserField>();
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zconn);
 
 			fieldsMap = zfields_api.getAllFields();
 		}
@@ -32,8 +32,8 @@ public class ZendeskUserFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZUserField>();
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zconn);
 
 			Map<String, ZendeskTypes.ZUserField> allFieldsMap = zfields_api.getAllFields();
 			if (allFieldsMap.containsKey(searchText)) {
@@ -54,8 +54,8 @@ public class ZendeskUserFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZUserField>();
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zconn);
 
 			ZendeskTypes.ZUserField field = zfields_api.getField(userFieldId);
 			if (field != null) {
@@ -75,8 +75,8 @@ public class ZendeskUserFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZUserField>();
 		try {
-			ZendeskAPI zapi = new ZendeskAPI(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskAPI.AuthType.Password : ZendeskAPI.AuthType.Token));
-			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zapi);
+			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zconn);
 
 			String[] splits = fieldOrderCSV.split(',');
 			List<Long> orderedFieldIds = new List<Long>();

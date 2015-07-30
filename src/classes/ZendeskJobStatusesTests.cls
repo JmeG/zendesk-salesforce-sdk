@@ -26,7 +26,7 @@ private class ZendeskJobStatusesTests {
         Test.setMock(HttpCalloutMock.class, new MockStatusResponse());
 
         Test.startTest();
-        ZendeskJobStatusesAPI zjobs_api = new ZendeskJobStatusesAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskJobStatusesAPI zjobs_api = new ZendeskJobStatusesAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         ZendeskTypes.ZJobStatus jstatus = zjobs_api.getJobStatus('abc123');
         Test.stopTest();
 
@@ -38,7 +38,7 @@ private class ZendeskJobStatusesTests {
         Test.setMock(HttpCalloutMock.class, new MockStatusesResponse());
 
         Test.startTest();
-        ZendeskJobStatusesAPI zjobs_api = new ZendeskJobStatusesAPI(new ZendeskAPI('s', 'u', 'p', ZendeskAPI.AuthType.Password));
+        ZendeskJobStatusesAPI zjobs_api = new ZendeskJobStatusesAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
         List<ZendeskTypes.ZJobStatus> jobs = zjobs_api.getJobStatuses(new Set<String> {'abc123', 'abc345'});
         Test.stopTest();
 

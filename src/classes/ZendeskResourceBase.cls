@@ -1,9 +1,9 @@
 public abstract class ZendeskResourceBase extends ZendeskTypes {
 
-	protected final ZendeskAPI zapi;
+	protected final ZendeskConnection zconn;
 
-    public ZendeskResourceBase(ZendeskAPI zapi) {
-		this.zapi = zapi;
+    public ZendeskResourceBase(ZendeskConnection zconn) {
+		this.zconn = zconn;
 	}
 
 	// Realllly hacky way of stripping out nulls. Experimenting with this instead of using deserializeUntyped

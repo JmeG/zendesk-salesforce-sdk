@@ -13,16 +13,16 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 		public TicketFieldsWrapper(List<ZTicketField> ticket_fields) { this.ticket_fields = ticket_fields; }
 	}
 
-	public ZendeskTicketFieldsAPI(ZendeskAPI zapi) {
-		super(zapi);
+	public ZendeskTicketFieldsAPI(ZendeskConnection zconn) {
+		super(zconn);
 		fieldsMap = new Map<Long, ZTicketField>();
 	}
 
 	public ZTicketField getField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/ticket_fields/'+fieldId+'.json');
-		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/ticket_fields/'+fieldId+'.json');
+		TicketFieldWrapper wrapper = (TicketFieldWrapper)JSON.deserialize(zconn.sendRequest(req), TicketFieldWrapper.class);
 		return wrapper.ticket_field;
 	}
 
@@ -30,23 +30,23 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 		return getFields(null);
 	}
 	public TicketFieldsWrapper getFields(Map<String, Object> queryParams) {
-		HttpRequest req = zapi.createRequest('GET', '/ticket_fields.json', queryParams);
-		return (TicketFieldsWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldsWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/ticket_fields.json', queryParams);
+		return (TicketFieldsWrapper)JSON.deserialize(zconn.sendRequest(req), TicketFieldsWrapper.class);
 	}
 
 	public void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('DELETE', '/ticket_fields/'+fieldId+'.json');
-		zapi.sendRequest(req);
+		HttpRequest req = zconn.createRequest('DELETE', '/ticket_fields/'+fieldId+'.json');
+		zconn.sendRequest(req);
 	}
 
 	public Long createField(ZTicketField zfield) {
 		if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('POST', '/ticket_fields.json');
+		HttpRequest req = zconn.createRequest('POST', '/ticket_fields.json');
 		req.setBody(JSON.serialize(new TicketFieldWrapper(zfield)));
-		TicketFieldWrapper resultWrapper = (TicketFieldWrapper)JSON.deserialize(zapi.sendRequest(req), TicketFieldWrapper.class);
+		TicketFieldWrapper resultWrapper = (TicketFieldWrapper)JSON.deserialize(zconn.sendRequest(req), TicketFieldWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_field == null) ? null : resultWrapper.ticket_field.id);
 	}
 
@@ -54,9 +54,9 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 		if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/ticket_fields/'+fieldId+'.json');
+		HttpRequest req = zconn.createRequest('PUT', '/ticket_fields/'+fieldId+'.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new TicketFieldWrapper(zfield))));
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
 	}
 
 	// Retrieves all pages of ticket fields. Uses the field "id" as the map key

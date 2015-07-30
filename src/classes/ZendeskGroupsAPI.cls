@@ -13,23 +13,23 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 		public GroupsWrapper(List<ZGroup> groups) { this.groups = groups; }
 	}
 
-	public ZendeskGroupsAPI(ZendeskAPI zapi) {
-		super(zapi);
+	public ZendeskGroupsAPI(ZendeskConnection zconn) {
+		super(zconn);
 		groupsMap = new Map<Long, ZGroup>();
 	}
 
 	public GroupWrapper getGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/groups/'+groupId+'.json');
-		return (GroupWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/groups/'+groupId+'.json');
+		return (GroupWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), GroupWrapper.class);
 	}
 
 	public GroupsWrapper getGroups() {
 		return getGroups(null);
 	}
 	public GroupsWrapper getGroups(Map<String, Object> queryParams) {
-		return getGroupsInternal(zapi.createRequest('GET', '/groups.json', queryParams));
+		return getGroupsInternal(zconn.createRequest('GET', '/groups.json', queryParams));
 	}
 
 	// Get all assignable groups
@@ -37,7 +37,7 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 		return getAssignableGroups(null);
 	}
 	public GroupsWrapper getAssignableGroups(Map<String, Object> queryParams) {
-		return getGroupsInternal(zapi.createRequest('GET', '/groups/assignable.json', queryParams));
+		return getGroupsInternal(zconn.createRequest('GET', '/groups/assignable.json', queryParams));
 	}
 
 	// Get the groups that a user is a member of
@@ -49,12 +49,12 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 	public GroupsWrapper getUserGroups(Long userId, Map<String, Object> queryParams) {
 		if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
-		return getGroupsInternal(zapi.createRequest('GET', '/users/'+userId+'/groups.json', queryParams));
+		return getGroupsInternal(zconn.createRequest('GET', '/users/'+userId+'/groups.json', queryParams));
 	}
 
 	// Private helper method to query multiple groups
 	private GroupsWrapper getGroupsInternal(HttpRequest req) {
-		return (GroupsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupsWrapper.class);
+		return (GroupsWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), GroupsWrapper.class);
 	}
 
 	// Simplified createGroup method that takes the only relevant parameter "name"
@@ -69,9 +69,9 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 	public Long createGroup(ZGroup x_group) {
 		if (x_group == null) { throw new ZendeskException('x_group parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('POST', '/groups.json');
+		HttpRequest req = zconn.createRequest('POST', '/groups.json');
 		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group)))));
-		GroupWrapper resultWrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), GroupWrapper.class);
+		GroupWrapper resultWrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), GroupWrapper.class);
 		return ((resultWrapper==null || resultWrapper.x_group == null) ? null : resultWrapper.x_group.id);
 	}
 
@@ -88,15 +88,15 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 	public void updateGroup(Long groupId, ZGroup x_group) {
 		if (x_group == null) { throw new ZendeskException('x_group parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/groups/'+groupId+'.json');
+		HttpRequest req = zconn.createRequest('PUT', '/groups/'+groupId+'.json');
 		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group)))));
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
 	}
 
 	public void deleteGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter cannot be null'); }
 
-		zapi.sendRequest(zapi.createRequest('DELETE', '/groups/'+groupId+'.json'));
+		zconn.sendRequest(zconn.createRequest('DELETE', '/groups/'+groupId+'.json'));
 	}
 
 	// Retrieves all pages of groups. Uses the Group field "id" as the map key

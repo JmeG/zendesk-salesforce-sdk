@@ -1,5 +1,5 @@
 // This class provides functionality for creating requests to interact with the Zendesk API
-public class ZendeskAPI {
+public class ZendeskConnection {
 
 	private final static String DEFAULT_USER_AGENT =  'Force.com Toolkit for Zendesk';
 
@@ -24,7 +24,7 @@ public class ZendeskAPI {
 		public String description;
 	}
 
-	public ZendeskAPI(String subdomain, String username, String password) {
+	public ZendeskConnection(String subdomain, String username, String password) {
 		if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
 		if (String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
 		if (String.isBlank(password)) { throw new ZendeskException('password parameter must not be empty'); }
@@ -37,7 +37,7 @@ public class ZendeskAPI {
 
 	// Use this constructor if you need to specify a Token instead of a Password
 	// This constructor will allow you to choose either method of authentication
-	public ZendeskAPI(String subdomain, String username, String passwordOrToken, AuthType authenticationType) {
+	public ZendeskConnection(String subdomain, String username, String passwordOrToken, AuthType authenticationType) {
 		if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
 		if (String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
 		if (String.isBlank(passwordOrToken)) { throw new ZendeskException('passwordOrToken parameter must not be empty'); }

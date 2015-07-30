@@ -9,8 +9,8 @@ public class ZendeskTicketCommentsAPI extends ZendeskResourceBase {
 		public List<ZTicketComment> comments {get;set;}
 	}
 
-	public ZendeskTicketCommentsAPI(ZendeskAPI zapi) {
-		super(zapi);
+	public ZendeskTicketCommentsAPI(ZendeskConnection zconn) {
+		super(zconn);
 	}
 
 	public TicketCommentsWrapper getTicketComments(Long ticketId) {
@@ -20,8 +20,8 @@ public class ZendeskTicketCommentsAPI extends ZendeskResourceBase {
 	public TicketCommentsWrapper getTicketComments(Long ticketId, Map<String, Object> queryParams) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
-		HttpRequest req = zapi.createRequest('GET', '/tickets/'+ticketId+'/comments.json', queryParams);
-		return (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(zapi.sendRequest(req)), TicketCommentsWrapper.class);
+		HttpRequest req = zconn.createRequest('GET', '/tickets/'+ticketId+'/comments.json', queryParams);
+		return (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketCommentsWrapper.class);
 	}
 
 	public void redactStringInComment(Long ticketId, Long ticketCommentId, String redactText) {
@@ -29,16 +29,16 @@ public class ZendeskTicketCommentsAPI extends ZendeskResourceBase {
 		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter cannot be null'); }
 		if (String.isBlank(redactText)) { throw new ZendeskException('redactText parameter must not be empty'); }
 
-		HttpRequest req = zapi.createRequest('PUT', '/tickets/'+ticketId+'/comments/'+ticketCommentId+'/redact.json');
+		HttpRequest req = zconn.createRequest('PUT', '/tickets/'+ticketId+'/comments/'+ticketCommentId+'/redact.json');
 		req.setBody('{"text": "' + redactText + '"}');
-		zapi.sendRequest(req);
+		zconn.sendRequest(req);
 	}
 
 	public void makeCommentPrivate(Long ticketId, Long ticketCommentId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter cannot be null'); }
 
-		zapi.sendRequest(zapi.createRequest('PUT', '/tickets/'+ticketId+'/comments/'+ticketCommentId+'/make_private.json'));
+		zconn.sendRequest(zconn.createRequest('PUT', '/tickets/'+ticketId+'/comments/'+ticketCommentId+'/make_private.json'));
 	}
 
 	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"

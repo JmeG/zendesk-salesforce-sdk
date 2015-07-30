@@ -14,7 +14,7 @@ public abstract class ZendeskPagingBase extends ZendeskSideLoadingBase {
     private static Long getPageNumber(String pageUrl) {
         Long page = null;
         if (!String.isEmpty(pageUrl)) {
-            Map<String, String> qmap = ZendeskAPI.getQueryStringMap(pageUrl);
+            Map<String, String> qmap = ZendeskConnection.getQueryStringMap(pageUrl);
             if (qmap.containsKey('page')) {
                 page = Long.valueOf(qmap.get('page'));
             }
