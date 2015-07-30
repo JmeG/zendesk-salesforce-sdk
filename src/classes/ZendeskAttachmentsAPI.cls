@@ -30,7 +30,7 @@ public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 			Map<String, Object> responseMap = (Map<String, Object>)JSON.deserializeUntyped(zapi.sendRequest(req));
 
 			// Extract the token from the response
-			if (jsonMap.containsKey('upload')) {
+			if (responseMap.containsKey('upload')) {
 				Map<String, Object> upload = (Map<String, Object>)responseMap.get('upload');
 				zendeskAttachmentToken = (String)upload.get('token');
 			}
