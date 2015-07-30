@@ -21,7 +21,7 @@ public abstract class ZendeskResourceBase extends ZendeskTypes {
 	}
 
 	public static Long getUnixEpochTime(DateTime dt) {
-	   return (dt.getTime() / 1000);
+	   return (dt == null ? null : (dt.getTime() / 1000));
 	}
 
 	public static String urlEncode(String str) {
