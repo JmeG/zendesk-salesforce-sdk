@@ -20,7 +20,7 @@ public class ZendeskSearchAPI extends ZendeskResourceBase {
 		if (String.isEmpty(query)) { throw new ZendeskException('query parameter cannot be null or empty'); }
 
 		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
-		additionalParams.put('query', urlEncode(searchString));
+		additionalParams.put('query', urlEncode(query));
 		HttpRequest req = zapi.createRequest('GET', '/search.json', additionalParams);
 		return (SearchResultsWrapper)JSON.deserialize(zapi.sendRequest(req), SearchResultsWrapper.class);
 	}
