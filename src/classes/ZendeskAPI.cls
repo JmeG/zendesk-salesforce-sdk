@@ -106,6 +106,19 @@ public class ZendeskAPI {
 		return str;
 	}
 
+	public static Map<String, String> getQueryStringMap(String url) {
+        Map<String, String> queryStringMap = new Map<String, String>();
+        if (!String.isEmpty(url)) {
+            for (String s : url.substringAfter('?').split('&')) {
+				if (s != null && s.contains('=')) {
+                	String[] splits = s.split('=');
+                	queryStringMap.put(splits[0], (splits.size() > 1 ? splits[1] : null));
+				}
+            }
+        }
+        return queryStringMap;
+    }
+
 	// Validate that the API login parameters are valid by simply trying to get our own user record
 	public Boolean canLogin() {
         HttpResponse res = new Http().send(createRequest('GET', '/users/me.json'));
