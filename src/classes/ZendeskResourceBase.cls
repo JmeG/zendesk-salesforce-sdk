@@ -20,6 +20,10 @@ public abstract class ZendeskResourceBase extends ZendeskTypes {
 		return jsonString;
 	}
 
+	public static Long getUnixEpochTime(DateTime dt) {
+	   return (dt.getTime() / 1000);
+	}
+
 	public static String urlEncode(String str) {
 		return (str == null ? null : EncodingUtil.urlEncode(str, 'UTF-8'));
 	}
