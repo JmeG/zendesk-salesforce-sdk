@@ -4,4 +4,5 @@
     <label>Zendesk Toolkit</label>
     <tab>standard-Account</tab>
     <tab>Zendesk_Samples</tab>
+    <tab>Zendesk_OrgSearch</tab>
 </CustomApplication>
