@@ -1,5 +1,5 @@
 public class ZendeskOrgSearchController {
-    
+
     private final static Integer ORGS_PER_PAGE = 30;
 
     public String subdomain {get; private set;}
@@ -82,7 +82,7 @@ public class ZendeskOrgSearchController {
                 orgsWrapper = zorganizations.getOrganizations(qparams);
             }
             else {
-                orgsWrapper = zorganizations.getOrganizationsByName(searchText, qparams);
+                orgsWrapper = zorganizations.autocompleteSearch(searchText, qparams);
             }
 
             previous_page = orgsWrapper.previousPageNumber;
