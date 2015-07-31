@@ -1,7 +1,7 @@
 // This class provides functionality to call the Zendesk Ticket Comments API
 global class ZendeskTicketCommentsAPI extends ZendeskResourceBase {
 
-	private class TicketCommentWrapper {
+	global class TicketCommentWrapper {
 		global ZTicketComment comment {get;set;}
 	}
 

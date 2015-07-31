@@ -1,7 +1,7 @@
 // This class provides functionality to call the Zendesk Attachments API
 global class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 
-	private class AttachmentWrapper {
+	global class AttachmentWrapper {
 		global ZAttachment attachment {get;set;}
 	}
 

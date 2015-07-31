@@ -1,7 +1,7 @@
 // This class provides functionality to call the Zendesk Organization Fields API
 global class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 
-    private class OrganizationFieldWrapper {
+    global class OrganizationFieldWrapper {
         global ZOrganizationField organization_field {get;set;}
 		global OrganizationFieldWrapper(ZOrganizationField organization_field) { this.organization_field = organization_field; }
     }

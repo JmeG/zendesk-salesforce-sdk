@@ -1,7 +1,7 @@
 // This class provides functionality to call the Zendesk User Fields API
 global class ZendeskUserFieldsAPI extends ZendeskResourceBase {
 
-    private class UserFieldWrapper {
+    global class UserFieldWrapper {
         global ZUserField user_field {get;set;}
 		global UserFieldWrapper(ZUserField user_field) { this.user_field = user_field; }
     }

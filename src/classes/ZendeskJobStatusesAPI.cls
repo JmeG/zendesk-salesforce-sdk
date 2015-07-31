@@ -1,11 +1,11 @@
 // This class provides functionality to call the Zendesk Job Statuses API
 global class ZendeskJobStatusesAPI extends ZendeskResourceBase {
 
-	private class JobStatusWrapper {
+	global class JobStatusWrapper {
 		global ZJobStatus job_status {get;set;}
 	}
 
-	private class JobStatusesWrapper {
+	global class JobStatusesWrapper {
 		global List<ZJobStatus> job_statuses {get;set;}
 	}
 

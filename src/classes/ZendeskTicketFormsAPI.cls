@@ -3,7 +3,7 @@ global class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 
 	private Map<Long, ZTicketForm> ticketFormsMap;
 
-	private class TicketFormWrapper {
+	global class TicketFormWrapper {
 		global ZTicketForm ticket_form {get;set;}
 		global TicketFormWrapper(ZTicketForm ticket_form) { this.ticket_form = ticket_form; }
 	}

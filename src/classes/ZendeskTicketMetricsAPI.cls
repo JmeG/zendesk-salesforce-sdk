@@ -1,7 +1,7 @@
 // This class provides functionality to call the Zendesk Ticket Metrics API
 global class ZendeskTicketMetricsAPI extends ZendeskResourceBase {
 
-	private class TicketMetricWrapper {
+	global class TicketMetricWrapper {
 		global ZTicketMetrics ticket_metric {get;set;}
 	}
 

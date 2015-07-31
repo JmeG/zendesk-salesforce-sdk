@@ -19,7 +19,7 @@ global class ZendeskConnection {
 
 	global Enum AuthType { Password, Token }
 
-	private class ZendeskError {
+	global class ZendeskError {
 		global String error;
 		global String description;
 	}

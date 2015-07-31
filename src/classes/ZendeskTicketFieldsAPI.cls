@@ -3,7 +3,7 @@ global class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 
 	private Map<Long, ZTicketField> fieldsMap {get; private set; }
 
-	private class TicketFieldWrapper {
+	global class TicketFieldWrapper {
 		global ZTicketField ticket_field {get;set;}
 		global TicketFieldWrapper(ZTicketField ticket_field) { this.ticket_field = ticket_field; }
 	}
