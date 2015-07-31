@@ -9,7 +9,7 @@ private class ZendeskResourceBaseTests {
     //}
 
     static testMethod void testToCSV() {
-        //Test1 t1 = new Test1(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
+        //Test1 t1 = new Test1(new ZendeskConnection('s','u','p'));
 
         Test.startTest();
         System.assertEquals('1,2,3', ZendeskResourceBase.toCSV(new Set<Long> { 1, 2, 3 }));

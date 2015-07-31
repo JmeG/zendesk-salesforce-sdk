@@ -13,7 +13,7 @@ public class ZendeskConnectionTests {
     }
 
     static testMethod void testCreateRequest() {
-        ZendeskConnection zconn = new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password);
+        ZendeskConnection zconn = new ZendeskConnection('s','u','p');
         HttpRequest req = zconn.createRequest('GET', '/users.json', new Map<String, Object>{'page'=>'1'});
 
         System.assertEquals('GET', req.getMethod());
@@ -21,7 +21,7 @@ public class ZendeskConnectionTests {
 
     static testMethod void testSendRequest() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
-        ZendeskConnection zconn = new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password);
+        ZendeskConnection zconn = new ZendeskConnection('s','u','p');
         zconn.debugAll = true;
         HttpRequest req = zconn.createRequest('GET', '/users.json');
         String resBody = zconn.sendRequest(req);
@@ -31,7 +31,7 @@ public class ZendeskConnectionTests {
 
     static testMethod void testCanLogin() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
-        ZendeskConnection zconn = new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password);
+        ZendeskConnection zconn = new ZendeskConnection('s','u','p');
 
         System.assertEquals(true, zconn.canLogin());
     }

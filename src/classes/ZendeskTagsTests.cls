@@ -35,7 +35,7 @@ public class ZendeskTagsTests {
         Test.setMock(HttpCalloutMock.class, new MockListTagsResponse());
 
         Test.startTest();
-        ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
+        ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(new ZendeskConnection('s','u','p'));
         ZendeskTagsAPI.ListTagsWrapper tagsResult = ztags_api.listTags();
         Test.stopTest();
 
@@ -46,7 +46,7 @@ public class ZendeskTagsTests {
         Test.setMock(HttpCalloutMock.class, new MockGetTagsResponse());
 
         Test.startTest();
-        ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
+        ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(new ZendeskConnection('s','u','p'));
         ZendeskTagsAPI.TagsWrapper wrapper = ztags_api.getTags(ZendeskTagsAPI.Resource.users, 123);
         Test.stopTest();
 
@@ -58,7 +58,7 @@ public class ZendeskTagsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
+        ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(new ZendeskConnection('s','u','p'));
         ztags_api.setTags(ZendeskTagsAPI.Resource.users, 123, new String[] {'tag1', 'tag2'});
         Test.stopTest();
 
@@ -69,7 +69,7 @@ public class ZendeskTagsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
+        ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(new ZendeskConnection('s','u','p'));
         ztags_api.addTags(ZendeskTagsAPI.Resource.users, 123, new String[] {'tag1', 'tag2'});
         Test.stopTest();
 
@@ -80,11 +80,23 @@ public class ZendeskTagsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(new ZendeskConnection('s', 'u', 'p', ZendeskConnection.AuthType.Password));
+        ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(new ZendeskConnection('s','u','p'));
         ztags_api.removeTags(ZendeskTagsAPI.Resource.users, 123, new String[] {'tag1', 'tag2'});
         Test.stopTest();
 
         System.assert(true);
+    }
+
+    static testMethod void testAutocompleteTags() {
+        Test.setMock(HttpCalloutMock.class, new MockGetTagsResponse());
+
+        Test.startTest();
+        ZendeskTagsAPI ztags_api = new ZendeskTagsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTagsAPI.TagsWrapper wrapper = ztags_api.autocompleteTags('foo');
+        Test.stopTest();
+
+        System.assertNotEquals(null, wrapper);
+        System.assertEquals(2, wrapper.tags.size());
     }
 
     static testMethod void testZTag() {
