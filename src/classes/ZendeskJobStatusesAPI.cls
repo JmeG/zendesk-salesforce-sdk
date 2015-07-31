@@ -1,19 +1,19 @@
 // This class provides functionality to call the Zendesk Job Statuses API
-public class ZendeskJobStatusesAPI extends ZendeskResourceBase {
+global class ZendeskJobStatusesAPI extends ZendeskResourceBase {
 
 	private class JobStatusWrapper {
-		public ZJobStatus job_status {get;set;}
-	}
-	
-	private class JobStatusesWrapper {
-		public List<ZJobStatus> job_statuses {get;set;}
+		global ZJobStatus job_status {get;set;}
 	}
 
-	public ZendeskJobStatusesAPI(ZendeskConnection zconn) {
+	private class JobStatusesWrapper {
+		global List<ZJobStatus> job_statuses {get;set;}
+	}
+
+	global ZendeskJobStatusesAPI(ZendeskConnection zconn) {
 		super(zconn);
 	}
 
-	public ZJobStatus getJobStatus(String jobId) {
+	global ZJobStatus getJobStatus(String jobId) {
 		if (jobId == null) { throw new ZendeskException('jobId parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('GET', '/job_statuses/'+jobId+'.json');
@@ -21,7 +21,7 @@ public class ZendeskJobStatusesAPI extends ZendeskResourceBase {
 		return wrapper.job_status;
 	}
 
-	public List<ZJobStatus> getJobStatuses(Set<String> jobIds) {
+	global List<ZJobStatus> getJobStatuses(Set<String> jobIds) {
 		if (jobIds == null || jobIds.isEmpty()) { throw new ZendeskException('jobIds parameter cannot be null or empty'); }
 
 		HttpRequest req = zconn.createRequest('GET', '/job_statuses/show_many.json', new Map<String, Object>{'ids'=>toCSV(jobIds)});

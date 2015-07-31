@@ -1,30 +1,30 @@
 // This class provides functionality to call the Zendesk Ticket Comments API
-public class ZendeskTicketCommentsAPI extends ZendeskResourceBase {
+global class ZendeskTicketCommentsAPI extends ZendeskResourceBase {
 
 	private class TicketCommentWrapper {
-		public ZTicketComment comment {get;set;}
-	}
-	
-	public class TicketCommentsWrapper extends ZendeskPagingBase {
-		public List<ZTicketComment> comments {get;set;}
+		global ZTicketComment comment {get;set;}
 	}
 
-	public ZendeskTicketCommentsAPI(ZendeskConnection zconn) {
+	global class TicketCommentsWrapper extends ZendeskPagingBase {
+		global List<ZTicketComment> comments {get;set;}
+	}
+
+	global ZendeskTicketCommentsAPI(ZendeskConnection zconn) {
 		super(zconn);
 	}
 
-	public TicketCommentsWrapper getTicketComments(Long ticketId) {
+	global TicketCommentsWrapper getTicketComments(Long ticketId) {
 		return getTicketComments(ticketId, null);
 	}
 
-	public TicketCommentsWrapper getTicketComments(Long ticketId, Map<String, Object> queryParams) {
+	global TicketCommentsWrapper getTicketComments(Long ticketId, Map<String, Object> queryParams) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('GET', '/tickets/'+ticketId+'/comments.json', queryParams);
 		return (TicketCommentsWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketCommentsWrapper.class);
 	}
 
-	public void redactStringInComment(Long ticketId, Long ticketCommentId, String redactText) {
+	global void redactStringInComment(Long ticketId, Long ticketCommentId, String redactText) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter cannot be null'); }
 		if (String.isBlank(redactText)) { throw new ZendeskException('redactText parameter must not be empty'); }
@@ -34,7 +34,7 @@ public class ZendeskTicketCommentsAPI extends ZendeskResourceBase {
 		zconn.sendRequest(req);
 	}
 
-	public void makeCommentPrivate(Long ticketId, Long ticketCommentId) {
+	global void makeCommentPrivate(Long ticketId, Long ticketCommentId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 		if (ticketCommentId == null) { throw new ZendeskException('ticketCommentId parameter cannot be null'); }
 

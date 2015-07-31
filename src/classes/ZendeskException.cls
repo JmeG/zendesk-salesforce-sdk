@@ -1,2 +1,2 @@
 // Custom exception type
-public class ZendeskException extends Exception {}
+global class ZendeskException extends Exception {}

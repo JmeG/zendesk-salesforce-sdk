@@ -1,5 +1,5 @@
 // This class provides functionality for creating requests to interact with the Zendesk API
-public class ZendeskConnection {
+global class ZendeskConnection {
 
 	private final static String DEFAULT_USER_AGENT =  'Force.com Toolkit for Zendesk';
 
@@ -9,22 +9,22 @@ public class ZendeskConnection {
 	private AuthType authenticationType;
 
 	// overridable properties
-	public String userAgent = DEFAULT_USER_AGENT;
-	public Integer timeoutSeconds = 30;
-	public Boolean debugAll = false;
-	public Boolean debugRequest = false;
-	public Boolean debugResponseStatus = false;
-	public Boolean debugResponseBody = false;
-	public Boolean debugResponseHeaders = false;
+	global String userAgent = DEFAULT_USER_AGENT;
+	global Integer timeoutSeconds = 30;
+	global Boolean debugAll = false;
+	global Boolean debugRequest = false;
+	global Boolean debugResponseStatus = false;
+	global Boolean debugResponseBody = false;
+	global Boolean debugResponseHeaders = false;
 
-	public Enum AuthType { Password, Token }
+	global Enum AuthType { Password, Token }
 
 	private class ZendeskError {
-		public String error;
-		public String description;
+		global String error;
+		global String description;
 	}
 
-	public ZendeskConnection(String subdomain, String username, String password) {
+	global ZendeskConnection(String subdomain, String username, String password) {
 		if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
 		if (String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
 		if (String.isBlank(password)) { throw new ZendeskException('password parameter must not be empty'); }
@@ -37,7 +37,7 @@ public class ZendeskConnection {
 
 	// Use this constructor if you need to specify a Token instead of a Password
 	// This constructor will allow you to choose either method of authentication
-	public ZendeskConnection(String subdomain, String username, String passwordOrToken, AuthType authenticationType) {
+	global ZendeskConnection(String subdomain, String username, String passwordOrToken, AuthType authenticationType) {
 		if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
 		if (String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
 		if (String.isBlank(passwordOrToken)) { throw new ZendeskException('passwordOrToken parameter must not be empty'); }
@@ -48,19 +48,19 @@ public class ZendeskConnection {
 		this.authenticationType = authenticationType;
 	}
 
-	public HttpRequest createRequest(String reqMethod, String path) {
+	global HttpRequest createRequest(String reqMethod, String path) {
 		return createRequest(reqMethod, path, null, null);
 	}
 
-	public HttpRequest createRequest(String reqMethod, String path, String body) {
+	global HttpRequest createRequest(String reqMethod, String path, String body) {
 		return createRequest(reqMethod, path, body, null);
 	}
 
-	public HttpRequest createRequest(String reqMethod, String path, Map<String, Object> queryParams) {
+	global HttpRequest createRequest(String reqMethod, String path, Map<String, Object> queryParams) {
 		return createRequest(reqMethod, path, null, queryParams);
 	}
 
-	public HttpRequest createRequest(String reqMethod, String path, String body, Map<String, Object> queryParams) {
+	global HttpRequest createRequest(String reqMethod, String path, String body, Map<String, Object> queryParams) {
 		if (String.isBlank(reqMethod)) { throw new ZendeskException('reqMethod parameter must not be empty'); }
 		if (String.isBlank(path)) { throw new ZendeskException('path parameter must not be empty'); }
 		if (!path.startsWith('/')) { throw new ZendeskException('path parameter must start with /'); }
@@ -106,7 +106,7 @@ public class ZendeskConnection {
 		return str;
 	}
 
-	public static Map<String, String> getQueryStringMap(String url) {
+	global static Map<String, String> getQueryStringMap(String url) {
         Map<String, String> queryStringMap = new Map<String, String>();
         if (!String.isEmpty(url)) {
             for (String s : url.substringAfter('?').split('&')) {
@@ -120,7 +120,7 @@ public class ZendeskConnection {
     }
 
 	// Validate that the API login parameters are valid by simply trying to get our own user record
-	public Boolean canLogin() {
+	global Boolean canLogin() {
         HttpResponse res = new Http().send(createRequest('GET', '/users/me.json'));
 		if (res.getStatusCode() == 200) {
 			return true;
@@ -129,7 +129,7 @@ public class ZendeskConnection {
 		}
 	}
 
-	public String sendRequest(HttpRequest req) {
+	global String sendRequest(HttpRequest req) {
 		if (debugAll || debugRequest) {
 			System.debug(Logginglevel.INFO, '**REQUEST=' + req);
 		}

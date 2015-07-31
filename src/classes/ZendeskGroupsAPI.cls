@@ -1,52 +1,52 @@
 // This class provides functionality to call the Zendesk Groups API
-public class ZendeskGroupsAPI extends ZendeskResourceBase {
+global class ZendeskGroupsAPI extends ZendeskResourceBase {
 
 	private Map<Long, ZGroup> groupsMap;
 
-	public class GroupWrapper extends ZendeskSideLoadingBase {
-		public ZGroup x_group {get;set;} // Use "x_group" in place of "group" which is a reserved keyword. Requires custom de/serialization.
-		public GroupWrapper(ZGroup x_group) { this.x_group = x_group; }
+	global class GroupWrapper extends ZendeskSideLoadingBase {
+		global ZGroup x_group {get;set;} // Use "x_group" in place of "group" which is a reserved keyword. Requires custom de/serialization.
+		global GroupWrapper(ZGroup x_group) { this.x_group = x_group; }
 	}
 
-	public class GroupsWrapper extends ZendeskPagingBase {
-		public List<ZGroup> groups {get;set;}
-		public GroupsWrapper(List<ZGroup> groups) { this.groups = groups; }
+	global class GroupsWrapper extends ZendeskPagingBase {
+		global List<ZGroup> groups {get;set;}
+		global GroupsWrapper(List<ZGroup> groups) { this.groups = groups; }
 	}
 
-	public ZendeskGroupsAPI(ZendeskConnection zconn) {
+	global ZendeskGroupsAPI(ZendeskConnection zconn) {
 		super(zconn);
 		groupsMap = new Map<Long, ZGroup>();
 	}
 
-	public GroupWrapper getGroup(Long groupId) {
+	global GroupWrapper getGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('GET', '/groups/'+groupId+'.json');
 		return (GroupWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), GroupWrapper.class);
 	}
 
-	public GroupsWrapper getGroups() {
+	global GroupsWrapper getGroups() {
 		return getGroups(null);
 	}
-	public GroupsWrapper getGroups(Map<String, Object> queryParams) {
+	global GroupsWrapper getGroups(Map<String, Object> queryParams) {
 		return getGroupsInternal(zconn.createRequest('GET', '/groups.json', queryParams));
 	}
 
 	// Get all assignable groups
-	public GroupsWrapper getAssignableGroups() {
+	global GroupsWrapper getAssignableGroups() {
 		return getAssignableGroups(null);
 	}
-	public GroupsWrapper getAssignableGroups(Map<String, Object> queryParams) {
+	global GroupsWrapper getAssignableGroups(Map<String, Object> queryParams) {
 		return getGroupsInternal(zconn.createRequest('GET', '/groups/assignable.json', queryParams));
 	}
 
 	// Get the groups that a user is a member of
-	public GroupsWrapper getUserGroups(Long userId) {
+	global GroupsWrapper getUserGroups(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
 		return getUserGroups(userId, null);
 	}
-	public GroupsWrapper getUserGroups(Long userId, Map<String, Object> queryParams) {
+	global GroupsWrapper getUserGroups(Long userId, Map<String, Object> queryParams) {
 		if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
 		return getGroupsInternal(zconn.createRequest('GET', '/users/'+userId+'/groups.json', queryParams));
@@ -58,7 +58,7 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 	}
 
 	// Simplified createGroup method that takes the only relevant parameter "name"
-	public Long createGroup(String name) {
+	global Long createGroup(String name) {
 		if (String.isBlank(name)) { throw new ZendeskException('name parameter must not be empty'); }
 
 		ZGroup g = new ZGroup();
@@ -66,7 +66,7 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 		return createGroup(g);
 	}
 
-	public Long createGroup(ZGroup x_group) {
+	global Long createGroup(ZGroup x_group) {
 		if (x_group == null) { throw new ZendeskException('x_group parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('POST', '/groups.json');
@@ -76,7 +76,7 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 	}
 
 	// Simplified method for updating a group name
-	public void updateGroupName(Long groupId, String newName) {
+	global void updateGroupName(Long groupId, String newName) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter cannot be null'); }
 		if (String.isBlank(newName)) { throw new ZendeskException('newName parameter must not be empty'); }
 
@@ -85,7 +85,7 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 		updateGroup(groupId, g);
 	}
 
-	public void updateGroup(Long groupId, ZGroup x_group) {
+	global void updateGroup(Long groupId, ZGroup x_group) {
 		if (x_group == null) { throw new ZendeskException('x_group parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('PUT', '/groups/'+groupId+'.json');
@@ -93,14 +93,14 @@ public class ZendeskGroupsAPI extends ZendeskResourceBase {
 		zconn.sendRequest(req);
 	}
 
-	public void deleteGroup(Long groupId) {
+	global void deleteGroup(Long groupId) {
 		if (groupId == null) { throw new ZendeskException('groupId parameter cannot be null'); }
 
 		zconn.sendRequest(zconn.createRequest('DELETE', '/groups/'+groupId+'.json'));
 	}
 
 	// Retrieves all pages of groups. Uses the Group field "id" as the map key
-	public Map<Long, ZGroup> getAllGroups() {
+	global Map<Long, ZGroup> getAllGroups() {
 		if (groupsMap.isEmpty()) {
 			loadAll();
 		}

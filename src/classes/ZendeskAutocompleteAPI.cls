@@ -1,14 +1,16 @@
 // This class provides functionality to call the Zendesk Autocomplete API
-public class ZendeskAutocompleteAPI extends ZendeskResourceBase {
+global class ZendeskAutocompleteAPI extends ZendeskResourceBase {
 
-    public ZendeskAutocompleteAPI(ZendeskConnection zconn) {
+    global ZendeskAutocompleteAPI(ZendeskConnection zconn) {
         super(zconn);
     }
 
-    public ZendeskTagsAPI.TagsWrapper autocompleteTags(String name) {
+    // NOTE: I'm not sure why there is a separate API just for tags autocomplete and not other entities.
+    // I'm going to duplicate these methods in the ZendeskTagsAPI class for now.
+    global ZendeskTagsAPI.TagsWrapper autocompleteTags(String name) {
         return autocompleteTags(name, null);
     }
-    public ZendeskTagsAPI.TagsWrapper autocompleteTags(String name, Map<String, Object> additionalParams) {
+    global ZendeskTagsAPI.TagsWrapper autocompleteTags(String name, Map<String, Object> additionalParams) {
         if (String.isEmpty(name)) { throw new ZendeskException('name parameter cannot be null or empty'); }
 
         if (additionalParams == null) { additionalParams = new Map<String, Object>(); }

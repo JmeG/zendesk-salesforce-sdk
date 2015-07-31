@@ -1,24 +1,24 @@
 // This class provides functionality to call the Zendesk Ticket Metrics API
-public class ZendeskTicketMetricsAPI extends ZendeskResourceBase {
+global class ZendeskTicketMetricsAPI extends ZendeskResourceBase {
 
 	private class TicketMetricWrapper {
-		public ZTicketMetrics ticket_metric {get;set;}
+		global ZTicketMetrics ticket_metric {get;set;}
 	}
 
-	public class TicketMetricsWrapper extends ZendeskPagingBase {
-		public List<ZTicketMetrics> ticket_metrics {get;set;}
+	global class TicketMetricsWrapper extends ZendeskPagingBase {
+		global List<ZTicketMetrics> ticket_metrics {get;set;}
 	}
 
-	public ZendeskTicketMetricsAPI(ZendeskConnection zconn) {
+	global ZendeskTicketMetricsAPI(ZendeskConnection zconn) {
 		super(zconn);
 	}
 
-	public TicketMetricsWrapper getTicketMetrics() {
+	global TicketMetricsWrapper getTicketMetrics() {
 		HttpRequest req = zconn.createRequest('GET', '/ticket_metrics.json');
 		return (TicketMetricsWrapper)JSON.deserialize(zconn.sendRequest(req), TicketMetricsWrapper.class);
 	}
 
-	public ZTicketMetrics getTicketMetrics(Long ticketMetricId) {
+	global ZTicketMetrics getTicketMetrics(Long ticketMetricId) {
 		if (ticketMetricId == null) { throw new ZendeskException('ticketMetricId parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('GET', '/ticket_metrics/'+ticketMetricId+'.json');
@@ -26,7 +26,7 @@ public class ZendeskTicketMetricsAPI extends ZendeskResourceBase {
 		return wrapper.ticket_metric;
 	}
 
-	public ZTicketMetrics getTicketMetricsByTicketId(Long ticketId) {
+	global ZTicketMetrics getTicketMetricsByTicketId(Long ticketId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('GET', '/tickets/'+ticketId+'/metrics.json');

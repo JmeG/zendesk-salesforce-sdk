@@ -1,24 +1,24 @@
 // This class provides functionality to call the Zendesk Ticket Forms API
-public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
+global class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 
 	private Map<Long, ZTicketForm> ticketFormsMap;
 
 	private class TicketFormWrapper {
-		public ZTicketForm ticket_form {get;set;}
-		public TicketFormWrapper(ZTicketForm ticket_form) { this.ticket_form = ticket_form; }
+		global ZTicketForm ticket_form {get;set;}
+		global TicketFormWrapper(ZTicketForm ticket_form) { this.ticket_form = ticket_form; }
 	}
 
-	public class TicketFormsWrapper extends ZendeskPagingBase {
-		public List<ZTicketForm> ticket_forms {get;set;}
-		public TicketFormsWrapper(List<ZTicketForm> ticket_forms) { this.ticket_forms = ticket_forms; }
+	global class TicketFormsWrapper extends ZendeskPagingBase {
+		global List<ZTicketForm> ticket_forms {get;set;}
+		global TicketFormsWrapper(List<ZTicketForm> ticket_forms) { this.ticket_forms = ticket_forms; }
 	}
 
-	public ZendeskTicketFormsAPI(ZendeskConnection zconn) {
+	global ZendeskTicketFormsAPI(ZendeskConnection zconn) {
 		super(zconn);
 		ticketFormsMap = new Map<Long, ZTicketForm>();
 	}
 
-	public ZTicketForm getTicketForm(Long ticketFormId) {
+	global ZTicketForm getTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('GET', '/ticket_forms/'+ticketFormId+'.json');
@@ -26,22 +26,22 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 		return resultWrapper.ticket_form;
 	}
 
-	public TicketFormsWrapper getTicketForms() {
+	global TicketFormsWrapper getTicketForms() {
 		return getTicketForms(null);
 	}
-	public TicketFormsWrapper getTicketForms(Map<String, Object> queryParams) {
+	global TicketFormsWrapper getTicketForms(Map<String, Object> queryParams) {
 		HttpRequest req = zconn.createRequest('GET', '/ticket_forms.json', queryParams);
 		return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormsWrapper.class);
 	}
 
-	public void deleteTicketForm(Long ticketFormId) {
+	global void deleteTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('DELETE', '/ticket_forms/'+ticketFormId+'.json');
 		zconn.sendRequest(req);
 	}
 
-	public Long createTicketForm(ZTicketForm ticketForm) {
+	global Long createTicketForm(ZTicketForm ticketForm) {
 		if (ticketForm == null) { throw new ZendeskException('ticketForm parameter cannot be null'); }
 
         HttpRequest req = zconn.createRequest('POST', '/ticket_forms.json');
@@ -50,7 +50,7 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 		return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
 	}
 
-	public void updateTicketForm(Long ticketFormId, ZTicketForm ticketForm) {
+	global void updateTicketForm(Long ticketFormId, ZTicketForm ticketForm) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
         if (ticketForm == null) { throw new ZendeskException('ticketForm parameter cannot be null'); }
 
@@ -59,7 +59,7 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 		zconn.sendRequest(req);
 	}
 
-	public void reorderTicketForms(List<Long> orderedTicketFormIds) {
+	global void reorderTicketForms(List<Long> orderedTicketFormIds) {
         if (orderedTicketFormIds == null || orderedTicketFormIds.size() < 2) { throw new ZendeskException('orderedTicketFormIds parameter contain at least 2 items'); }
 
         HttpRequest req = zconn.createRequest('PUT', '/ticket_forms/reorder.json');
@@ -67,7 +67,7 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 		zconn.sendRequest(req);
     }
 
-	public Long cloneTicketForm(Long ticketFormId) {
+	global Long cloneTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
 
         HttpRequest req = zconn.createRequest('POST', '/ticket_forms/'+ticketFormId+'/clone.json');
@@ -76,7 +76,7 @@ public class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 	}
 
 	// Retrieves all pages of ticket forms. Uses the field "id" as the map key
-	public Map<Long, ZTicketForm> getAllTicketForms() {
+	global Map<Long, ZTicketForm> getAllTicketForms() {
         if (ticketFormsMap.isEmpty()) {
             loadAll();
         }

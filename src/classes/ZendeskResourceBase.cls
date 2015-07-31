@@ -1,14 +1,14 @@
-public abstract class ZendeskResourceBase extends ZendeskTypes {
+global abstract class ZendeskResourceBase extends ZendeskTypes {
 
 	protected final ZendeskConnection zconn;
 
-    public ZendeskResourceBase(ZendeskConnection zconn) {
+    global ZendeskResourceBase(ZendeskConnection zconn) {
 		this.zconn = zconn;
 	}
 
 	// Realllly hacky way of stripping out nulls. Experimenting with this instead of using deserializeUntyped
 	// https://iwritecrappycode.wordpress.com/2014/07/16/stripping-nulls-from-a-json-object-in-apex/
-	public static string stripJsonNulls(String jsonString) {
+	global static string stripJsonNulls(String jsonString) {
 		if (!String.isEmpty(jsonString)) {
 			jsonString = jsonString.replaceAll('\"[^\"]*\":null',''); // basic removal of null values
 			jsonString = jsonString.replaceAll(',{2,}', ','); // remove duplicate/multiple commas
@@ -20,15 +20,15 @@ public abstract class ZendeskResourceBase extends ZendeskTypes {
 		return jsonString;
 	}
 
-	public static Long getUnixEpochTime(DateTime dt) {
+	global static Long getUnixEpochTime(DateTime dt) {
 	   return (dt == null ? null : (dt.getTime() / 1000));
 	}
 
-	public static String urlEncode(String str) {
+	global static String urlEncode(String str) {
 		return (str == null ? null : EncodingUtil.urlEncode(str, 'UTF-8'));
 	}
 
-    public static String toCSV(List<Long> longs) {
+    global static String toCSV(List<Long> longs) {
 		String csv = '';
 		if (longs != null && !longs.isEmpty()) {
 			for (Long l : longs) { csv += l + ','; }
@@ -37,7 +37,7 @@ public abstract class ZendeskResourceBase extends ZendeskTypes {
 		return csv;
 	}
 
-	public static String toCSV(Set<Long> longs) {
+	global static String toCSV(Set<Long> longs) {
 		String csv = '';
 		if (longs != null && !longs.isEmpty()) {
 			for (Long l : longs) { csv += l + ','; }
@@ -46,7 +46,7 @@ public abstract class ZendeskResourceBase extends ZendeskTypes {
 		return csv;
 	}
 
-	public static String toCSV(Set<String> strings) {
+	global static String toCSV(Set<String> strings) {
 		String csv = '';
 		if (strings != null && !strings.isEmpty()) {
 			for (String str : strings) { csv += str + ','; }
@@ -61,11 +61,11 @@ public abstract class ZendeskResourceBase extends ZendeskTypes {
 	// If you do need specific fields with NULL values to remain in the JSON then add the names
 	// of those fields to the fieldsToNull set.
 	// NOTE that this only looks at fields 1 level down from the top
-	public static String serializeJsonNoNulls(Object obj) {
+	global static String serializeJsonNoNulls(Object obj) {
 		return serializeJsonNoNulls(obj, null);
 	}
 
-	public static String serializeJsonNoNulls(Object obj, Set<String> fieldsToNull) {
+	global static String serializeJsonNoNulls(Object obj, Set<String> fieldsToNull) {
 		if (obj == null) { throw new ZendeskException('obj parameter cannot be null'); }
 
 		Map<String, Object> fieldsMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(obj));

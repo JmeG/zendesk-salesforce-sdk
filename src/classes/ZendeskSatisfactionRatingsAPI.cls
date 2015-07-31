@@ -1,22 +1,22 @@
 // This class provides functionality to call the Zendesk SatisfactionRatings API
-public class ZendeskSatisfactionRatingsAPI extends ZendeskResourceBase {
+global class ZendeskSatisfactionRatingsAPI extends ZendeskResourceBase {
 
-    public class SatisfactionRatingWrapper extends ZendeskSideLoadingBase {
-        public ZSatisfactionRating satisfaction_rating {get;set;}
-		public SatisfactionRatingWrapper(ZSatisfactionRating satisfaction_rating) { this.satisfaction_rating = satisfaction_rating; }
+    global class SatisfactionRatingWrapper extends ZendeskSideLoadingBase {
+        global ZSatisfactionRating satisfaction_rating {get;set;}
+		global SatisfactionRatingWrapper(ZSatisfactionRating satisfaction_rating) { this.satisfaction_rating = satisfaction_rating; }
     }
 
-    public class SatisfactionRatingsWrapper extends ZendeskPagingBase {
-        public List<ZSatisfactionRating> satisfaction_ratings {get;set;}
-		public SatisfactionRatingsWrapper(List<ZSatisfactionRating> satisfaction_ratings) { this.satisfaction_ratings = satisfaction_ratings; }
+    global class SatisfactionRatingsWrapper extends ZendeskPagingBase {
+        global List<ZSatisfactionRating> satisfaction_ratings {get;set;}
+		global SatisfactionRatingsWrapper(List<ZSatisfactionRating> satisfaction_ratings) { this.satisfaction_ratings = satisfaction_ratings; }
     }
 
-    public ZendeskSatisfactionRatingsAPI(ZendeskConnection zconn) {
+    global ZendeskSatisfactionRatingsAPI(ZendeskConnection zconn) {
         super(zconn);
     }
 
     // GET /api/v2/satisfaction_ratings/{id}.json
-    public SatisfactionRatingWrapper getSatisfactionRating(Long satRatingId) {
+    global SatisfactionRatingWrapper getSatisfactionRating(Long satRatingId) {
         if (satRatingId == null) { throw new ZendeskException('satRatingId parameter cannot be null'); }
 
         HttpRequest req = zconn.createRequest('GET', '/satisfaction_ratings/'+satRatingId+'.json');
@@ -31,16 +31,16 @@ public class ZendeskSatisfactionRatingsAPI extends ZendeskResourceBase {
 	*/
 
     // GET /api/v2/satisfaction_ratings.json
-    public SatisfactionRatingsWrapper getSatisfactionRatings() {
+    global SatisfactionRatingsWrapper getSatisfactionRatings() {
         return getSatisfactionRatings(null);
     }
-    public SatisfactionRatingsWrapper getSatisfactionRatings(Map<String, Object> queryParams) {
+    global SatisfactionRatingsWrapper getSatisfactionRatings(Map<String, Object> queryParams) {
         HttpRequest req = zconn.createRequest('GET', '/satisfaction_ratings.json', queryParams);
         return (SatisfactionRatingsWrapper)JSON.deserialize(zconn.sendRequest(req), SatisfactionRatingsWrapper.class);
     }
 
 	// POST /api/v2/tickets/{ticket_id}/satisfaction_rating.json
-	public void createSatisfactionRating(ZSatisfactionRating satRating, Long ticketId) {
+	global void createSatisfactionRating(ZSatisfactionRating satRating, Long ticketId) {
 		if (satRating == null) { throw new ZendeskException('satRating parameter cannot be null'); }
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 

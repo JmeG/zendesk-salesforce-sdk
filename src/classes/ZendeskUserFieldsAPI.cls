@@ -1,21 +1,21 @@
 // This class provides functionality to call the Zendesk User Fields API
-public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
+global class ZendeskUserFieldsAPI extends ZendeskResourceBase {
 
     private class UserFieldWrapper {
-        public ZUserField user_field {get;set;}
-		public UserFieldWrapper(ZUserField user_field) { this.user_field = user_field; }
+        global ZUserField user_field {get;set;}
+		global UserFieldWrapper(ZUserField user_field) { this.user_field = user_field; }
     }
 
-    public class UserFieldsWrapper extends ZendeskPagingBase {
-        public List<ZUserField> user_fields {get;set;}
-		public UserFieldsWrapper(List<ZUserField> user_fields) { this.user_fields = user_fields; }
+    global class UserFieldsWrapper extends ZendeskPagingBase {
+        global List<ZUserField> user_fields {get;set;}
+		global UserFieldsWrapper(List<ZUserField> user_fields) { this.user_fields = user_fields; }
     }
 
-    public ZendeskUserFieldsAPI(ZendeskConnection zconn) {
+    global ZendeskUserFieldsAPI(ZendeskConnection zconn) {
         super(zconn);
     }
 
-    public ZUserField getField(Long fieldId) {
+    global ZUserField getField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
         HttpRequest req = zconn.createRequest('GET', '/user_fields/'+fieldId+'.json');
@@ -24,21 +24,21 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
     }
 
     // /api/v2/user_fields.json
-    public UserFieldsWrapper getFields() {
+    global UserFieldsWrapper getFields() {
         return getFields(null);
     }
-    public UserFieldsWrapper getFields(Map<String, Object> queryParams) {
+    global UserFieldsWrapper getFields(Map<String, Object> queryParams) {
         HttpRequest req = zconn.createRequest('GET', '/user_fields.json', queryParams);
         return (UserFieldsWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), UserFieldsWrapper.class);
     }
 
-    public void deleteField(Long fieldId) {
+    global void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
 		zconn.sendRequest(zconn.createRequest('DELETE', '/user_fields/'+fieldId+'.json'));
 	}
 
-    public void reorderFields(List<Long> orderedFieldIds) {
+    global void reorderFields(List<Long> orderedFieldIds) {
         if (orderedFieldIds == null || orderedFieldIds.size() < 2) { throw new ZendeskException('orderedFieldIds parameter contain at least 2 items'); }
 
         HttpRequest req = zconn.createRequest('PUT', '/user_fields/reorder.json');
@@ -46,7 +46,7 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
 		zconn.sendRequest(req);
     }
 
-    public Long createField(ZUserField zfield) {
+    global Long createField(ZUserField zfield) {
         if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
         HttpRequest req = zconn.createRequest('POST', '/user_fields.json');
@@ -55,7 +55,7 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
 		return ((resultWrapper==null || resultWrapper.user_field==null) ? null : resultWrapper.user_field.id);
     }
 
-    public void updateField(Long fieldId, ZUserField zfield) {
+    global void updateField(Long fieldId, ZUserField zfield) {
         if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
         if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
@@ -65,7 +65,7 @@ public class ZendeskUserFieldsAPI extends ZendeskResourceBase {
     }
 
     // Retrieves all pages of user fields. Uses the field "key" as the map key
-    public Map<String, ZUserField> getAllFields() {
+    global Map<String, ZUserField> getAllFields() {
         Map<String, ZUserField> fieldsMap = new Map<String, ZUserField>();
         UserFieldsWrapper wrapper = getFields();
         if (wrapper != null && wrapper.user_fields != null) {

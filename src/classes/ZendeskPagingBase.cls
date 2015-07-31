@@ -1,13 +1,13 @@
 // This class provides paging support for lists of records returned from the Zendesk API
-public abstract class ZendeskPagingBase extends ZendeskSideLoadingBase {
-    public String next_page;
-    public Long nextPageNumber { get { return getPageNumber(next_page); } private set; }
+global abstract class ZendeskPagingBase extends ZendeskSideLoadingBase {
+    global String next_page;
+    global Long nextPageNumber { get { return getPageNumber(next_page); } private set; }
 
-    public String previous_page;
-    public Long previousPageNumber { get { return getPageNumber(previous_page); } private set; }
+    global String previous_page;
+    global Long previousPageNumber { get { return getPageNumber(previous_page); } private set; }
 
     // Total number of records regardless of paging
-    public Long count {get; set;}
+    global Long count {get; set;}
 
     // URL could look like this
     // next_page":"https://test.zendesk.com/api/v2/organizations/25378250/tickets.json?include=users%2Cgroups&page=2&per_page=10&sort_order=desc"

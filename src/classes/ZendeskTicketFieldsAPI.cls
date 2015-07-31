@@ -1,24 +1,24 @@
 // This class provides functionality to call the Zendesk Ticket Fields API
-public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
+global class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 
 	private Map<Long, ZTicketField> fieldsMap {get; private set; }
 
 	private class TicketFieldWrapper {
-		public ZTicketField ticket_field {get;set;}
-		public TicketFieldWrapper(ZTicketField ticket_field) { this.ticket_field = ticket_field; }
+		global ZTicketField ticket_field {get;set;}
+		global TicketFieldWrapper(ZTicketField ticket_field) { this.ticket_field = ticket_field; }
 	}
 
-	public class TicketFieldsWrapper extends ZendeskPagingBase {
-		public List<ZTicketField> ticket_fields {get;set;}
-		public TicketFieldsWrapper(List<ZTicketField> ticket_fields) { this.ticket_fields = ticket_fields; }
+	global class TicketFieldsWrapper extends ZendeskPagingBase {
+		global List<ZTicketField> ticket_fields {get;set;}
+		global TicketFieldsWrapper(List<ZTicketField> ticket_fields) { this.ticket_fields = ticket_fields; }
 	}
 
-	public ZendeskTicketFieldsAPI(ZendeskConnection zconn) {
+	global ZendeskTicketFieldsAPI(ZendeskConnection zconn) {
 		super(zconn);
 		fieldsMap = new Map<Long, ZTicketField>();
 	}
 
-	public ZTicketField getField(Long fieldId) {
+	global ZTicketField getField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('GET', '/ticket_fields/'+fieldId+'.json');
@@ -26,22 +26,22 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 		return wrapper.ticket_field;
 	}
 
-	public TicketFieldsWrapper getFields() {
+	global TicketFieldsWrapper getFields() {
 		return getFields(null);
 	}
-	public TicketFieldsWrapper getFields(Map<String, Object> queryParams) {
+	global TicketFieldsWrapper getFields(Map<String, Object> queryParams) {
 		HttpRequest req = zconn.createRequest('GET', '/ticket_fields.json', queryParams);
 		return (TicketFieldsWrapper)JSON.deserialize(zconn.sendRequest(req), TicketFieldsWrapper.class);
 	}
 
-	public void deleteField(Long fieldId) {
+	global void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('DELETE', '/ticket_fields/'+fieldId+'.json');
 		zconn.sendRequest(req);
 	}
 
-	public Long createField(ZTicketField zfield) {
+	global Long createField(ZTicketField zfield) {
 		if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('POST', '/ticket_fields.json');
@@ -50,7 +50,7 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 		return ((resultWrapper==null || resultWrapper.ticket_field == null) ? null : resultWrapper.ticket_field.id);
 	}
 
-	public void updateField(Long fieldId, ZTicketField zfield) {
+	global void updateField(Long fieldId, ZTicketField zfield) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 		if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
@@ -60,7 +60,7 @@ public class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 	}
 
 	// Retrieves all pages of ticket fields. Uses the field "id" as the map key
-	public Map<Long, ZTicketField> getAllFields() {
+	global Map<Long, ZTicketField> getAllFields() {
         if (fieldsMap.isEmpty()) {
             loadAll();
         }

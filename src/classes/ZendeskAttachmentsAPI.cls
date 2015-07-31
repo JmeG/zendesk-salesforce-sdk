@@ -1,15 +1,15 @@
 // This class provides functionality to call the Zendesk Attachments API
-public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
+global class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 
 	private class AttachmentWrapper {
 		public ZAttachment attachment {get;set;}
 	}
 
-	public ZendeskAttachmentsAPI(ZendeskConnection zconn) {
+	global ZendeskAttachmentsAPI(ZendeskConnection zconn) {
 		super(zconn);
 	}
 
-	public ZAttachment getAttachment(Long attachmentId) {
+	global ZAttachment getAttachment(Long attachmentId) {
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('GET', '/attachments/'+attachmentId+'.json');
@@ -17,7 +17,7 @@ public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 		return resultWrapper.attachment;
 	}
 
-	public String uploadAttachment(String fileName, String fileContentType, Blob fileBody) {
+	global String uploadAttachment(String fileName, String fileContentType, Blob fileBody) {
 		if (String.isBlank(fileName)) { throw new ZendeskException('fileName parameter must not be empty'); }
 		if (String.isBlank(fileContentType)) { throw new ZendeskException('fileContentType parameter must not be empty'); }
 		if (fileBody == null) { throw new ZendeskException('fileBody parameter cannot be null'); }
@@ -45,18 +45,17 @@ public class ZendeskAttachmentsAPI extends ZendeskResourceBase {
 		return zendeskAttachmentToken;
 	}
 
-	public void deleteAttachment(Long attachmentId) {
+	global void deleteAttachment(Long attachmentId) {
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter cannot be null'); }
 
 		zconn.sendRequest(zconn.createRequest('DELETE', '/attachments/'+attachmentId+'.json'));
 	}
 
-	public void redactCommentAttachment(Long ticketId, Long commentId, Long attachmentId) {
+	global void redactCommentAttachment(Long ticketId, Long commentId, Long attachmentId) {
 		if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 		if (commentId == null) { throw new ZendeskException('commentId parameter cannot be null'); }
 		if (attachmentId == null) { throw new ZendeskException('attachmentId parameter cannot be null'); }
 
 		zconn.sendRequest(zconn.createRequest('PUT', '/tickets/'+ticketId+'/comments/'+commentId+'/attachments/'+attachmentId+'/redact.json', '{}'));
 	}
-
 }

@@ -1,21 +1,21 @@
 // This class provides functionality to call the Zendesk Organization Fields API
-public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
+global class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 
     private class OrganizationFieldWrapper {
-        public ZOrganizationField organization_field {get;set;}
-		public OrganizationFieldWrapper(ZOrganizationField organization_field) { this.organization_field = organization_field; }
+        global ZOrganizationField organization_field {get;set;}
+		global OrganizationFieldWrapper(ZOrganizationField organization_field) { this.organization_field = organization_field; }
     }
 
-    public class OrganizationFieldsWrapper extends ZendeskPagingBase {
-        public List<ZOrganizationField> organization_fields {get;set;}
-		public OrganizationFieldsWrapper(List<ZOrganizationField> organization_fields) { this.organization_fields = organization_fields; }
+    global class OrganizationFieldsWrapper extends ZendeskPagingBase {
+        global List<ZOrganizationField> organization_fields {get;set;}
+		global OrganizationFieldsWrapper(List<ZOrganizationField> organization_fields) { this.organization_fields = organization_fields; }
     }
 
-    public ZendeskOrganizationFieldsAPI(ZendeskConnection zconn) {
+    global ZendeskOrganizationFieldsAPI(ZendeskConnection zconn) {
         super(zconn);
     }
 
-    public ZOrganizationField getField(Long fieldId) {
+    global ZOrganizationField getField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
         HttpRequest req = zconn.createRequest('GET', '/organization_fields/'+fieldId+'.json');
@@ -23,21 +23,21 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
         return wrapper.organization_field;
     }
 
-    public OrganizationFieldsWrapper getFields() {
+    global OrganizationFieldsWrapper getFields() {
         return getFields(null);
     }
-    public OrganizationFieldsWrapper getFields(Map<String, Object> queryParams) {
+    global OrganizationFieldsWrapper getFields(Map<String, Object> queryParams) {
         HttpRequest req = zconn.createRequest('GET', '/organization_fields.json', queryParams);
         return (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationFieldsWrapper.class);
     }
 
-    public void deleteField(Long fieldId) {
+    global void deleteField(Long fieldId) {
 		if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
 		zconn.sendRequest(zconn.createRequest('DELETE', '/organization_fields/'+fieldId+'.json'));
 	}
 
-    public void reorderFields(List<Long> orderedFieldIds) {
+    global void reorderFields(List<Long> orderedFieldIds) {
         if (orderedFieldIds == null || orderedFieldIds.size() < 2) { throw new ZendeskException('orderedFieldIds parameter contain at least 2 items'); }
 
         HttpRequest req = zconn.createRequest('PUT', '/organization_fields/reorder.json');
@@ -45,7 +45,7 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 		zconn.sendRequest(req);
     }
 
-    public Long createField(ZOrganizationField zfield) {
+    global Long createField(ZOrganizationField zfield) {
         if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
         HttpRequest req = zconn.createRequest('POST', '/organization_fields.json');
@@ -54,7 +54,7 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 		return ((resultWrapper==null || resultWrapper.organization_field == null) ? null : resultWrapper.organization_field.id);
     }
 
-    public void updateField(Long fieldId, ZOrganizationField zfield) {
+    global void updateField(Long fieldId, ZOrganizationField zfield) {
         if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
         if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
@@ -64,7 +64,7 @@ public class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
     }
 
     // Retrieves all pages of organization fields. Uses the field "key" as the map key
-    public Map<String, ZOrganizationField> getAllFields() {
+    global Map<String, ZOrganizationField> getAllFields() {
         Map<String, ZOrganizationField> fieldsMap = new Map<String, ZOrganizationField>();
         OrganizationFieldsWrapper wrapper = getFields();
         if (wrapper != null && wrapper.organization_fields != null) {
