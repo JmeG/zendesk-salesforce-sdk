@@ -24,7 +24,7 @@
                             <apex:column value="{!ui_org.tags}" headerValue="Tags" rendered="false"/>
                             <apex:column value="{!ui_org.org.created_at}" headerValue="Created"/>
                             <apex:facet name="footer">
-                                <apex:outputPanel>
+                                <apex:outputPanel >
                                     <apex:commandButton value="<< prev page" action="{!prevPage}" rendered="{!NOT(ISNULL(previous_page))}" rerender="searchResults" />
                                     <apex:commandButton value="next page >>" action="{!nextPage}" rendered="{!NOT(ISNULL(next_page))}" rerender="searchResults" />
                                 </apex:outputPanel>

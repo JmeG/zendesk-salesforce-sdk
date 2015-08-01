@@ -130,7 +130,7 @@
                         </apex:column>
                         <apex:column headerValue="Body" value="{!c.comment.body}"/>
                         <apex:facet name="footer">
-                            <apex:outputPanel>
+                            <apex:outputPanel >
                                 <apex:commandButton value="<< prev page" action="{!prevCommentsPage}" rendered="{!NOT(ISNULL(previous_page))}" rerender="commentsPanel" />
                                 <apex:commandButton value="next page >>" action="{!nextCommentsPage}" rendered="{!NOT(ISNULL(next_page))}" rerender="commentsPanel" />
                             </apex:outputPanel>

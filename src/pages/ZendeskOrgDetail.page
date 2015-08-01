@@ -71,7 +71,7 @@
                         </apex:column>
                         <apex:column headerValue="Group" value="{!t.groupName}" />
                         <apex:facet name="footer">
-                            <apex:outputPanel>
+                            <apex:outputPanel >
                                 <apex:commandButton value="<< prev page" action="{!prevTicketPage}" rendered="{!NOT(ISNULL(previous_page))}" rerender="ticketsPanel" />
                                 <apex:commandButton value="next page >>" action="{!nextTicketPage}" rendered="{!NOT(ISNULL(next_page))}" rerender="ticketsPanel" />
                             </apex:outputPanel>
