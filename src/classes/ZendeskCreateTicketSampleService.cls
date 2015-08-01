@@ -41,7 +41,7 @@ global class ZendeskCreateTicketSampleService {
 			Long ticketNum = zTickets.createTicket(zt);
 
 			// Return the newly created ticket number
-			return 'Ticket # ' + ticketNum + ' created.';
+			return 'Ticket # ' + ticketNum + ' created';
 		}
 		catch(Exception e) {
 			return 'Error creating ticket: ' + e.getMessage();
