@@ -39,9 +39,14 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
     }
 
 	global OrganizationsWrapper getOrganizationsByExternalIds(Set<String> externalIds) {
+		return getOrganizationsByExternalIds(externalIds, null);
+    }
+	global OrganizationsWrapper getOrganizationsByExternalIds(Set<String> externalIds, Map<String, Object> additionalParams) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter cannot be null or empty'); }
 
-        return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/show_many.json', new Map<String, Object>{'external_ids'=>toCSV(externalIds)}));
+		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
+		additionalParams.put('external_ids', toCSV(externalIds));
+        return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/show_many.json', additionalParams));
     }
 
 	global OrganizationsWrapper autocompleteSearch(String name) {
@@ -56,9 +61,14 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
     }
 
 	global OrganizationsWrapper searchOrganizationsByExternalId(String externalId) {
+		return searchOrganizationsByExternalId(externalId, null);
+	}
+	global OrganizationsWrapper searchOrganizationsByExternalId(String externalId, Map<String, Object> additionalParams) {
 		if (String.isBlank(externalId)) { throw new ZendeskException('externalId parameter cannot be null or empty'); }
 
-        return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/search.json', new Map<String, Object>{'external_id'=>urlEncode(externalId)}));
+		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
+		additionalParams.put('external_id', urlEncode(externalId));
+        return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/search.json', additionalParams));
     }
 
 	global OrganizationsWrapper getUserOrganizations(Long userId) {
