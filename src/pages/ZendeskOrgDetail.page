@@ -1,4 +1,16 @@
 <apex:page controller="ZendeskOrgDetailController" action="{!init}" tabStyle="Zendesk_OrgSearch__tab">
+    <apex:stylesheet value="/sCSS/25.0/sprites/1342034628000/Theme3/default/gc/versioning.css" />
+    <apex:stylesheet value="/sCSS/25.0/sprites/1342034628000/Theme3/default/gc/extended.css" />
+
+    <!-- Define Tab panel .css styles
+    alternatively use these attributes in <apex:tabPanel tabClass='activeTab' inactiveTabClass='inactiveTab'>
+    and remove the <apex:stylesheet> references above
+    -->
+    <style>
+    .activeTab {background-color: #78A300; color:white; background-image:none}
+    .inactiveTab { background-color: lightgrey; color:black; background-image:none}
+    </style>
+
     <apex:form >
         <apex:pageBlock title="Zendesk Organization Detail" id="block" mode="detail">
             <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
@@ -49,37 +61,69 @@
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSection>
 
-            <apex:outputPanel id="ticketsPanel">
-                <apex:pageBlockSection title="Tickets" id="ticketsSection" columns="1">
-                    <apex:pageBlockTable value="{!ui_tickets}" var="t" rendered="{!NOT(ISNULL(ui_tickets))}">
-                        <apex:column headerValue="ID">
-                            <apex:outputLink value="/apex/ZendeskTicketDetail?id={!t.ticket.id}">{!t.ticket.id}</apex:outputLink>
-                        </apex:column>
-                        <apex:column headerValue="Type" value="{!t.ticket.type}"/>
-                        <apex:column headerValue="Status" value="{!t.ticket.status}"/>
-                        <apex:column headerValue="Created">
-                            <apex:outputText value="{0,date,full}">
-                                <apex:param value="{!t.ticket.created_at}" />
-                            </apex:outputText>
-                        </apex:column>
-                        <apex:column headerValue="Subject" value="{!t.ticket.subject}"/>
-                        <apex:column headerValue="Requested By">
-                            <apex:outputLink value="/apex/ZendeskUserDetail?id={!t.ticket.requester_id}">{!t.requestedBy}</apex:outputLink>
-                        </apex:column>
-                        <apex:column headerValue="Assigned To">
-                            <apex:outputLink value="/apex/ZendeskUserDetail?id={!t.ticket.assignee_id}">{!t.assignedTo}</apex:outputLink>
-                        </apex:column>
-                        <apex:column headerValue="Group" value="{!t.groupName}" />
-                        <apex:facet name="footer">
-                            <apex:outputPanel >
-                                <apex:commandButton value="<< prev page" action="{!prevTicketPage}" rendered="{!NOT(ISNULL(previous_page))}" rerender="ticketsPanel" />
-                                <apex:commandButton value="next page >>" action="{!nextTicketPage}" rendered="{!NOT(ISNULL(next_page))}" rerender="ticketsPanel" />
-                            </apex:outputPanel>
-                        </apex:facet>
-                    </apex:pageBlockTable>
-                </apex:pageBlockSection>
-            </apex:outputPanel>
-
+            <apex:pageBlockSection title="Related Items" id="usersSection" columns="1">
+                <apex:tabPanel switchType="client" selectedTab="ticketsTab" id="theTabPanel">
+                    <apex:tab label="Tickets" name="ticketsTab" id="ticketsTab">
+                        <apex:outputPanel id="ticketsPanel">
+                            <apex:pageBlockTable value="{!ui_tickets}" var="t" rendered="{!NOT(ISNULL(ui_tickets))}">
+                                <apex:column headerValue="ID">
+                                    <apex:outputLink value="/apex/ZendeskTicketDetail?id={!t.ticket.id}">{!t.ticket.id}</apex:outputLink>
+                                </apex:column>
+                                <apex:column headerValue="Type" value="{!t.ticket.type}"/>
+                                <apex:column headerValue="Status" value="{!t.ticket.status}"/>
+                                <apex:column headerValue="Created">
+                                    <apex:outputText value="{0,date,full}">
+                                        <apex:param value="{!t.ticket.created_at}" />
+                                    </apex:outputText>
+                                </apex:column>
+                                <apex:column headerValue="Subject" value="{!t.ticket.subject}"/>
+                                <apex:column headerValue="Requested By">
+                                    <apex:outputLink value="/apex/ZendeskUserDetail?id={!t.ticket.requester_id}">{!t.requestedBy}</apex:outputLink>
+                                </apex:column>
+                                <apex:column headerValue="Assigned To">
+                                    <apex:outputLink value="/apex/ZendeskUserDetail?id={!t.ticket.assignee_id}">{!t.assignedTo}</apex:outputLink>
+                                </apex:column>
+                                <apex:column headerValue="Group" value="{!t.groupName}" />
+                                <apex:facet name="footer">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="<< prev page" action="{!prevTicketPage}" rendered="{!NOT(ISNULL(previous_tickets_page))}" rerender="ticketsPanel" />
+                                        <apex:commandButton value="next page >>" action="{!nextTicketPage}" rendered="{!NOT(ISNULL(next_tickets_page))}" rerender="ticketsPanel" />
+                                    </apex:outputPanel>
+                                </apex:facet>
+                            </apex:pageBlockTable>
+                        </apex:outputPanel>
+                    </apex:tab>
+                    <apex:tab label="Users" name="usersTab" id="usersTab">
+                    <apex:outputPanel id="usersPanel">
+                        <apex:pageBlockTable value="{!ui_users}" var="u" rendered="{!NOT(ISNULL(ui_users))}">
+                            <apex:column headerValue="ID">
+                                <apex:outputLink value="/apex/ZendeskUserDetail?id={!u.user.id}">{!u.user.id}</apex:outputLink>
+                            </apex:column>
+                            <apex:column headerValue="Name" value="{!u.user.name}"/>
+                            <apex:column headerValue="Role" value="{!u.user.role}"/>
+                            <apex:column headerValue="Email" value="{!u.user.email}"/>
+                            <apex:column headerValue="Phone" value="{!u.user.phone}"/>
+                            <apex:column headerValue="Created">
+                                <apex:outputText value="{0,date,full}">
+                                    <apex:param value="{!u.user.created_at}" />
+                                </apex:outputText>
+                            </apex:column>
+                            <apex:column headerValue="Last Login">
+                                <apex:outputText value="{0,date,full}">
+                                    <apex:param value="{!u.user.last_login_at}" />
+                                </apex:outputText>
+                            </apex:column>
+                            <apex:facet name="footer">
+                                <apex:outputPanel >
+                                    <apex:commandButton value="<< prev page" action="{!prevUserPage}" rendered="{!NOT(ISNULL(previous_users_page))}" rerender="usersPanel" />
+                                    <apex:commandButton value="next page >>" action="{!nextUserPage}" rendered="{!NOT(ISNULL(next_users_page))}" rerender="usersPanel" />
+                                </apex:outputPanel>
+                            </apex:facet>
+                        </apex:pageBlockTable>
+                    </apex:outputPanel>
+                    </apex:tab>
+                </apex:tabPanel>
+            </apex:pageBlockSection>
         </apex:pageBlock>
     </apex:form>
 </apex:page>

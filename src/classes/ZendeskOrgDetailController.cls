@@ -1,6 +1,7 @@
 public class ZendeskOrgDetailController {
 
-    private final static Integer TICKETS_PER_PAGE = 20;
+    private final static Integer TICKETS_PER_PAGE = 10;
+    private final static Integer USERS_PER_PAGE = 10;
 
     private String subdomain;
     private String username;
@@ -12,6 +13,7 @@ public class ZendeskOrgDetailController {
     public String pageMessage {get;set;}
     public UIOrg ui_org {get; private set;}
     public List<UITicket> ui_tickets {get;set;}
+    public List<UIUser> ui_users {get;set;}
 
     public class UIOrg {
         public ZendeskTypes.ZOrganization org {get; private set;}
@@ -74,6 +76,13 @@ public class ZendeskOrgDetailController {
         }
     }
 
+    public class UIUser {
+        public ZendeskTypes.ZUser user {get; private set;}
+        public UIUser(ZendeskTypes.ZUser u) {
+            user = u;
+        }
+    }
+
 
     public ZendeskOrgDetailController() {
         try {
@@ -105,15 +114,15 @@ public class ZendeskOrgDetailController {
         loadOrgDetails();
     }
 
-    public Long previous_page {get;set;}
+    public Long previous_tickets_page {get;set;}
     public PageReference prevTicketPage() {
-        loadTickets(previous_page);
+        loadTickets(previous_tickets_page);
         return null;
     }
 
-    public Long next_page {get;set;}
+    public Long next_tickets_page {get;set;}
     public PageReference nextTicketPage() {
-        loadTickets(next_page);
+        loadTickets(next_tickets_page);
         return null;
     }
 
@@ -127,8 +136,8 @@ public class ZendeskOrgDetailController {
             qparams.put('page', page);
         }
         ZendeskTicketsAPI.TicketsWrapper ticketsWrapper = tickets_api.getTicketsByOrgId(orgId, qparams);
-        previous_page = ticketsWrapper.previousPageNumber;
-        next_page = ticketsWrapper.nextPageNumber;
+        previous_tickets_page = ticketsWrapper.previousPageNumber;
+        next_tickets_page = ticketsWrapper.nextPageNumber;
 
         // Build a map of User name's related to the tickets
         Map<Long, String> ticketUsersMap = new Map<Long, String>();
@@ -149,6 +158,38 @@ public class ZendeskOrgDetailController {
         if (ticketsWrapper != null && ticketsWrapper.tickets != null && !ticketsWrapper.tickets.isEmpty()) {
             for (ZendeskTypes.ZTicket t : ticketsWrapper.tickets) {
                 ui_tickets.add(new UITicket(t, ticketUsersMap, ticketGroupsMap));
+            }
+        }
+    }
+
+    public Long previous_users_page {get;set;}
+    public PageReference prevUserPage() {
+        loadUsers(previous_users_page);
+        return null;
+    }
+
+    public Long next_users_page {get;set;}
+    public PageReference nextUserPage() {
+        loadUsers(next_users_page);
+        return null;
+    }
+
+    public void loadUsers(Long page) {
+        ui_users = new List<UIUser>();
+
+        // Get Users for the Organization
+        ZendeskUsersAPI users_api = new ZendeskUsersAPI(zconn);
+        Map<String, Object> qparams = new Map<String, Object>{'sort_order'=>'desc', 'per_page'=>USERS_PER_PAGE};
+        if (page != null) {
+            qparams.put('page', page);
+        }
+        ZendeskUsersAPI.UsersWrapper usersWrapper = users_api.getUsersByOrganization(orgId, qparams);
+        previous_users_page = usersWrapper.previousPageNumber;
+        next_users_page = usersWrapper.nextPageNumber;
+
+        if (usersWrapper != null && usersWrapper.users != null && !usersWrapper.users.isEmpty()) {
+            for (ZendeskTypes.ZUser u : usersWrapper.users) {
+                ui_users.add(new UIUser(u));
             }
         }
     }
@@ -190,6 +231,9 @@ public class ZendeskOrgDetailController {
 
                 // Load the first page of tickets
                 loadTickets(null);
+
+                // Load the first page of users
+                loadUsers(null);
             }
             else {
                 throw new ZendeskException('No Organization found with id ' + orgId);
