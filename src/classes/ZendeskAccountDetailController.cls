@@ -5,10 +5,10 @@ public class ZendeskAccountDetailController {
         PER_PAGE = 5;
     }
 
-    private String subdomain;
-    private String username;
-    private String pwdOrToken;
-    private String authType;
+    public String subdomain;
+    public String username;
+    public String pwdOrToken;
+    public String authType;
 
     public final Account acct;
     public String pageMessage {get;set;}
