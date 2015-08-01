@@ -1,0 +1,32 @@
+<!-- This page can be used as an inline Visualforce page on the Account layout -->
+<apex:page standardController="Account" extensions="ZendeskAccountDetailController" readOnly="true" action="{!init}">
+    <apex:form >
+        <apex:pageBlock title="Zendesk Organizations" id="block" mode="detail">
+            <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
+            <apex:pageBlockSection id="resultsBlock" columns="1" rendered="{!pageMessage=''}">
+                <apex:outputPanel id="orgsPanel">
+                    <apex:pageBlockTable value="{!ui_orgs}" var="o" rendered="{!NOT(ISNULL(ui_orgs))}">
+                        <apex:column headerValue="ID">
+                            <apex:outputLink value="/apex/ZendeskOrgDetail?id={!o.org.id}" target="_top">{!o.org.id}</apex:outputLink>
+                        </apex:column>
+                        <apex:column headerValue="Name" value="{!o.org.name}"/>
+                        <apex:column headerValue="Created">
+                            <apex:outputText value="{0,date,full}">
+                                <apex:param value="{!o.org.created_at}" />
+                            </apex:outputText>
+                        </apex:column>
+                        <apex:column headerValue="Domain Names" value="{!o.domains}"/>
+                        <apex:column headerValue="Group" value="{!o.groupName}"/>
+                        <apex:facet name="footer">
+                            <apex:outputPanel >
+                                <apex:commandButton value="<< prev page" action="{!prevPage}" rendered="{!NOT(ISNULL(previous_page))}" rerender="orgsPanel" />
+                                <apex:commandButton value="next page >>" action="{!nextPage}" rendered="{!NOT(ISNULL(next_page))}" rerender="orgsPanel" />
+                                <apex:outputText value="{!total_matches} match(es)" rendered="{!NOT(ISNULL(total_matches)) && total_matches > PER_PAGE}" />
+                            </apex:outputPanel>
+                        </apex:facet>
+                    </apex:pageBlockTable>
+                </apex:outputPanel>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
