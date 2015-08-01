@@ -1,5 +1,5 @@
 @isTest
-public class ZendeskAccountDetailControllerTests {
+public class ZendeskAccountOrgsControllerTests {
 
     public class MockAPIResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
@@ -19,17 +19,16 @@ public class ZendeskAccountDetailControllerTests {
 
     private static testmethod void testInit() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
+
+        Zendesk_API__c config = new Zendesk_API__c(Subdomain__c='s', Username__c='u', Password_or_Token__c='pwd', Authentication_Type__c='Password');
+        insert config;
+
         Account acct = new Account(Name='TestAccount');
         insert acct;
 
         Test.startTest();
         ApexPages.CurrentPage().getparameters().put('id', acct.id);
-        ZendeskAccountDetailController con = new ZendeskAccountDetailController(new ApexPages.standardController(acct));
-        con.subdomain = 'test';
-        con.username = 'username';
-        con.pwdOrToken = 'pwd';
-        con.authType = 'Password';
-
+        ZendeskAccountOrgsController con = new ZendeskAccountOrgsController(new ApexPages.standardController(acct));
         con.init();
         Test.stopTest();
 
@@ -41,16 +40,16 @@ public class ZendeskAccountDetailControllerTests {
 
     private static testmethod void testPaging() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
+
+        Zendesk_API__c config = new Zendesk_API__c(Subdomain__c='s', Username__c='u', Password_or_Token__c='pwd', Authentication_Type__c='Password');
+        insert config;
+
         Account acct = new Account(Name='TestAccount');
         insert acct;
 
         Test.startTest();
         ApexPages.CurrentPage().getparameters().put('id', acct.id);
-        ZendeskAccountDetailController con = new ZendeskAccountDetailController(new ApexPages.standardController(acct));
-        con.subdomain = 'test';
-        con.username = 'username';
-        con.pwdOrToken = 'pwd';
-        con.authType = 'Password';
+        ZendeskAccountOrgsController con = new ZendeskAccountOrgsController(new ApexPages.standardController(acct));
 
         con.previous_page = 1;
         con.prevPage();

@@ -1,14 +1,14 @@
-public class ZendeskAccountDetailController {
+public class ZendeskAccountOrgsController {
 
     public final static Integer PER_PAGE {get;private set;}
     static {
         PER_PAGE = 5;
     }
 
-    public String subdomain;
-    public String username;
-    public String pwdOrToken;
-    public String authType;
+    private String subdomain;
+    private String username;
+    private String pwdOrToken;
+    private String authType;
 
     public final Account acct;
     public String pageMessage {get;set;}
@@ -39,7 +39,7 @@ public class ZendeskAccountDetailController {
 		}
 	}
 
-    public ZendeskAccountDetailController(ApexPages.StandardController controller) {
+    public ZendeskAccountOrgsController(ApexPages.StandardController controller) {
         try {
             this.acct = (Account)controller.getRecord();
 

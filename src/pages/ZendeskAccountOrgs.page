@@ -1,5 +1,5 @@
 <!-- This page can be used as an inline Visualforce page on the Account layout -->
-<apex:page standardController="Account" extensions="ZendeskAccountDetailController" readOnly="true" action="{!init}">
+<apex:page standardController="Account" extensions="ZendeskAccountOrgsController" readOnly="true" action="{!init}">
     <apex:form >
         <apex:pageBlock title="Zendesk Organizations" id="block" mode="detail">
             <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />

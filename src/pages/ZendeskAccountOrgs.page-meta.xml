@@ -3,5 +3,5 @@
     <apiVersion>34.0</apiVersion>
     <availableInTouch>false</availableInTouch>
     <confirmationTokenRequired>false</confirmationTokenRequired>
-    <label>ZendeskAccountDetail</label>
+    <label>ZendeskAccountOrgs</label>
 </ApexPage>
