@@ -16,28 +16,28 @@ public class ZendeskAccountOrgsController {
     private Map<Long, String> groupsMap = null;
 
     public List<UIOrg> ui_orgs {get;set;}
-	public class UIOrg {
-		public ZendeskTypes.ZOrganization org {get; private set;}
+    public class UIOrg {
+        public ZendeskTypes.ZOrganization org {get; private set;}
         public String groupName {get;set;}
-		public UIOrg(ZendeskTypes.ZOrganization org) {
-			this.org = org;
-		}
+        public UIOrg(ZendeskTypes.ZOrganization org) {
+            this.org = org;
+        }
 
-		public String domains {
-			get {
-				if (org.domain_names != null) {
-					String str = '';
-					for (String d : org.domain_names) {
-						str += d + ', ';
-					}
-					str = str.removeEnd(', ');
-					return str;
-				} else {
-					return null;
-				}
-			}
-		}
-	}
+        public String domains {
+            get {
+                if (org.domain_names != null) {
+                    String str = '';
+                    for (String d : org.domain_names) {
+                        str += d + ', ';
+                    }
+                    str = str.removeEnd(', ');
+                    return str;
+                } else {
+                    return null;
+                }
+            }
+        }
+    }
 
     public ZendeskAccountOrgsController(ApexPages.StandardController controller) {
         try {
@@ -59,9 +59,9 @@ public class ZendeskAccountOrgsController {
         }
     }
 
-	public void init() {
-		loadOrgs(null);
-	}
+    public void init() {
+        loadOrgs(null);
+    }
 
     public Long total_matches {get;set;}
     public Long previous_page {get;set;}
@@ -109,9 +109,9 @@ public class ZendeskAccountOrgsController {
                     UIOrg ui_org = new UIOrg(zorg);
 
                     // Get the Group associated with the Organization
-    				if (zorg.group_id != null && groupsMap != null && groupsMap.containsKey(zorg.group_id)) {
-    					ui_org.groupName = groupsMap.get(zorg.group_id);
-    				}
+                    if (zorg.group_id != null && groupsMap != null && groupsMap.containsKey(zorg.group_id)) {
+                        ui_org.groupName = groupsMap.get(zorg.group_id);
+                    }
 
                     ui_orgs.add(ui_org);
                 }
