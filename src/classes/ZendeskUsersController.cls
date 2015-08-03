@@ -94,16 +94,4 @@ public class ZendeskUsersController {
             ui_users.add(new UIUser(user));
         }
     }
-
-    public static String listToCSV(List<String> strList) {
-        if (strList != null) {
-            String str = '';
-            for (String t : strList) { str += t + ', '; }
-            str = str.removeEnd(', ');
-            return str;
-        } else {
-            return '';
-        }
-    }
-
 }

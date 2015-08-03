@@ -69,7 +69,7 @@ public class ZendeskOrgSearchController {
 
     public void doSearch(Long page) {
         try {
-            ZendeskOrganizationsAPI zorganizations = new ZendeskOrganizationsAPI(zconn);
+            ZendeskOrganizationsAPI orgs_api = new ZendeskOrganizationsAPI(zconn);
             ZendeskOrganizationsAPI.OrganizationsWrapper orgsWrapper = null;
 
             Map<String, Object> qparams = new Map<String, Object>{'per_page'=>ORGS_PER_PAGE};
@@ -79,10 +79,10 @@ public class ZendeskOrgSearchController {
 
             if (String.isEmpty(searchText) || searchText.length() < 2) {
                 // Default to showing all orgs if no search text is specified
-                orgsWrapper = zorganizations.getOrganizations(qparams);
+                orgsWrapper = orgs_api.getOrganizations(qparams);
             }
             else {
-                orgsWrapper = zorganizations.autocompleteSearch(searchText, qparams);
+                orgsWrapper = orgs_api.autocompleteSearch(searchText, qparams);
             }
 
             previous_page = orgsWrapper.previousPageNumber;

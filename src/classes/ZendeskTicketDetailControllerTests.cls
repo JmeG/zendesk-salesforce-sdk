@@ -6,7 +6,6 @@ public class ZendeskTicketDetailControllerTests {
             HttpResponse res = new HttpResponse();
             res.setStatusCode(200);
             res.setStatus('OK');
-            System.debug('**req.endpoint=' + req.getEndPoint());
             if (req.getEndPoint().contains('comments.json')) {
                 res.setBody('{"comments":[{"id":123,"type":"Comment","author_id":123,"body":"test","public":true,"attachments":[],"audit_id":13239342224,"via":{"channel":"email"},"created_at":"2014-04-15T04:25:37Z"}],"users":[{"id":123,"url":"https://test.zendesk.com/api/v2/users/123.json","name":"Test User","email":"testuser@test.com","created_at":"2014-03-02T19:52:32Z","updated_at":"2015-07-20T23:57:27Z","time_zone":"Pacific Time (US & Canada)","phone":"111-222-2233","photo":null,"locale_id":1,"locale":"en-US","organization_id":123,"role":"end-user","verified":false,"external_id":null,"tags":["canada"],"alias":"","active":true,"shared":false,"shared_agent":false,"last_login_at":null,"two_factor_auth_enabled":false,"signature":null,"details":"","notes":"","custom_role_id":null,"moderator":false,"ticket_restriction":"requested","only_private_comments":false,"restricted_agent":true,"suspended":false,"chat_only":false}],"next_page":null,"previous_page":null,"count":1}');
             } else if (req.getEndPoint().contains('/tickets/')) {
