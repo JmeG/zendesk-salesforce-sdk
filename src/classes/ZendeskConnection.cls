@@ -158,9 +158,15 @@ global class ZendeskConnection {
 		if (!isSuccess(res)) {
 			ZendeskError zerr = safeGetError(res.getBody());
 			if (zerr != null && !String.isEmpty(zerr.error)) {
-				throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ') ' + res.getStatus() + ': '+ zerr.error + ' ' + zerr.description);
+				throw new ZendeskResponseException(
+					String.format('Zendesk API Error ({0}, {1}) ERR={2} {3}', new List<String>{
+						String.valueOf(res.getStatusCode()),
+						res.getStatus(),
+						zerr.error,
+						zerr.description
+					}));
 			} else {
-				throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ') ' + res.getStatus());
+				throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ', ' + res.getStatus() + ')');
 			}
 		}
 
@@ -176,14 +182,14 @@ global class ZendeskConnection {
 
 	// Attempt to deserialize the response body JSON into a ZendeskError class
 	// Examples of error responses
-	// {"error":"RecordNotFound","description":"Not found"}
-	// {"error":"InvalidEndpoint","description":"Not found"}
+	// {"error":"RecordNotFound", "description":"Not found"}
+	// {"error":"InvalidEndpoint", "description":"Not found"}
+	// {"error":"RecordInvalid", "description":"Record validation errors", "details":{"base":[{"description":"Description: cannot be blank","error":"BlankValue"}]}}
 	private ZendeskError safeGetError(String resBody) {
 		ZendeskError zerr = null;
 		try {
 			zerr = (ZendeskError)JSON.deserialize(resBody, ZendeskError.class);
-		} catch(Exception e) {}
+		} catch(Exception e) {System.debug(e);}
 		return zerr;
 	}
-
 }
