@@ -1,8 +1,8 @@
-# Force.com Library for Zendesk
+# Force.com Toolkit for Zendesk
 
 ** This is very much still an early work in progress and hasn't been fully tested yet.
 
-The Force.com Library for Zendesk allows your Force.com apps to manipulate the Zendesk Core [ API](https://developer.zendesk.com/rest_api). The library provides a set of Apex classes, such as `ZendeskUsersAPI` and `ZendeskTicketsAPI`, that model Zendesk Objects `Users` and `Tickets`.
+The Force.com Toolkit for Zendesk allows your Force.com apps to manipulate the Zendesk Core [ API](https://developer.zendesk.com/rest_api). The library provides a set of Apex classes, such as `ZendeskUsersAPI` and `ZendeskTicketsAPI`, that model Zendesk Objects `Users` and `Tickets`.
 
 ## Installation
 
@@ -26,12 +26,12 @@ There are three mechanisms for installing the toolkit: as a managed package, unm
 2. Create a new Force.com project in the [Force.com IDE](http://wiki.developerforce.com/index.php/Force.com_IDE) using your new org's credentials. In the 'Choose Initial Project Contents' dialog, select 'Selected metadata components', hit 'Choose...' and select ALL of the components in the next page. This will give you a complete project directory tree.
 3. Clone this GitHub project into the Force.com IDE project directory. You will need to clone it first to a temporary location, since git will not let you clone to a directory with existing content:
 
-        $ git clone --no-checkout git://github.com/JmeG/Force.com-Library-for-Zendesk.git /path/to/your/projectdir/tmp
+        $ git clone --no-checkout git://github.com/JmeG/Force.com-Toolkit-for-Zendesk.git /path/to/your/projectdir/tmp
         $ mv /path/to/your/projectdir/tmp/.git /path/to/your/projectdir
         $ rm -rf /path/to/your/projectdir/tmp
         $ cd /path/to/your/projectdir
         $ git reset --hard HEAD
 
 4. In Eclipse, right click your project in the project explorer and click 'Refresh'. This causes Eclipse to scan the project directory tree for changes, and the plugin syncs changes to Force.com.
-5. In your DE environment, go to **Setup | App Setup | Create | Apps**, click 'Edit' next to the Zendesk Library app, scroll down, click the 'Visible' box next to System Administrator and hit 'Save'. Now go to **Setup | Administration Setup | Manage Users | Profiles**, click on System Administrator, Object Settings, set 'Zendesk Samples' to 'Default On' and hit 'Save'. 'Zendesk Library' should now be available in the dropdown list of apps (top right).
+5. In your DE environment, go to **Setup | App Setup | Create | Apps**, click 'Edit' next to the Zendesk Toolkit app, scroll down, click the 'Visible' box next to System Administrator and hit 'Save'. Now go to **Setup | Administration Setup | Manage Users | Profiles**, click on System Administrator, Object Settings, set 'Zendesk Samples' to 'Default On' and hit 'Save'. 'Zendesk Toolkit' should now be available in the dropdown list of apps (top right).
 6. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://yoursubdomain.zendesk.com as a new remote site.
