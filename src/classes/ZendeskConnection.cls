@@ -22,9 +22,6 @@ global class ZendeskConnection {
 		global String description;
 	}
 
-	// Don't let anyone create a connection with endpoint and authentication details
-	//private ZendeskConnection() {}
-
 	// Factory method to initialize a ZendeskConnection with a Password
 	global static ZendeskConnection createWithPassword(String subdomain, String username, String password) {
 		return new ZendeskConnection(subdomain, username, password, null);
