@@ -5,4 +5,5 @@
     <tab>standard-Account</tab>
     <tab>Zendesk_Samples</tab>
     <tab>Zendesk_OrgSearch</tab>
+    <tab>Zendesk_Search</tab>
 </CustomApplication>
