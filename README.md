@@ -10,13 +10,13 @@ There are two mechanisms for installing the toolkit: as an unmanaged package, or
 
 ### Installing the Unmanaged Package
 
-1. Create a new Developer Edition (DE) account at http://developer.force.com/join. You will receive an activation email - click the enclosed link to complete setup of your DE environment. This will also log you in to your new DE environment.
+1. Create a new Developer Edition (DE) account at https://developer.salesforce.com/signup. You will receive an activation email - click the enclosed link to complete setup of your DE environment. This will also log you in to your new DE environment.
 2. Install the unmanaged package into your new DE org via this URL: https://login.salesforce.com/packaging/installPackage.apexp?p0=XXXXXXXXXXXXXX
 4. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://yoursubdomain.zendesk.com as a new remote site.
 
 ### Installing from GitHub
 
-1. Create a new Developer Edition (DE) account at http://developer.force.com/join. You will receive an activation email - click the enclosed link to complete setup of your DE environment. This will also log you in to your new DE environment.
+1. Create a new Developer Edition (DE) account at https://developer.salesforce.com/signup. You will receive an activation email - click the enclosed link to complete setup of your DE environment. This will also log you in to your new DE environment.
 2. Create a new Force.com project in the [Force.com IDE](http://wiki.developerforce.com/index.php/Force.com_IDE) using your new org's credentials. In the 'Choose Initial Project Contents' dialog, select 'Selected metadata components', hit 'Choose...' and select ALL of the components in the next page. This will give you a complete project directory tree.
 3. Clone this GitHub project into the Force.com IDE project directory. You will need to clone it first to a temporary location, since git will not let you clone to a directory with existing content:
 
