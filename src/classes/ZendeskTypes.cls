@@ -1,5 +1,12 @@
 global abstract class ZendeskTypes {
 
+    //global abstract class BaseType {
+    //    global Long id {get;set;}
+    //    global String url {get;set;}
+    //    global DateTime created_at {get; private set;}
+    //    global DateTime updated_at {get; private set;}
+    //}
+
     global enum TicketType { question, incident, problem, task }
     global enum TicketPriority { low, normal, high, urgent }
 
@@ -130,14 +137,6 @@ global abstract class ZendeskTypes {
         global DateTime created_at {get; private set;}
         global String uploads {get;set;}
     }
-
-    /*
-        global class ZTicketComment {
-            global String body {get;set;}
-            global Boolean x_public {get;set;}  // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
-            global String uploads {get;set;}
-        }
-    */
 
     // Note that Ticket Field's are different than User and Organization Custom fields
     global class ZTicketField {
@@ -314,6 +313,25 @@ global abstract class ZendeskTypes {
 		global DateTime updated_at {get; private set;}
 		global String result_type {get; private set;}
 		global String url {get; private set;}
+    }
+
+    global class ZTopic {
+        global Long id {get; private set;}
+        global String title {get;set;}
+        global String body {get;set;}
+        global String topic_type {get;set;}
+        global Long submitter_id {get;set;}
+        global Long updater_id {get;set;}
+        global Long forum_id {get;set;}
+        global Boolean locked {get;set;}
+        global Boolean pinned {get;set;}
+        global Boolean highlighted {get;set;}
+        global List<String> tags {get;set;}
+        //global List<ZAttachment> attachments {get;set;}
+        global Long comments_count {get;set;}
+		global DateTime created_at {get; private set;}
+		global DateTime updated_at {get; private set;}
+        global List<String> search_phrases {get;set;}
     }
 
     global class ZSatisfactionRating {
