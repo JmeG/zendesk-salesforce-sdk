@@ -122,7 +122,7 @@ public class ZendeskSearchController {
                 pwdOrToken = settings.Password_or_Token__c;
                 authType = settings.Authentication_Type__c;
 
-                zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+                zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
                 zconn.debugResponseStatus = true;
                 zconn.debugResponseBody = true;
                 zconn.debugRequest = true;

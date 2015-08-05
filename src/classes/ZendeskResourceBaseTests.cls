@@ -2,15 +2,7 @@
 @isTest
 private class ZendeskResourceBaseTests {
 
-    //public class Test1 extends ZendeskResourceBase {
-    //    public Test1(ZendeskConnection zconn) {
-    //		super(zconn);
-    //	}
-    //}
-
     static testMethod void testToCSV() {
-        //Test1 t1 = new Test1(new ZendeskConnection('s','u','p'));
-
         Test.startTest();
         System.assertEquals('1,2,3', ZendeskResourceBase.toCSV(new Set<Long> { 1, 2, 3 }));
         System.assertEquals('1,2,3', ZendeskResourceBase.toCSV(new List<Long> { 1, 2, 3 }));

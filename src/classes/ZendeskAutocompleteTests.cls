@@ -16,7 +16,7 @@ public class ZendeskAutocompleteTests {
         Test.setMock(HttpCalloutMock.class, new MockGetTagsResponse());
 
         Test.startTest();
-        ZendeskAutocompleteAPI zautocomplete_api = new ZendeskAutocompleteAPI(new ZendeskConnection('s','u','p'));
+        ZendeskAutocompleteAPI zautocomplete_api = new ZendeskAutocompleteAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskTagsAPI.TagsWrapper wrapper = zautocomplete_api.autocompleteTags('foo');
         Test.stopTest();
 

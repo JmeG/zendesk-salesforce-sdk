@@ -15,7 +15,7 @@ public class ZendeskOrganizationsSampleController {
 		pageMessage = '';
 		organizations = null;
 		try {
-			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
 			ZendeskOrganizationsAPI zorganizations = new ZendeskOrganizationsAPI(zconn);
 
 			ZendeskOrganizationsAPI.OrganizationsWrapper wrapper = zorganizations.getOrganizations();
@@ -31,7 +31,7 @@ public class ZendeskOrganizationsSampleController {
 		pageMessage = '';
 		organizations = null;
 		try {
-			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
 			ZendeskOrganizationsAPI zorganizations = new ZendeskOrganizationsAPI(zconn);
 
 			ZendeskOrganizationsAPI.OrganizationWrapper wrapper = zorganizations.getOrganization(organizationId);

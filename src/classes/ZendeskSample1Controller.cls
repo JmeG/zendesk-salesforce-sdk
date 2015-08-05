@@ -27,7 +27,7 @@ public class ZendeskSample1Controller {
 	public PageReference validateLogin() {
 		pageMessage = '';
 		try {
-			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
 			if (zconn.canLogin()) {
 				pageMessage = 'Successfully logged in';
 			}

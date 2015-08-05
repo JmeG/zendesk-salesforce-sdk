@@ -26,7 +26,7 @@ public class ZendeskTicketMetricsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketMetricsResponse());
 
         Test.startTest();
-        ZendeskTicketMetricsAPI zmetrics_api = new ZendeskTicketMetricsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketMetricsAPI zmetrics_api = new ZendeskTicketMetricsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskTicketMetricsAPI.TicketMetricsWrapper wrapper = zmetrics_api.getTicketMetrics();
         Test.stopTest();
 
@@ -38,7 +38,7 @@ public class ZendeskTicketMetricsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketMetricResponse());
 
         Test.startTest();
-        ZendeskTicketMetricsAPI zmetrics_api = new ZendeskTicketMetricsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketMetricsAPI zmetrics_api = new ZendeskTicketMetricsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskTypes.ZTicketMetrics tmetric = zmetrics_api.getTicketMetrics(1);
         Test.stopTest();
 
@@ -49,7 +49,7 @@ public class ZendeskTicketMetricsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketMetricResponse());
 
         Test.startTest();
-        ZendeskTicketMetricsAPI zmetrics_api = new ZendeskTicketMetricsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketMetricsAPI zmetrics_api = new ZendeskTicketMetricsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskTypes.ZTicketMetrics tmetric = zmetrics_api.getTicketMetricsByTicketId(1);
         Test.stopTest();
 

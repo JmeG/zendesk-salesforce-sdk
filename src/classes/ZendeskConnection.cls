@@ -5,8 +5,8 @@ global class ZendeskConnection {
 
 	private String subdomain;
 	private String username;
-	private String passwordOrToken;
-	private AuthType authenticationType;
+	private String password;
+	private String token;
 
 	// overridable properties
 	global String userAgent = DEFAULT_USER_AGENT;
@@ -17,35 +17,34 @@ global class ZendeskConnection {
 	global Boolean debugResponseBody = false;
 	global Boolean debugResponseHeaders = false;
 
-	global Enum AuthType { Password, Token }
-
 	global class ZendeskError {
 		global String error;
 		global String description;
 	}
 
-	global ZendeskConnection(String subdomain, String username, String password) {
-		if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
-		if (String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
-		if (String.isBlank(password)) { throw new ZendeskException('password parameter must not be empty'); }
+	// Don't let anyone create a connection with endpoint and authentication details
+	//private ZendeskConnection() {}
 
-		this.subdomain = subdomain;
-		this.username = username;
-		this.passwordOrToken = password;
-		this.authenticationType = AuthType.Password;
+	// Factory method to initialize a ZendeskConnection with a Password
+	global static ZendeskConnection createWithPassword(String subdomain, String username, String password) {
+		return new ZendeskConnection(subdomain, username, password, null);
 	}
 
-	// Use this constructor if you need to specify a Token instead of a Password
-	// This constructor will allow you to choose either method of authentication
-	global ZendeskConnection(String subdomain, String username, String passwordOrToken, AuthType authenticationType) {
+	// Factory method to initialize a ZendeskConnection with a Token
+	global static ZendeskConnection createWithToken(String subdomain, String username, String token) {
+		return new ZendeskConnection(subdomain, username, null, token);
+	}
+
+	// Private constructor called by the factory initialization methods
+	private ZendeskConnection(String subdomain, String username, String password, String token) {
 		if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
 		if (String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
-		if (String.isBlank(passwordOrToken)) { throw new ZendeskException('passwordOrToken parameter must not be empty'); }
+		if (String.isBlank(password) && String.isBlank(token)) { throw new ZendeskException('password or token must not be empty'); }
 
 		this.subdomain = subdomain;
 		this.username = username;
-		this.passwordOrToken = passwordOrToken;
-		this.authenticationType = authenticationType;
+		this.password = password;
+		this.token = token;
 	}
 
 	global HttpRequest createRequest(String reqMethod, String path) {
@@ -66,10 +65,10 @@ global class ZendeskConnection {
 		if (!path.startsWith('/')) { throw new ZendeskException('path parameter must start with /'); }
 
 		Blob headerValue = null;
-		if (authenticationType == AuthType.Password) {
-			headerValue = Blob.valueOf(username + ':' + passwordOrToken);
+		if (password != null) {
+			headerValue = Blob.valueOf(username + ':' + password);
 		} else { // Token
-			headerValue = Blob.valueOf(username + '/token:' + passwordOrToken);
+			headerValue = Blob.valueOf(username + '/token:' + token);
 		}
 		String authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(headerValue);
 

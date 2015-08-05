@@ -35,7 +35,7 @@ public class ZendeskTicketFormsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
 
         Test.startTest();
-        ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(ZendeskConnection.createWithPassword('s','u','p'));
 		ZendeskTypes.ZTicketForm testObj = ztforms_api.getTicketForm(123);
         Test.stopTest();
 
@@ -47,7 +47,7 @@ public class ZendeskTicketFormsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(ZendeskConnection.createWithPassword('s','u','p'));
 		ztforms_api.deleteTicketForm(123);
         Test.stopTest();
 
@@ -58,7 +58,7 @@ public class ZendeskTicketFormsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
 
         Test.startTest();
-        ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskTypes.ZTicketForm zform = new ZendeskTypes.ZTicketForm();
         zform.name = 'create name';
         zform.ticket_field_ids = new Long[] { 123, 456 };
@@ -72,7 +72,7 @@ public class ZendeskTicketFormsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
 
         Test.startTest();
-        ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskTypes.ZTicketForm zform = new ZendeskTypes.ZTicketForm();
         zform.name = 'update name';
         zform.ticket_field_ids = new Long[] { 456, 123 };
@@ -86,7 +86,7 @@ public class ZendeskTicketFormsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTicketFormsAPI zfields = new ZendeskTicketFormsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFormsAPI zfields = new ZendeskTicketFormsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         zfields.reorderTicketForms(new Long[] { 123, 456 });
         Test.stopTest();
 
@@ -97,7 +97,7 @@ public class ZendeskTicketFormsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
 
         Test.startTest();
-        ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFormsAPI ztforms_api = new ZendeskTicketFormsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         Long newTicketFormId = ztforms_api.cloneTicketForm(123);
         Test.stopTest();
 
@@ -108,7 +108,7 @@ public class ZendeskTicketFormsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormsResponse());
 
         Test.startTest();
-        ZendeskTicketFormsAPI zfields = new ZendeskTicketFormsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFormsAPI zfields = new ZendeskTicketFormsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         Map<Long, ZendeskTypes.ZTicketForm> fieldsMap = zfields.getAllTicketForms();
         Test.stopTest();
 

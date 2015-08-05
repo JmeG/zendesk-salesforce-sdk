@@ -35,7 +35,7 @@ public class ZendeskTicketFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
 
         Test.startTest();
-        ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskTypes.ZTicketField testObj = zfields_api.getField(123);
         System.assertNotEquals(null, testObj);
 
@@ -48,7 +48,7 @@ public class ZendeskTicketFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         zfields_api.deleteField(123);
         Test.stopTest();
 
@@ -59,7 +59,7 @@ public class ZendeskTicketFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
 
         Test.startTest();
-        ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskTypes.ZTicketField zfield = new ZendeskTypes.ZTicketField();
         zfield.type = 'create type';
         zfield.title = 'create title';
@@ -73,7 +73,7 @@ public class ZendeskTicketFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
 
         Test.startTest();
-        ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskTypes.ZTicketField zfield = new ZendeskTypes.ZTicketField();
         zfield.type = 'update type';
         zfield.title = 'update title';
@@ -87,7 +87,7 @@ public class ZendeskTicketFieldsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldsResponse());
 
         Test.startTest();
-        ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketFieldsAPI zfields_api = new ZendeskTicketFieldsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         Map<Long, ZendeskTypes.ZTicketField> fieldsMap = zfields_api.getAllFields();
         Test.stopTest();
 

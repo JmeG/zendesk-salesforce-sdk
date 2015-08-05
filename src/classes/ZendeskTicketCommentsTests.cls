@@ -25,7 +25,7 @@ private class ZendeskTicketCommentsTests {
         Test.setMock(HttpCalloutMock.class, new MockTicketCommentsResponse());
 
         Test.startTest();
-        ZendeskTicketCommentsAPI zcomments = new ZendeskTicketCommentsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketCommentsAPI zcomments = new ZendeskTicketCommentsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskTicketCommentsAPI.TicketCommentsWrapper wrapper = zcomments.getTicketComments(123);
         Test.stopTest();
 
@@ -38,7 +38,7 @@ private class ZendeskTicketCommentsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTicketCommentsAPI zcomments = new ZendeskTicketCommentsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketCommentsAPI zcomments = new ZendeskTicketCommentsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         zcomments.redactStringInComment(123, 456, 'redact me');
         Test.stopTest();
 
@@ -49,7 +49,7 @@ private class ZendeskTicketCommentsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskTicketCommentsAPI zcomments = new ZendeskTicketCommentsAPI(new ZendeskConnection('s','u','p'));
+        ZendeskTicketCommentsAPI zcomments = new ZendeskTicketCommentsAPI(ZendeskConnection.createWithPassword('s','u','p'));
         zcomments.makeCommentPrivate(123, 456);
         Test.stopTest();
 

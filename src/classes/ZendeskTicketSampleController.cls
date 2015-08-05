@@ -17,7 +17,7 @@ public class ZendeskTicketSampleController {
 	public PageReference createTicket() {
 		pageMessage = '';
 		try {
-			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
 			ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(zconn);
 
 			Long newTicketId = ztickets.createTicket(ZendeskTypes.TicketType.question, newTicketSubject, newTicketComment, requesterId);
@@ -34,7 +34,7 @@ public class ZendeskTicketSampleController {
 		pageMessage = '';
 		tickets = null;
 		try {
-			ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
 			ZendeskTicketsAPI ztickets = new ZendeskTicketsAPI(zconn);
 
 			ZendeskTicketsAPI.TicketsWrapper pagedTickets = ztickets.getTickets();

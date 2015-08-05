@@ -78,7 +78,7 @@ public class ZendeskAccountOrgsController {
     public void loadOrgs(Long page) {
         ui_orgs = new List<UIOrg>();
         try {
-            ZendeskConnection zconn = new ZendeskConnection(subdomain, username, pwdOrToken, (authType=='Password' ? ZendeskConnection.AuthType.Password : ZendeskConnection.AuthType.Token));
+            ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
             zconn.debugResponseStatus = true;
             zconn.debugResponseBody = true;
             zconn.debugRequest = true;

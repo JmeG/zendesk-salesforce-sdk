@@ -16,7 +16,7 @@ public class ZendeskSearchTests {
         Test.setMock(HttpCalloutMock.class, new MockSearchResponse());
 
         Test.startTest();
-        ZendeskSearchAPI search_api = new ZendeskSearchAPI(new ZendeskConnection('s','u','p'));
+        ZendeskSearchAPI search_api = new ZendeskSearchAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskSearchAPI.SearchResultsWrapper searchWrapper = search_api.search('foo');
         Test.stopTest();
 
@@ -27,7 +27,7 @@ public class ZendeskSearchTests {
         Test.setMock(HttpCalloutMock.class, new MockSearchResponse());
 
         Test.startTest();
-        ZendeskSearchAPI search_api = new ZendeskSearchAPI(new ZendeskConnection('s','u','p'));
+        ZendeskSearchAPI search_api = new ZendeskSearchAPI(ZendeskConnection.createWithPassword('s','u','p'));
         ZendeskSearchAPI.SearchResultsWrapper searchWrapper = search_api.searchForums('foo');
         Test.stopTest();
 
