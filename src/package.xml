@@ -27,6 +27,7 @@
     <types>
         <members>Zendesk_Samples</members>
         <members>Zendesk_OrgSearch</members>
+        <members>Zendesk_Search</members>
         <name>CustomTab</name>
     </types>
     <version>34.0</version>
