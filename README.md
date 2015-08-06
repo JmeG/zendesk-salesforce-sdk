@@ -1,8 +1,6 @@
 # Force.com Toolkit for Zendesk
 
-** This is very much still an early work in progress and hasn't been fully tested yet.
-
-The Force.com Toolkit for Zendesk allows your Force.com apps to manipulate the Zendesk Core [ API](https://developer.zendesk.com/rest_api). The library provides a set of Apex classes, such as `ZendeskUsersAPI` and `ZendeskTicketsAPI`, that model Zendesk Objects `Users` and `Tickets`.
+The Force.com Toolkit for Zendesk allows your Force.com apps to call the Zendesk Core [ API](https://developer.zendesk.com/rest_api). The library provides a set of Apex classes, such as `ZendeskUsersAPI` and `ZendeskTicketsAPI`, that model Zendesk Objects `Users` and `Tickets`.
 
 ## Installation
 
@@ -11,7 +9,7 @@ There are three mechanisms for installing the toolkit: as a managed package, unm
 ### Installing the Managed Package
 
 1. Create a new Developer Edition (DE) account at https://developer.salesforce.com/signup. You will receive an activation email - click the enclosed link to complete setup of your DE environment. This will also log you in to your new DE environment.
-2. Install the unmanaged package into your new DE org via this URL: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t80000000lSAS
+2. Install the managed package into your new DE org via this URL: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t61000000HMP0
 4. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://yoursubdomain.zendesk.com as a new remote site.
 
 ### Installing the Unmanaged Package
