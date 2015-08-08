@@ -23,7 +23,8 @@ public class ZendeskContactUserController {
 
     public ZendeskContactUserController(ApexPages.StandardController controller) {
         try {
-            controller.addFields(new List<String>{'Email'});
+            if (!Test.isRunningTest()) { controller.addFields(new List<String>{'Email'}); }
+            
             this.con = (Contact)controller.getRecord();
 
             Zendesk_API__c settings = Zendesk_API__c.getInstance();
