@@ -84,8 +84,9 @@
                                 <apex:column headerValue="Group" value="{!t.groupName}" />
                                 <apex:facet name="footer">
                                     <apex:outputPanel >
-                                        <apex:commandButton value="<< prev page" action="{!prevTicketPage}" rendered="{!NOT(ISNULL(previous_tickets_page))}" rerender="ticketsPanel" />
-                                        <apex:commandButton value="next page >>" action="{!nextTicketPage}" rendered="{!NOT(ISNULL(next_tickets_page))}" rerender="ticketsPanel" />
+                                        <apex:commandButton value=" < Prev " action="{!prevTicketPage}" rendered="{!NOT(ISNULL(previous_tickets_page))}" rerender="ticketsPanel" />
+                                        <apex:outputText value=" Page {!current_tickets_page} of {!total_ticket_pages} " rendered="{!NOT(ISNULL(total_tickets))}" />
+                                        <apex:commandButton value=" Next > " action="{!nextTicketPage}" rendered="{!NOT(ISNULL(next_tickets_page))}" rerender="ticketsPanel" />
                                     </apex:outputPanel>
                                 </apex:facet>
                             </apex:pageBlockTable>
@@ -109,8 +110,9 @@
                             </apex:column>
                             <apex:facet name="footer">
                                 <apex:outputPanel >
-                                    <apex:commandButton value="<< prev page" action="{!prevUserPage}" rendered="{!NOT(ISNULL(previous_users_page))}" rerender="usersPanel" />
-                                    <apex:commandButton value="next page >>" action="{!nextUserPage}" rendered="{!NOT(ISNULL(next_users_page))}" rerender="usersPanel" />
+                                    <apex:commandButton value=" < Prev " action="{!prevUserPage}" rendered="{!NOT(ISNULL(previous_users_page))}" rerender="usersPanel" />
+                                    <apex:outputText value=" Page {!current_users_page} of {!total_user_pages} " rendered="{!NOT(ISNULL(total_users))}" />
+                                    <apex:commandButton value=" Next > " action="{!nextUserPage}" rendered="{!NOT(ISNULL(next_users_page))}" rerender="usersPanel" />
                                 </apex:outputPanel>
                             </apex:facet>
                         </apex:pageBlockTable>

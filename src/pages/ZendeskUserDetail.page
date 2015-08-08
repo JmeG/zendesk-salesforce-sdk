@@ -75,6 +75,36 @@
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSection>
 
+            <apex:pageBlockSection title="Tickets" id="usersSection" columns="1">
+                <apex:outputPanel id="ticketsPanel">
+                    <apex:pageBlockTable value="{!ui_tickets}" var="t" rendered="{!NOT(ISNULL(ui_tickets))}">
+                        <apex:column headerValue="ID">
+                            <apex:outputLink value="/apex/ZendeskTicketDetail?id={!t.ticket.id}">{!t.ticket.id}</apex:outputLink>
+                        </apex:column>
+                        <apex:column headerValue="Type" value="{!t.ticket.type}"/>
+                        <apex:column headerValue="Status" value="{!t.ticket.status}"/>
+                        <apex:column headerValue="Created">
+                            <c:ZendeskOutputDateTime value="{!t.ticket.created_at}" />
+                        </apex:column>
+                        <apex:column headerValue="Subject" value="{!t.ticket.subject}"/>
+                        <apex:column headerValue="Requested By">
+                            <apex:outputLink value="/apex/ZendeskUserDetail?id={!t.ticket.requester_id}">{!t.requestedBy}</apex:outputLink>
+                        </apex:column>
+                        <apex:column headerValue="Assigned To">
+                            <apex:outputLink value="/apex/ZendeskUserDetail?id={!t.ticket.assignee_id}">{!t.assignedTo}</apex:outputLink>
+                        </apex:column>
+                        <apex:column headerValue="Group" value="{!t.groupName}" />
+                        <apex:facet name="footer">
+                            <apex:outputPanel >
+                                <apex:commandButton value=" < Prev " action="{!prevTicketPage}" rendered="{!NOT(ISNULL(previous_tickets_page))}" rerender="ticketsPanel" />
+                                <apex:outputText value=" Page {!current_tickets_page} of {!total_ticket_pages} " rendered="{!NOT(ISNULL(total_tickets))}" />
+                                <apex:commandButton value=" Next > " action="{!nextTicketPage}" rendered="{!NOT(ISNULL(next_tickets_page))}" rerender="ticketsPanel" />
+                            </apex:outputPanel>
+                        </apex:facet>
+                    </apex:pageBlockTable>
+                </apex:outputPanel>
+            </apex:pageBlockSection>
+
         </apex:pageBlock>
     </apex:form>
 </apex:page>

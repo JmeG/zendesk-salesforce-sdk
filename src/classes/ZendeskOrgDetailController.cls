@@ -114,6 +114,24 @@ public class ZendeskOrgDetailController {
         loadOrgDetails();
     }
 
+    public Integer total_ticket_pages {
+        get {
+            if (Math.mod(total_tickets, TICKETS_PER_PAGE) == 0) {
+                return Integer.valueOf(total_tickets / TICKETS_PER_PAGE);
+            } else {
+                return Integer.valueOf(total_tickets / TICKETS_PER_PAGE) + 1;
+            }
+        }
+    }
+    public Long total_tickets {get;set;}
+    public Long current_tickets_page {
+        get {
+            if (previous_tickets_page != null) return previous_tickets_page + 1;
+            else if (next_tickets_page != null) return next_tickets_page - 1;
+            else return 1;
+        }
+    }
+
     public Long previous_tickets_page {get;set;}
     public PageReference prevTicketPage() {
         loadTickets(previous_tickets_page);
@@ -138,6 +156,7 @@ public class ZendeskOrgDetailController {
         ZendeskTicketsAPI.TicketsWrapper ticketsWrapper = tickets_api.getTicketsByOrgId(orgId, qparams);
         previous_tickets_page = ticketsWrapper.previousPageNumber;
         next_tickets_page = ticketsWrapper.nextPageNumber;
+        total_tickets = ticketsWrapper.count;
 
         // Build a map of User name's related to the tickets
         Map<Long, String> ticketUsersMap = new Map<Long, String>();
@@ -159,6 +178,24 @@ public class ZendeskOrgDetailController {
             for (ZendeskTypes.ZTicket t : ticketsWrapper.tickets) {
                 ui_tickets.add(new UITicket(t, ticketUsersMap, ticketGroupsMap));
             }
+        }
+    }
+
+    public Integer total_user_pages {
+        get {
+            if (Math.mod(total_users, USERS_PER_PAGE) == 0) {
+                return Integer.valueOf(total_users / USERS_PER_PAGE);
+            } else {
+                return Integer.valueOf(total_users / USERS_PER_PAGE) + 1;
+            }
+        }
+    }
+    public Long total_users {get;set;}
+    public Long current_users_page {
+        get {
+            if (previous_users_page != null) return previous_users_page + 1;
+            else if (next_users_page != null) return next_users_page - 1;
+            else return 1;
         }
     }
 
@@ -186,6 +223,7 @@ public class ZendeskOrgDetailController {
         ZendeskUsersAPI.UsersWrapper usersWrapper = users_api.getUsersByOrganization(orgId, qparams);
         previous_users_page = usersWrapper.previousPageNumber;
         next_users_page = usersWrapper.nextPageNumber;
+        total_users = usersWrapper.count;
 
         if (usersWrapper != null && usersWrapper.users != null && !usersWrapper.users.isEmpty()) {
             for (ZendeskTypes.ZUser u : usersWrapper.users) {
