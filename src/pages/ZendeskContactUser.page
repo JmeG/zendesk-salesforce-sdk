@@ -8,6 +8,10 @@
                     <apex:outputLabel value="ID" />
                     <apex:outputLink value="/apex/ZendeskUserDetail?id={!ui_user.user.id}" target="_top">{!ui_user.user.id}</apex:outputLink>
                 </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem>
+                    <apex:outputLabel value="Organization" />
+                    <apex:outputLink value="/apex/ZendeskOrgDetail?id={!ui_user.user.organization_id}" target="_top">{!ui_user.user.organization_id}</apex:outputLink>
+                </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Name" />
                     <apex:outputText value="{!ui_user.user.name}" />
@@ -21,12 +25,16 @@
                     <apex:outputText value="{!ui_user.user.phone}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
-                    <apex:outputLabel value="Last Login" />
-                    <apex:outputText value="{!ui_user.user.last_login_at}" />
+                    <apex:outputLabel value="Verified" />
+                    <c:ZendeskOutputCheckbox value="{!ui_user.user.verified}" />
                 </apex:pageBlockSectionItem>
-                <apex:pageBlockSectionItem>
-                    <apex:outputLabel value="Organization" />
-                    <apex:outputLink value="/apex/ZendeskOrgDetail?id={!ui_user.user.organization_id}" target="_top">{!ui_user.user.organization_id}</apex:outputLink>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Created" />
+                    <c:ZendeskOutputDateTime value="{!ui_user.user.created_at}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Last Login" />
+                    <c:ZendeskOutputDateTime value="{!ui_user.user.last_login_at}" />
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSection>
         </apex:pageBlock>

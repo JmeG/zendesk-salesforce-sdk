@@ -16,9 +16,7 @@
                         <apex:column headerValue="Role" value="{!u.user.role}"/>
                         <apex:column headerValue="Timezone" value="{!u.user.time_zone}"/>
                         <apex:column headerValue="Created">
-                            <apex:outputText value="{0,date,full}">
-                                <apex:param value="{!u.user.created_at}" />
-                            </apex:outputText>
+                            <c:ZendeskOutputDateTime value="{!u.user.created_at}" />
                         </apex:column>
                         <apex:facet name="footer">
                             <apex:outputPanel >

@@ -21,11 +21,11 @@
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Created" />
-                    <apex:outputText value="{!ui_org.org.created_at}" />
+                    <c:ZendeskOutputDateTime value="{!ui_org.org.created_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Updated" />
-                    <apex:outputText value="{!ui_org.org.updated_at}" />
+                    <c:ZendeskOutputDateTime value="{!ui_org.org.updated_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Domain Names" />
@@ -72,9 +72,7 @@
                                 <apex:column headerValue="Type" value="{!t.ticket.type}"/>
                                 <apex:column headerValue="Status" value="{!t.ticket.status}"/>
                                 <apex:column headerValue="Created">
-                                    <apex:outputText value="{0,date,full}">
-                                        <apex:param value="{!t.ticket.created_at}" />
-                                    </apex:outputText>
+                                    <c:ZendeskOutputDateTime value="{!t.ticket.created_at}" />
                                 </apex:column>
                                 <apex:column headerValue="Subject" value="{!t.ticket.subject}"/>
                                 <apex:column headerValue="Requested By">
@@ -104,14 +102,10 @@
                             <apex:column headerValue="Email" value="{!u.user.email}"/>
                             <apex:column headerValue="Phone" value="{!u.user.phone}"/>
                             <apex:column headerValue="Created">
-                                <apex:outputText value="{0,date,full}">
-                                    <apex:param value="{!u.user.created_at}" />
-                                </apex:outputText>
+                                <c:ZendeskOutputDateTime value="{!u.user.created_at}" />
                             </apex:column>
                             <apex:column headerValue="Last Login">
-                                <apex:outputText value="{0,date,full}">
-                                    <apex:param value="{!u.user.last_login_at}" />
-                                </apex:outputText>
+                                <c:ZendeskOutputDateTime value="{!u.user.last_login_at}" />
                             </apex:column>
                             <apex:facet name="footer">
                                 <apex:outputPanel >

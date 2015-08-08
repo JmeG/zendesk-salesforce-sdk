@@ -11,9 +11,7 @@
                         </apex:column>
                         <apex:column headerValue="Name" value="{!o.org.name}"/>
                         <apex:column headerValue="Created">
-                            <apex:outputText value="{0,date,full}">
-                                <apex:param value="{!o.org.created_at}" />
-                            </apex:outputText>
+                            <c:ZendeskOutputDateTime value="{!o.org.created_at}" />
                         </apex:column>
                         <apex:column headerValue="Domain Names" value="{!o.domains}"/>
                         <apex:column headerValue="Group" value="{!o.groupName}"/>

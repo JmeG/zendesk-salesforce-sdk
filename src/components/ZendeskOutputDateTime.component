@@ -1,0 +1,5 @@
+<apex:component >
+    <apex:attribute name="value" description="Date and Time" type="DateTime" />
+    <!-- The space before {!value} is intentional to get Salesforce to display datetime in users timezone and format -->
+    <apex:outputText value=" {!value}" />
+</apex:component>

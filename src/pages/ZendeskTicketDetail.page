@@ -35,7 +35,7 @@
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Due At" />
-                    <apex:outputText value="{!ui_ticket.ticket.due_at}" />
+                    <c:ZendeskOutputDateTime value="{!ui_ticket.ticket.due_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Requested By" />
@@ -55,11 +55,11 @@
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Created" />
-                    <apex:outputText value="{!ui_ticket.ticket.created_at}" />
+                    <c:ZendeskOutputDateTime value="{!ui_ticket.ticket.created_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Last Updated" />
-                    <apex:outputText value="{!ui_ticket.ticket.updated_at}" />
+                    <c:ZendeskOutputDateTime value="{!ui_ticket.ticket.updated_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="External ID" />
@@ -70,19 +70,19 @@
             <apex:pageBlockSection title="Ticket Metrics" id="metrics" columns="2">
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Created" />
-                    <apex:outputText value="{!ticketMetrics.created_at}" />
+                    <c:ZendeskOutputDateTime value="{!ticketMetrics.created_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Updated" />
-                    <apex:outputText value="{!ticketMetrics.updated_at}" />
+                    <c:ZendeskOutputDateTime value="{!ticketMetrics.updated_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Assigned" />
-                    <apex:outputText value="{!ticketMetrics.assigned_at}" />
+                    <c:ZendeskOutputDateTime value="{!ticketMetrics.assigned_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Solved" />
-                    <apex:outputText value="{!ticketMetrics.solved_at}" />
+                    <c:ZendeskOutputDateTime value="{!ticketMetrics.solved_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Group Stations" />
@@ -106,7 +106,7 @@
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Status Updated" />
-                    <apex:outputText value="{!ticketMetrics.status_updated_at}" />
+                    <c:ZendeskOutputDateTime value="{!ticketMetrics.status_updated_at}" />
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSection>
 
@@ -115,9 +115,7 @@
                     <apex:pageBlockTable value="{!ui_ticketComments}" var="c" rendered="{!NOT(ISNULL(ui_ticketComments))}">
                         <apex:column headerValue="ID" value="{!c.comment.id}"/>
                         <apex:column headerValue="Created">
-                            <apex:outputText value="{0,date,full}">
-                                <apex:param value="{!c.comment.created_at}" />
-                            </apex:outputText>
+                            <c:ZendeskOutputDateTime value="{!c.comment.created_at}" />
                         </apex:column>
                         <apex:column headerValue="Author">
                             <apex:outputLink value="/apex/ZendeskUserDetail?id={!c.comment.author_id}">{!c.authorName}</apex:outputLink>

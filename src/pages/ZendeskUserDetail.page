@@ -59,15 +59,15 @@
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Last Login" />
-                    <apex:outputText value="{!ui_user.user.last_login_at}" />
+                    <c:ZendeskOutputDateTime value="{!ui_user.user.last_login_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Created" />
-                    <apex:outputText value="{!ui_user.user.created_at}" />
+                    <c:ZendeskOutputDateTime value="{!ui_user.user.created_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Last Updated" />
-                    <apex:outputText value="{!ui_user.user.updated_at}" />
+                    <c:ZendeskOutputDateTime value="{!ui_user.user.updated_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="External ID" />
