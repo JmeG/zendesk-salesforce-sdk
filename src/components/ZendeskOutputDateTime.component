@@ -1,6 +1,6 @@
 <apex:component >
     <apex:attribute name="value" description="Date and Time" type="DateTime" />
-    <!-- The space before {!value} is intentional to get Salesforce to display datetime in users timezone and format -->
+    <!-- The space before {!value} is an intentional hack to get Salesforce to display datetime in users timezone and format -->
     <!-- Without the space it renders: Sun Mar 02 19:52:32 GMT 2014 -->
     <!-- With the space it renders:  3/2/2014 11:52 AM -->
     <apex:outputText value=" {!value}" />
