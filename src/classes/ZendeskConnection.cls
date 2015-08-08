@@ -150,8 +150,13 @@ global class ZendeskConnection {
 			System.debug(LoggingLevel.INFO, '**RESPONSE_BODY=' + res.getBody());
 		}
 
-		// Validate the response
-		if (!isSuccess(res)) {
+		// Validate the response - anything outside the 200 range will result in an exception
+		if (res.getStatusCode() < 200 || res.getStatusCode() > 299) {
+			if (res.getStatusCode() == 429) {
+				String retrySeconds = res.getHeader('Retry-After');
+				System.debug('retrySeconds=' + retrySeconds);
+				throw new ZendeskResponseException('Rate Limit Exception. Try after ' + retrySeconds);
+			}
 			ZendeskError zerr = safeGetError(res.getBody());
 			if (zerr != null && !String.isEmpty(zerr.error)) {
 				throw new ZendeskResponseException(
@@ -167,13 +172,6 @@ global class ZendeskConnection {
 		}
 
 		return res.getBody();
-	}
-
-	private Boolean isSuccess(HttpResponse res) {
-		if (res == null) { throw new ZendeskException('res parameter cannot be null'); }
-
-		Boolean isSuccess = (res.getStatusCode() != null && res.getStatusCode() >= 200 && res.getStatusCode() <= 299);
-		return isSuccess;
 	}
 
 	// Attempt to deserialize the response body JSON into a ZendeskError class
