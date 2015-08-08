@@ -114,14 +114,14 @@ global class ZendeskUsersAPI extends ZendeskResourceBase {
 	global ZUser findUserByEmail(String email) {
 		if (String.isBlank(email)) { throw new ZendeskException('email parameter must not be empty'); }
 
-		// Set the email to lowercase because that's how Zendesk stores it
-		String resBody = zconn.sendRequest(zconn.createRequest('GET', '/users/search.json', new Map<String, Object>{'query'=>urlEncode(email.toLowerCase())}));
+		String resBody = zconn.sendRequest(zconn.createRequest('GET', '/users/search.json', new Map<String, Object>{'query'=>urlEncode(email)}));
 		UsersWrapper wrapper = (UsersWrapper)JSON.deserialize(resBody, UsersWrapper.class);
 		ZUser user = null;
 		if (wrapper != null && wrapper.users != null) {
-			for (ZUser obj : wrapper.users) {
-				if (obj.email != null && obj.email.equalsIgnoreCase(email)) {
-					user = obj;
+			// Look for a user with an exact email match
+			for (ZUser u : wrapper.users) {
+				if (u.email != null && u.email.equalsIgnoreCase(email)) {
+					user = u;
 					break;
 				}
 			}
