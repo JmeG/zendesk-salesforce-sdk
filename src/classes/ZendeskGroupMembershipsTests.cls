@@ -57,23 +57,23 @@ public class ZendeskGroupMembershipsTests {
         System.assertEquals(123, wrapper.group_membership.id);
     }
 
-    static testMethod void testDeleteGroupMembership1() {
+    static testMethod void testDeleteMembership1() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
         ZendeskGroupMembershipsAPI api = new ZendeskGroupMembershipsAPI(ZendeskConnection.createWithPassword('s','u','p'));
-        api.deleteGroupMembership(123);
+        api.deleteMembership(123);
         Test.stopTest();
 
         System.assert(true);
     }
 
-    static testMethod void testDeleteGroupMembership2() {
+    static testMethod void testDeleteMembership2() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
         ZendeskGroupMembershipsAPI api = new ZendeskGroupMembershipsAPI(ZendeskConnection.createWithPassword('s','u','p'));
-        api.deleteGroupMembership(123, 456);
+        api.deleteMembership(123, 456);
         Test.stopTest();
 
         System.assert(true);
@@ -84,7 +84,7 @@ public class ZendeskGroupMembershipsTests {
 
         Test.startTest();
         ZendeskGroupMembershipsAPI api = new ZendeskGroupMembershipsAPI(ZendeskConnection.createWithPassword('s','u','p'));
-        Long membershipId = api.createGroupMembership(123, 456);
+        Long membershipId = api.createMembership(123, 456);
         Test.stopTest();
 
         System.assertNotEquals(null, membershipId);
@@ -98,7 +98,7 @@ public class ZendeskGroupMembershipsTests {
         ZendeskTypes.ZGroupMembership gm = new ZendeskTypes.ZGroupMembership();
         gm.user_id = 123;
         gm.group_id = 456;
-        Long membershipId = api.createGroupMembership(gm);
+        Long membershipId = api.createMembership(gm);
         Test.stopTest();
 
         System.assertNotEquals(null, membershipId);
@@ -120,7 +120,7 @@ public class ZendeskGroupMembershipsTests {
 
         Test.startTest();
         ZendeskGroupMembershipsAPI api = new ZendeskGroupMembershipsAPI(ZendeskConnection.createWithPassword('s','u','p'));
-        ZendeskGroupMembershipsAPI.GroupMembershipsWrapper wrapper = api.getGroupsMemberships();
+        ZendeskGroupMembershipsAPI.GroupMembershipsWrapper wrapper = api.getMemberships();
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper.group_memberships);
@@ -151,7 +151,7 @@ public class ZendeskGroupMembershipsTests {
         System.assertNotEquals(0, wrapper.group_memberships.size());
     }
 
-    static testMethod void testGetAssignableGroupMemberships() {
+    static testMethod void testGetAssignableMemberships() {
         Test.setMock(HttpCalloutMock.class, new MockGroupMembershipsResponse());
 
         Test.startTest();
@@ -163,7 +163,7 @@ public class ZendeskGroupMembershipsTests {
         System.assertNotEquals(0, wrapper.group_memberships.size());
     }
 
-    static testMethod void testGetUserGroupMemberships() {
+    static testMethod void testGetUserMemberships() {
         Test.setMock(HttpCalloutMock.class, new MockGroupMembershipsResponse());
 
         Test.startTest();
