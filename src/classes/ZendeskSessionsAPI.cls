@@ -1,7 +1,7 @@
 // This class provides functionality to call the Zendesk Sessions API
 global class ZendeskSessionsAPI extends ZendeskResourceBase {
 
-    global class SessionWrapper extends ZendeskSideLoadingBase {
+    global class SessionWrapper {
         global ZSession session {get;set;}
         global SessionWrapper(ZSession session) { this.session = session; }
     }
