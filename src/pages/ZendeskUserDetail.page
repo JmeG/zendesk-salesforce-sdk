@@ -1,9 +1,7 @@
 <apex:page controller="ZendeskUserDetailController" action="{!init}" tabStyle="Zendesk_OrgSearch__tab">
     <apex:form >
         <apex:pageBlock title="Zendesk User Detail" id="block" mode="detail">
-
             <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
-
             <apex:pageBlockSection id="resultsBlock" columns="2">
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Name" />
@@ -107,4 +105,5 @@
 
         </apex:pageBlock>
     </apex:form>
+
 </apex:page>
