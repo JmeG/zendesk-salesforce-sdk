@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskSessionsAPI class
 @isTest
-public class ZendeskSessionsTests {
+public class ZendeskSessionsAPITests {
 
     public class MockOKResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
@@ -35,8 +35,8 @@ public class ZendeskSessionsTests {
         Test.setMock(HttpCalloutMock.class, new MockSessionResponse());
 
         Test.startTest();
-        ZendeskSessionsAPI sessions_api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
-        ZendeskSessionsAPI.SessionWrapper wrapper = sessions_api.getSession(12345, 3432);
+        ZendeskSessionsAPI api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
+        ZendeskSessionsAPI.SessionWrapper wrapper = api.getSession(12345, 3432);
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper);
@@ -48,8 +48,8 @@ public class ZendeskSessionsTests {
         Test.setMock(HttpCalloutMock.class, new MockSessionResponse());
 
         Test.startTest();
-        ZendeskSessionsAPI sessions_api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
-        ZendeskSessionsAPI.SessionWrapper wrapper = sessions_api.getMySession();
+        ZendeskSessionsAPI api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
+        ZendeskSessionsAPI.SessionWrapper wrapper = api.getMySession();
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper);
@@ -61,8 +61,8 @@ public class ZendeskSessionsTests {
         Test.setMock(HttpCalloutMock.class, new MockSessionsResponse());
 
         Test.startTest();
-        ZendeskSessionsAPI sessions_api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
-        ZendeskSessionsAPI.SessionsWrapper wrapper = sessions_api.getSessions();
+        ZendeskSessionsAPI api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
+        ZendeskSessionsAPI.SessionsWrapper wrapper = api.getSessions();
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper);
@@ -74,9 +74,9 @@ public class ZendeskSessionsTests {
         Test.setMock(HttpCalloutMock.class, new MockSessionsResponse());
 
         Test.startTest();
-        ZendeskSessionsAPI sessions_api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
+        ZendeskSessionsAPI api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
 
-        ZendeskSessionsAPI.SessionsWrapper wrapper = sessions_api.getSessions(new Map<String, Object>{'page'=>2});
+        ZendeskSessionsAPI.SessionsWrapper wrapper = api.getSessions(new Map<String, Object>{'page'=>2});
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper);
@@ -88,8 +88,8 @@ public class ZendeskSessionsTests {
         Test.setMock(HttpCalloutMock.class, new MockSessionsResponse());
 
         Test.startTest();
-        ZendeskSessionsAPI sessions_api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
-        ZendeskSessionsAPI.SessionsWrapper wrapper = sessions_api.getSessions(12345);
+        ZendeskSessionsAPI api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
+        ZendeskSessionsAPI.SessionsWrapper wrapper = api.getSessions(12345);
         Test.stopTest();
 
         System.assertNotEquals(null, wrapper);
@@ -102,8 +102,8 @@ public class ZendeskSessionsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskSessionsAPI sessions_api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
-        sessions_api.deleteMySession();
+        ZendeskSessionsAPI api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
+        api.deleteMySession();
         Test.stopTest();
 
         System.assert(true);
@@ -113,8 +113,8 @@ public class ZendeskSessionsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskSessionsAPI sessions_api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
-        sessions_api.deleteSession(12345, 3432);
+        ZendeskSessionsAPI api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
+        api.deleteSession(12345, 3432);
         Test.stopTest();
 
         System.assert(true);
@@ -124,25 +124,25 @@ public class ZendeskSessionsTests {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
-        ZendeskSessionsAPI sessions_api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
-        sessions_api.deleteSessions(12345);
+        ZendeskSessionsAPI api = new ZendeskSessionsAPI(ZendeskConnection.createWithPassword('s','u','p'));
+        api.deleteSessions(12345);
         Test.stopTest();
 
         System.assert(true);
     }
 
     static testMethod void testZSession() {
-        String sessionJson = '{'
+        String testJson = '{'
           + '"id": 12345,'
           + '"user_id": 123,'
           + '"authenticated_at": "2014-09-26T01:43:11Z",'
           + '"last_seen_at": "2014-09-26T01:43:11Z"'
           + '}';
 
-        ZendeskTypes.ZSession zsession = (ZendeskTypes.ZSession)JSON.deserialize(sessionJson, ZendeskTypes.ZSession.class);
-        System.assertEquals(12345, zsession.id);
-        System.assertEquals(123, zsession.user_id);
-        System.assertNotEquals(null, zsession.authenticated_at);
-        System.assertNotEquals(null, zsession.last_seen_at);
+        ZendeskTypes.ZSession zobj = (ZendeskTypes.ZSession)JSON.deserialize(testJson, ZendeskTypes.ZSession.class);
+        System.assertEquals(12345, zobj.id);
+        System.assertEquals(123, zobj.user_id);
+        System.assertNotEquals(null, zobj.authenticated_at);
+        System.assertNotEquals(null, zobj.last_seen_at);
     }
 }
