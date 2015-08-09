@@ -41,6 +41,13 @@ global abstract class ZendeskTypes {
         global DateTime updated_at {get; private set;}
     }
 
+    global class ZGroupMembership {
+        global Long id {get; private set;}
+        global Long user_id {get;set;}
+        global Long group_id {get;set;}
+        global Boolean x_default {get; private set;}
+    }
+
     global class ZJobStatus {
         global String id {get;set;}
         global String url {get;set;}
@@ -342,7 +349,14 @@ global abstract class ZendeskTypes {
     	global Long ticket_id {get; private set;}
     	global String score {get;set;}
     	global String comment {get;set;}
-    	global String updated_at {get; private set;}
-    	global String created_at {get; private set;}
+    	global DateTime updated_at {get; private set;}
+    	global DateTime created_at {get; private set;}
+    }
+
+    global class ZSession {
+    	global Long id {get; private set;}
+    	global Long user_id {get; private set;}
+    	global DateTime authenticated_at {get; private set;}
+    	global DateTime last_seen_at {get; private set;}
     }
 }
