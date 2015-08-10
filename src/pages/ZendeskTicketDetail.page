@@ -1,9 +1,7 @@
 <apex:page controller="ZendeskTicketDetailController" action="{!init}" tabStyle="Zendesk_OrgSearch__tab">
     <apex:form >
         <apex:pageBlock title="Zendesk Ticket Detail" id="block" mode="detail">
-
             <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
-
             <apex:pageBlockSection id="resultsBlock" columns="2">
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Status" />
@@ -102,7 +100,7 @@
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Last Comment Added" />
-                    <apex:outputText value="{!ticketMetrics.latest_comment_added_at}" />
+                    <c:ZendeskOutputDateTime value="{!ticketMetrics.latest_comment_added_at}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Status Updated" />
