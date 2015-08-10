@@ -14,7 +14,7 @@ private class ZendeskGroupsSampleTests {
     }
 
     private static testmethod void testGetGroups() {
-        Test.setMock(HttpCalloutMock.class, new ZendeskGroupsTests.MockGroupsResponse());
+        Test.setMock(HttpCalloutMock.class, new ZendeskGroupsAPITests.MockGroupsResponse());
 
         Test.startTest();
         ZendeskGroupsSampleController con = getTestController();
@@ -26,7 +26,7 @@ private class ZendeskGroupsSampleTests {
     }
 
     private static testmethod void testGetGroupById() {
-        Test.setMock(HttpCalloutMock.class, new ZendeskGroupsTests.MockGroupResponse());
+        Test.setMock(HttpCalloutMock.class, new ZendeskGroupsAPITests.MockGroupResponse());
 
         Test.startTest();
         ZendeskGroupsSampleController con = getTestController();
@@ -39,7 +39,7 @@ private class ZendeskGroupsSampleTests {
     }
 
     private static testmethod void testGetAssignableGroups() {
-        Test.setMock(HttpCalloutMock.class, new ZendeskGroupsTests.MockGroupsResponse());
+        Test.setMock(HttpCalloutMock.class, new ZendeskGroupsAPITests.MockGroupsResponse());
 
         Test.startTest();
         ZendeskGroupsSampleController con = getTestController();
@@ -51,7 +51,7 @@ private class ZendeskGroupsSampleTests {
     }
 
     private static testmethod void testGetUserGroups() {
-        Test.setMock(HttpCalloutMock.class, new ZendeskGroupsTests.MockGroupsResponse());
+        Test.setMock(HttpCalloutMock.class, new ZendeskGroupsAPITests.MockGroupsResponse());
 
         Test.startTest();
         ZendeskGroupsSampleController con = getTestController();
