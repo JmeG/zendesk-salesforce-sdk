@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskTicketCommentsAPI class
 @isTest
-private class ZendeskTicketCommentsTests {
+private class ZendeskTicketCommentsAPITests {
 
     public class MockOKResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
