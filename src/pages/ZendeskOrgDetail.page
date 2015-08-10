@@ -63,7 +63,7 @@
 
             <apex:pageBlockSection title="Related Items" id="usersSection" columns="1">
                 <apex:tabPanel switchType="client" selectedTab="ticketsTab" id="theTabPanel">
-                    <apex:tab label="Tickets" name="ticketsTab" id="ticketsTab">
+                    <apex:tab label="Recent Tickets" name="ticketsTab" id="ticketsTab">
                         <apex:outputPanel id="ticketsPanel">
                             <apex:pageBlockTable value="{!ui_tickets}" var="t" rendered="{!NOT(ISNULL(ui_tickets))}">
                                 <apex:column headerValue="ID">
