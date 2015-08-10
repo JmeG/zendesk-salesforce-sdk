@@ -15,7 +15,7 @@ public class ZendeskGroupsSampleController {
 	public PageReference getGroups() {
 		pageMessage = '';
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zconn);
 
 			groupsMap = zgroups.getAllGroups();
@@ -29,7 +29,7 @@ public class ZendeskGroupsSampleController {
 	public PageReference getGroupById() {
 		pageMessage = '';
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zconn);
 
 			groupsMap = new Map<Long, ZendeskTypes.ZGroup>();
@@ -50,7 +50,7 @@ public class ZendeskGroupsSampleController {
 	public PageReference getAssignableGroups() {
 		pageMessage = '';
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zconn);
 
 			ZendeskGroupsAPI.GroupsWrapper wrapper = zgroups.getAssignableGroups();
@@ -68,7 +68,7 @@ public class ZendeskGroupsSampleController {
 	public PageReference getUserGroups() {
 		pageMessage = '';
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskGroupsAPI zgroups = new ZendeskGroupsAPI(zconn);
 
 			ZendeskGroupsAPI.GroupsWrapper wrapper = zgroups.getUserGroups(userId);

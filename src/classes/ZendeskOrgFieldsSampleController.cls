@@ -17,7 +17,7 @@ public class ZendeskOrgFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZOrganizationField>();
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(zconn);
 
 			fieldsMap = zfields_api.getAllFields();
@@ -32,7 +32,7 @@ public class ZendeskOrgFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZOrganizationField>();
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(zconn);
 
 			Map<String, ZendeskTypes.ZOrganizationField> allFieldsMap = zfields_api.getAllFields();
@@ -54,7 +54,7 @@ public class ZendeskOrgFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZOrganizationField>();
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(zconn);
 
 			ZendeskTypes.ZOrganizationField field = zfields_api.getField(organizationFieldId);
@@ -75,7 +75,7 @@ public class ZendeskOrgFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZOrganizationField>();
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskOrganizationFieldsAPI zfields_api = new ZendeskOrganizationFieldsAPI(zconn);
 
 			String[] splits = fieldOrderCSV.split(',');

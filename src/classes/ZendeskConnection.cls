@@ -6,7 +6,8 @@ global class ZendeskConnection {
 	private String subdomain;
 	private String username;
 	private String password;
-	private String token;
+	private String apiToken;
+	private String oauthToken;
 
 	// overridable properties
 	global String userAgent = DEFAULT_USER_AGENT;
@@ -24,24 +25,30 @@ global class ZendeskConnection {
 
 	// Factory method to initialize a ZendeskConnection with a Password
 	global static ZendeskConnection createWithPassword(String subdomain, String username, String password) {
-		return new ZendeskConnection(subdomain, username, password, null);
+		return new ZendeskConnection(subdomain, username, password, null, null);
 	}
 
-	// Factory method to initialize a ZendeskConnection with a Token
-	global static ZendeskConnection createWithToken(String subdomain, String username, String token) {
-		return new ZendeskConnection(subdomain, username, null, token);
+	// Factory method to initialize a ZendeskConnection with an API Token
+	global static ZendeskConnection createWithAPIToken(String subdomain, String username, String apiToken) {
+		return new ZendeskConnection(subdomain, username, null, apiToken, null);
+	}
+
+	// Factory method to initialize a ZendeskConnection with an OAuth token
+	global static ZendeskConnection createWithOAuthToken(String subdomain, String username, String oauthToken) {
+		return new ZendeskConnection(subdomain, username, null, null, oauthToken);
 	}
 
 	// Private constructor called by the factory initialization methods
-	private ZendeskConnection(String subdomain, String username, String password, String token) {
+	private ZendeskConnection(String subdomain, String username, String password, String apiToken, String oauthToken) {
 		if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
 		if (String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
-		if (String.isBlank(password) && String.isBlank(token)) { throw new ZendeskException('password or token must not be empty'); }
+		if (String.isBlank(password) && String.isBlank(apiToken) && String.isBlank(oauthToken)) { throw new ZendeskException('password or token must not be empty'); }
 
 		this.subdomain = subdomain;
 		this.username = username;
 		this.password = password;
-		this.token = token;
+		this.apiToken = apiToken;
+		this.oauthToken = oauthToken;
 	}
 
 	global HttpRequest createRequest(String reqMethod, String path) {
@@ -61,13 +68,16 @@ global class ZendeskConnection {
 		if (String.isBlank(path)) { throw new ZendeskException('path parameter must not be empty'); }
 		if (!path.startsWith('/')) { throw new ZendeskException('path parameter must start with /'); }
 
-		Blob headerValue = null;
+		String authorizationHeader = null;
 		if (password != null) {
-			headerValue = Blob.valueOf(username + ':' + password);
-		} else { // Token
-			headerValue = Blob.valueOf(username + '/token:' + token);
+			authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(Blob.valueOf(username + ':' + password));
+		} else if (apiToken != null) {
+			authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(Blob.valueOf(username + '/token:' + apiToken));
+		} else if (oauthToken != null) {
+			authorizationHeader = 'Bearer ' + oauthToken;
+		} else {
+			throw new ZendeskException('Authentication not configured correctly');
 		}
-		String authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(headerValue);
 
 		HttpRequest req = new HttpRequest();
 		req.setMethod(reqMethod);

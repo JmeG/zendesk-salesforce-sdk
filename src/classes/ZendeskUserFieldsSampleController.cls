@@ -17,7 +17,7 @@ public class ZendeskUserFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZUserField>();
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zconn);
 
 			fieldsMap = zfields_api.getAllFields();
@@ -32,7 +32,7 @@ public class ZendeskUserFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZUserField>();
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zconn);
 
 			Map<String, ZendeskTypes.ZUserField> allFieldsMap = zfields_api.getAllFields();
@@ -54,7 +54,7 @@ public class ZendeskUserFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZUserField>();
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zconn);
 
 			ZendeskTypes.ZUserField field = zfields_api.getField(userFieldId);
@@ -75,7 +75,7 @@ public class ZendeskUserFieldsSampleController {
 		pageMessage = '';
 		fieldsMap = new Map<String, ZendeskTypes.ZUserField>();
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskUserFieldsAPI zfields_api = new ZendeskUserFieldsAPI(zconn);
 
 			String[] splits = fieldOrderCSV.split(',');

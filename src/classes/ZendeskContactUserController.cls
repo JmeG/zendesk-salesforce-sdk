@@ -24,7 +24,7 @@ public class ZendeskContactUserController {
     public ZendeskContactUserController(ApexPages.StandardController controller) {
         try {
             if (!Test.isRunningTest()) { controller.addFields(new List<String>{'Email'}); }
-            
+
             this.con = (Contact)controller.getRecord();
 
             Zendesk_API__c settings = Zendesk_API__c.getInstance();
@@ -50,13 +50,15 @@ public class ZendeskContactUserController {
     public void findUser() {
         ui_user = null;
         try {
-            ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+            ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 
             // Search for the User by email address
             ZendeskUsersAPI users_api = new ZendeskUsersAPI(zconn);
             if (String.isEmpty(con.Email)) {
                 throw new ZendeskException('Contact must have an Email address');
             }
+            // NOTE: instead of looking up by Email you could do a lookup by ExternalID
+            // users_api.searchUsersByExternalId(con.Id);
             ZendeskTypes.ZUser user = users_api.findUserByEmail(con.Email);
             if (user != null) {
                 ui_user = new UIUser(user);

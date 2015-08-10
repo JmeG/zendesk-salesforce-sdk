@@ -17,7 +17,7 @@ public class ZendeskUserSampleController {
 		pageMessage = '';
 		users = null;
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zconn);
 
 			Long newUserId = zusers_api.createUser(nameInput, emailInput);
@@ -34,7 +34,7 @@ public class ZendeskUserSampleController {
 		pageMessage = '';
 		users = null;
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zconn);
 
 			if (String.isEmpty(emailInput)) {
@@ -59,7 +59,7 @@ public class ZendeskUserSampleController {
 		pageMessage = '';
 		users = null;
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zconn);
 
 			String searchStr = '';
@@ -84,7 +84,7 @@ public class ZendeskUserSampleController {
 		pageMessage = '';
 		users = null;
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(zconn);
 
 			ZendeskUsersAPI.UsersWrapper pagedUsers = zusers_api.getUsers();

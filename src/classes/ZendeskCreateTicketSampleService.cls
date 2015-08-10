@@ -39,7 +39,7 @@ global class ZendeskCreateTicketSampleService {
 			String username = settings.Username__c;
 			String pwdOrToken = settings.Password_or_Token__c;
 			String authType = settings.Authentication_Type__c;
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 
 			ZendeskTicketsAPI zTickets = new ZendeskTicketsAPI(zconn);
 			Long ticketNum = zTickets.createTicket(zt);

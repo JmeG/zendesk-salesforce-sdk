@@ -14,7 +14,7 @@ public class ZendeskTicketFieldsSampleController {
 	public PageReference getFields() {
 		pageMessage = '';
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskTicketFieldsAPI zfields = new ZendeskTicketFieldsAPI(zconn);
 
 			fieldsMap = zfields.getAllFields();
@@ -28,7 +28,7 @@ public class ZendeskTicketFieldsSampleController {
 	public PageReference getFieldByID() {
 		pageMessage = '';
 		try {
-			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithToken(subdomain, username, pwdOrToken);
+			ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
 			ZendeskTicketFieldsAPI zfields = new ZendeskTicketFieldsAPI(zconn);
 
 			fieldsMap = new Map<Long, ZendeskTypes.ZTicketField>();
