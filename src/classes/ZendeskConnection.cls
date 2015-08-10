@@ -34,15 +34,16 @@ global class ZendeskConnection {
 	}
 
 	// Factory method to initialize a ZendeskConnection with an OAuth token
-	global static ZendeskConnection createWithOAuthToken(String subdomain, String username, String oauthToken) {
-		return new ZendeskConnection(subdomain, username, null, null, oauthToken);
+	global static ZendeskConnection createWithOAuthToken(String subdomain, String oauthToken) {
+		return new ZendeskConnection(subdomain, null, null, null, oauthToken);
 	}
 
 	// Private constructor called by the factory initialization methods
 	private ZendeskConnection(String subdomain, String username, String password, String apiToken, String oauthToken) {
 		if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
-		if (String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
 		if (String.isBlank(password) && String.isBlank(apiToken) && String.isBlank(oauthToken)) { throw new ZendeskException('password or token must not be empty'); }
+		// username is required for password and apiToken authentication flows
+		if ((!String.isBlank(password) || !String.isBlank(apiToken)) && String.isBlank(username)) { throw new ZendeskException('username parameter must not be empty'); }
 
 		this.subdomain = subdomain;
 		this.username = username;

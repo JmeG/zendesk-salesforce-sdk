@@ -39,7 +39,7 @@ public class ZendeskConnectionTests {
     @isTest static void testConstructors() {
         ZendeskConnection zconn1 = ZendeskConnection.createWithPassword('s','u','p');
         ZendeskConnection zconn2 = ZendeskConnection.createWithAPIToken('s','u','t1');
-        ZendeskConnection zconn3 = ZendeskConnection.createWithOauthToken('s','u','t2');
+        ZendeskConnection zconn3 = ZendeskConnection.createWithOauthToken('s','t2');
 
         System.assert(true);
     }
