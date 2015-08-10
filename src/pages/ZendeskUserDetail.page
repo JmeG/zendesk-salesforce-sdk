@@ -85,9 +85,6 @@
                             <c:ZendeskOutputDateTime value="{!t.ticket.created_at}" />
                         </apex:column>
                         <apex:column headerValue="Subject" value="{!t.ticket.subject}"/>
-                        <apex:column headerValue="Requested By">
-                            <apex:outputLink value="/apex/ZendeskUserDetail?id={!t.ticket.requester_id}">{!t.requestedBy}</apex:outputLink>
-                        </apex:column>
                         <apex:column headerValue="Assigned To">
                             <apex:outputLink value="/apex/ZendeskUserDetail?id={!t.ticket.assignee_id}">{!t.assignedTo}</apex:outputLink>
                         </apex:column>
