@@ -1,12 +1,16 @@
 <!-- This page can be used as an inline Visualforce page on the Contact layout -->
 <apex:page standardController="Contact" extensions="ZendeskContactUserController" readOnly="true" action="{!init}">
     <apex:form >
-        <apex:pageBlock title="" id="block" mode="detail">
+        <apex:pageBlock title="Zendesk User" id="block" mode="detail">
             <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
             <apex:pageBlockSection id="resultsBlock" columns="2" rendered="{!pageMessage=''}">
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="ID" />
                     <apex:outputLink value="/apex/ZendeskUserDetail?id={!ui_user.user.id}" target="_top">{!ui_user.user.id}</apex:outputLink>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="External ID" />
+                    <apex:outputText value="{!ui_user.user.external_id}" />
                 </apex:pageBlockSectionItem>
                 <apex:pageBlockSectionItem>
                     <apex:outputLabel value="Organization" />
