@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskUserFieldsAPI class
 @isTest
-public class ZendeskUserFieldsTests {
+public class ZendeskUserFieldsAPITests {
 
     public class MockOKResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {

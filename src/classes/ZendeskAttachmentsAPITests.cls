@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskAttachmentsAPI class
 @isTest
-public class ZendeskAttachmentsTests {
+public class ZendeskAttachmentsAPITests {
 
     public class MockCreateAttachmentResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {

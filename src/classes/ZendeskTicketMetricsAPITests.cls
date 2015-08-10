@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskTicketMetricsAPI class
 @isTest
-public class ZendeskTicketMetricsTests {
+public class ZendeskTicketMetricsAPITests {
 
     public class MockTicketMetricResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {

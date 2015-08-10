@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskJobStatusesAPI class
 @isTest
-private class ZendeskJobStatusesTests {
+private class ZendeskJobStatusesAPITests {
 
     public class MockStatusResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {

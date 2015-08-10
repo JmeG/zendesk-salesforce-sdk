@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskSearchAPI class
 @isTest
-public class ZendeskSearchTests {
+public class ZendeskSearchAPITests {
 
     public class MockSearchResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {

@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskGroupMembershipsAPI class
 @isTest
-public class ZendeskGroupMembershipsTests {
+public class ZendeskGroupMembershipsAPITests {
 
     public class MockOKResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {

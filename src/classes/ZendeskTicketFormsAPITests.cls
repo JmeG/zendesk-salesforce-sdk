@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskTicketFormsAPI class
 @isTest
-public class ZendeskTicketFormsTests {
+public class ZendeskTicketFormsAPITests {
 
     public class MockOKResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {

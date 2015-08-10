@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskTagsAPI class
 @isTest
-public class ZendeskTagsTests {
+public class ZendeskTagsAPITests {
 
     public class MockOKResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {

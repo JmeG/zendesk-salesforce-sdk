@@ -1,6 +1,6 @@
 // This class provides test coverage for the ZendeskAutocompleteAPI class
 @isTest
-public class ZendeskAutocompleteTests {
+public class ZendeskAutocompleteAPITests {
 
     public class MockGetTagsResponse implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
