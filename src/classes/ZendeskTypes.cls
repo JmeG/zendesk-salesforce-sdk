@@ -132,6 +132,13 @@ global abstract class ZendeskTypes {
         global DateTime updated_at {get; private set;}
     }
 
+    global class ZOrganizationMembership {
+        global Long id {get; private set;}
+        global Long user_id {get;set;}
+        global Long organization_id {get;set;}
+        global Boolean x_default {get; private set;}
+    }
+
     global class ZTicketComment {
         global Long id {get; private set;}
         global String type {get;set;}
