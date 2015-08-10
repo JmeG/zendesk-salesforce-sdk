@@ -39,7 +39,7 @@ public class ZendeskAttachmentsAPITests {
         }
     }
 
-    static testMethod void testUploadAttachment() {
+    @isTest static void testUploadAttachment() {
         Test.setMock(HttpCalloutMock.class, new MockCreateAttachmentResponse());
 
         Test.startTest();
@@ -50,7 +50,7 @@ public class ZendeskAttachmentsAPITests {
 		System.assertNotEquals(null, attachId);
     }
 
-    static testMethod void testUploadAttachmentException() {
+    @isTest static void testUploadAttachmentException() {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
         Test.startTest();
@@ -62,7 +62,7 @@ public class ZendeskAttachmentsAPITests {
         Test.stopTest();
     }
 
-    static testMethod void testDeleteAttachment() {
+    @isTest static void testDeleteAttachment() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -73,7 +73,7 @@ public class ZendeskAttachmentsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testDeleteAttachmentException() {
+    @isTest static void testDeleteAttachmentException() {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
         Test.startTest();
@@ -85,7 +85,7 @@ public class ZendeskAttachmentsAPITests {
         Test.stopTest();
     }
 
-    static testMethod void testGetAttachment() {
+    @isTest static void testGetAttachment() {
         Test.setMock(HttpCalloutMock.class, new MockAttachmentResponse());
 
         Test.startTest();
@@ -96,7 +96,7 @@ public class ZendeskAttachmentsAPITests {
         System.assertNotEquals(null, za);
     }
 
-    static testMethod void testGetAttachmentException() {
+    @isTest static void testGetAttachmentException() {
         Test.setMock(HttpCalloutMock.class, new MockFailedResponse());
 
         Test.startTest();
@@ -108,7 +108,7 @@ public class ZendeskAttachmentsAPITests {
         Test.stopTest();
     }
 
-    static testMethod void testRedactTicketAttachment() {
+    @isTest static void testRedactTicketAttachment() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -119,7 +119,7 @@ public class ZendeskAttachmentsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testZAttachment() {
+    @isTest static void testZAttachment() {
         ZendeskTypes.ZAttachment obj = new ZendeskTypes.ZAttachment();
         obj.name = '';
         obj.content_url = '';

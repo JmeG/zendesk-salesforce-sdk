@@ -31,7 +31,7 @@ public class ZendeskSatisfactionRatingsAPITests {
         }
     }
 
-    static testMethod void testGetSatisfactionRating() {
+    @isTest static void testGetSatisfactionRating() {
         Test.setMock(HttpCalloutMock.class, new MockSatisfactionRatingResponse());
 
         Test.startTest();
@@ -44,7 +44,7 @@ public class ZendeskSatisfactionRatingsAPITests {
         System.assertEquals(35436, wrapper.satisfaction_rating.id);
     }
 
-    static testMethod void testGetSatisfactionRatings() {
+    @isTest static void testGetSatisfactionRatings() {
         Test.setMock(HttpCalloutMock.class, new MockSatisfactionRatingsResponse());
 
         Test.startTest();
@@ -56,7 +56,7 @@ public class ZendeskSatisfactionRatingsAPITests {
         System.assertNotEquals(0, wrapper.satisfaction_ratings.size());
     }
 
-    static testMethod void testCreateSatisfactionRating() {
+    @isTest static void testCreateSatisfactionRating() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -70,7 +70,7 @@ public class ZendeskSatisfactionRatingsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testZSatisfactionRating() {
+    @isTest static void testZSatisfactionRating() {
         String satRatingJson = '{'
           + '"url": "https://test.zendesk.com/api/v2/satisfaction_ratings/12345.json",'
           + '"id": 12345,'

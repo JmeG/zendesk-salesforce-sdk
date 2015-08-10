@@ -22,7 +22,7 @@ public class ZendeskTicketMetricsAPITests {
         }
     }
 
-    static testMethod void testGetTicketMetrics() {
+    @isTest static void testGetTicketMetrics() {
         Test.setMock(HttpCalloutMock.class, new MockTicketMetricsResponse());
 
         Test.startTest();
@@ -34,7 +34,7 @@ public class ZendeskTicketMetricsAPITests {
         System.assertNotEquals(null, wrapper.ticket_metrics);
     }
 
-    static testMethod void testGetTicketMetricsById() {
+    @isTest static void testGetTicketMetricsById() {
         Test.setMock(HttpCalloutMock.class, new MockTicketMetricResponse());
 
         Test.startTest();
@@ -45,7 +45,7 @@ public class ZendeskTicketMetricsAPITests {
         System.assertNotEquals(null, tmetric);
     }
 
-    static testMethod void testGetTicketMetricsByTicketId() {
+    @isTest static void testGetTicketMetricsByTicketId() {
         Test.setMock(HttpCalloutMock.class, new MockTicketMetricResponse());
 
         Test.startTest();
@@ -57,7 +57,7 @@ public class ZendeskTicketMetricsAPITests {
     }
 
 
-    static testMethod void testZTicketMetric() {
+    @isTest static void testZTicketMetric() {
         String metricJson = '{"id":33,"ticket_id":4343,"created_at":"2009-07-20T22:55:29Z","updated_at":"2011-05-05T10:38:52Z","group_stations":7,"assignee_stations":1,"reopens":55,"replies":322,"assignee_updated_at":"2011-05-06T10:38:52Z","requester_updated_at":"2011-05-07T10:38:52Z","status_updated_at":"2011-05-04T10:38:52Z","initially_assigned_at":"2011-05-03T10:38:52Z","assigned_at":"2011-05-05T10:38:52Z","solved_at":"2011-05-09T10:38:52Z","latest_comment_added_at":"2011-05-09T10:38:52Z","reply_time_in_minutes":{"calendar":2391,"business":737},"first_resolution_time_in_minutes":{"calendar":2391,"business":737},"full_resolution_time_in_minutes":{"calendar":2391,"business":737},"agent_wait_time_in_minutes":{"calendar":2391,"business":737},"requester_wait_time_in_minutes":{"calendar":2391,"business":737},"on_hold_time_in_minutes":{"calendar":2290,"business":637}}';
         ZendeskTypes.ZTicketMetrics zmetric = (ZendeskTypes.ZTicketMetrics)JSON.deserialize(metricJson, ZendeskTypes.ZTicketMetrics.class);
 

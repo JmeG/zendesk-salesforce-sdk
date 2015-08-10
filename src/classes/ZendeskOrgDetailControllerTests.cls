@@ -28,7 +28,7 @@ public class ZendeskOrgDetailControllerTests {
         insert config;
     }
 
-    private static testmethod void testInit() {
+    private @isTest static void testInit() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();
@@ -48,7 +48,7 @@ public class ZendeskOrgDetailControllerTests {
         System.assertEquals('Support', con.ui_tickets[0].groupName);
     }
 
-    private static testmethod void testTicketsPaging() {
+    private @isTest static void testTicketsPaging() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();
@@ -68,7 +68,7 @@ public class ZendeskOrgDetailControllerTests {
         Test.stopTest();
     }
 
-    private static testmethod void testUsersPaging() {
+    private @isTest static void testUsersPaging() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();

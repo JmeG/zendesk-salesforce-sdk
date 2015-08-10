@@ -24,7 +24,7 @@ public class ZendeskUserDetailControllerTests {
         insert config;
     }
 
-    private static testmethod void testInit() {
+    private @isTest static void testInit() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();
@@ -44,7 +44,7 @@ public class ZendeskUserDetailControllerTests {
         System.assertNotEquals(null, con.ui_tickets[0].assignedTo);
     }
 
-    private static testmethod void testTicketsPaging() {
+    private @isTest static void testTicketsPaging() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();

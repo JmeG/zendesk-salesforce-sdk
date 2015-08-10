@@ -16,7 +16,7 @@ public class ZendeskUsersControllerTests {
         insert config;
     }
 
-    private static testmethod void testInit() {
+    private @isTest static void testInit() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();
@@ -30,7 +30,7 @@ public class ZendeskUsersControllerTests {
         System.assertNotEquals(0, con.ui_users.size());
     }
 
-    private static testmethod void testPaging() {
+    private @isTest static void testPaging() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();

@@ -31,7 +31,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         }
     }
 
-    static testMethod void testGetMembership1() {
+    @isTest static void testGetMembership1() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationMembershipResponse());
 
         Test.startTest();
@@ -44,7 +44,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assertEquals(123, wrapper.organization_membership.id);
     }
 
-    static testMethod void testGetMembership2() {
+    @isTest static void testGetMembership2() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationMembershipResponse());
 
         Test.startTest();
@@ -57,7 +57,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assertEquals(123, wrapper.organization_membership.id);
     }
 
-    static testMethod void testDeleteMembership1() {
+    @isTest static void testDeleteMembership1() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -68,7 +68,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testDeleteMembership2() {
+    @isTest static void testDeleteMembership2() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -79,7 +79,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testCreateMembership1() {
+    @isTest static void testCreateMembership1() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationMembershipResponse());
 
         Test.startTest();
@@ -90,7 +90,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assertNotEquals(null, membershipId);
     }
 
-    static testMethod void testCreateMembership2() {
+    @isTest static void testCreateMembership2() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationMembershipResponse());
 
         Test.startTest();
@@ -104,7 +104,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assertNotEquals(null, membershipId);
     }
 
-    static testMethod void testMakeDefault() {
+    @isTest static void testMakeDefault() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -115,7 +115,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testGetMemberships() {
+    @isTest static void testGetMemberships() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationMembershipsResponse());
 
         Test.startTest();
@@ -127,7 +127,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assertNotEquals(0, wrapper.organization_memberships.size());
     }
 
-    static testMethod void testGetMembershipsByOrganization() {
+    @isTest static void testGetMembershipsByOrganization() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationMembershipsResponse());
 
         Test.startTest();
@@ -139,7 +139,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assertNotEquals(0, wrapper.organization_memberships.size());
     }
 
-    static testMethod void testGetAssignableMembershipsByOrganization() {
+    @isTest static void testGetAssignableMembershipsByOrganization() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationMembershipsResponse());
 
         Test.startTest();
@@ -151,7 +151,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assertNotEquals(0, wrapper.organization_memberships.size());
     }
 
-    static testMethod void testGetAssignableMemberships() {
+    @isTest static void testGetAssignableMemberships() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationMembershipsResponse());
 
         Test.startTest();
@@ -163,7 +163,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assertNotEquals(0, wrapper.organization_memberships.size());
     }
 
-    static testMethod void testGetUserMemberships() {
+    @isTest static void testGetUserMemberships() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationMembershipsResponse());
 
         Test.startTest();
@@ -175,7 +175,7 @@ public class ZendeskOrganizationMembershipsAPITests {
         System.assertNotEquals(0, wrapper.organization_memberships.size());
     }
 
-    static testMethod void testZOrganizationMembership() {
+    @isTest static void testZOrganizationMembership() {
         String testJson = '{'
           + '"id": 123,'
           + '"user_id": 456,'

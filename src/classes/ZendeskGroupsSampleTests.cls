@@ -13,7 +13,7 @@ private class ZendeskGroupsSampleTests {
         return con;
     }
 
-    private static testmethod void testGetGroups() {
+    private @isTest static void testGetGroups() {
         Test.setMock(HttpCalloutMock.class, new ZendeskGroupsAPITests.MockGroupsResponse());
 
         Test.startTest();
@@ -25,7 +25,7 @@ private class ZendeskGroupsSampleTests {
         System.assertEquals(false, con.groupsMap.isEmpty());
     }
 
-    private static testmethod void testGetGroupById() {
+    private @isTest static void testGetGroupById() {
         Test.setMock(HttpCalloutMock.class, new ZendeskGroupsAPITests.MockGroupResponse());
 
         Test.startTest();
@@ -38,7 +38,7 @@ private class ZendeskGroupsSampleTests {
         System.assertEquals(false, con.groupsMap.isEmpty());
     }
 
-    private static testmethod void testGetAssignableGroups() {
+    private @isTest static void testGetAssignableGroups() {
         Test.setMock(HttpCalloutMock.class, new ZendeskGroupsAPITests.MockGroupsResponse());
 
         Test.startTest();
@@ -50,7 +50,7 @@ private class ZendeskGroupsSampleTests {
         System.assertEquals(false, con.groupsMap.isEmpty());
     }
 
-    private static testmethod void testGetUserGroups() {
+    private @isTest static void testGetUserGroups() {
         Test.setMock(HttpCalloutMock.class, new ZendeskGroupsAPITests.MockGroupsResponse());
 
         Test.startTest();

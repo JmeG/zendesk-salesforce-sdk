@@ -20,7 +20,7 @@ public class ZendeskOrgSearchControllerTests {
         insert config;
     }
 
-    private static testmethod void testSearch() {
+    private @isTest static void testSearch() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();
@@ -33,7 +33,7 @@ public class ZendeskOrgSearchControllerTests {
         System.assertNotEquals(null, con.ui_orgs[0].domains);
     }
 
-    private static testmethod void testPaging() {
+    private @isTest static void testPaging() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();

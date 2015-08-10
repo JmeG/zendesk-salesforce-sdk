@@ -20,7 +20,7 @@ public class ZendeskContactUserControllerTests {
         insert config;
     }
 
-    private static testmethod void testInit() {
+    private @isTest static void testInit() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Account acct = new Account(Name='TestAccount');

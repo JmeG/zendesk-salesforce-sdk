@@ -12,14 +12,14 @@ public class ZendeskConnectionTests {
         }
     }
 
-    static testMethod void testCreateRequest() {
+    @isTest static void testCreateRequest() {
         ZendeskConnection zconn = ZendeskConnection.createWithPassword('s','u','p');
         HttpRequest req = zconn.createRequest('GET', '/users.json', new Map<String, Object>{'page'=>'1'});
 
         System.assertEquals('GET', req.getMethod());
     }
 
-    static testMethod void testSendRequest() {
+    @isTest static void testSendRequest() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
         ZendeskConnection zconn = ZendeskConnection.createWithPassword('s','u','p');
         zconn.debugAll = true;
@@ -29,21 +29,21 @@ public class ZendeskConnectionTests {
         System.assertNotEquals(null, resBody);
     }
 
-    static testMethod void testCanLogin() {
+    @isTest static void testCanLogin() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
         ZendeskConnection zconn = ZendeskConnection.createWithPassword('s','u','p');
 
         System.assertEquals(true, zconn.canLogin());
     }
 
-    static testMethod void testConstructors() {
+    @isTest static void testConstructors() {
         ZendeskConnection zconn1 = ZendeskConnection.createWithPassword('s','u','p');
         ZendeskConnection zconn2 = ZendeskConnection.createWithToken('s','u','t');
 
         System.assert(true);
     }
 
-    static testMethod void testGetQueryStringMap() {
+    @isTest static void testGetQueryStringMap() {
         String url = 'https://test.zendesk.com/api/v2/organizations/25378250/tickets.json?include=users%2Cgroups&page=2&per_page=10&sort_order=desc';
         Map<String, String> qmap = ZendeskConnection.getQueryStringMap(url);
 

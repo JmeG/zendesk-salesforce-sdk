@@ -22,7 +22,7 @@ private class ZendeskJobStatusesAPITests {
         }
     }
 
-    static testMethod void testGetStatus() {
+    @isTest static void testGetStatus() {
         Test.setMock(HttpCalloutMock.class, new MockStatusResponse());
 
         Test.startTest();
@@ -34,7 +34,7 @@ private class ZendeskJobStatusesAPITests {
         System.assertEquals('31a2e47012e20', jstatus.id);
     }
 
-    static testMethod void testGetStatuses() {
+    @isTest static void testGetStatuses() {
         Test.setMock(HttpCalloutMock.class, new MockStatusesResponse());
 
         Test.startTest();
@@ -46,7 +46,7 @@ private class ZendeskJobStatusesAPITests {
         System.assertEquals(2, jobs.size());
     }
 
-    static testMethod void testDeserialize() {
+    @isTest static void testDeserialize() {
         String jsonStr = '{'+
 		'    \"id\":       \"8b726e606741012ffc2d782bcb7848fe\",'+
 		'    \"url\":      \"https://company.zendesk.com/api/v2/job_statuses/8b726e606741012ffc2d782bcb7848fe.json\",'+

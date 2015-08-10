@@ -31,7 +31,7 @@ public class ZendeskTagsAPITests {
         }
     }
 
-    static testMethod void testListTags() {
+    @isTest static void testListTags() {
         Test.setMock(HttpCalloutMock.class, new MockListTagsResponse());
 
         Test.startTest();
@@ -42,7 +42,7 @@ public class ZendeskTagsAPITests {
         System.assertNotEquals(null, tagsResult);
     }
 
-    static testMethod void testGetTags() {
+    @isTest static void testGetTags() {
         Test.setMock(HttpCalloutMock.class, new MockGetTagsResponse());
 
         Test.startTest();
@@ -54,7 +54,7 @@ public class ZendeskTagsAPITests {
         System.assertEquals(2, wrapper.tags.size());
     }
 
-    static testMethod void testSetTags() {
+    @isTest static void testSetTags() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -65,7 +65,7 @@ public class ZendeskTagsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testAddTags() {
+    @isTest static void testAddTags() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -76,7 +76,7 @@ public class ZendeskTagsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testRemoveTags() {
+    @isTest static void testRemoveTags() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -87,7 +87,7 @@ public class ZendeskTagsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testAutocompleteTags() {
+    @isTest static void testAutocompleteTags() {
         Test.setMock(HttpCalloutMock.class, new MockGetTagsResponse());
 
         Test.startTest();
@@ -99,7 +99,7 @@ public class ZendeskTagsAPITests {
         System.assertEquals(2, wrapper.tags.size());
     }
 
-    static testMethod void testZTag() {
+    @isTest static void testZTag() {
         String tagJson = '{"name":"important", "count":47}';
         ZendeskTypes.ZTag tag = (ZendeskTypes.ZTag)JSON.deserialize(tagJson, ZendeskTypes.ZTag.class);
 

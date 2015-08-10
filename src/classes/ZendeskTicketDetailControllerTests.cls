@@ -24,7 +24,7 @@ public class ZendeskTicketDetailControllerTests {
         insert config;
     }
 
-    private static testmethod void testInit() {
+    private @isTest static void testInit() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();
@@ -42,7 +42,7 @@ public class ZendeskTicketDetailControllerTests {
         System.assertEquals('email', con.ui_ticket.createdVia);
     }
 
-    private static testmethod void testPaging() {
+    private @isTest static void testPaging() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();

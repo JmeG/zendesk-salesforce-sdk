@@ -31,7 +31,7 @@ public class ZendeskTicketFieldsAPITests {
         }
     }
 
-    static testMethod void testGetTicketFieldById() {
+    @isTest static void testGetTicketFieldById() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
 
         Test.startTest();
@@ -44,7 +44,7 @@ public class ZendeskTicketFieldsAPITests {
         Test.stopTest();
     }
 
-    static testMethod void testDeleteField() {
+    @isTest static void testDeleteField() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -55,7 +55,7 @@ public class ZendeskTicketFieldsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testCreateField() {
+    @isTest static void testCreateField() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
 
         Test.startTest();
@@ -69,7 +69,7 @@ public class ZendeskTicketFieldsAPITests {
         System.assertNotEquals(null, fieldId);
     }
 
-    static testMethod void testUpdateField() {
+    @isTest static void testUpdateField() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldResponse());
 
         Test.startTest();
@@ -83,7 +83,7 @@ public class ZendeskTicketFieldsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testGetAllFields() {
+    @isTest static void testGetAllFields() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFieldsResponse());
 
         Test.startTest();
@@ -94,7 +94,7 @@ public class ZendeskTicketFieldsAPITests {
         System.assertNotEquals(null, fieldsMap.containsKey(123));
     }
 
-    static testMethod void testZTicketField() {
+    @isTest static void testZTicketField() {
         ZendeskTypes.ZTicketField zticketfield = new ZendeskTypes.ZTicketField();
         //zticketfield.id = 0;
         zticketfield.type = '';

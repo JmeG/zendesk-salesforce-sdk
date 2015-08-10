@@ -40,7 +40,7 @@ public class ZendeskUsersAPITests {
         }
     }
 
-    static testmethod void testCreateUsers() {
+    @isTest static void testCreateUsers() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
@@ -52,7 +52,7 @@ public class ZendeskUsersAPITests {
 		System.assertNotEquals(null, jobStatus);
 	}
 
-    static testmethod void testUpdateUser() {
+    @isTest static void testUpdateUser() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -64,7 +64,7 @@ public class ZendeskUsersAPITests {
 		System.assert(true);
 	}
 
-    static testmethod void testUpdateUsers1() {
+    @isTest static void testUpdateUsers1() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
@@ -77,7 +77,7 @@ public class ZendeskUsersAPITests {
 		System.assert(true);
 	}
 
-    static testmethod void testUpdateUsers2() {
+    @isTest static void testUpdateUsers2() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
@@ -89,7 +89,7 @@ public class ZendeskUsersAPITests {
 		System.assert(true);
 	}
 
-    static testmethod void testUpdateUsers3() {
+    @isTest static void testUpdateUsers3() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
@@ -101,7 +101,7 @@ public class ZendeskUsersAPITests {
 		System.assert(true);
 	}
 
-    static testmethod void testMergeUsers() {
+    @isTest static void testMergeUsers() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -113,7 +113,7 @@ public class ZendeskUsersAPITests {
 		System.assert(true);
 	}
 
-    static testMethod void testGetUsersByPage() {
+    @isTest static void testGetUsersByPage() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
@@ -126,7 +126,7 @@ public class ZendeskUsersAPITests {
         System.assertEquals(1, results.users.size());
     }
 
-    static testMethod void testGetUsersByIds() {
+    @isTest static void testGetUsersByIds() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
@@ -139,7 +139,7 @@ public class ZendeskUsersAPITests {
         System.assertEquals(1, results.users.size());
     }
 
-    static testMethod void testGetUsersByExternalIds() {
+    @isTest static void testGetUsersByExternalIds() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
@@ -152,7 +152,7 @@ public class ZendeskUsersAPITests {
         System.assertEquals(1, results.users.size());
     }
 
-    static testMethod void testGetUsersByGroup() {
+    @isTest static void testGetUsersByGroup() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
@@ -165,7 +165,7 @@ public class ZendeskUsersAPITests {
         System.assertEquals(1, results.users.size());
     }
 
-    static testMethod void testGetUsersByOrg() {
+    @isTest static void testGetUsersByOrg() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
@@ -178,7 +178,7 @@ public class ZendeskUsersAPITests {
         System.assertEquals(1, results.users.size());
     }
 
-    static testMethod void testGetUsersAutocomplete() {
+    @isTest static void testGetUsersAutocomplete() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
@@ -191,7 +191,7 @@ public class ZendeskUsersAPITests {
         System.assertEquals(1, results.users.size());
     }
 
-    static testMethod void testAutocompleteSearch() {
+    @isTest static void testAutocompleteSearch() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
@@ -204,7 +204,7 @@ public class ZendeskUsersAPITests {
         System.assertEquals(1, results.users.size());
     }
 
-    static testMethod void testGetUserRelatedInfo() {
+    @isTest static void testGetUserRelatedInfo() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
@@ -215,7 +215,7 @@ public class ZendeskUsersAPITests {
 		System.assertNotEquals(null, results);
     }
 
-    static testMethod void testDeleteUser() {
+    @isTest static void testDeleteUser() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -226,7 +226,7 @@ public class ZendeskUsersAPITests {
 		System.assert(true);
     }
 
-    static testMethod void testDeleteUsers1() {
+    @isTest static void testDeleteUsers1() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -237,7 +237,7 @@ public class ZendeskUsersAPITests {
 		System.assert(true);
     }
 
-    static testMethod void testDeleteUsers2() {
+    @isTest static void testDeleteUsers2() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -248,7 +248,7 @@ public class ZendeskUsersAPITests {
 		System.assert(true);
     }
 
-    static testmethod void testCreateUser() {
+    @isTest static void testCreateUser() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
 
         Test.startTest();
@@ -259,7 +259,7 @@ public class ZendeskUsersAPITests {
 		System.assertNotEquals(null, userId);
 	}
 
-	static testmethod void testGetUserId() {
+	@isTest static void testGetUserId() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
@@ -270,7 +270,7 @@ public class ZendeskUsersAPITests {
 		System.assertNotEquals(null, userId);
 	}
 
-    static testMethod void testFindUsersByNameOrEmail() {
+    @isTest static void testFindUsersByNameOrEmail() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
@@ -283,7 +283,7 @@ public class ZendeskUsersAPITests {
         System.assertEquals(1, results.users.size());
     }
 
-    static testMethod void testGetUsers() {
+    @isTest static void testGetUsers() {
         Test.setMock(HttpCalloutMock.class, new MockUsersResponse());
 
         Test.startTest();
@@ -296,7 +296,7 @@ public class ZendeskUsersAPITests {
         System.assertNotEquals(0, results.users.size());
     }
 
-    static testMethod void testGetUser() {
+    @isTest static void testGetUser() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
 
         Test.startTest();
@@ -309,7 +309,7 @@ public class ZendeskUsersAPITests {
         System.assertEquals(123, wrapper.user.id);
     }
 
-    static testMethod void testGetCurrentUser() {
+    @isTest static void testGetCurrentUser() {
         Test.setMock(HttpCalloutMock.class, new MockUserResponse());
 
         Test.startTest();
@@ -320,7 +320,7 @@ public class ZendeskUsersAPITests {
 		System.assertNotEquals(null, u);
     }
 
-    static testMethod void testZUser() {
+    @isTest static void testZUser() {
         String userJson = '{ "id": 35436, "name": "Johnny Agent", "external_id": "sai989sur98w9", "alias": "Mr. Johnny", "created_at": "2009-07-20T22:55:29Z", "updated_at": "2011-05-05T10:38:52Z", "active": true, "verified": true, "shared": false, "shared_agent": false, "locale": "en-US", "locale_id": 1, "time_zone": "Copenhagen", "last_login_at": "2011-05-05T10:38:52Z", "email": "johnny@example.com", "phone": "555-123-4567", "signature": "Have a nice day, Johnny", "details": "bla bla", "notes": "Johnny is a nice guy!", "organization_id": 57542, "role": "agent", "custom_role_id": 9373643, "moderator": true, "ticket_restriction": "assigned", "only_private_comments": false, "tags": ["enterprise", "other_tag"], "restricted_agent": true, "suspended": true, "user_fields": { "user_decimal": 5.1, "user_dropdown": "option_1", "user_date": "2012-07-23T00:00:00Z" } }';
         ZendeskTypes.ZUser zuser = (ZendeskTypes.ZUser)JSON.deserialize(userJson, ZendeskTypes.ZUser.class);
         System.assertEquals(35436, zuser.id);

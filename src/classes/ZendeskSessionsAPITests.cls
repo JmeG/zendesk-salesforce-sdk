@@ -31,7 +31,7 @@ public class ZendeskSessionsAPITests {
         }
     }
 
-    static testMethod void testGetSession() {
+    @isTest static void testGetSession() {
         Test.setMock(HttpCalloutMock.class, new MockSessionResponse());
 
         Test.startTest();
@@ -44,7 +44,7 @@ public class ZendeskSessionsAPITests {
         System.assertEquals(3432, wrapper.session.id);
     }
 
-    static testMethod void testGetMySession() {
+    @isTest static void testGetMySession() {
         Test.setMock(HttpCalloutMock.class, new MockSessionResponse());
 
         Test.startTest();
@@ -57,7 +57,7 @@ public class ZendeskSessionsAPITests {
         System.assertEquals(3432, wrapper.session.id);
     }
 
-    static testMethod void testGetSessions() {
+    @isTest static void testGetSessions() {
         Test.setMock(HttpCalloutMock.class, new MockSessionsResponse());
 
         Test.startTest();
@@ -70,7 +70,7 @@ public class ZendeskSessionsAPITests {
         System.assertEquals(3432, wrapper.sessions[0].id);
     }
 
-    static testMethod void testGetSessionsPage() {
+    @isTest static void testGetSessionsPage() {
         Test.setMock(HttpCalloutMock.class, new MockSessionsResponse());
 
         Test.startTest();
@@ -84,7 +84,7 @@ public class ZendeskSessionsAPITests {
         System.assertEquals(3432, wrapper.sessions[0].id);
     }
 
-    static testMethod void testGetUserSessions() {
+    @isTest static void testGetUserSessions() {
         Test.setMock(HttpCalloutMock.class, new MockSessionsResponse());
 
         Test.startTest();
@@ -98,7 +98,7 @@ public class ZendeskSessionsAPITests {
     }
 
 
-    static testMethod void testDeleteMySession() {
+    @isTest static void testDeleteMySession() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -109,7 +109,7 @@ public class ZendeskSessionsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testDeleteSession() {
+    @isTest static void testDeleteSession() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -120,7 +120,7 @@ public class ZendeskSessionsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testDeleteSessions() {
+    @isTest static void testDeleteSessions() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -131,7 +131,7 @@ public class ZendeskSessionsAPITests {
         System.assert(true);
     }
 
-    static testMethod void testZSession() {
+    @isTest static void testZSession() {
         String testJson = '{'
           + '"id": 12345,'
           + '"user_id": 123,'
