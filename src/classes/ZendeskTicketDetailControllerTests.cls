@@ -19,11 +19,13 @@ public class ZendeskTicketDetailControllerTests {
         }
     }
 
-    private static testmethod void testInit() {
-        Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
-
+    @testSetup static void setup() {
         Zendesk_API__c config = new Zendesk_API__c(Subdomain__c='s', Username__c='u', Password_or_Token__c='pwd', Authentication_Type__c='Password');
         insert config;
+    }
+
+    private static testmethod void testInit() {
+        Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();
         ApexPages.CurrentPage().getparameters().put('id', '123');
@@ -42,9 +44,6 @@ public class ZendeskTicketDetailControllerTests {
 
     private static testmethod void testPaging() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
-
-        Zendesk_API__c config = new Zendesk_API__c(Subdomain__c='s', Username__c='u', Password_or_Token__c='pwd', Authentication_Type__c='Password');
-        insert config;
 
         Test.startTest();
         ApexPages.CurrentPage().getparameters().put('id', '123');

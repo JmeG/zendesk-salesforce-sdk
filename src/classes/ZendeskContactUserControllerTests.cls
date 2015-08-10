@@ -15,11 +15,13 @@ public class ZendeskContactUserControllerTests {
         }
     }
 
-    private static testmethod void testInit() {
-        Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
-
+    @testSetup static void setup() {
         Zendesk_API__c config = new Zendesk_API__c(Subdomain__c='s', Username__c='u', Password_or_Token__c='pwd', Authentication_Type__c='Password');
         insert config;
+    }
+
+    private static testmethod void testInit() {
+        Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Account acct = new Account(Name='TestAccount');
         insert acct;
