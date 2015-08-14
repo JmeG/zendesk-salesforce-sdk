@@ -31,6 +31,15 @@ public class ZendeskOrganizationMembershipsAPITests {
         }
     }
 
+    public class MockJobStatusResponse implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            HttpResponse res = new HttpResponse();
+            res.setStatusCode(200);
+            res.setBody('{ "job_status": {"id": "31a2e47012e2013340b438ca3a5dc6c8", "url": "https://test.zendesk.com/api/v2/job_statuses/31a2e47012e2013340b438ca3a5dc6c8.json", "status": "queued" }}');
+            return res;
+        }
+    }
+
     @isTest static void testGetMembership1() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationMembershipResponse());
 
@@ -173,6 +182,31 @@ public class ZendeskOrganizationMembershipsAPITests {
 
         System.assertNotEquals(null, wrapper.organization_memberships);
         System.assertNotEquals(0, wrapper.organization_memberships.size());
+    }
+
+    @isTest static void testCreateMemberships() {
+        Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
+
+        Test.startTest();
+        ZendeskOrganizationMembershipsAPI api = new ZendeskOrganizationMembershipsAPI(ZendeskConnection.createWithPassword('s','u','p'));
+        ZendeskTypes.ZOrganizationMembership m1 = new ZendeskTypes.ZOrganizationMembership();
+        m1.user_id = 123;
+        m1.organization_id = 456;
+        ZendeskTypes.ZJobStatus jobStatus = api.createMemberships(new List<ZendeskTypes.ZOrganizationMembership>{m1});
+        Test.stopTest();
+
+        System.assertNotEquals(null, jobStatus);
+    }
+
+    @isTest static void testDeleteMemberships() {
+        Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
+
+        Test.startTest();
+        ZendeskOrganizationMembershipsAPI api = new ZendeskOrganizationMembershipsAPI(ZendeskConnection.createWithPassword('s','u','p'));
+        ZendeskTypes.ZJobStatus jobStatus = api.deleteMemberships(new Set<Long>{123,456});
+        Test.stopTest();
+
+        System.assertNotEquals(null, jobStatus);
     }
 
     @isTest static void testZOrganizationMembership() {
