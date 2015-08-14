@@ -74,7 +74,7 @@ global abstract class ZendeskTypes {
     global abstract class ZCustomField {
         global Long id {get; private set;}
         global String key {get;set;}
-        global String type {get;set;}
+        global String type {get;set;} // "checkbox", "date", "decimal", "dropdown", "integer", "regexp", "text", or "textarea"
         global String title {get;set;}
         global String raw_title {get;set;}
         global Long position {get;set;}
