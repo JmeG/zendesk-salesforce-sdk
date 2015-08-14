@@ -42,6 +42,7 @@ global class ZendeskUsersAPI extends ZendeskResourceBase {
 
 	global ZendeskTypes.ZJobStatus createUsers(List<ZUser> zusers) {
         if (zusers == null || zusers.isEmpty()) { throw new ZendeskException('zusers parameter cannot be null or empty'); }
+		
         HttpRequest req = zconn.createRequest('POST', '/users/create_many.json');
         req.setBody(stripJsonNulls(JSON.serialize(new UsersWrapper(zusers))));
         return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
