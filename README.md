@@ -4,18 +4,12 @@ The Force.com Toolkit for Zendesk allows your Force.com apps to call the Zendesk
 
 ## Installation
 
-There are three mechanisms for installing the toolkit: as a managed package, unmanaged package, or from GitHub. Choose the managed package if you only want the pure API library without sample code. Choose the unmanaged package if you want to customize the API library or want to install the sample Visualforce pages. If you are considering modifying or extending the toolkit itself, then installing from GitHub is a little more work, but will enable you to easily contribute code back to the project.
+There are two mechanisms for installing the toolkit: as a managed package or from GitHub. Choose the managed package if you only want the Apex API library without sample code. If you are considering modifying or extending the toolkit itself or want to install the sample Visualforce pages, then installing from GitHub is a little more work, but will enable you to easily contribute code back to the project.
 
 ### Installing the Managed Package
 
 1. Create a new Developer Edition (DE) account at https://developer.salesforce.com/signup. You will receive an activation email - click the enclosed link to complete setup of your DE environment. This will also log you in to your new DE environment.
 2. Install the managed package into your new DE org via this URL: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t61000000DEZ1
-4. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://yoursubdomain.zendesk.com as a new remote site.
-
-### Installing the Unmanaged Package
-
-1. Create a new Developer Edition (DE) account at https://developer.salesforce.com/signup. You will receive an activation email - click the enclosed link to complete setup of your DE environment. This will also log you in to your new DE environment.
-2. Install the unmanaged package into your new DE org via this URL: (Coming Soon)
 4. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://yoursubdomain.zendesk.com as a new remote site.
 
 ### Installing from GitHub (and using Eclipse)
