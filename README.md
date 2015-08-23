@@ -2,25 +2,25 @@
 
 The Force.com Toolkit for Zendesk allows your Force.com apps to call the Zendesk Core [ API](https://developer.zendesk.com/rest_api). The library provides a set of Apex classes, such as `ZendeskUsersAPI` and `ZendeskTicketsAPI`, that model Zendesk Objects `Users` and `Tickets`.
 
-## Example
+## Examples
 
 ```Apex
 // Get recent Tickets
-ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(ZendeskConnection.createWithPassword('subdomain','username','password'));
-ZendeskTicketsAPI.TicketsWrapper result = ztickets_api.getTickets();
+ZendeskTicketsAPI zapi = new ZendeskTicketsAPI(ZendeskConnection.createWithPassword('subdomain','username','password'));
+ZendeskTicketsAPI.TicketsWrapper result = zapi.getTickets();
 for (ZendeskTypes.ZTicket zt : result.tickets) {
     System.debug(zt);
 }
 
 // Update Ticket
-ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(ZendeskConnection.createWithPassword('subdomain','username','password'));
+ZendeskTicketsAPI zapi = new ZendeskTicketsAPI(ZendeskConnection.createWithPassword('subdomain','username','password'));
 ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
 zt.priority = ZendeskTypes.TicketPriority.urgent;
-ztickets_api.updateTicket(12345, zt);
+zapi.updateTicket(12345, zt);
 
 // Get Users for Organization
-ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(ZendeskConnection.createWithAPIToken('subdomain','username','token'));
-ZendeskUsersAPI.UsersWrapper result = zusers_api.getUsersByOrganization(1122334455);
+ZendeskUsersAPI zapi = new ZendeskUsersAPI(ZendeskConnection.createWithAPIToken('subdomain','username','token'));
+ZendeskUsersAPI.UsersWrapper result = zapi.getUsersByOrganization(1122334455);
 for (ZendeskTypes.ZUser zu : result.users) {
     System.debug(zu);
 }
