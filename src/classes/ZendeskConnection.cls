@@ -1,8 +1,6 @@
 // This class provides functionality for creating requests to interact with the Zendesk API
 global class ZendeskConnection {
 
-	private final static String DEFAULT_USER_AGENT =  'Force.com Toolkit for Zendesk';
-
 	private String subdomain;
 	private String username;
 	private String password;
@@ -10,7 +8,7 @@ global class ZendeskConnection {
 	private String oauthToken;
 
 	// overridable properties
-	global String userAgent = DEFAULT_USER_AGENT;
+	global String userAgent = 'Force.com Toolkit for Zendesk';
 	global Integer timeoutSeconds = 30;
 	global Boolean debugAll = false;
 	global Boolean debugRequest = false;
