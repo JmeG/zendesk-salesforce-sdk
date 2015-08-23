@@ -2,6 +2,30 @@
 
 The Force.com Toolkit for Zendesk allows your Force.com apps to call the Zendesk Core [ API](https://developer.zendesk.com/rest_api). The library provides a set of Apex classes, such as `ZendeskUsersAPI` and `ZendeskTicketsAPI`, that model Zendesk Objects `Users` and `Tickets`.
 
+## Example
+
+```Apex
+// Get recent Tickets
+ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(ZendeskConnection.createWithPassword('subdomain','username','password'));
+ZendeskTicketsAPI.TicketsWrapper result = ztickets_api.getTickets();
+for (ZendeskTypes.ZTicket zt : result.tickets) {
+    System.debug(zt);
+}
+
+// Update Ticket
+ZendeskTicketsAPI ztickets_api = new ZendeskTicketsAPI(ZendeskConnection.createWithPassword('subdomain','username','password'));
+ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
+zt.priority = ZendeskTypes.TicketPriority.urgent;
+ztickets_api.updateTicket(12345, zt);
+
+// Get Users for Organization
+ZendeskUsersAPI zusers_api = new ZendeskUsersAPI(ZendeskConnection.createWithAPIToken('subdomain','username','token'));
+ZendeskUsersAPI.UsersWrapper result = zusers_api.getUsersByOrganization(1122334455);
+for (ZendeskTypes.ZUser zu : result.users) {
+    System.debug(zu);
+}
+```
+
 ## Installation
 
 There are two mechanisms for installing the toolkit: as a managed package or from GitHub. Choose the managed package if you only want the Apex API library without sample code. If you are considering modifying or extending the toolkit itself or want to install the sample Visualforce pages, then installing from GitHub is a little more work, but will enable you to easily contribute code back to the project.
