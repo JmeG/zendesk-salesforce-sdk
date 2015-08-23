@@ -3,7 +3,7 @@ public class ZendeskOrgDetailController {
     private final static Integer TICKETS_PER_PAGE = 10;
     private final static Integer USERS_PER_PAGE = 10;
 
-    private String subdomain;
+    public String subdomain {get;set;}
     private String username;
     private String pwdOrToken;
     private String authType;
