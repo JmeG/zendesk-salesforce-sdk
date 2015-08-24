@@ -26,6 +26,28 @@ for (ZendeskTypes.ZUser zu : result.users) {
 }
 ```
 
+## Implemented Resources
+
+- Attachments
+- Autocomplete
+- Group Memberships
+- Groups
+- Job Statuses
+- Organization Fields
+- Organization Memberships
+- Organizations
+- Satisfaction Ratings
+- Search
+- Sessions
+- Tags
+- Ticket Comments
+- Ticket Fields
+- Ticket Forms
+- Ticket Metrics
+- Tickets
+- User Fields
+- Users
+
 ## Installation
 
 There are two mechanisms for installing the toolkit: as a managed package or from GitHub. Choose the managed package if you only want the Apex API library without sample code. If you are considering modifying or extending the toolkit itself or want to install the sample Visualforce pages, then installing from GitHub is a little more work, but will enable you to easily contribute code back to the project.
