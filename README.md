@@ -5,25 +5,33 @@ The Force.com Toolkit for Zendesk allows your Force.com apps to call the Zendesk
 ## Examples
 
 ```Apex
+// Create a new API connection
+ZendeskConnection zconn = ZendeskConnection.createWithAPIToken('subdomain','username','token');
+
 // Get recent Tickets
-ZendeskTicketsAPI zapi = new ZendeskTicketsAPI(ZendeskConnection.createWithPassword('subdomain','username','password'));
+ZendeskTicketsAPI zapi = new ZendeskTicketsAPI(zconn);
 ZendeskTicketsAPI.TicketsWrapper result = zapi.getTickets();
 for (ZendeskTypes.ZTicket zt : result.tickets) {
     System.debug(zt);
 }
 
-// Update Ticket
-ZendeskTicketsAPI zapi = new ZendeskTicketsAPI(ZendeskConnection.createWithPassword('subdomain','username','password'));
+// Update a Ticket
+ZendeskTicketsAPI zapi = new ZendeskTicketsAPI(zconn);
 ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
 zt.priority = ZendeskTypes.TicketPriority.urgent;
 zapi.updateTicket(12345, zt);
 
-// Get Users for Organization
-ZendeskUsersAPI zapi = new ZendeskUsersAPI(ZendeskConnection.createWithAPIToken('subdomain','username','token'));
+// Get Users of an Organization
+ZendeskUsersAPI zapi = new ZendeskUsersAPI(zconn);
 ZendeskUsersAPI.UsersWrapper result = zapi.getUsersByOrganization(1122334455);
 for (ZendeskTypes.ZUser zu : result.users) {
     System.debug(zu);
 }
+
+// Search Organizations with paging options
+ZendeskOrganizationsAPI orgs_api = new ZendeskOrganizationsAPI(zconn);
+Map<String, Object> params = new Map<String, Object>{'per_page'=>20, 'page'=>2};
+ZendeskOrganizationsAPI.OrganizationsWrapper orgsWrapper = orgs_api.autocompleteSearch('searchText', params);
 ```
 
 ## Implemented Resources
