@@ -61,11 +61,11 @@ global class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 
 	// Retrieves all pages of ticket fields. Uses the field "id" as the map key
 	global Map<Long, ZTicketField> getAllFields() {
-        if (fieldsMap.isEmpty()) {
-            loadAll();
-        }
-        return fieldsMap;
-    }
+		if (fieldsMap.isEmpty()) {
+			loadAll();
+		}
+		return fieldsMap;
+	}
 
 	private void loadAll() {
 		TicketFieldsWrapper wrapper = getFields();

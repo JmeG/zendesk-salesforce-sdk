@@ -19,21 +19,21 @@ global class ZendeskCreateTicketSampleService {
 	// Expose method as a webService so we can call it from a Javascript button on a Salesforce layout
 	webService static String createNewZendeskTicket(String ticketSubject, String ticketComment) {
 		try {
-            // Retrieve the Zendesk API details from the custom settings object
-            Zendesk_API__c settings = Zendesk_API__c.getInstance();
-    		if (settings == null) { throw new ZendeskException('Zendesk_API custom settings are null'); }
-			
+			// Retrieve the Zendesk API details from the custom settings object
+			Zendesk_API__c settings = Zendesk_API__c.getInstance();
+			if (settings == null) { throw new ZendeskException('Zendesk_API custom settings are null'); }
+
 			// Create a new Ticket object
-            ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
-            zt.type = ZendeskTypes.TicketType.question;
-    		zt.subject = ticketSubject;
-            // Create a new requester if one doesn't exist with this email address
-    		zt.requester = new ZendeskTypes.ZTicketRequester();
-            zt.requester.name = UserInfo.getName();
-            zt.requester.email = UserInfo.getUserEmail();
-            // Add a comment to the ticket
-            zt.comment = new ZendeskTypes.ZTicketComment();
-    		zt.comment.body = ticketComment;
+			ZendeskTypes.ZTicket zt = new ZendeskTypes.ZTicket();
+			zt.type = ZendeskTypes.TicketType.question;
+			zt.subject = ticketSubject;
+			// Create a new requester if one doesn't exist with this email address
+			zt.requester = new ZendeskTypes.ZTicketRequester();
+			zt.requester.name = UserInfo.getName();
+			zt.requester.email = UserInfo.getUserEmail();
+			// Add a comment to the ticket
+			zt.comment = new ZendeskTypes.ZTicketComment();
+			zt.comment.body = ticketComment;
 
 			String subdomain = settings.Subdomain__c;
 			String username = settings.Username__c;

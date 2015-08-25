@@ -125,14 +125,14 @@ global class ZendeskGroupsAPI extends ZendeskResourceBase {
 	}
 
 	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
-    // Use when calling deserialize()
+	// Use when calling deserialize()
 	private String replaceReservedWords(String str) {
 		str = str.replaceAll('"group"\\s*:', '"x_group":');
 		return str;
 	}
 
 	// un-replace reserved keywords in the JSON string
-    // Use when calling serialize()
+	// Use when calling serialize()
 	private String unreplaceReservedWords(String str) {
 		str = str.replaceAll('"x_group"\\s*:', '"group":');
 		return str;

@@ -20,7 +20,7 @@ public class ZendeskSample1Controller {
 	// This method simply exists so that changes to API fields are saved in the controller
 	// without a full postback
 	public PageReference changeAPIdetails() {
-    	pageMessage = '';
+		pageMessage = '';
 		return null;
 	}
 

@@ -17,37 +17,37 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 
 	global OrganizationWrapper getOrganization(Long orgId) {
 		return getOrganization(orgId, null);
-    }
+	}
 	global OrganizationWrapper getOrganization(Long orgId, Map<String, Object> queryParams) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/organizations/'+orgId+'.json', queryParams);
-        return (OrganizationWrapper)JSON.deserialize(zconn.sendRequest(req), OrganizationWrapper.class);
-    }
+		HttpRequest req = zconn.createRequest('GET', '/organizations/'+orgId+'.json', queryParams);
+		return (OrganizationWrapper)JSON.deserialize(zconn.sendRequest(req), OrganizationWrapper.class);
+	}
 
 	global OrganizationsWrapper getOrganizations() {
-        return getOrganizationsHelper(zconn.createRequest('GET', '/organizations.json'));
-    }
-    global OrganizationsWrapper getOrganizations(Map<String, Object> queryParams) {
-        return getOrganizationsHelper(zconn.createRequest('GET', '/organizations.json', queryParams));
-    }
+		return getOrganizationsHelper(zconn.createRequest('GET', '/organizations.json'));
+	}
+	global OrganizationsWrapper getOrganizations(Map<String, Object> queryParams) {
+		return getOrganizationsHelper(zconn.createRequest('GET', '/organizations.json', queryParams));
+	}
 
 	global OrganizationsWrapper getOrganizationsByIds(Set<Long> orgIds) {
 		if (orgIds == null || orgIds.isEmpty()) { throw new ZendeskException('orgIds parameter cannot be null or empty'); }
 
-        return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/show_many.json', new Map<String, Object>{'ids'=>toCSV(orgIds)}));
-    }
+		return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/show_many.json', new Map<String, Object>{'ids'=>toCSV(orgIds)}));
+	}
 
 	global OrganizationsWrapper getOrganizationsByExternalIds(Set<String> externalIds) {
 		return getOrganizationsByExternalIds(externalIds, null);
-    }
+	}
 	global OrganizationsWrapper getOrganizationsByExternalIds(Set<String> externalIds, Map<String, Object> additionalParams) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter cannot be null or empty'); }
 
 		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
 		additionalParams.put('external_ids', toCSV(externalIds));
-        return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/show_many.json', additionalParams));
-    }
+		return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/show_many.json', additionalParams));
+	}
 
 	global OrganizationsWrapper autocompleteSearch(String name) {
 		return autocompleteSearch(name, null);
@@ -57,8 +57,8 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 
 		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
 		additionalParams.put('name', urlEncode(name));
-        return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/autocomplete.json', additionalParams));
-    }
+		return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/autocomplete.json', additionalParams));
+	}
 
 	global OrganizationsWrapper searchOrganizationsByExternalId(String externalId) {
 		return searchOrganizationsByExternalId(externalId, null);
@@ -68,52 +68,52 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 
 		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
 		additionalParams.put('external_id', urlEncode(externalId));
-        return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/search.json', additionalParams));
-    }
+		return getOrganizationsHelper(zconn.createRequest('GET', '/organizations/search.json', additionalParams));
+	}
 
 	global OrganizationsWrapper getUserOrganizations(Long userId) {
 		if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
-        return getOrganizationsHelper(zconn.createRequest('GET', '/users/'+userId+'/organizations.json'));
-    }
+		return getOrganizationsHelper(zconn.createRequest('GET', '/users/'+userId+'/organizations.json'));
+	}
 
 	// Helper method for GET Organization's
 	private OrganizationsWrapper getOrganizationsHelper(HttpRequest req) {
-        return (OrganizationsWrapper)JSON.deserialize(zconn.sendRequest(req), OrganizationsWrapper.class);
-    }
+		return (OrganizationsWrapper)JSON.deserialize(zconn.sendRequest(req), OrganizationsWrapper.class);
+	}
 
 	global Map<String, Object> getOrganizationRelatedInfo(Long orgId) {
 		if (orgId == null) { throw new ZendeskException('orgId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/organizations/'+orgId+'/related.json');
+		HttpRequest req = zconn.createRequest('GET', '/organizations/'+orgId+'/related.json');
 		return (Map<String, Object>)JSON.deserializeUntyped(zconn.sendRequest(req));
 	}
 
 	global Long createOrganization(ZOrganization zorg) {
-        if (zorg == null) { throw new ZendeskException('zorg parameter cannot be null'); }
+		if (zorg == null) { throw new ZendeskException('zorg parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/organizations.json');
-        req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
-        OrganizationWrapper resultWrapper = (OrganizationWrapper)JSON.deserialize(zconn.sendRequest(req), OrganizationWrapper.class);
+		HttpRequest req = zconn.createRequest('POST', '/organizations.json');
+		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
+		OrganizationWrapper resultWrapper = (OrganizationWrapper)JSON.deserialize(zconn.sendRequest(req), OrganizationWrapper.class);
 		return ((resultWrapper==null || resultWrapper.organization==null) ? null : resultWrapper.organization.id);
-    }
+	}
 
 	global ZendeskTypes.ZJobStatus createOrganizations(List<ZOrganization> zorgs) {
-        if (zorgs == null || zorgs.isEmpty()) { throw new ZendeskException('zorgs parameter cannot be null or empty'); }
+		if (zorgs == null || zorgs.isEmpty()) { throw new ZendeskException('zorgs parameter cannot be null or empty'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/organizations/create_many.json');
-        req.setBody(stripJsonNulls(JSON.serialize(new OrganizationsWrapper(zorgs))));
-        return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
-    }
+		HttpRequest req = zconn.createRequest('POST', '/organizations/create_many.json');
+		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationsWrapper(zorgs))));
+		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+	}
 
-    global void updateOrganization(Long orgId, ZOrganization zorg) {
-        if (orgId == null) { throw new ZendeskException('orgId parameter cannot be null'); }
-        if (zorg == null) { throw new ZendeskException('zorg parameter cannot be null'); }
+	global void updateOrganization(Long orgId, ZOrganization zorg) {
+		if (orgId == null) { throw new ZendeskException('orgId parameter cannot be null'); }
+		if (zorg == null) { throw new ZendeskException('zorg parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('PUT', '/organizations/'+orgId+'.json');
+		HttpRequest req = zconn.createRequest('PUT', '/organizations/'+orgId+'.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
 		zconn.sendRequest(req);
-    }
+	}
 
 	global ZendeskTypes.ZJobStatus updateOrganizations(List<ZOrganization> zorgs) {
 		if (zorgs == null || zorgs.isEmpty()) { throw new ZendeskException('zorgs parameter cannot be null or empty'); }
@@ -128,9 +128,9 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 
 	global ZendeskTypes.ZJobStatus updateOrganizations(Set<Long> orgIds, ZOrganization zorg) {
 		if (orgIds == null || orgIds.isEmpty()) { throw new ZendeskException('orgIds parameter cannot be null or empty'); }
-        if (zorg == null) { throw new ZendeskException('zorg parameter cannot be null'); }
+		if (zorg == null) { throw new ZendeskException('zorg parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('PUT', '/organizations/update_many.json', new Map<String, Object>{'ids'=>toCSV(orgIds)});
+		HttpRequest req = zconn.createRequest('PUT', '/organizations/update_many.json', new Map<String, Object>{'ids'=>toCSV(orgIds)});
 		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
 		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
 	}

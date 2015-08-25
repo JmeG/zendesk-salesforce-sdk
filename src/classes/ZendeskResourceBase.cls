@@ -2,7 +2,7 @@ global abstract class ZendeskResourceBase extends ZendeskTypes {
 
 	protected final ZendeskConnection zconn;
 
-    global ZendeskResourceBase(ZendeskConnection zconn) {
+	global ZendeskResourceBase(ZendeskConnection zconn) {
 		this.zconn = zconn;
 	}
 
@@ -28,7 +28,7 @@ global abstract class ZendeskResourceBase extends ZendeskTypes {
 		return (str == null ? null : EncodingUtil.urlEncode(str, 'UTF-8'));
 	}
 
-    global static String toCSV(List<Long> longs) {
+	global static String toCSV(List<Long> longs) {
 		String csv = '';
 		if (longs != null && !longs.isEmpty()) {
 			for (Long l : longs) { csv += l + ','; }

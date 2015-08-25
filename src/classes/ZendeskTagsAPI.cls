@@ -20,16 +20,16 @@ global class ZendeskTagsAPI extends ZendeskResourceBase {
 	}
 
 	global TagsWrapper autocompleteTags(String name) {
-        return autocompleteTags(name, null);
-    }
-    global TagsWrapper autocompleteTags(String name, Map<String, Object> additionalParams) {
-        if (String.isEmpty(name)) { throw new ZendeskException('name parameter cannot be null or empty'); }
+		return autocompleteTags(name, null);
+	}
+	global TagsWrapper autocompleteTags(String name, Map<String, Object> additionalParams) {
+		if (String.isEmpty(name)) { throw new ZendeskException('name parameter cannot be null or empty'); }
 
-        if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
-        additionalParams.put('name', urlEncode(name));
-        HttpRequest req = zconn.createRequest('GET', '/autocomplete/tags.json', additionalParams);
-        return (TagsWrapper)JSON.deserialize(zconn.sendRequest(req), TagsWrapper.class);
-    }
+		if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
+		additionalParams.put('name', urlEncode(name));
+		HttpRequest req = zconn.createRequest('GET', '/autocomplete/tags.json', additionalParams);
+		return (TagsWrapper)JSON.deserialize(zconn.sendRequest(req), TagsWrapper.class);
+	}
 
 	global ListTagsWrapper listTags() {
 		HttpRequest req = zconn.createRequest('GET', '/tags.json');

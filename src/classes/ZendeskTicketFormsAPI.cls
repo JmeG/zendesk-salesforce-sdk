@@ -44,44 +44,44 @@ global class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 	global Long createTicketForm(ZTicketForm ticketForm) {
 		if (ticketForm == null) { throw new ZendeskException('ticketForm parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/ticket_forms.json');
-        req.setBody(unreplaceReservedWords(JSON.serialize(new TicketFormWrapper(ticketForm))));
-        TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormWrapper.class);
+		HttpRequest req = zconn.createRequest('POST', '/ticket_forms.json');
+		req.setBody(unreplaceReservedWords(JSON.serialize(new TicketFormWrapper(ticketForm))));
+		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
 	}
 
 	global void updateTicketForm(Long ticketFormId, ZTicketForm ticketForm) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
-        if (ticketForm == null) { throw new ZendeskException('ticketForm parameter cannot be null'); }
+		if (ticketForm == null) { throw new ZendeskException('ticketForm parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('PUT', '/ticket_forms/'+ticketFormId+'.json');
+		HttpRequest req = zconn.createRequest('PUT', '/ticket_forms/'+ticketFormId+'.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketFormWrapper(ticketForm)))));
 		zconn.sendRequest(req);
 	}
 
 	global void reorderTicketForms(List<Long> orderedTicketFormIds) {
-        if (orderedTicketFormIds == null || orderedTicketFormIds.size() < 2) { throw new ZendeskException('orderedTicketFormIds parameter contain at least 2 items'); }
+		if (orderedTicketFormIds == null || orderedTicketFormIds.size() < 2) { throw new ZendeskException('orderedTicketFormIds parameter contain at least 2 items'); }
 
-        HttpRequest req = zconn.createRequest('PUT', '/ticket_forms/reorder.json');
-        req.setBody('{"ticket_form_ids": ' + JSON.serialize(orderedTicketFormIds) + '}');
+		HttpRequest req = zconn.createRequest('PUT', '/ticket_forms/reorder.json');
+		req.setBody('{"ticket_form_ids": ' + JSON.serialize(orderedTicketFormIds) + '}');
 		zconn.sendRequest(req);
-    }
+	}
 
 	global Long cloneTicketForm(Long ticketFormId) {
 		if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/ticket_forms/'+ticketFormId+'/clone.json');
-        TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormWrapper.class);
+		HttpRequest req = zconn.createRequest('POST', '/ticket_forms/'+ticketFormId+'/clone.json');
+		TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormWrapper.class);
 		return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
 	}
 
 	// Retrieves all pages of ticket forms. Uses the field "id" as the map key
 	global Map<Long, ZTicketForm> getAllTicketForms() {
-        if (ticketFormsMap.isEmpty()) {
-            loadAll();
-        }
-        return ticketFormsMap;
-    }
+		if (ticketFormsMap.isEmpty()) {
+			loadAll();
+		}
+		return ticketFormsMap;
+	}
 
 	private void loadAll() {
 		TicketFormsWrapper wrapper = getTicketForms();
@@ -100,14 +100,14 @@ global class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 	}
 
 	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
-    // Use when calling deserialize()
+	// Use when calling deserialize()
 	private String replaceReservedWords(String str) {
 		str = str.replaceAll('"default"\\s*:', '"x_default":');
 		return str;
 	}
 
 	// un-replace reserved keywords in the JSON string
-    // Use when calling serialize()
+	// Use when calling serialize()
 	private String unreplaceReservedWords(String str) {
 		str = str.replaceAll('"x_default"\\s*:', '"default":');
 		return str;
