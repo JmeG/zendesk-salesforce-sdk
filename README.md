@@ -63,7 +63,7 @@ There are two mechanisms for installing the toolkit: as a managed package or fro
 ### Installing the Managed Package
 
 1. Create a new Developer Edition (DE) account at https://developer.salesforce.com/signup. You will receive an activation email - click the enclosed link to complete setup of your DE environment. This will also log you in to your new DE environment.
-2. Install the managed package into your new DE org via this URL: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t61000000DEZ1
+2. Install the managed package into your new DE org via this URL: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t61000000Ddt8
 4. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://yoursubdomain.zendesk.com as a new remote site.
 
 ### Installing from GitHub (and using Eclipse)
