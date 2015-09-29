@@ -103,7 +103,8 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('POST', '/organizations/create_many.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationsWrapper(zorgs))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global void updateOrganization(Long orgId, ZOrganization zorg) {
@@ -123,7 +124,8 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/organizations/update_many.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationsWrapper(zorgs))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global ZendeskTypes.ZJobStatus updateOrganizations(Set<Long> orgIds, ZOrganization zorg) {
@@ -132,7 +134,8 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/organizations/update_many.json', new Map<String, Object>{'ids'=>toCSV(orgIds)});
 		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global ZendeskTypes.ZJobStatus updateOrganizations(Set<String> externalIds, ZOrganization zorg) {
@@ -141,7 +144,8 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/organizations/update_many.json', new Map<String, Object>{'external_ids'=>toCSV(externalIds)});
 		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global void deleteOrganization(Long orgId) {
@@ -154,13 +158,15 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 		if (orgIds == null || orgIds.isEmpty()) { throw new ZendeskException('orgIds parameter cannot be null or empty'); }
 
 		HttpRequest req = zconn.createRequest('DELETE', '/organizations/destroy_many.json', new Map<String, Object>{'ids'=>toCSV(orgIds)});
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global ZendeskTypes.ZJobStatus deleteOrganizations(Set<String> externalIds) {
 		if (externalIds == null || externalIds.isEmpty()) { throw new ZendeskException('externalIds parameter cannot be null or empty'); }
 
 		HttpRequest req = zconn.createRequest('DELETE', '/organizations/destroy_many.json', new Map<String, Object>{'external_ids'=>toCSV(externalIds)});
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 }

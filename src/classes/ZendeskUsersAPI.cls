@@ -1,9 +1,9 @@
 // This class provides functionality to call the Zendesk Users API
 // *************************************
 // TODO: Implement the following methods
-// POST   /api/v2/users/{user_id}/password.json
-// PUT	/api/v2/users/{user_id}/password.json
-// PUT	/api/v2/users/me/merge.json
+// POST  /api/v2/users/{user_id}/password.json
+// PUT   /api/v2/users/{user_id}/password.json
+// PUT   /api/v2/users/me/merge.json
 global class ZendeskUsersAPI extends ZendeskResourceBase {
 
 	global class UserWrapper extends ZendeskSideLoadingBase {
@@ -45,7 +45,8 @@ global class ZendeskUsersAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('POST', '/users/create_many.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new UsersWrapper(zusers))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global void updateUser(Long userId, ZUser zuser) {
@@ -64,7 +65,8 @@ global class ZendeskUsersAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/users/update_many.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new UsersWrapper(zusers))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global ZendeskTypes.ZJobStatus updateUsers(Set<Long> userIds, ZUser zuser) {
@@ -73,7 +75,8 @@ global class ZendeskUsersAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/users/update_many.json?ids=' + toCSV(userIds));
 		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global ZendeskTypes.ZJobStatus updateUsers(Set<String> externalIds, ZUser zuser) {
@@ -82,7 +85,8 @@ global class ZendeskUsersAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/users/update_many.json?external_ids=' + toCSV(externalIds));
 		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global void mergeUsers(Long sourceUserId, Long targetUserId) {

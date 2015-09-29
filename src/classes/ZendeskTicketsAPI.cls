@@ -194,7 +194,8 @@ global class ZendeskTicketsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('POST', '/tickets/create_many.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketsWrapper(ztickets)))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global void updateTicket(Long ticketId, ZTicket zticket) {
@@ -214,7 +215,8 @@ global class ZendeskTicketsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/tickets/update_many.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketsWrapper(ztickets)))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global ZendeskTypes.ZJobStatus updateTickets(Set<Long> ticketIds, ZTicket zticket) {
@@ -223,7 +225,8 @@ global class ZendeskTicketsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/tickets/update_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(zticket)))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	// helper method to add a new comment to a ticket
@@ -272,7 +275,8 @@ global class ZendeskTicketsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('POST', '/tickets/'+targetTicketId+'/merge.json');
 		req.setBody(gen.getAsString());
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global void deleteTicket(Long ticketId) {
@@ -304,7 +308,8 @@ global class ZendeskTicketsAPI extends ZendeskResourceBase {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter cannot be null or empty'); }
 
 		HttpRequest req = zconn.createRequest('PUT', '/tickets/mark_many_as_spam.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	global TicketsWrapper autocompleteProblems(String text) {

@@ -131,7 +131,8 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('POST', '/organization_memberships/create_many.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationMembershipsWrapper(memberships))));
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	// DELETE /api/v2/organization_memberships/destroy_many.json?ids={ids}
@@ -139,7 +140,8 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
 		if (membershipIds == null || membershipIds.isEmpty()) { throw new ZendeskException('membershipIds parameter cannot be null or empty'); }
 
 		HttpRequest req = zconn.createRequest('DELETE', '/organization_memberships/destroy_many.json', new Map<String, Object>{'ids'=>toCSV(membershipIds)});
-		return (ZendeskTypes.ZJobStatus)JSON.deserialize(zconn.sendRequest(req), ZendeskTypes.ZJobStatus.class);
+		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		return wrapper.job_status;
 	}
 
 	// replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
