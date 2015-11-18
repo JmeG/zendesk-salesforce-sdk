@@ -194,7 +194,7 @@ global class ZendeskTicketsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('POST', '/tickets/create_many.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketsWrapper(ztickets)))));
-		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
 
@@ -215,7 +215,7 @@ global class ZendeskTicketsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/tickets/update_many.json');
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketsWrapper(ztickets)))));
-		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
 
@@ -225,7 +225,7 @@ global class ZendeskTicketsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/tickets/update_many.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
 		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketWrapper(zticket)))));
-		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
 
@@ -275,7 +275,7 @@ global class ZendeskTicketsAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('POST', '/tickets/'+targetTicketId+'/merge.json');
 		req.setBody(gen.getAsString());
-		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
 
@@ -308,7 +308,7 @@ global class ZendeskTicketsAPI extends ZendeskResourceBase {
 		if (ticketIds == null || ticketIds.isEmpty()) { throw new ZendeskException('ticketIds parameter cannot be null or empty'); }
 
 		HttpRequest req = zconn.createRequest('PUT', '/tickets/mark_many_as_spam.json', new Map<String, Object>{'ids'=>toCSV(ticketIds)});
-		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
 
