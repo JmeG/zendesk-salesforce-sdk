@@ -30,5 +30,5 @@
         <members>Zendesk_Search</members>
         <name>CustomTab</name>
     </types>
-    <version>34.0</version>
+    <version>35.0</version>
 </Package>
