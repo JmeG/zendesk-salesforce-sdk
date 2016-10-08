@@ -12,7 +12,7 @@
     </style>
 
     <apex:form >
-        <apex:pageBlock title="Zendesk Organization Detail" id="block" mode="detail">
+        <apex:pageBlock title="Zendesk Organization Detail" id="block" mode="edit">
             <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
             <apex:pageBlockSection id="resultsBlock" columns="2">
                 <apex:pageBlockSectionItem >

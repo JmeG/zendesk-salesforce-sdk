@@ -25,12 +25,12 @@
                     </apex:pageBlockSectionItem>
                 </apex:pageBlockSection>
                 <apex:pageBlockSection title="User List" columns="1">
-                	<apex:pageBlockTable value="{!users}" var="user">
+                    <apex:pageBlockTable value="{!users}" var="user">
                         <apex:column value="{!user.id}" headerValue="ID"/>
                         <apex:column value="{!user.name}" headerValue="Name"/>
                         <apex:column value="{!user.email}" headerValue="Email"/>
                         <apex:column value="{!user}" headerValue="Attributes"/>
-                	</apex:pageBlockTable>
+                    </apex:pageBlockTable>
                 </apex:pageBlockSection>
             </apex:pageBlock>
         </apex:outputPanel>

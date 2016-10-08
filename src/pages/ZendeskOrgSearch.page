@@ -2,8 +2,8 @@
     <apex:form >
         <apex:outputPanel id="organizationsPanel">
             <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
-            <apex:pageBlock title="Zendesk Organization Search - {!subdomain}.zendesk.com" mode="edit">
-                <apex:pageBlockSection title="" columns="1">
+            <apex:pageBlock title="Zendesk Organization Search" mode="edit">
+                <apex:pageBlockSection columns="1">
                     <apex:pageBlockSectionItem >
                         <apex:outputPanel layout="block">
                             <apex:inputText value="{!searchText}" style="width: 250px !important;" />
