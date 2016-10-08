@@ -55,7 +55,7 @@ global class ZendeskTicketFormsAPI extends ZendeskResourceBase {
 		if (ticketForm == null) { throw new ZendeskException('ticketForm parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('PUT', '/ticket_forms/'+ticketFormId+'.json');
-		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new TicketFormWrapper(ticketForm)))));
+		req.setBody(unreplaceReservedWords(JSON.serialize(new TicketFormWrapper(ticketForm), true)));
 		zconn.sendRequest(req);
 	}
 

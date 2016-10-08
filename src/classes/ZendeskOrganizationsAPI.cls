@@ -93,7 +93,7 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 		if (zorg == null) { throw new ZendeskException('zorg parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('POST', '/organizations.json');
-		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
+		req.setBody(JSON.serialize(new OrganizationWrapper(zorg), true));
 		OrganizationWrapper resultWrapper = (OrganizationWrapper)JSON.deserialize(zconn.sendRequest(req), OrganizationWrapper.class);
 		return ((resultWrapper==null || resultWrapper.organization==null) ? null : resultWrapper.organization.id);
 	}
@@ -102,7 +102,7 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 		if (zorgs == null || zorgs.isEmpty()) { throw new ZendeskException('zorgs parameter cannot be null or empty'); }
 
 		HttpRequest req = zconn.createRequest('POST', '/organizations/create_many.json');
-		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationsWrapper(zorgs))));
+		req.setBody(JSON.serialize(new OrganizationsWrapper(zorgs), true));
 		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
@@ -112,7 +112,7 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 		if (zorg == null) { throw new ZendeskException('zorg parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('PUT', '/organizations/'+orgId+'.json');
-		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
+		req.setBody(JSON.serialize(new OrganizationWrapper(zorg), true));
 		zconn.sendRequest(req);
 	}
 
@@ -123,7 +123,7 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 		}
 
 		HttpRequest req = zconn.createRequest('PUT', '/organizations/update_many.json');
-		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationsWrapper(zorgs))));
+		req.setBody(JSON.serialize(new OrganizationsWrapper(zorgs), true));
 		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
@@ -133,7 +133,7 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 		if (zorg == null) { throw new ZendeskException('zorg parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('PUT', '/organizations/update_many.json', new Map<String, Object>{'ids'=>toCSV(orgIds)});
-		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
+		req.setBody(JSON.serialize(new OrganizationWrapper(zorg), true));
 		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
@@ -143,7 +143,7 @@ global class ZendeskOrganizationsAPI extends ZendeskResourceBase {
 		if (zorg == null) { throw new ZendeskException('zorg parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('PUT', '/organizations/update_many.json', new Map<String, Object>{'external_ids'=>toCSV(externalIds)});
-		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationWrapper(zorg))));
+		req.setBody(JSON.serialize(new OrganizationWrapper(zorg), true));
 		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}

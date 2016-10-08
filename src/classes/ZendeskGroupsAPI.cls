@@ -70,7 +70,7 @@ global class ZendeskGroupsAPI extends ZendeskResourceBase {
 		if (x_group == null) { throw new ZendeskException('x_group parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('POST', '/groups.json');
-		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group)))));
+		req.setBody(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group), true)));
 		GroupWrapper resultWrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), GroupWrapper.class);
 		return ((resultWrapper==null || resultWrapper.x_group == null) ? null : resultWrapper.x_group.id);
 	}
@@ -89,7 +89,7 @@ global class ZendeskGroupsAPI extends ZendeskResourceBase {
 		if (x_group == null) { throw new ZendeskException('x_group parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('PUT', '/groups/'+groupId+'.json');
-		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group)))));
+		req.setBody(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group), true)));
 		zconn.sendRequest(req);
 	}
 

@@ -87,7 +87,7 @@ global class ZendeskGroupMembershipsAPI extends ZendeskResourceBase {
 		gm.group_id = groupId;
 
 		HttpRequest req = zconn.createRequest('POST', '/users/'+userId+'/group_memberships.json');
-		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new GroupMembershipWrapper(gm)))));
+		req.setBody(unreplaceReservedWords(JSON.serialize(new GroupMembershipWrapper(gm), true)));
 		GroupMembershipWrapper resultWrapper = (GroupMembershipWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), GroupMembershipWrapper.class);
 		return ((resultWrapper==null || resultWrapper.group_membership == null) ? null : resultWrapper.group_membership.id);
 	}
@@ -96,7 +96,7 @@ global class ZendeskGroupMembershipsAPI extends ZendeskResourceBase {
 		if (groupMembership == null) { throw new ZendeskException('groupMembership parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('POST', '/group_memberships.json');
-		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new GroupMembershipWrapper(groupMembership)))));
+		req.setBody(unreplaceReservedWords(JSON.serialize(new GroupMembershipWrapper(groupMembership), true)));
 		GroupMembershipWrapper resultWrapper = (GroupMembershipWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), GroupMembershipWrapper.class);
 		return ((resultWrapper==null || resultWrapper.group_membership == null) ? null : resultWrapper.group_membership.id);
 	}
@@ -130,7 +130,7 @@ global class ZendeskGroupMembershipsAPI extends ZendeskResourceBase {
 		if (memberships == null || memberships.isEmpty()) { throw new ZendeskException('memberships parameter cannot be null or empty'); }
 
 		HttpRequest req = zconn.createRequest('POST', '/group_memberships/create_many.json');
-		req.setBody(stripJsonNulls(JSON.serialize(new GroupMembershipsWrapper(memberships))));
+		req.setBody(JSON.serialize(new GroupMembershipsWrapper(memberships), true));
 		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}

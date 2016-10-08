@@ -59,7 +59,7 @@ global class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
 		if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('PUT', '/organization_fields/'+fieldId+'.json');
-		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new OrganizationFieldWrapper(zfield)))));
+		req.setBody(unreplaceReservedWords(JSON.serialize(new OrganizationFieldWrapper(zfield), true)));
 		zconn.sendRequest(req);
 	}
 

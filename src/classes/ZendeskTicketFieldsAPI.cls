@@ -55,7 +55,7 @@ global class ZendeskTicketFieldsAPI extends ZendeskResourceBase {
 		if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('PUT', '/ticket_fields/'+fieldId+'.json');
-		req.setBody(stripJsonNulls(JSON.serialize(new TicketFieldWrapper(zfield))));
+		req.setBody(JSON.serialize(new TicketFieldWrapper(zfield), true));
 		zconn.sendRequest(req);
 	}
 

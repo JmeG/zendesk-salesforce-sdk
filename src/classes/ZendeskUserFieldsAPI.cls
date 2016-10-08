@@ -60,7 +60,7 @@ global class ZendeskUserFieldsAPI extends ZendeskResourceBase {
 		if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('PUT', '/user_fields/'+fieldId+'.json');
-		req.setBody(unreplaceReservedWords(stripJsonNulls(JSON.serialize(new UserFieldWrapper(zfield)))));
+		req.setBody(unreplaceReservedWords(JSON.serialize(new UserFieldWrapper(zfield), true)));
 		zconn.sendRequest(req);
 	}
 

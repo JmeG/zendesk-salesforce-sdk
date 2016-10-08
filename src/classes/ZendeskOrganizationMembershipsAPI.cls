@@ -87,7 +87,7 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
 		gm.organization_id = organizationId;
 
 		HttpRequest req = zconn.createRequest('POST', '/users/'+userId+'/organization_memberships.json');
-		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new OrganizationMembershipWrapper(gm)))));
+		req.setBody(unreplaceReservedWords(JSON.serialize(new OrganizationMembershipWrapper(gm), true)));
 		OrganizationMembershipWrapper resultWrapper = (OrganizationMembershipWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationMembershipWrapper.class);
 		return ((resultWrapper==null || resultWrapper.organization_membership == null) ? null : resultWrapper.organization_membership.id);
 	}
@@ -96,7 +96,7 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
 		if (organizationMembership == null) { throw new ZendeskException('organizationMembership parameter cannot be null'); }
 
 		HttpRequest req = zconn.createRequest('POST', '/organization_memberships.json');
-		req.setBody(stripJsonNulls(unreplaceReservedWords(JSON.serialize(new OrganizationMembershipWrapper(organizationMembership)))));
+		req.setBody(unreplaceReservedWords(JSON.serialize(new OrganizationMembershipWrapper(organizationMembership), true)));
 		OrganizationMembershipWrapper resultWrapper = (OrganizationMembershipWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationMembershipWrapper.class);
 		return ((resultWrapper==null || resultWrapper.organization_membership == null) ? null : resultWrapper.organization_membership.id);
 	}
@@ -130,7 +130,7 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
 		if (memberships == null || memberships.isEmpty()) { throw new ZendeskException('memberships parameter cannot be null or empty'); }
 
 		HttpRequest req = zconn.createRequest('POST', '/organization_memberships/create_many.json');
-		req.setBody(stripJsonNulls(JSON.serialize(new OrganizationMembershipsWrapper(memberships))));
+		req.setBody(JSON.serialize(new OrganizationMembershipsWrapper(memberships), true));
 		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
