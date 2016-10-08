@@ -1,11 +1,11 @@
 global abstract class ZendeskTypes {
 
-    //global abstract class BaseType {
-    //  global Long id { get; set; }
-    //  global String url { get; set; }
-    //  global DateTime created_at {get; private set;}
-    //  global DateTime updated_at {get; private set;}
-    //}
+  //global abstract class BaseType {
+  //    global Long id {get;set;}
+  //    global String url {get;set;}
+  //    global DateTime created_at {get; private set;}
+  //    global DateTime updated_at {get; private set;}
+  //}
 
     global enum TicketType { question, incident, problem, task }
     global enum TicketPriority { low, normal, high, urgent }
@@ -26,16 +26,16 @@ global abstract class ZendeskTypes {
 
     global class ZAttachment {
         global Long id {get; private set;}
-        global String name { get; set; }
-        global String content_url { get; set; }
-        global String content_type { get; set; }
-        //global List<Object> thumbnails { get; set; }
-        global Long size { get; set; }
+        global String name {get;set;}
+        global String content_url {get;set;}
+        global String content_type {get;set;}
+        //global List<Object> thumbnails {get;set;}
+        global Long size {get;set;}
     }
 
     global class ZGroup {
         global Long id {get; private set;}
-        global String name { get; set; }
+        global String name {get;set;}
         global Boolean deleted {get; private set;}
         global DateTime created_at {get; private set;}
         global DateTime updated_at {get; private set;}
@@ -43,19 +43,19 @@ global abstract class ZendeskTypes {
 
     global class ZGroupMembership {
         global Long id {get; private set;}
-        global Long user_id { get; set; }
-        global Long group_id { get; set; }
+        global Long user_id {get;set;}
+        global Long group_id {get;set;}
         global Boolean x_default {get; private set;}
     }
 
     global class ZJobStatus {
-        global String id { get; set; }
-        global String url { get; set; }
-        global Integer total { get; set; }
-        global Integer progress { get; set; }
-        global String status { get; set; }
-        global String message { get; set; }
-        global List<ZJobStatusResults> results { get; set; }
+        global String id {get;set;}
+        global String url {get;set;}
+        global Integer total {get;set;}
+        global Integer progress {get;set;}
+        global String status {get;set;}
+        global String message {get;set;}
+        global List<ZJobStatusResults> results {get;set;}
 
         // Using a custom parser because the response isn't consistent.
         // Sometimes results.details is a single string, sometimes it's an array of strings
@@ -98,11 +98,16 @@ global abstract class ZendeskTypes {
     }
 
     global class ZJobStatusResults {
-        global Integer index { get; set; }
-        global String error { get; set; }
-        global String external_id { get; set; }
-        global Long id { get; set; }
-        global List<String> details { get; set; }
+        global Integer index {get;set;}
+        global String error {get;set;}
+        global String errors {get;set;}
+        global String title {get;set;}
+        global String action {get;set;}
+        global String external_id {get;set;}
+        global String status {get;set;}
+        global List<String> details {get;set;}
+        global Long id {get;set;}
+        global Boolean success {set;get;}
 
         // Using a custom parser because the response isn't consistent
         // Sometimes results.details is a single string, sometimes it's an array of strings
@@ -113,13 +118,30 @@ global abstract class ZendeskTypes {
                     if (parser.nextToken() != JSONToken.VALUE_NULL) {
                         if (text == 'index') {
                             index = parser.getIntegerValue();
-                        } else if (text == 'error') {
+                        }
+                        else if (text == 'title') {
+                            title = parser.getText();
+                        }
+                        else if (text == 'action') {
+                            action = parser.getText();
+                        }
+                        else if (text == 'success') {
+                            success = parser.getBooleanValue();
+                        }
+                        else if (text == 'status') {
+                            status = parser.getText();
+                        }
+                        else if (text == 'error' || text == 'errors') {
                             error = parser.getText();
-                        } else if (text == 'external_id') {
+                            errors = parser.getText();
+                        }
+                        else if (text == 'external_id') {
                             external_id = parser.getText();
-                        } else if (text == 'id') {
+                        }
+                        else if (text == 'id') {
                             id = parser.getIntegerValue();
-                        } else if (text == 'details') {
+                        }
+                        else if (text == 'details') {
                             details = new List<String>();
 
                             // If we're in a start array "[" then loop through the values until we reach the end "]"
@@ -132,7 +154,8 @@ global abstract class ZendeskTypes {
                                 // do this if single string
                                 details.add(parser.getText());
                             }
-                        } else {
+                        }
+                        else {
                             System.debug(LoggingLevel.WARN, 'Results consuming unrecognized property: ' + text);
                         }
                     }
@@ -147,18 +170,18 @@ global abstract class ZendeskTypes {
 
     global abstract class ZCustomField {
         global Long id {get; private set;}
-        global String key { get; set; }
-        global String type { get; set; } // "checkbox", "date", "decimal", "dropdown", "integer", "regexp", "text", or "textarea"
-        global String title { get; set; }
-        global String raw_title { get; set; }
-        global Long position { get; set; }
-        global Boolean active { get; set; }
-        global String description { get; set; }
-        global String raw_description { get; set; }
-        //global Boolean x_system { get; set; } // NOTE: "system" is reserved
-        //global String regexp_for_validation { get; set; }
-        //global String tag { get; set; }
-        global List<ZCustomFieldOption> custom_field_options { get; set; }
+        global String key {get;set;}
+        global String type {get;set;} // "checkbox", "date", "decimal", "dropdown", "integer", "regexp", "text", or "textarea"
+        global String title {get;set;}
+        global String raw_title {get;set;}
+        global Long position {get;set;}
+        global Boolean active {get;set;}
+        global String description {get;set;}
+        global String raw_description {get;set;}
+        //global Boolean x_system {get;set;} // NOTE: "system" is reserved
+        //global String regexp_for_validation {get;set;}
+        //global String tag {get;set;}
+        global List<ZCustomFieldOption> custom_field_options {get;set;}
         global DateTime created_at {get; private set;}
         global DateTime updated_at {get; private set;}
 
@@ -178,62 +201,64 @@ global abstract class ZendeskTypes {
                 }
             }
 
-            if (String.isEmpty(val) && errorIfNotFound) { throw new ZendeskException('Option value "' + optname + '" not found for field "' + this.title + '"'); }
+            if (String.isEmpty(val) && errorIfNotFound) {
+                throw new ZendeskException('Option value "' + optname + '" not found for field "' + this.title + '"');
+            }
             return val;
         }
     }
 
     global class ZCustomFieldOption {
-        global Long id { get; set; }
-        global String name { get; set; }
-        global String raw_name { get; set; }
-        global String value { get; set; }
+        global Long id {get;set;}
+        global String name {get;set;}
+        global String raw_name {get;set;}
+        global String value {get;set;}
     }
 
     global class ZOrganization {
-        global Long id { get; set; }
-        global String external_id { get; set; }
-        global String name { get; set; }
-        global List<String> domain_names { get; set; }
-        global String details { get; set; }
-        global String notes { get; set; }
-        global Long group_id { get; set; }
-        global Boolean shared_tickets { get; set; }
-        global Boolean shared_comments { get; set; }
-        global List<String> tags { get; set; }
-        global Map<String, String> organization_fields { get; set; }
+        global Long id {get;set;}
+        global String external_id {get;set;}
+        global String name {get;set;}
+        global List<String> domain_names {get;set;}
+        global String details {get;set;}
+        global String notes {get;set;}
+        global Long group_id {get;set;}
+        global Boolean shared_tickets {get;set;}
+        global Boolean shared_comments {get;set;}
+        global List<String> tags {get;set;}
+        global Map<String, String> organization_fields {get;set;}
         global DateTime created_at {get; private set;}
         global DateTime updated_at {get; private set;}
     }
 
     global class ZOrganizationMembership {
         global Long id {get; private set;}
-        global Long user_id { get; set; }
-        global Long organization_id { get; set; }
+        global Long user_id {get;set;}
+        global Long organization_id {get;set;}
         global Boolean x_default {get; private set;}
     }
 
     global class ZTicketComment {
         global Long id {get; private set;}
-        global String type { get; set; }
-        global String body { get; set; }
-        global String html_body { get; set; }
-        global Boolean x_public { get; set; } // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
-        global Long author_id { get; set; }
-        global List<ZAttachment> attachments { get; set; }
-        global ZTicketVia via { get; set; }
+        global String type {get;set;}
+        global String body {get;set;}
+        global String html_body {get;set;}
+        global Boolean x_public {get;set;} // Use "x_public" in place of "public" which is a reserved keyword. Requires custom de/serialization.
+        global Long author_id {get;set;}
+        global List<ZAttachment> attachments {get;set;}
+        global ZTicketVia via {get;set;}
         global DateTime created_at {get; private set;}
-        global String uploads { get; set; }
+        global String uploads {get;set;}
     }
 
     // Note that Ticket Field's are different than User and Organization Custom fields
     global class ZTicketField {
         global Long id {get; private set;}
-        global String type { get; set; }
-        global String title { get; set; }
-        global String raw_title { get; set; }
-        global Boolean active { get; set; }
-        global List<ZCustomFieldOption> custom_field_options { get; set; }
+        global String type {get;set;}
+        global String title {get;set;}
+        global String raw_title {get;set;}
+        global Boolean active {get;set;}
+        global List<ZCustomFieldOption> custom_field_options {get;set;}
         global DateTime created_at {get; private set;}
         global DateTime updated_at {get; private set;}
 
@@ -253,47 +278,50 @@ global abstract class ZendeskTypes {
                 }
             }
 
-            if (String.isEmpty(val) && errorIfNotFound) { throw new ZendeskException('Option value "' + optname + '" not found for field "' + this.title + '"'); }
+            if (String.isEmpty(val) && errorIfNotFound) {
+                throw new ZendeskException('Option value "' + optname + '" not found for field "' + this.title + '"');
+            }
+
             return val;
         }
     }
 
     global class ZTicketForm {
         global Long id {get; private set;}
-        global String name { get; set; }
-        global String raw_name { get; set; }
-        global String display_name { get; set; }
-        global String raw_display_name { get; set; }
-        global Boolean active { get; set; }
-        global Boolean x_default { get; set; } // Use "x_default" in place of "default" which is a reserved keyword. Requires custom de/serialization.
-        global Boolean end_user_visible { get; set; }
-        global Long position { get; set; }
-        global List<Long> ticket_field_ids { get; set; }
+        global String name {get;set;}
+        global String raw_name {get;set;}
+        global String display_name {get;set;}
+        global String raw_display_name {get;set;}
+        global Boolean active {get;set;}
+        global Boolean x_default {get;set;} // Use "x_default" in place of "default" which is a reserved keyword. Requires custom de/serialization.
+        global Boolean end_user_visible {get;set;}
+        global Long position {get;set;}
+        global List<Long> ticket_field_ids {get;set;}
     }
 
     global class ZTicket {
-        global Long id { get; set; }
-        global String url { get; set; }
-        global String external_id { get; set; }
-        global TicketType type { get; set; }
-        global String subject { get; set; }
-        global TicketPriority priority { get; set; }
-        global String status { get; set; }
-        global String recipient { get; set; }
-        global Long requester_id { get; set; }
-        global ZTicketRequester requester { get; set; } // optional when creating a new ticket in place of requester_id
-        global Long submitter_id { get; set; }
-        global Long assignee_id { get; set; }
-        global Long group_id { get; set; }
-        global List<Long> collaborator_ids { get; set; }
-        global Long forum_topic_id { get; set; }
-        global Long problem_id { get; set; }
-        global DateTime due_at { get; set; }
-        global List<String> tags { get; set; }
-        global List<ZTicketCustomField> custom_fields { get; set; }
-        global Long ticket_form_id { get; set; }
-        global Long brand_id { get; set; }
-        global ZTicketComment comment { get; set; } // use for adding the ticket comment
+        global Long id {get;set;}
+        global String url {get;set;}
+        global String external_id {get;set;}
+        global TicketType type {get;set;}
+        global String subject {get;set;}
+        global TicketPriority priority {get;set;}
+        global String status {get;set;}
+        global String recipient {get;set;}
+        global Long requester_id {get;set;}
+        global ZTicketRequester requester {get;set;} // optional when creating a new ticket in place of requester_id
+        global Long submitter_id {get;set;}
+        global Long assignee_id {get;set;}
+        global Long group_id {get;set;}
+        global List<Long> collaborator_ids {get;set;}
+        global Long forum_topic_id {get;set;}
+        global Long problem_id {get;set;}
+        global DateTime due_at {get;set;}
+        global List<String> tags {get;set;}
+        global List<ZTicketCustomField> custom_fields {get;set;}
+        global Long ticket_form_id {get;set;}
+        global Long brand_id {get;set;}
+        global ZTicketComment comment {get;set;} // use for adding the ticket comment
         global String description {get; private set;} // readonly. first comment on ticket
         global Long organization_id {get; private set;}
         global ZTicketVia via {get; private set;}
@@ -306,54 +334,54 @@ global abstract class ZendeskTypes {
     }
 
     global class ZTicketCustomField {
-        global Long id { get; set; }
-        global String value { get; set; }
+        global Long id {get;set;}
+        global String value {get;set;}
 
         global ZTicketCustomField() {}
         global ZTicketCustomField(Long id, String value) { this.id = id; this.value = value; }
     }
 
     global class ZTicketVia {
-        global String channel { get; set; }
-        //global String source { get; set; }
+        global String channel {get;set;}
+        //global String source {get;set;}
     }
 
     global class ZTicketSatisfactionRating {
-        global Long id { get; set; }
-        global String score { get; set; }
-        global String comment { get; set; }
+        global Long id {get;set;}
+        global String score {get;set;}
+        global String comment {get;set;}
     }
 
     global class ZTicketRequester {
-        global Long locale_id { get; set; }
-        global String name { get; set; }
-        global String email { get; set; }
+        global Long locale_id {get;set;}
+        global String name {get;set;}
+        global String email {get;set;}
     }
 
     global class ZUser {
-        global Long id { get; set; }
-        global String name { get; set; }
-        global String email { get; set; }
-        global String phone { get; set; }
-        global String external_id { get; set; }
-        global String alias { get; set; }
-        global Boolean verified { get; set; }
-        global Boolean moderator { get; set; }
-        global Boolean only_private_comments { get; set; }
-        global Boolean restricted_agent { get; set; }
-        global Boolean suspended { get; set; }
-        global Boolean chat_only { get; set; }
-        global Boolean shared { get; set; }
-        global Boolean shared_agent { get; set; }
-        global String role { get; set; }
-        global String signature { get; set; }
-        global String details { get; set; }
-        global String notes { get; set; }
-        global String time_zone { get; set; }
-        global String locale { get; set; }
-        global Long organization_id { get; set; }
-        global List<String> tags { get; set; }
-        global Map<String, String> user_fields { get; set; }
+        global Long id {get;set;}
+        global String name {get;set;}
+        global String email {get;set;}
+        global String phone {get;set;}
+        global String external_id {get;set;}
+        global String alias {get;set;}
+        global Boolean verified {get;set;}
+        global Boolean moderator {get;set;}
+        global Boolean only_private_comments {get;set;}
+        global Boolean restricted_agent {get;set;}
+        global Boolean suspended {get;set;}
+        global Boolean chat_only {get;set;}
+        global Boolean shared {get;set;}
+        global Boolean shared_agent {get;set;}
+        global String role {get;set;}
+        global String signature {get;set;}
+        global String details {get;set;}
+        global String notes {get;set;}
+        global String time_zone {get;set;}
+        global String locale {get;set;}
+        global Long organization_id {get;set;}
+        global List<String> tags {get;set;}
+        global Map<String, String> user_fields {get;set;}
         global Boolean active {get; private set;}
         global DateTime last_login_at {get; private set;}
         global DateTime created_at {get; private set;}
@@ -361,8 +389,8 @@ global abstract class ZendeskTypes {
     }
 
     global class ZTag {
-        global String name { get; set; }
-        global Long count { get; set; }
+        global String name {get;set;}
+        global Long count {get;set;}
     }
 
     global class ZTicketMetrics {
@@ -405,21 +433,21 @@ global abstract class ZendeskTypes {
 
     global class ZTopic {
         global Long id {get; private set;}
-        global String title { get; set; }
-        global String body { get; set; }
-        global String topic_type { get; set; }
-        global Long submitter_id { get; set; }
-        global Long updater_id { get; set; }
-        global Long forum_id { get; set; }
-        global Boolean locked { get; set; }
-        global Boolean pinned { get; set; }
-        global Boolean highlighted { get; set; }
-        global List<String> tags { get; set; }
-        //global List<ZAttachment> attachments { get; set; }
-        global Long comments_count { get; set; }
+        global String title {get;set;}
+        global String body {get;set;}
+        global String topic_type {get;set;}
+        global Long submitter_id {get;set;}
+        global Long updater_id {get;set;}
+        global Long forum_id {get;set;}
+        global Boolean locked {get;set;}
+        global Boolean pinned {get;set;}
+        global Boolean highlighted {get;set;}
+        global List<String> tags {get;set;}
+        //global List<ZAttachment> attachments {get;set;}
+        global Long comments_count {get;set;}
         global DateTime created_at {get; private set;}
         global DateTime updated_at {get; private set;}
-        global List<String> search_phrases { get; set; }
+        global List<String> search_phrases {get;set;}
     }
 
     global class ZSatisfactionRating {
@@ -428,8 +456,8 @@ global abstract class ZendeskTypes {
         global Long group_id {get; private set;}
         global Long requester_id {get; private set;}
         global Long ticket_id {get; private set;}
-        global String score { get; set; }
-        global String comment { get; set; }
+        global String score {get;set;}
+        global String comment {get;set;}
         global DateTime updated_at {get; private set;}
         global DateTime created_at {get; private set;}
     }

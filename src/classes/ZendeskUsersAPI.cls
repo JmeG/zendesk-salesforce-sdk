@@ -45,7 +45,7 @@ global class ZendeskUsersAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('POST', '/users/create_many.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new UsersWrapper(zusers))));
-		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
 
@@ -65,7 +65,7 @@ global class ZendeskUsersAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/users/update_many.json');
 		req.setBody(stripJsonNulls(JSON.serialize(new UsersWrapper(zusers))));
-		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
 
@@ -75,7 +75,7 @@ global class ZendeskUsersAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/users/update_many.json?ids=' + toCSV(userIds));
 		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
-		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
 
@@ -85,7 +85,7 @@ global class ZendeskUsersAPI extends ZendeskResourceBase {
 
 		HttpRequest req = zconn.createRequest('PUT', '/users/update_many.json?external_ids=' + toCSV(externalIds));
 		req.setBody(stripJsonNulls(JSON.serialize(new UserWrapper(zuser))));
-		ZendeskJobStatusesAPI.JobStatusWrapper wrapper = (ZendeskJobStatusesAPI.JobStatusWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskJobStatusesAPI.JobStatusWrapper.class);
+		ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
 		return wrapper.job_status;
 	}
 

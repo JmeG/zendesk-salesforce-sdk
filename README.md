@@ -2,6 +2,8 @@
 
 The Force.com Toolkit for Zendesk allows your Force.com apps to call the Zendesk Core [ API](https://developer.zendesk.com/rest_api). The library provides a set of Apex classes, such as `ZendeskUsersAPI` and `ZendeskTicketsAPI`, that model Zendesk Objects `Users` and `Tickets`.
 
+Included in this repository are a number of sample Visualforce pages and controllers that demonstrate in more detail how the library can be used.
+
 ## Examples
 
 ```Apex
@@ -63,8 +65,16 @@ There are two mechanisms for installing the toolkit: as a managed package or fro
 ### Installing the Managed Package
 
 1. Create a new Developer Edition (DE) account at https://developer.salesforce.com/signup. You will receive an activation email - click the enclosed link to complete setup of your DE environment. This will also log you in to your new DE environment.
-2. Install the managed package into your new DE org via this URL: https://login.salesforce.com/packaging/installPackage.apexp?p0=04t61000000Ddt8
+2. Install the managed package into your new DE org via this URL: (email me for the latest URL. My email is listed in my GitHub profile)
 4. Go to **Setup | Administration Setup | Security Controls | Remote Site Settings** and add https://yoursubdomain.zendesk.com as a new remote site.
+
+### Installing from GitHub (and using MavensMate)
+1. Clone project to your local filesystem
+`$ git clone https://github.com/JmeG/Force.com-Toolkit-for-Zendesk.git`
+2. Drag directory into Sublime Text
+3. Right click the project root in the Sublime Text sidebar
+4. Select `MavensMate > Create MavensMate Project.`
+5. You will then be prompted for Salesforce.com credentials.
 
 ### Installing from GitHub (and using Eclipse)
 
