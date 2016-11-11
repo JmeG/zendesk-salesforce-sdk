@@ -257,7 +257,9 @@ global abstract class ZendeskTypes {
         global String type {get;set;}
         global String title {get;set;}
         global String raw_title {get;set;}
+        global Integer position {get;set;}
         global Boolean active {get;set;}
+        global Boolean required {get;set;}
         global List<ZCustomFieldOption> custom_field_options {get;set;}
         global DateTime created_at {get; private set;}
         global DateTime updated_at {get; private set;}
