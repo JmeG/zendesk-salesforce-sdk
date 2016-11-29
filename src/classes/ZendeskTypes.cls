@@ -178,9 +178,9 @@ global abstract class ZendeskTypes {
         global Boolean active {get;set;}
         global String description {get;set;}
         global String raw_description {get;set;}
-        //global Boolean x_system {get;set;} // NOTE: "system" is reserved
-        //global String regexp_for_validation {get;set;}
-        //global String tag {get;set;}
+        global Boolean x_system {get;set;} // NOTE: "system" is reserved
+        global String regexp_for_validation {get;set;}
+        global String tag {get;set;}
         global List<ZCustomFieldOption> custom_field_options {get;set;}
         global DateTime created_at {get; private set;}
         global DateTime updated_at {get; private set;}
@@ -263,7 +263,7 @@ global abstract class ZendeskTypes {
         global String raw_title_in_portal {get;set;}
         global String regexp_for_validation {get;set;}
         global String tag {get;set;}
-        global Integer position {get;set;}
+        global Integer position {get;set;} // NOTE: this is stuck as a "integer" since it's part of managed package
         global Boolean active {get;set;}
         global Boolean required {get;set;}
         global Boolean collapsed_for_agents {get;set;}
