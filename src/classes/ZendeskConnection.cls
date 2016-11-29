@@ -19,6 +19,15 @@ global class ZendeskConnection {
     global class ZendeskError {
         global String error;
         global String description;
+        global Map<String, Object> details;
+        public ZendeskError(String jsonString) {
+            Map<String, Object> raw = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
+            error = (String)raw.get('error');
+            description = (String)raw.get('description');
+            if (null != raw.get('details')) {
+                details = (Map<String, Object>)raw.get('details');
+            }
+        }
     }
 
     // Factory method to initialize a ZendeskConnection with a Password
@@ -191,7 +200,7 @@ global class ZendeskConnection {
     private ZendeskError safeGetError(String resBody) {
         ZendeskError zerr = null;
         try {
-            zerr = (ZendeskError)JSON.deserialize(resBody, ZendeskError.class);
+            zerr = new ZendeskError(resBody);
         } catch(Exception e) {System.debug(e);}
         return zerr;
     }
