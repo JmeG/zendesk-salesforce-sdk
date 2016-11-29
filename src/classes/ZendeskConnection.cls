@@ -183,7 +183,7 @@ global class ZendeskConnection {
                         res.getStatus(),
                         zerr.error,
                         zerr.description
-                    }));
+                    }), zerr);
             } else {
                 throw new ZendeskResponseException('Zendesk API Error (' + res.getStatusCode() + ', ' + res.getStatus() + ')');
             }
