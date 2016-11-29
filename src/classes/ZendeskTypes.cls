@@ -255,11 +255,22 @@ global abstract class ZendeskTypes {
     global class ZTicketField {
         global Long id {get; private set;}
         global String type {get;set;}
+        global String description {get;set;}
+        global String raw_description {get;set;}
         global String title {get;set;}
         global String raw_title {get;set;}
+        global String title_in_portal {get;set;}
+        global String raw_title_in_portal {get;set;}
+        global String regexp_for_validation {get;set;}
+        global String tag {get;set;}
         global Integer position {get;set;}
         global Boolean active {get;set;}
         global Boolean required {get;set;}
+        global Boolean collapsed_for_agents {get;set;}
+        global Boolean visible_in_portal {get;set;}
+        global Boolean editable_in_portal {get;set;}
+        global Boolean required_in_portal {get;set;}
+        global Boolean removable {get; private set;}
         global List<ZCustomFieldOption> custom_field_options {get;set;}
         global DateTime created_at {get; private set;}
         global DateTime updated_at {get; private set;}
