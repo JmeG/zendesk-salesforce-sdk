@@ -72,7 +72,7 @@ There are two mechanisms for installing the toolkit: as a managed package or fro
 
 ### Installing from GitHub (and using MavensMate)
 1. Clone project to your local filesystem
-`$ git clone https://github.com/JmeG/Force.com-Toolkit-for-Zendesk.git`
+`$ git clone https://github.com/JmeG/zendesk-salesforce-sdk.git`
 2. Drag directory into Sublime Text
 3. Right click the project root in the Sublime Text sidebar
 4. Select `MavensMate > Create MavensMate Project.`
@@ -84,7 +84,7 @@ There are two mechanisms for installing the toolkit: as a managed package or fro
 2. Create a new Force.com project in the [Force.com IDE](http://wiki.developerforce.com/index.php/Force.com_IDE) using your new org's credentials. In the 'Choose Initial Project Contents' dialog, select 'Selected metadata components', hit 'Choose...' and select ALL of the components in the next page. This will give you a complete project directory tree.
 3. Clone this GitHub project into the Force.com IDE project directory. You will need to clone it first to a temporary location, since git will not let you clone to a directory with existing content:
 
-        $ git clone --no-checkout git://github.com/JmeG/Force.com-Toolkit-for-Zendesk.git /path/to/your/projectdir/tmp
+        $ git clone --no-checkout git://github.com/JmeG/zendesk-salesforce-sdk.git /path/to/your/projectdir/tmp
         $ mv /path/to/your/projectdir/tmp/.git /path/to/your/projectdir
         $ rm -rf /path/to/your/projectdir/tmp
         $ cd /path/to/your/projectdir
@@ -96,4 +96,4 @@ There are two mechanisms for installing the toolkit: as a managed package or fro
 
 ### Installing from GitHub (direct deploy)
 
-https://githubsfdeploy.herokuapp.com/app/githubdeploy/JmeG/Force.com-Toolkit-for-Zendesk
+https://githubsfdeploy.herokuapp.com/app/githubdeploy/JmeG/zendesk-salesforce-sdk
