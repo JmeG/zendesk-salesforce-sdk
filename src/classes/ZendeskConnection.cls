@@ -58,6 +58,11 @@ global class ZendeskConnection {
         this.apiToken = apiToken;
         this.oauthToken = oauthToken;
     }
+    
+    // return the subdomain associated with this connection
+    global static String getSubdomain() {
+        return subdomain;   
+    }
 
     global HttpRequest createRequest(String reqMethod, String path) {
         return createRequest(reqMethod, path, null, null);
