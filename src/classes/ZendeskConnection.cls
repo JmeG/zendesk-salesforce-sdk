@@ -60,7 +60,7 @@ global class ZendeskConnection {
     }
     
     // return the subdomain associated with this connection
-    global static String getSubdomain() {
+    global String getSubdomain() {
         return subdomain;   
     }
 
