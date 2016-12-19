@@ -12,8 +12,8 @@ global class ZendeskConnection {
     private Integer apiCallCount;
 
     // Used for debugging purposes to provide access to the request/response used in an API call
-    private HttpRequest lastRequest;
-    private HttpResponse lastResponse;
+    private transient HttpRequest lastRequest;
+    private transient HttpResponse lastResponse;
 
     // Overridable properties
     global String userAgent = 'Zendesk SDK for Salesforce';
