@@ -248,4 +248,9 @@ global class ZendeskConnection {
         } catch(Exception e) {System.debug(e);}
         return zerr;
     }
+
+    // Allow for setting Mock Callout response from external code when this code is used as part of a managed package.
+    global static void setHttpCalloutMock(HttpCalloutMock mock) {
+        Test.setMock(HttpCalloutMock.class, mock);
+    }
 }
