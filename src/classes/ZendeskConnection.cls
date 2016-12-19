@@ -1,15 +1,25 @@
 // This class provides functionality for creating requests to interact with the Zendesk API
 global class ZendeskConnection {
 
+    // Parameters used to establish a connection
     private String subdomain;
     private String username;
     private String password;
     private String apiToken;
     private String oauthToken;
 
-    // overridable properties
-    global String userAgent = 'Force.com Toolkit for Zendesk';
+    // Used to keep track of how many API calls were made with this connection
+    private Integer apiCallCount;
+
+    // Used for debugging purposes to provide access to the request/response used in an API call
+    private HttpRequest lastRequest;
+    private HttpResponse lastResponse;
+
+    // Overridable properties
+    global String userAgent = 'Zendesk SDK for Salesforce';
     global Integer timeoutSeconds = 30;
+
+    // Note that debugging can't be exposed from within a managed package.
     global Boolean debugAll = false;
     global Boolean debugRequest = false;
     global Boolean debugResponseStatus = false;
@@ -57,25 +67,46 @@ global class ZendeskConnection {
         this.password = password;
         this.apiToken = apiToken;
         this.oauthToken = oauthToken;
-    }
-    
-    // return the subdomain associated with this connection
-    global String getSubdomain() {
-        return subdomain;   
+
+        this.apiCallCount = 0;
     }
 
+    // Return the subdomain associated with this connection
+    global String getSubdomain() {
+        return subdomain;
+    }
+
+    // Return the # of API callouts made using this connection
+    global Integer getAPICallCount() {
+        return apiCallCount;
+    }
+
+    // Get the last Http Request object used for an API call
+    global HttpRequest getLastRequest() {
+        return lastRequest;
+    }
+
+    // Get the last Http Response object received from an API call
+    global HttpResponse getLastResponse() {
+        return lastResponse;
+    }
+
+    // Create an API Request
     global HttpRequest createRequest(String reqMethod, String path) {
         return createRequest(reqMethod, path, null, null);
     }
 
+    // Create an API Request
     global HttpRequest createRequest(String reqMethod, String path, String body) {
         return createRequest(reqMethod, path, body, null);
     }
 
+    // Create an API Request
     global HttpRequest createRequest(String reqMethod, String path, Map<String, Object> queryParams) {
         return createRequest(reqMethod, path, null, queryParams);
     }
 
+    // Create an API Request
     global HttpRequest createRequest(String reqMethod, String path, String body, Map<String, Object> queryParams) {
         if (String.isBlank(reqMethod)) { throw new ZendeskException('reqMethod parameter must not be empty'); }
         if (String.isBlank(path)) { throw new ZendeskException('path parameter must not be empty'); }
@@ -111,6 +142,7 @@ global class ZendeskConnection {
         return req;
     }
 
+    // Build a query parameters string from a map of values
     private String buildQueryParamString(Map<String, Object> queryParams) {
         String str = '';
         if (queryParams != null && !queryParams.isEmpty()) {
@@ -125,6 +157,7 @@ global class ZendeskConnection {
         return str;
     }
 
+    // Returns a map of all query string name/value's.
     global static Map<String, String> getQueryStringMap(String url) {
         Map<String, String> queryStringMap = new Map<String, String>();
         if (!String.isEmpty(url)) {
@@ -148,13 +181,19 @@ global class ZendeskConnection {
         }
     }
 
+    // Send an API Request
     global String sendRequest(HttpRequest req) {
+        lastRequest = req;
+        lastResponse = null;
         if (debugAll || debugRequest) {
             System.debug(Logginglevel.INFO, '**REQUEST=' + req);
         }
 
-        // Send it!
+        // Send it
         HttpResponse res = new Http().send(req);
+        // Track it
+        lastResponse = res;
+        apiCallCount++;
 
         // Debug the response
         if (debugAll || debugResponseHeaders) {
