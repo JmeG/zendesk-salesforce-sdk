@@ -15,3 +15,9 @@ config/.session
 config/.lightning
 
 *.txt
+
+*.json
+
+*.log
+
+*.sublime-project
