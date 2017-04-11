@@ -215,6 +215,11 @@ global abstract class ZendeskTypes {
         global String value {get;set;}
     }
 
+    global class ZSystemFieldOption {
+        global String name {get;set;}
+        global String value {get;set;}
+    }
+
     global class ZOrganization {
         global Long id {get;set;}
         global String external_id {get;set;}
@@ -272,6 +277,7 @@ global abstract class ZendeskTypes {
         global Boolean required_in_portal {get;set;}
         global Boolean removable {get; private set;}
         global List<ZCustomFieldOption> custom_field_options {get;set;}
+        global List<ZSystemFieldOption> system_field_options {get;set;}
         global DateTime created_at {get; private set;}
         global DateTime updated_at {get; private set;}
 
@@ -279,11 +285,32 @@ global abstract class ZendeskTypes {
         global String getOptionValue(String optname) {
             return getOptionValue(optname, false);
         }
-
         global String getOptionValue(String optname, Boolean errorIfNotFound) {
             String val = null;
             if (custom_field_options != null) {
                 for (ZCustomFieldOption fo : custom_field_options) {
+                    if (fo.name.equalsIgnoreCase(optname)) {
+                        val = fo.value;
+                        break;
+                    }
+                }
+            }
+
+            if (String.isEmpty(val) && errorIfNotFound) {
+                throw new ZendeskException('Option value "' + optname + '" not found for field "' + this.title + '"');
+            }
+
+            return val;
+        }
+
+        // Get the picklist "value" matching the provided name
+        global String getSystemFieldOptionValue(String optname) {
+            return getSystemFieldOptionValue(optname, false);
+        }
+        global String getSystemFieldOptionValue(String optname, Boolean errorIfNotFound) {
+            String val = null;
+            if (system_field_options != null) {
+                for (ZSystemFieldOption fo : system_field_options) {
                     if (fo.name.equalsIgnoreCase(optname)) {
                         val = fo.value;
                         break;
