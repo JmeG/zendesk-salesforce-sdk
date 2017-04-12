@@ -2,6 +2,7 @@
 global class ZendeskConnection {
 
     // Parameters used to establish a connection
+    private String namedCredential;
     private String subdomain;
     private String username;
     private String password;
@@ -55,6 +56,17 @@ global class ZendeskConnection {
         return new ZendeskConnection(subdomain, null, null, null, oauthToken);
     }
 
+    // Factory method to initialize a ZendeskConnection via a Named Credential
+    // In order to make use of a Named Credential set it up like follows.
+    // Identity Type: Named Principal
+    // Auth Protocol: Password Authentication
+    // Username: user@domain.com or user@domain.com/token (if using an api token)
+    // Password: <password> or <token>
+    // Generate Authorization Header: checked
+    global static ZendeskConnection createWithNamedCredential(String namedCredential) {
+        return new ZendeskConnection(namedCredential);
+    }
+
     // Private constructor called by the factory initialization methods
     private ZendeskConnection(String subdomain, String username, String password, String apiToken, String oauthToken) {
         if (String.isBlank(subdomain)) { throw new ZendeskException('subdomain parameter must not be empty'); }
@@ -69,6 +81,20 @@ global class ZendeskConnection {
         this.oauthToken = oauthToken;
 
         this.apiCallCount = 0;
+    }
+
+    // Private constructor called by the factory initialization methods
+    private ZendeskConnection(String namedCredential) {
+        if (String.isBlank(namedCredential)) { throw new ZendeskException('namedCredential parameter must not be empty'); }
+
+        this.namedCredential = namedCredential;
+
+        this.apiCallCount = 0;
+    }
+
+    // Return the namedCredential associated with this connection
+    global String getNamedCredential() {
+        return namedCredential;
     }
 
     // Return the subdomain associated with this connection
@@ -113,21 +139,27 @@ global class ZendeskConnection {
         if (!path.startsWith('/')) { throw new ZendeskException('path parameter must start with /'); }
 
         String authorizationHeader = null;
-        if (password != null) {
-            authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(Blob.valueOf(username + ':' + password));
-        } else if (apiToken != null) {
-            authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(Blob.valueOf(username + '/token:' + apiToken));
-        } else if (oauthToken != null) {
-            authorizationHeader = 'Bearer ' + oauthToken;
-        } else {
-            throw new ZendeskException('Authentication not configured correctly');
+        if (String.isEmpty(namedCredential)) {
+            if (password != null) {
+                authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(Blob.valueOf(username + ':' + password));
+            } else if (apiToken != null) {
+                authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(Blob.valueOf(username + '/token:' + apiToken));
+            } else if (oauthToken != null) {
+                authorizationHeader = 'Bearer ' + oauthToken;
+            } else {
+                throw new ZendeskException('Authentication not configured correctly');
+            }
         }
 
         HttpRequest req = new HttpRequest();
         req.setMethod(reqMethod);
         req.setTimeout(timeoutSeconds * 1000);
-        req.setHeader('Authorization', authorizationHeader);
-        req.setEndpoint(String.format('https://{0}.zendesk.com/api/v2{1}{2}', new List<String>{subdomain, path, buildQueryParamString(queryParams)}));
+        if (!String.isEmpty(namedCredential)) {
+            req.setEndpoint(String.format('callout:{0}/api/v2{1}{2}', new List<String>{namedCredential, path, buildQueryParamString(queryParams)}));
+        } else {
+            req.setHeader('Authorization', authorizationHeader);
+            req.setEndpoint(String.format('https://{0}.zendesk.com/api/v2{1}{2}', new List<String>{subdomain, path, buildQueryParamString(queryParams)}));
+        }
         req.setHeader('Accept', 'application/json');
         if (reqMethod == 'POST' || reqMethod == 'PUT') {
             req.setHeader('Content-Type', 'application/json');
