@@ -11,6 +11,8 @@ Included in this repository are a number of sample Visualforce pages and control
 ```Apex
 // Create a new API connection
 ZendeskConnection zconn = ZendeskConnection.createWithAPIToken('subdomain','username','token');
+or 
+ZendeskConnection zconn = ZendeskConnection.createWithNamedCredential('named_credential');
 
 // Get recent Tickets
 ZendeskTicketsAPI zapi = new ZendeskTicketsAPI(zconn);
