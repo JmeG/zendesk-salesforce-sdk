@@ -12,7 +12,8 @@ public class ZendeskAutocompleteAPITests {
         }
     }
 
-    @isTest static void testAutocompleteTags() {
+    @isTest
+    static void testAutocompleteTags() {
         Test.setMock(HttpCalloutMock.class, new MockGetTagsResponse());
 
         Test.startTest();
