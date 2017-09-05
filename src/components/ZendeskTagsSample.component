@@ -1,9 +1,4 @@
 <apex:component controller="ZendeskTagsSampleController">
-    <apex:attribute name="subdomainParam" description="Subdomain" type="String" required="required" assignTo="{!subdomain}"/>
-    <apex:attribute name="usernameParam" description="Username" type="String" required="required" assignTo="{!username}"/>
-    <apex:attribute name="pwdOrTokenParam" description="Password or Token" type="String" required="required" assignTo="{!pwdOrToken}"/>
-    <apex:attribute name="authTypeParam" description="Auth Type" type="String" required="required" assignTo="{!authType}"/>
-
     <apex:form >
         <apex:outputPanel id="tagsPanel">
             <apex:pageBlock title="Tags" mode="edit">
@@ -20,5 +15,4 @@
             </apex:pageBlock>
         </apex:outputPanel>
     </apex:form>
-
 </apex:component>

@@ -1,0 +1,29 @@
+<apex:page controller="ZendeskSample1Controller" title="Zendesk SDK for Salesforce - Sample Page">
+    <apex:sectionHeader title="Zendesk" subtitle="API Samples"/>
+    <apex:form id="credsForm">
+        <apex:outputpanel id="credsPanel">
+            <apex:pageBlock title="API Details" mode="edit">
+                <apex:pageMessage summary="{!pageMessage}" id="loginResult" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
+                <apex:pageBlockButtons location="top">
+                    <apex:commandButton action="{!validateLogin}" value="Validate Login" rerender="credsPanel" />
+                </apex:pageBlockButtons>
+                <apex:pageBlockSection title="Zendesk Credentials" columns="1" id="apiDetails">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Make sure you create and configure a Named Credential named '{!namedCredentialName}'. You must also add the URL to Remote Site Settings." />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:outputpanel>
+    </apex:form>
+
+    <c:ZendeskUserSample />
+    <c:ZendeskUserFieldsSample />
+    <c:ZendeskOrganizationsSample />
+    <c:ZendeskOrganizationFieldsSample />
+    <c:ZendeskTicketSample />
+    <c:ZendeskTicketFieldsSample />
+    <c:ZendeskTicketFormsSample />
+    <c:ZendeskGroupsSample />
+    <c:ZendeskTagsSample />
+
+</apex:page>

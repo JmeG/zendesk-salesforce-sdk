@@ -26,17 +26,6 @@ public class ZendeskContactUserController {
             if (!Test.isRunningTest()) { controller.addFields(new List<String>{'Email'}); }
 
             this.con = (Contact)controller.getRecord();
-
-            Zendesk_API__c settings = Zendesk_API__c.getInstance();
-            if (settings != null) {
-                subdomain = settings.Subdomain__c;
-                username = settings.Username__c;
-                pwdOrToken = settings.Password_or_Token__c;
-                authType = settings.Authentication_Type__c;
-            }
-            else {
-                pageMessage = 'Zendesk API settings are not configured';
-            }
         }
         catch(Exception e) {
             pageMessage = e.getMessage();
@@ -50,7 +39,7 @@ public class ZendeskContactUserController {
     public void findUser() {
         ui_user = null;
         try {
-            ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
+            ZendeskConnection zconn = ZendeskControllerSettings.getConnection();
 
             // Search for the User by email address
             ZendeskUsersAPI users_api = new ZendeskUsersAPI(zconn);

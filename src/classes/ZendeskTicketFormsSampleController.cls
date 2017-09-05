@@ -1,10 +1,5 @@
 public class ZendeskTicketFormsSampleController {
 
-    public String subdomain { get; set; }
-    public String username { get; set; }
-    public String pwdOrToken { get; set; }
-    public String authType { get; set; }
-
     public String pageMessage { get; set; }
     public Long ticketFormId { get; set; }
     public Map<Long, ZendeskTypes.ZTicketForm> formsMap { get; set; }
@@ -14,7 +9,7 @@ public class ZendeskTicketFormsSampleController {
     public PageReference getForms() {
         pageMessage = '';
         try {
-            ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
+            ZendeskConnection zconn = ZendeskControllerSettings.getConnection();
             ZendeskTicketFormsAPI zforms = new ZendeskTicketFormsAPI(zconn);
 
             formsMap = zforms.getAllTicketForms();
@@ -28,7 +23,7 @@ public class ZendeskTicketFormsSampleController {
     public PageReference getFormById() {
         pageMessage = '';
         try {
-            ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
+            ZendeskConnection zconn = ZendeskControllerSettings.getConnection();
             ZendeskTicketFormsAPI zforms = new ZendeskTicketFormsAPI(zconn);
 
             formsMap = new Map<Long, ZendeskTypes.ZTicketForm>();

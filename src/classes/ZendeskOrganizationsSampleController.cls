@@ -1,10 +1,5 @@
 public class ZendeskOrganizationsSampleController {
 
-    public String subdomain { get; set; }
-    public String username { get; set; }
-    public String pwdOrToken { get; set; }
-    public String authType { get; set; }
-
     public String pageMessage { get; set; }
     public Long organizationId { get; set; }
     public ZendeskTypes.ZOrganization[] organizations { get; set; }
@@ -15,7 +10,7 @@ public class ZendeskOrganizationsSampleController {
         pageMessage = '';
         organizations = null;
         try {
-            ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
+            ZendeskConnection zconn = ZendeskControllerSettings.getConnection();
             ZendeskOrganizationsAPI zorganizations = new ZendeskOrganizationsAPI(zconn);
 
             ZendeskOrganizationsAPI.OrganizationsWrapper wrapper = zorganizations.getOrganizations();
@@ -31,7 +26,7 @@ public class ZendeskOrganizationsSampleController {
         pageMessage = '';
         organizations = null;
         try {
-            ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
+            ZendeskConnection zconn = ZendeskControllerSettings.getConnection();
             ZendeskOrganizationsAPI zorganizations = new ZendeskOrganizationsAPI(zconn);
 
             ZendeskOrganizationsAPI.OrganizationWrapper wrapper = zorganizations.getOrganization(organizationId);

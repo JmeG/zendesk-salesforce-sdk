@@ -2,10 +2,6 @@ public class ZendeskUsersController {
 
     private final static Integer PER_PAGE = 30;
 
-    private String subdomain;
-    private String username;
-    private String pwdOrToken;
-    private String authType;
     private ZendeskConnection zconn;
     private final Long orgId;
     private final Long groupId;
@@ -31,21 +27,10 @@ public class ZendeskUsersController {
                 groupId = Long.valueOf(groupIdStr);
             }
 
-            Zendesk_API__c settings = Zendesk_API__c.getInstance();
-            if (settings != null) {
-                subdomain = settings.Subdomain__c;
-                username = settings.Username__c;
-                pwdOrToken = settings.Password_or_Token__c;
-                authType = settings.Authentication_Type__c;
-
-                zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
-                zconn.debugResponseStatus = true;
-                zconn.debugResponseBody = true;
-                zconn.debugRequest = true;
-            }
-            else {
-                pageMessage = 'Zendesk API settings are not configured';
-            }
+            zconn = ZendeskControllerSettings.getConnection();
+            zconn.debugResponseStatus = true;
+            zconn.debugResponseBody = true;
+            zconn.debugRequest = true;
         }
         catch(Exception e) {
             pageMessage = e.getMessage();
