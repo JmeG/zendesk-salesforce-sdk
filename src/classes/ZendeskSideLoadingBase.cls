@@ -11,10 +11,10 @@ global abstract class ZendeskSideLoadingBase extends ZendeskTypes {
     // Topic Comments => users
     // Requests => users, organizations
 
-    global List<ZUser> users {get; private set;}
-    global List<ZGroup> groups {get; private set;}
-    global List<ZOrganization> organizations {get; private set;}
-    global List<ZTicketMetrics> metric_sets {get; private set;}
-    global List<ZTicketForm> ticket_forms {get; private set;}
-    global List<ZTicket> tickets {get; private set;}
+    global List<ZUser> users {get; protected set;}
+    global List<ZGroup> groups {get; protected set;}
+    global List<ZOrganization> organizations {get; protected set;}
+    global List<ZTicketMetrics> metric_sets {get; protected set;}
+    global List<ZTicketForm> ticket_forms {get; protected set;}
+    global List<ZTicket> tickets {get; protected set;}
 }

@@ -9,23 +9,19 @@ global class ZendeskConnection {
     private String apiToken;
     private String oauthToken;
 
-    // Used to keep track of how many API calls were made with this connection
-    private Integer apiCallCount;
-
-    // Used for debugging purposes to provide access to the request/response used in an API call
-    private transient HttpRequest lastRequest;
-    private transient HttpResponse lastResponse;
-
     // Overridable properties
     global String userAgent = 'Zendesk SDK for Salesforce';
     global Integer timeoutSeconds = 30;
 
-    // Note that debugging can't be exposed from within a managed package.
+    // Note that System.debug logs can't be exposed from within a managed package but
+    // we can save debug messages to a custom List that we expose publically.
     global Boolean debugAll = false;
     global Boolean debugRequest = false;
     global Boolean debugResponseStatus = false;
     global Boolean debugResponseBody = false;
     global Boolean debugResponseHeaders = false;
+    global Boolean saveDebugLogsToList = false;
+    private List<String> debugLogs;
 
     global class ZendeskError {
         global String error;
@@ -80,7 +76,7 @@ global class ZendeskConnection {
         this.apiToken = apiToken;
         this.oauthToken = oauthToken;
 
-        this.apiCallCount = 0;
+        debugLogs = new List<String>();
     }
 
     // Private constructor called by the factory initialization methods
@@ -89,7 +85,7 @@ global class ZendeskConnection {
 
         this.namedCredential = namedCredential;
 
-        this.apiCallCount = 0;
+        debugLogs = new List<String>();
     }
 
     // Return the namedCredential associated with this connection
@@ -102,19 +98,23 @@ global class ZendeskConnection {
         return subdomain;
     }
 
-    // Return the # of API callouts made using this connection
-    global Integer getAPICallCount() {
-        return apiCallCount;
+    global List<String> getDebugLogs() {
+        return debugLogs;
     }
 
-    // Get the last Http Request object used for an API call
-    global HttpRequest getLastRequest() {
-        return lastRequest;
+    global void clearDebugLogs() {
+        debugLogs = new List<String>();
     }
 
-    // Get the last Http Response object received from an API call
-    global HttpResponse getLastResponse() {
-        return lastResponse;
+    private void addDebugLog(Logginglevel logLevel, Object obj) {
+        if (obj != null) {
+            // Always write to the standard debugger
+            System.debug(logLevel, obj);
+            // Optionally save to our custom debug logs list
+            if (saveDebugLogsToList) {
+                debugLogs.add(logLevel + ': ' + String.valueOf(obj));
+            }
+        }
     }
 
     // Create an API Request
@@ -134,6 +134,10 @@ global class ZendeskConnection {
 
     // Create an API Request
     global HttpRequest createRequest(String reqMethod, String path, String body, Map<String, Object> queryParams) {
+        return createRequest(reqMethod, path, body, queryParams, true);
+    }
+
+    global HttpRequest createRequest(String reqMethod, String path, String body, Map<String, Object> queryParams, Boolean unreplaceReservedWords) {
         if (String.isBlank(reqMethod)) { throw new ZendeskException('reqMethod parameter must not be empty'); }
         if (String.isBlank(path)) { throw new ZendeskException('path parameter must not be empty'); }
         if (!path.startsWith('/')) { throw new ZendeskException('path parameter must start with /'); }
@@ -168,6 +172,9 @@ global class ZendeskConnection {
             req.setHeader('User-Agent', userAgent);
         }
         if (body != null) {
+            if (unreplaceReservedWords) {
+                body = unreplaceReservedWords(body);
+            }
             req.setBody(body);
         }
 
@@ -205,50 +212,59 @@ global class ZendeskConnection {
 
     // Validate that the API login parameters are valid by simply trying to get our own user record
     global Boolean canLogin() {
-        HttpResponse res = new Http().send(createRequest('GET', '/users/me.json'));
-        if (res.getStatusCode() == 200) {
-            return true;
-        } else {
-            throw new ZendeskException('Cannot login: ' + res.getStatusCode());
+        try {
+            HttpResponse res = new Http().send(createRequest('GET', '/users/me.json'));
+            if (res.getStatusCode() == 200) {
+                // Note that a 200 response doesn't necessarily mean our credentials are good.
+                // The API will return an anonymous user if we send a bad username/password in the request
+                // {"user":{"id":null,"url":null,"name":"Anonymous user","email":"invalid@example.com","created_at":null,"updated_at":null,"time_zone":"Pacific Time (US & Canada)","phone":null,"shared_phone_number":null,"photo":null,"locale_id":1,"locale":"en-US","organization_id":null,"role":"end-user","verified":false,"authenticity_token":"Uc68v64GiT2jUBocB/g6JCbuThuUET9xCt6ClQqZAn8="}}
+                ZendeskUsersAPI.UserWrapper resultWrapper = (ZendeskUsersAPI.UserWrapper)JSON.deserialize(res.getBody(), ZendeskUsersAPI.UserWrapper.class);
+                if (resultWrapper == null || resultWrapper.user == null) {
+                    throw new ZendeskException('API returned invalid response');
+                } else if (resultWrapper.user.id == null) {
+                    throw new ZendeskException('API could not authenticate you');
+                }
+
+                return true;
+            } else {
+                throw new ZendeskException('API returned Status Code ' + res.getStatusCode());
+            }
+        } catch(Exception e) {
+            throw new ZendeskException('Cannot login: ' + e.getMessage());
         }
     }
 
     // Send an API Request
     global String sendRequest(HttpRequest req) {
-        lastRequest = req;
-        lastResponse = null;
         if (debugAll || debugRequest) {
-            System.debug(Logginglevel.INFO, '**REQUEST=' + req);
+            addDebugLog(Logginglevel.INFO, '**REQUEST=' + req);
         }
 
         // Send it
         HttpResponse res = new Http().send(req);
-        // Track it
-        lastResponse = res;
-        apiCallCount++;
 
         // Debug the response
         if (debugAll || debugResponseHeaders) {
-            System.debug(LoggingLevel.INFO, '**HeaderKeys=' + res.getHeaderKeys());
+            addDebugLog(LoggingLevel.INFO, '**HeaderKeys=' + res.getHeaderKeys());
             for (String s : res.getHeaderKeys()) {
                 if (s != null) {
-                    System.debug(LoggingLevel.INFO, 'header: "' + s + '" value: "' + res.getHeader(s) + '"');
+                    addDebugLog(LoggingLevel.INFO, 'header: "' + s + '" value: "' + res.getHeader(s) + '"');
                 }
             }
         }
         if (debugAll || debugResponseStatus) {
-            System.debug(LoggingLevel.INFO, '**STATUS=' + res.getStatus());
-            System.debug(LoggingLevel.INFO, '**STATUS_CODE=' + res.getStatusCode());
+            addDebugLog(LoggingLevel.INFO, '**STATUS=' + res.getStatus());
+            addDebugLog(LoggingLevel.INFO, '**STATUS_CODE=' + res.getStatusCode());
         }
         if (debugAll || debugResponseBody) {
-            System.debug(LoggingLevel.INFO, '**RESPONSE_BODY=' + res.getBody());
+            addDebugLog(LoggingLevel.INFO, '**RESPONSE_BODY=' + res.getBody());
         }
 
         // Validate the response - anything outside the 200 range will result in an exception
         if (res.getStatusCode() < 200 || res.getStatusCode() > 299) {
             if (res.getStatusCode() == 429) {
                 String retrySeconds = res.getHeader('Retry-After');
-                System.debug('retrySeconds=' + retrySeconds);
+                addDebugLog(LoggingLevel.INFO, 'retrySeconds=' + retrySeconds);
                 throw new ZendeskResponseException('Rate Limit Exception. Try after ' + retrySeconds);
             }
             ZendeskError zerr = safeGetError(res.getBody());
@@ -279,6 +295,28 @@ global class ZendeskConnection {
             zerr = new ZendeskError(resBody);
         } catch(Exception e) {System.debug(e);}
         return zerr;
+    }
+
+    // replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
+    // Use when calling deserialize()
+    // Note that a full list of reserved words can be found here
+    // https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_reserved_words.htm
+    private String replaceReservedWords(String str) {
+        str = str.replaceAll('"default"\\s*:', '"x_default":');
+        str = str.replaceAll('"group"\\s*:', '"x_group":');
+        str = str.replaceAll('"system"\\s*:', '"x_system":');
+        str = str.replaceAll('"public"\\s*:', '"x_public":');
+        return str;
+    }
+
+    // un-replace reserved keywords in the JSON string
+    // Use before sending a request to the API
+    private String unreplaceReservedWords(String str) {
+        str = str.replaceAll('"x_default"\\s*:', '"default":');
+        str = str.replaceAll('"x_group"\\s*:', '"group":');
+        str = str.replaceAll('"x_system"\\s*:', '"system":');
+        str = str.replaceAll('"x_public"\\s*:', '"public":');
+        return str;
     }
 
     // Allow for setting Mock Callout response from external code when this code is used as part of a managed package.

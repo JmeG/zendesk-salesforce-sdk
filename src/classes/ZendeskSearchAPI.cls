@@ -30,7 +30,11 @@ global class ZendeskSearchAPI extends ZendeskResourceBase {
 
         if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
         additionalParams.put('query', urlEncode(query));
-        HttpRequest req = zconn.createRequest('GET', '/search.json', additionalParams);
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/search.json',
+            additionalParams
+        );
 
         String jsonResult = zconn.sendRequest(req);
         SearchResultsWrapper wrapper = (SearchResultsWrapper)JSON.deserialize(jsonResult, SearchResultsWrapper.class);
@@ -44,7 +48,8 @@ global class ZendeskSearchAPI extends ZendeskResourceBase {
                 if (objMap != null && objMap.containsKey('result_type')) {
                     String resultType = String.valueOf(objMap.get('result_type'));
                     if (resultType == 'ticket') {
-                        wrapper.objResults.add((ZTicket)JSON.deserialize(JSON.serialize(obj), ZTicket.class));
+                        wrapper.objResults.add(new ZendeskTypes.ZTicket(System.JSON.createParser(JSON.serialize(obj))));
+                        //wrapper.objResults.add((ZTicket)JSON.deserialize(JSON.serialize(obj), ZTicket.class));
                     } else if (resultType == 'user') {
                         wrapper.objResults.add((ZUser)JSON.deserialize(JSON.serialize(obj), ZUser.class));
                     } else if (resultType == 'organization') {
@@ -69,7 +74,11 @@ global class ZendeskSearchAPI extends ZendeskResourceBase {
 
         if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
         additionalParams.put('query', urlEncode(query));
-        HttpRequest req = zconn.createRequest('GET', '/portal/search.json', additionalParams);
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/portal/search.json',
+            additionalParams
+        );
         return (SearchResultsWrapper)JSON.deserialize(zconn.sendRequest(req), SearchResultsWrapper.class);
     }
 
