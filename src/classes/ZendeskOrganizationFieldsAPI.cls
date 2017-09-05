@@ -18,7 +18,10 @@ global class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
     global ZOrganizationField getField(Long fieldId) {
         if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/organization_fields/'+fieldId+'.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/organization_fields/'+fieldId+'.json'
+        );
         OrganizationFieldWrapper wrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationFieldWrapper.class);
         return wrapper.organization_field;
     }
@@ -27,29 +30,42 @@ global class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
         return getFields(null);
     }
     global OrganizationFieldsWrapper getFields(Map<String, Object> queryParams) {
-        HttpRequest req = zconn.createRequest('GET', '/organization_fields.json', queryParams);
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/organization_fields.json',
+            queryParams
+        );
         return (OrganizationFieldsWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationFieldsWrapper.class);
     }
 
     global void deleteField(Long fieldId) {
         if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
 
-        zconn.sendRequest(zconn.createRequest('DELETE', '/organization_fields/'+fieldId+'.json'));
+        zconn.sendRequest(zconn.createRequest(
+            HTTP_DELETE,
+            '/organization_fields/'+fieldId+'.json'
+        ));
     }
 
     global void reorderFields(List<Long> orderedFieldIds) {
         if (orderedFieldIds == null || orderedFieldIds.size() < 2) { throw new ZendeskException('orderedFieldIds parameter contain at least 2 items'); }
 
-        HttpRequest req = zconn.createRequest('PUT', '/organization_fields/reorder.json');
-        req.setBody('{ "organization_field_ids": ' + JSON.serialize(orderedFieldIds) + '}');
+        HttpRequest req = zconn.createRequest(
+            HTTP_PUT,
+            '/organization_fields/reorder.json',
+            '{ "organization_field_ids": ' + JSON.serialize(orderedFieldIds) + '}'
+        );
         zconn.sendRequest(req);
     }
 
     global Long createField(ZOrganizationField zfield) {
         if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/organization_fields.json');
-        req.setBody(JSON.serialize(new OrganizationFieldWrapper(zfield)));
+        HttpRequest req = zconn.createRequest(
+            HTTP_POST,
+            '/organization_fields.json',
+            JSON.serialize(new OrganizationFieldWrapper(zfield))
+        );
         OrganizationFieldWrapper resultWrapper = (OrganizationFieldWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationFieldWrapper.class);
         return ((resultWrapper==null || resultWrapper.organization_field == null) ? null : resultWrapper.organization_field.id);
     }
@@ -58,8 +74,11 @@ global class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
         if (fieldId == null) { throw new ZendeskException('fieldId parameter cannot be null'); }
         if (zfield == null) { throw new ZendeskException('zfield parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('PUT', '/organization_fields/'+fieldId+'.json');
-        req.setBody(unreplaceReservedWords(JSON.serialize(new OrganizationFieldWrapper(zfield), true)));
+        HttpRequest req = zconn.createRequest(
+            HTTP_PUT,
+            '/organization_fields/'+fieldId+'.json',
+            JSON.serialize(new OrganizationFieldWrapper(zfield), true)
+        );
         zconn.sendRequest(req);
     }
 
@@ -81,19 +100,4 @@ global class ZendeskOrganizationFieldsAPI extends ZendeskResourceBase {
         }
         return fieldsMap;
     }
-
-    // replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
-    // Use when calling deserialize()
-    private String replaceReservedWords(String str) {
-        str = str.replaceAll('"system"\\s*:', '"x_system":');
-        return str;
-    }
-
-    // un-replace reserved keywords in the JSON string
-    // Use when calling serialize()
-    private String unreplaceReservedWords(String str) {
-        str = str.replaceAll('"x_system"\\s*:', '"system":');
-        return str;
-    }
-
 }

@@ -31,7 +31,8 @@ public class ZendeskOrganizationFieldsAPITests {
         }
     }
 
-    @isTest static void testGetOrganizationFieldById() {
+    @isTest
+    static void testGetOrganizationFieldById() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldResponse());
 
         Test.startTest();
@@ -44,7 +45,8 @@ public class ZendeskOrganizationFieldsAPITests {
         Test.stopTest();
     }
 
-    @isTest static void testDeleteField() {
+    @isTest
+    static void testDeleteField() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -55,7 +57,8 @@ public class ZendeskOrganizationFieldsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testCreateField() {
+    @isTest
+    static void testCreateField() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldResponse());
 
         Test.startTest();
@@ -69,7 +72,8 @@ public class ZendeskOrganizationFieldsAPITests {
         System.assertNotEquals(null, fieldId);
     }
 
-    @isTest static void testUpdateField() {
+    @isTest
+    static void testUpdateField() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldResponse());
 
         Test.startTest();
@@ -83,7 +87,8 @@ public class ZendeskOrganizationFieldsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testReorderFields() {
+    @isTest
+    static void testReorderFields() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         ZendeskConnection zconn = ZendeskConnection.createWithPassword('s','u','p');
@@ -96,7 +101,8 @@ public class ZendeskOrganizationFieldsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testGetAllFields() {
+    @isTest
+    static void testGetAllFields() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationFieldsResponse());
 
         Test.startTest();
@@ -107,7 +113,8 @@ public class ZendeskOrganizationFieldsAPITests {
         System.assertNotEquals(null, fieldsMap.containsKey('Test'));
     }
 
-    @isTest static void testZOrganizationField() {
+    @isTest
+    static void testZOrganizationField() {
         ZendeskTypes.ZOrganizationField zfield = new ZendeskTypes.ZOrganizationField();
         //zfield.id = 0;
         zfield.type = '';

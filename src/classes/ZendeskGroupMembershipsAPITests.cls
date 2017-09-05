@@ -40,7 +40,8 @@ public class ZendeskGroupMembershipsAPITests {
         }
     }
 
-    @isTest static void testGetMembership1() {
+    @isTest
+    static void testGetMembership1() {
         Test.setMock(HttpCalloutMock.class, new MockGroupMembershipResponse());
 
         Test.startTest();
@@ -53,7 +54,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assertEquals(123, wrapper.group_membership.id);
     }
 
-    @isTest static void testGetMembership2() {
+    @isTest
+    static void testGetMembership2() {
         Test.setMock(HttpCalloutMock.class, new MockGroupMembershipResponse());
 
         Test.startTest();
@@ -66,7 +68,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assertEquals(123, wrapper.group_membership.id);
     }
 
-    @isTest static void testDeleteMembership1() {
+    @isTest
+    static void testDeleteMembership1() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -77,7 +80,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testDeleteMembership2() {
+    @isTest
+    static void testDeleteMembership2() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -88,7 +92,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testCreateMembership1() {
+    @isTest
+    static void testCreateMembership1() {
         Test.setMock(HttpCalloutMock.class, new MockGroupMembershipResponse());
 
         Test.startTest();
@@ -99,7 +104,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assertNotEquals(null, membershipId);
     }
 
-    @isTest static void testCreateMembership2() {
+    @isTest
+    static void testCreateMembership2() {
         Test.setMock(HttpCalloutMock.class, new MockGroupMembershipResponse());
 
         Test.startTest();
@@ -113,7 +119,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assertNotEquals(null, membershipId);
     }
 
-    @isTest static void testMakeDefault() {
+    @isTest
+    static void testMakeDefault() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -124,7 +131,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testGetMemberships() {
+    @isTest
+    static void testGetMemberships() {
         Test.setMock(HttpCalloutMock.class, new MockGroupMembershipsResponse());
 
         Test.startTest();
@@ -136,7 +144,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assertNotEquals(0, wrapper.group_memberships.size());
     }
 
-    @isTest static void testGetMembershipsByGroup() {
+    @isTest
+    static void testGetMembershipsByGroup() {
         Test.setMock(HttpCalloutMock.class, new MockGroupMembershipsResponse());
 
         Test.startTest();
@@ -148,7 +157,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assertNotEquals(0, wrapper.group_memberships.size());
     }
 
-    @isTest static void testGetAssignableMembershipsByGroup() {
+    @isTest
+    static void testGetAssignableMembershipsByGroup() {
         Test.setMock(HttpCalloutMock.class, new MockGroupMembershipsResponse());
 
         Test.startTest();
@@ -160,7 +170,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assertNotEquals(0, wrapper.group_memberships.size());
     }
 
-    @isTest static void testGetAssignableMemberships() {
+    @isTest
+    static void testGetAssignableMemberships() {
         Test.setMock(HttpCalloutMock.class, new MockGroupMembershipsResponse());
 
         Test.startTest();
@@ -172,7 +183,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assertNotEquals(0, wrapper.group_memberships.size());
     }
 
-    @isTest static void testGetUserMemberships() {
+    @isTest
+    static void testGetUserMemberships() {
         Test.setMock(HttpCalloutMock.class, new MockGroupMembershipsResponse());
 
         Test.startTest();
@@ -184,7 +196,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assertNotEquals(0, wrapper.group_memberships.size());
     }
 
-    @isTest static void testCreateMemberships() {
+    @isTest
+    static void testCreateMemberships() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
@@ -198,7 +211,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assertNotEquals(null, jobStatus);
     }
 
-    @isTest static void testDeleteMemberships() {
+    @isTest
+    static void testDeleteMemberships() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
@@ -209,7 +223,8 @@ public class ZendeskGroupMembershipsAPITests {
         System.assertNotEquals(null, jobStatus);
     }
 
-    @isTest static void testZGroupMembership() {
+    @isTest
+    static void testZGroupMembership() {
         String testJson = '{'
           + '"id": 123,'
           + '"user_id": 456,'

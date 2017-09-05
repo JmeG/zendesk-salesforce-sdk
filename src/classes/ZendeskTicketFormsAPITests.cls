@@ -31,7 +31,8 @@ public class ZendeskTicketFormsAPITests {
         }
     }
 
-    @isTest static void testGetTicketForm() {
+    @isTest
+    static void testGetTicketForm() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
 
         Test.startTest();
@@ -43,7 +44,8 @@ public class ZendeskTicketFormsAPITests {
         System.assertEquals(123, testObj.id);
     }
 
-    @isTest static void testDeleteTicketForm() {
+    @isTest
+    static void testDeleteTicketForm() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -54,7 +56,8 @@ public class ZendeskTicketFormsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testCreateTicketForm() {
+    @isTest
+    static void testCreateTicketForm() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
 
         Test.startTest();
@@ -68,7 +71,8 @@ public class ZendeskTicketFormsAPITests {
         System.assertNotEquals(null, newTicketFormId);
     }
 
-    @isTest static void testUpdateTicketForm() {
+    @isTest
+    static void testUpdateTicketForm() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
 
         Test.startTest();
@@ -82,7 +86,8 @@ public class ZendeskTicketFormsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testReorderFields() {
+    @isTest
+    static void testReorderFields() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -93,7 +98,8 @@ public class ZendeskTicketFormsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testCloneTicketForm() {
+    @isTest
+    static void testCloneTicketForm() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormResponse());
 
         Test.startTest();
@@ -104,7 +110,8 @@ public class ZendeskTicketFormsAPITests {
         System.assertNotEquals(null, newTicketFormId);
     }
 
-    @isTest static void testGetAllTicketForms() {
+    @isTest
+    static void testGetAllTicketForms() {
         Test.setMock(HttpCalloutMock.class, new MockTicketFormsResponse());
 
         Test.startTest();
@@ -115,7 +122,8 @@ public class ZendeskTicketFormsAPITests {
         System.assertNotEquals(null, fieldsMap.containsKey(123));
     }
 
-    @isTest static void testZTicketForm() {
+    @isTest
+    static void testZTicketForm() {
         ZendeskTypes.ZTicketForm zticketform = new ZendeskTypes.ZTicketForm();
         zticketform.position = 0;
         zticketform.name = '';

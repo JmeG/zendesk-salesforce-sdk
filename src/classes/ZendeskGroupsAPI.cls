@@ -21,7 +21,10 @@ global class ZendeskGroupsAPI extends ZendeskResourceBase {
     global GroupWrapper getGroup(Long groupId) {
         if (groupId == null) { throw new ZendeskException('groupId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/groups/'+groupId+'.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/groups/'+groupId+'.json'
+        );
         return (GroupWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), GroupWrapper.class);
     }
 
@@ -29,7 +32,11 @@ global class ZendeskGroupsAPI extends ZendeskResourceBase {
         return getGroups(null);
     }
     global GroupsWrapper getGroups(Map<String, Object> queryParams) {
-        return getGroupsInternal(zconn.createRequest('GET', '/groups.json', queryParams));
+        return getGroupsInternal(zconn.createRequest(
+            HTTP_GET,
+            '/groups.json',
+            queryParams
+        ));
     }
 
     // Get all assignable groups
@@ -37,7 +44,11 @@ global class ZendeskGroupsAPI extends ZendeskResourceBase {
         return getAssignableGroups(null);
     }
     global GroupsWrapper getAssignableGroups(Map<String, Object> queryParams) {
-        return getGroupsInternal(zconn.createRequest('GET', '/groups/assignable.json', queryParams));
+        return getGroupsInternal(zconn.createRequest(
+            HTTP_GET,
+            '/groups/assignable.json',
+            queryParams
+        ));
     }
 
     // Get the groups that a user is a member of
@@ -49,7 +60,11 @@ global class ZendeskGroupsAPI extends ZendeskResourceBase {
     global GroupsWrapper getUserGroups(Long userId, Map<String, Object> queryParams) {
         if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
-        return getGroupsInternal(zconn.createRequest('GET', '/users/'+userId+'/groups.json', queryParams));
+        return getGroupsInternal(zconn.createRequest(
+            HTTP_GET,
+            '/users/'+userId+'/groups.json',
+            queryParams
+        ));
     }
 
     // Private helper method to query multiple groups
@@ -69,8 +84,11 @@ global class ZendeskGroupsAPI extends ZendeskResourceBase {
     global Long createGroup(ZGroup x_group) {
         if (x_group == null) { throw new ZendeskException('x_group parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/groups.json');
-        req.setBody(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group), true)));
+        HttpRequest req = zconn.createRequest(
+            HTTP_POST,
+            '/groups.json',
+            JSON.serialize(new GroupWrapper(x_group), true)
+        );
         GroupWrapper resultWrapper = (GroupWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), GroupWrapper.class);
         return ((resultWrapper==null || resultWrapper.x_group == null) ? null : resultWrapper.x_group.id);
     }
@@ -88,15 +106,21 @@ global class ZendeskGroupsAPI extends ZendeskResourceBase {
     global void updateGroup(Long groupId, ZGroup x_group) {
         if (x_group == null) { throw new ZendeskException('x_group parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('PUT', '/groups/'+groupId+'.json');
-        req.setBody(unreplaceReservedWords(JSON.serialize(new GroupWrapper(x_group), true)));
+        HttpRequest req = zconn.createRequest(
+            HTTP_PUT,
+            '/groups/'+groupId+'.json',
+            JSON.serialize(new GroupWrapper(x_group), true)
+        );
         zconn.sendRequest(req);
     }
 
     global void deleteGroup(Long groupId) {
         if (groupId == null) { throw new ZendeskException('groupId parameter cannot be null'); }
 
-        zconn.sendRequest(zconn.createRequest('DELETE', '/groups/'+groupId+'.json'));
+        zconn.sendRequest(zconn.createRequest(
+            HTTP_DELETE,
+            '/groups/'+groupId+'.json'
+        ));
     }
 
     // Retrieves all pages of groups. Uses the Group field "id" as the map key
@@ -122,19 +146,5 @@ global class ZendeskGroupsAPI extends ZendeskResourceBase {
                 }
             }
         }
-    }
-
-    // replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
-    // Use when calling deserialize()
-    private String replaceReservedWords(String str) {
-        str = str.replaceAll('"group"\\s*:', '"x_group":');
-        return str;
-    }
-
-    // un-replace reserved keywords in the JSON string
-    // Use when calling serialize()
-    private String unreplaceReservedWords(String str) {
-        str = str.replaceAll('"x_group"\\s*:', '"group":');
-        return str;
     }
 }

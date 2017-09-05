@@ -27,12 +27,19 @@ global class ZendeskTagsAPI extends ZendeskResourceBase {
 
         if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
         additionalParams.put('name', urlEncode(name));
-        HttpRequest req = zconn.createRequest('GET', '/autocomplete/tags.json', additionalParams);
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/autocomplete/tags.json',
+            additionalParams
+        );
         return (TagsWrapper)JSON.deserialize(zconn.sendRequest(req), TagsWrapper.class);
     }
 
     global ListTagsWrapper listTags() {
-        HttpRequest req = zconn.createRequest('GET', '/tags.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/tags.json'
+        );
         String resBody = zconn.sendRequest(req);
 
         return (ListTagsWrapper)JSON.deserialize(resBody, ListTagsWrapper.class);
@@ -44,31 +51,44 @@ global class ZendeskTagsAPI extends ZendeskResourceBase {
     global TagsWrapper getTags(Resource resourceType, Long recordId, Map<String, Object> queryParams) {
         if (recordId == null) { throw new ZendeskException('recordId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/'+resourceType.name()+'/'+recordId+'/tags.json', queryParams);
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/'+resourceType.name()+'/'+recordId+'/tags.json',
+            queryParams
+        );
         return (TagsWrapper)JSON.deserialize(zconn.sendRequest(req), TagsWrapper.class);
     }
 
     global void setTags(Resource resourceType, Long recordId, String[] tags) {
         if (recordId == null) { throw new ZendeskException('recordId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/'+resourceType.name()+'/'+recordId+'/tags.json');
-        req.setBody(JSON.serialize(new TagsWrapper(tags)));
+        HttpRequest req = zconn.createRequest(
+            HTTP_POST,
+            '/'+resourceType.name()+'/'+recordId+'/tags.json',
+            JSON.serialize(new TagsWrapper(tags))
+        );
         zconn.sendRequest(req);
     }
 
     global void addTags(Resource resourceType, Long recordId, String[] tags) {
         if (recordId == null) { throw new ZendeskException('recordId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('PUT', '/'+resourceType.name()+'/'+recordId+'/tags.json');
-        req.setBody(JSON.serialize(new TagsWrapper(tags)));
+        HttpRequest req = zconn.createRequest(
+            HTTP_PUT,
+            '/'+resourceType.name()+'/'+recordId+'/tags.json',
+            JSON.serialize(new TagsWrapper(tags))
+        );
         zconn.sendRequest(req);
     }
 
     global void removeTags(Resource resourceType, Long recordId, String[] tags) {
         if (recordId == null) { throw new ZendeskException('recordId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('DELETE', '/'+resourceType.name()+'/'+recordId+'/tags.json');
-        req.setBody(JSON.serialize(new TagsWrapper(tags)));
+        HttpRequest req = zconn.createRequest(
+            HTTP_DELETE,
+            '/'+resourceType.name()+'/'+recordId+'/tags.json',
+            JSON.serialize(new TagsWrapper(tags))
+        );
         zconn.sendRequest(req);
     }
 }

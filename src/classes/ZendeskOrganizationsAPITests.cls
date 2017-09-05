@@ -40,7 +40,8 @@ public class ZendeskOrganizationsAPITests {
         }
     }
 
-    @isTest static void testGetOrganizations() {
+    @isTest
+    static void testGetOrganizations() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
@@ -53,7 +54,8 @@ public class ZendeskOrganizationsAPITests {
         System.assertNotEquals(0, results.organizations.size());
     }
 
-    @isTest static void testGetOrganizationsByPage() {
+    @isTest
+    static void testGetOrganizationsByPage() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
@@ -66,7 +68,8 @@ public class ZendeskOrganizationsAPITests {
         System.assertNotEquals(0, results.organizations.size());
     }
 
-    @isTest static void testGetOrganizationsByIds() {
+    @isTest
+    static void testGetOrganizationsByIds() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
@@ -79,7 +82,8 @@ public class ZendeskOrganizationsAPITests {
         System.assertNotEquals(0, results.organizations.size());
     }
 
-    @isTest static void testGetOrganizationsByExternalIds() {
+    @isTest
+    static void testGetOrganizationsByExternalIds() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
@@ -92,7 +96,8 @@ public class ZendeskOrganizationsAPITests {
         System.assertNotEquals(0, results.organizations.size());
     }
 
-    @isTest static void testAutocompleteSearch() {
+    @isTest
+    static void testAutocompleteSearch() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
@@ -105,7 +110,8 @@ public class ZendeskOrganizationsAPITests {
         System.assertNotEquals(0, results.organizations.size());
     }
 
-    @isTest static void testSearchOrganizationsByExternalId() {
+    @isTest
+    static void testSearchOrganizationsByExternalId() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
@@ -118,7 +124,8 @@ public class ZendeskOrganizationsAPITests {
         System.assertNotEquals(0, results.organizations.size());
     }
 
-    @isTest static void testGetUserOrganizations() {
+    @isTest
+    static void testGetUserOrganizations() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationsResponse());
 
         Test.startTest();
@@ -131,7 +138,8 @@ public class ZendeskOrganizationsAPITests {
         System.assertNotEquals(0, results.organizations.size());
     }
 
-    @isTest static void testGetOrganizationRelatedInfo() {
+    @isTest
+    static void testGetOrganizationRelatedInfo() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationResponse());
 
         Test.startTest();
@@ -142,7 +150,8 @@ public class ZendeskOrganizationsAPITests {
         System.assertNotEquals(null, results);
     }
 
-    @isTest static void testGetOrganization() {
+    @isTest
+    static void testGetOrganization() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationResponse());
 
         Test.startTest();
@@ -155,7 +164,8 @@ public class ZendeskOrganizationsAPITests {
         System.assertEquals(123, wrapper.organization.id);
     }
 
-    @isTest static void testCreateOrganization() {
+    @isTest
+    static void testCreateOrganization() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationResponse());
 
         ZendeskTypes.ZOrganization zorg = new ZendeskTypes.ZOrganization();
@@ -169,7 +179,8 @@ public class ZendeskOrganizationsAPITests {
         System.assertEquals(123, newOrgId);
     }
 
-    @isTest static void testCreateOrganizations() {
+    @isTest
+    static void testCreateOrganizations() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         ZendeskTypes.ZOrganization zorg1 = new ZendeskTypes.ZOrganization();
@@ -185,7 +196,8 @@ public class ZendeskOrganizationsAPITests {
         System.assertNotEquals(null, jobStatus);
     }
 
-    @isTest static void testUpdateOrganization() {
+    @isTest
+    static void testUpdateOrganization() {
         Test.setMock(HttpCalloutMock.class, new MockOrganizationResponse());
 
         ZendeskTypes.ZOrganization zorg = new ZendeskTypes.ZOrganization();
@@ -199,7 +211,8 @@ public class ZendeskOrganizationsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testUpdateOrganizations() {
+    @isTest
+    static void testUpdateOrganizations() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         ZendeskTypes.ZOrganization zorg1 = new ZendeskTypes.ZOrganization();
@@ -217,7 +230,8 @@ public class ZendeskOrganizationsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testUpdateOrganizationsById() {
+    @isTest
+    static void testUpdateOrganizationsById() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         ZendeskTypes.ZOrganization zorg = new ZendeskTypes.ZOrganization();
@@ -231,7 +245,8 @@ public class ZendeskOrganizationsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testUpdateOrganizationsByExternalId() {
+    @isTest
+    static void testUpdateOrganizationsByExternalId() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         ZendeskTypes.ZOrganization zorg = new ZendeskTypes.ZOrganization();
@@ -245,7 +260,8 @@ public class ZendeskOrganizationsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testDeleteOrganization() {
+    @isTest
+    static void testDeleteOrganization() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -256,7 +272,8 @@ public class ZendeskOrganizationsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testDeleteOrganizationsById() {
+    @isTest
+    static void testDeleteOrganizationsById() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
@@ -267,7 +284,8 @@ public class ZendeskOrganizationsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testDeleteOrganizationsByExternalId() {
+    @isTest
+    static void testDeleteOrganizationsByExternalId() {
         Test.setMock(HttpCalloutMock.class, new MockJobStatusResponse());
 
         Test.startTest();
@@ -278,7 +296,8 @@ public class ZendeskOrganizationsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testZOrganization() {
+    @isTest
+    static void testZOrganization() {
         String organizationJson = '{"url":"https://test.zendesk.com/api/v2/organizations/123.json","id":123,"name":"Zendesk","shared_tickets":false,"shared_comments":false,"external_id":null,"created_at":"2014-03-08T18:29:33Z","updated_at":"2014-03-08T18:29:33Z","domain_names":["zendesk.com"],"details":"","notes":"","group_id":null,"tags":["tag1","tag2"],"organization_fields":{"city":null,"customer":false,"customer_since":null,"employee_number":null,"street_address_1":null,"street_address_2":null,"website":null,"zip":null}}';
         ZendeskTypes.ZOrganization zorganization = (ZendeskTypes.ZOrganization)JSON.deserialize(organizationJson, ZendeskTypes.ZOrganization.class);
 

@@ -31,7 +31,8 @@ public class ZendeskGroupsAPITests {
         }
     }
 
-    @isTest static void testGetGroup() {
+    @isTest
+    static void testGetGroup() {
         Test.setMock(HttpCalloutMock.class, new MockGroupResponse());
 
         Test.startTest();
@@ -44,7 +45,8 @@ public class ZendeskGroupsAPITests {
         System.assertEquals(123, wrapper.x_group.id);
     }
 
-    @isTest static void testDeleteGroup() {
+    @isTest
+    static void testDeleteGroup() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -55,7 +57,8 @@ public class ZendeskGroupsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testCreateGroup() {
+    @isTest
+    static void testCreateGroup() {
         Test.setMock(HttpCalloutMock.class, new MockGroupResponse());
 
         Test.startTest();
@@ -66,7 +69,8 @@ public class ZendeskGroupsAPITests {
         System.assertNotEquals(null, groupId);
     }
 
-    @isTest static void testUpdateGroup() {
+    @isTest
+    static void testUpdateGroup() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -77,7 +81,8 @@ public class ZendeskGroupsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testGetAllGroups() {
+    @isTest
+    static void testGetAllGroups() {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
         Test.startTest();
@@ -88,7 +93,8 @@ public class ZendeskGroupsAPITests {
         System.assertNotEquals(null, fieldsMap.containsKey(123));
     }
 
-    @isTest static void testGetGroups() {
+    @isTest
+    static void testGetGroups() {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
         Test.startTest();
@@ -100,7 +106,8 @@ public class ZendeskGroupsAPITests {
         System.assertNotEquals(0, wrapper.groups.size());
     }
 
-    @isTest static void testGetAssignableGroups() {
+    @isTest
+    static void testGetAssignableGroups() {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
         Test.startTest();
@@ -112,7 +119,8 @@ public class ZendeskGroupsAPITests {
         System.assertNotEquals(0, wrapper.groups.size());
     }
 
-    @isTest static void testGetUserGroups() {
+    @isTest
+    static void testGetUserGroups() {
         Test.setMock(HttpCalloutMock.class, new MockGroupsResponse());
 
         Test.startTest();
@@ -124,7 +132,8 @@ public class ZendeskGroupsAPITests {
         System.assertNotEquals(0, wrapper.groups.size());
     }
 
-    @isTest static void testZGroup() {
+    @isTest
+    static void testZGroup() {
         String groupJson = '{'
           + '"url": "https://test.zendesk.com/api/v2/groups/12345.json",'
           + '"id": 12345,'
