@@ -19,12 +19,8 @@ public class ZendeskUserDetailControllerTests {
         }
     }
 
-    @testSetup static void setup() {
-        Zendesk_API__c config = new Zendesk_API__c(Subdomain__c='s', Username__c='u', Password_or_Token__c='pwd', Authentication_Type__c='Password');
-        insert config;
-    }
-
-    private @isTest static void testInit() {
+    @isTest
+    static void testInit() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();
@@ -44,7 +40,8 @@ public class ZendeskUserDetailControllerTests {
         System.assertNotEquals(null, con.ui_tickets[0].assignedTo);
     }
 
-    private @isTest static void testTicketsPaging() {
+    @isTest
+    static void testTicketsPaging() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();

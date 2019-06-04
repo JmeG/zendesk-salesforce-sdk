@@ -21,7 +21,10 @@ global class ZendeskTicketFormsAPI extends ZendeskResourceBase {
     global ZTicketForm getTicketForm(Long ticketFormId) {
         if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/ticket_forms/'+ticketFormId+'.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/ticket_forms/'+ticketFormId+'.json'
+        );
         TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormWrapper.class);
         return resultWrapper.ticket_form;
     }
@@ -30,22 +33,32 @@ global class ZendeskTicketFormsAPI extends ZendeskResourceBase {
         return getTicketForms(null);
     }
     global TicketFormsWrapper getTicketForms(Map<String, Object> queryParams) {
-        HttpRequest req = zconn.createRequest('GET', '/ticket_forms.json', queryParams);
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/ticket_forms.json',
+            queryParams
+        );
         return (TicketFormsWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormsWrapper.class);
     }
 
     global void deleteTicketForm(Long ticketFormId) {
         if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('DELETE', '/ticket_forms/'+ticketFormId+'.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_DELETE,
+            '/ticket_forms/'+ticketFormId+'.json'
+        );
         zconn.sendRequest(req);
     }
 
     global Long createTicketForm(ZTicketForm ticketForm) {
         if (ticketForm == null) { throw new ZendeskException('ticketForm parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/ticket_forms.json');
-        req.setBody(unreplaceReservedWords(JSON.serialize(new TicketFormWrapper(ticketForm))));
+        HttpRequest req = zconn.createRequest(
+            HTTP_POST,
+            '/ticket_forms.json',
+            JSON.serialize(new TicketFormWrapper(ticketForm))
+        );
         TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormWrapper.class);
         return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
     }
@@ -54,23 +67,32 @@ global class ZendeskTicketFormsAPI extends ZendeskResourceBase {
         if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
         if (ticketForm == null) { throw new ZendeskException('ticketForm parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('PUT', '/ticket_forms/'+ticketFormId+'.json');
-        req.setBody(unreplaceReservedWords(JSON.serialize(new TicketFormWrapper(ticketForm), true)));
+        HttpRequest req = zconn.createRequest(
+            HTTP_PUT,
+            '/ticket_forms/'+ticketFormId+'.json',
+            JSON.serialize(new TicketFormWrapper(ticketForm), true)
+        );
         zconn.sendRequest(req);
     }
 
     global void reorderTicketForms(List<Long> orderedTicketFormIds) {
         if (orderedTicketFormIds == null || orderedTicketFormIds.size() < 2) { throw new ZendeskException('orderedTicketFormIds parameter contain at least 2 items'); }
 
-        HttpRequest req = zconn.createRequest('PUT', '/ticket_forms/reorder.json');
-        req.setBody('{"ticket_form_ids": ' + JSON.serialize(orderedTicketFormIds) + '}');
+        HttpRequest req = zconn.createRequest(
+            HTTP_PUT,
+            '/ticket_forms/reorder.json',
+            '{"ticket_form_ids": ' + JSON.serialize(orderedTicketFormIds) + '}'
+        );
         zconn.sendRequest(req);
     }
 
     global Long cloneTicketForm(Long ticketFormId) {
         if (ticketFormId == null) { throw new ZendeskException('ticketFormId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/ticket_forms/'+ticketFormId+'/clone.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_POST,
+            '/ticket_forms/'+ticketFormId+'/clone.json'
+        );
         TicketFormWrapper resultWrapper = (TicketFormWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), TicketFormWrapper.class);
         return ((resultWrapper==null || resultWrapper.ticket_form==null) ? null : resultWrapper.ticket_form.id);
     }
@@ -97,19 +119,5 @@ global class ZendeskTicketFormsAPI extends ZendeskResourceBase {
                 }
             }
         }
-    }
-
-    // replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
-    // Use when calling deserialize()
-    private String replaceReservedWords(String str) {
-        str = str.replaceAll('"default"\\s*:', '"x_default":');
-        return str;
-    }
-
-    // un-replace reserved keywords in the JSON string
-    // Use when calling serialize()
-    private String unreplaceReservedWords(String str) {
-        str = str.replaceAll('"x_default"\\s*:', '"default":');
-        return str;
     }
 }

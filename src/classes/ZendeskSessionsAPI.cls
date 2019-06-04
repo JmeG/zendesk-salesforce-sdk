@@ -20,23 +20,36 @@ global class ZendeskSessionsAPI extends ZendeskResourceBase {
         if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
         if (sessionId == null) { throw new ZendeskException('sessionId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/users/'+userId+'/sessions/'+sessionId+'.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/users/'+userId+'/sessions/'+sessionId+'.json'
+        );
         return (SessionWrapper)JSON.deserialize(zconn.sendRequest(req), SessionWrapper.class);
     }
 
     // GET /api/v2/users/me/session.json
     global SessionWrapper getMySession() {
-        HttpRequest req = zconn.createRequest('GET', '/users/me/session.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/users/me/session.json'
+        );
         return (SessionWrapper)JSON.deserialize(zconn.sendRequest(req), SessionWrapper.class);
     }
 
     // GET /api/v2/sessions.json
     global SessionsWrapper getSessions() {
-        HttpRequest req = zconn.createRequest('GET', '/sessions.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/sessions.json'
+        );
         return (SessionsWrapper)JSON.deserialize(zconn.sendRequest(req), SessionsWrapper.class);
     }
     global SessionsWrapper getSessions(Map<String, Object> queryParams) {
-        HttpRequest req = zconn.createRequest('GET', '/sessions.json', queryParams);
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/sessions.json',
+            queryParams
+        );
         return (SessionsWrapper)JSON.deserialize(zconn.sendRequest(req), SessionsWrapper.class);
     }
 
@@ -47,13 +60,20 @@ global class ZendeskSessionsAPI extends ZendeskResourceBase {
     global SessionsWrapper getSessions(Long userId, Map<String, Object> queryParams) {
         if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/users/'+userId+'/sessions.json', queryParams);
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/users/'+userId+'/sessions.json',
+            queryParams
+        );
         return (SessionsWrapper)JSON.deserialize(zconn.sendRequest(req), SessionsWrapper.class);
     }
 
     // DELETE /api/v2/users/me/logout.json
     global void deleteMySession() {
-        zconn.sendRequest(zconn.createRequest('DELETE', '/users/me/logout.json'));
+        zconn.sendRequest(zconn.createRequest(
+            HTTP_DELETE,
+            '/users/me/logout.json'
+        ));
     }
 
     // DELETE /api/v2/users/{user_id}/sessions/{id}.json
@@ -61,13 +81,19 @@ global class ZendeskSessionsAPI extends ZendeskResourceBase {
         if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
         if (sessionId == null) { throw new ZendeskException('sessionId parameter cannot be null'); }
 
-        zconn.sendRequest(zconn.createRequest('DELETE', '/users/'+userId+'/sessions/'+sessionId+'.json'));
+        zconn.sendRequest(zconn.createRequest(
+            HTTP_DELETE,
+            '/users/'+userId+'/sessions/'+sessionId+'.json'
+        ));
     }
 
     // DELETE /api/v2/users/{user_id}/sessions.json
     global void deleteSessions(Long userId) {
         if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
 
-        zconn.sendRequest(zconn.createRequest('DELETE', '/users/'+userId+'/sessions.json'));
+        zconn.sendRequest(zconn.createRequest(
+            HTTP_DELETE,
+            '/users/'+userId+'/sessions.json'
+        ));
     }
 }

@@ -2,7 +2,8 @@
 @isTest
 private class ZendeskResourceBaseTests {
 
-    @isTest static void testToCSV() {
+    @isTest
+    static void testToCSV() {
         Test.startTest();
         System.assertEquals('1,2,3', ZendeskResourceBase.toCSV(new Set<Long> { 1, 2, 3 }));
         System.assertEquals('1,2,3', ZendeskResourceBase.toCSV(new List<Long> { 1, 2, 3 }));
@@ -10,18 +11,20 @@ private class ZendeskResourceBaseTests {
         Test.stopTest();
     }
 
-    @isTest static void testStripJsonNulls() {
-        Account acct = new Account();
-        acct.Name = 'test';
+    // @isTest
+    // static void testStripJsonNulls() {
+    //     Account acct = new Account();
+    //     acct.Name = 'test';
+    //
+    //     Test.startTest();
+    //     String testJson = ZendeskResourceBase.stripJsonNulls(JSON.serialize(acct));
+    //     Test.stopTest();
+    //
+    //     System.assertEquals(false, testJson.containsIgnoreCase('null'));
+    // }
 
-        Test.startTest();
-        String testJson = ZendeskResourceBase.stripJsonNulls(JSON.serialize(acct));
-        Test.stopTest();
-
-        System.assertEquals(false, testJson.containsIgnoreCase('null'));
-    }
-
-    @isTest static void testGetEpochTime() {
+    @isTest
+    static void testGetEpochTime() {
         DateTime dt = DateTime.newInstance(2015, 7, 1);
 
         Test.startTest();

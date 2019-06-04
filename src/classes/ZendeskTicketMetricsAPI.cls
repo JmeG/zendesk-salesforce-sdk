@@ -14,14 +14,20 @@ global class ZendeskTicketMetricsAPI extends ZendeskResourceBase {
     }
 
     global TicketMetricsWrapper getTicketMetrics() {
-        HttpRequest req = zconn.createRequest('GET', '/ticket_metrics.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/ticket_metrics.json'
+        );
         return (TicketMetricsWrapper)JSON.deserialize(zconn.sendRequest(req), TicketMetricsWrapper.class);
     }
 
     global ZTicketMetrics getTicketMetrics(Long ticketMetricId) {
         if (ticketMetricId == null) { throw new ZendeskException('ticketMetricId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/ticket_metrics/'+ticketMetricId+'.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/ticket_metrics/'+ticketMetricId+'.json'
+        );
         TicketMetricWrapper wrapper = (TicketMetricWrapper)JSON.deserialize(zconn.sendRequest(req), TicketMetricWrapper.class);
         return wrapper.ticket_metric;
     }
@@ -29,7 +35,10 @@ global class ZendeskTicketMetricsAPI extends ZendeskResourceBase {
     global ZTicketMetrics getTicketMetricsByTicketId(Long ticketId) {
         if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/tickets/'+ticketId+'/metrics.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/tickets/'+ticketId+'/metrics.json'
+        );
         TicketMetricWrapper wrapper = (TicketMetricWrapper)JSON.deserialize(zconn.sendRequest(req), TicketMetricWrapper.class);
         return wrapper.ticket_metric;
     }

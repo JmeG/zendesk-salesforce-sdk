@@ -5,11 +5,6 @@ public class ZendeskAccountOrgsController {
         PER_PAGE = 5;
     }
 
-    private String subdomain;
-    private String username;
-    private String pwdOrToken;
-    private String authType;
-
     public final Account acct;
     public String pageMessage { get; set; }
 
@@ -42,17 +37,6 @@ public class ZendeskAccountOrgsController {
     public ZendeskAccountOrgsController(ApexPages.StandardController controller) {
         try {
             this.acct = (Account)controller.getRecord();
-
-            Zendesk_API__c settings = Zendesk_API__c.getInstance();
-            if (settings != null) {
-                subdomain = settings.Subdomain__c;
-                username = settings.Username__c;
-                pwdOrToken = settings.Password_or_Token__c;
-                authType = settings.Authentication_Type__c;
-            }
-            else {
-                pageMessage = 'Zendesk API settings are not configured';
-            }
         }
         catch(Exception e) {
             pageMessage = e.getMessage();
@@ -78,7 +62,7 @@ public class ZendeskAccountOrgsController {
     public void loadOrgs(Long page) {
         ui_orgs = new List<UIOrg>();
         try {
-            ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
+            ZendeskConnection zconn = ZendeskControllerSettings.getConnection();
             zconn.debugResponseStatus = true;
             zconn.debugResponseBody = true;
             zconn.debugRequest = true;

@@ -15,12 +15,8 @@ public class ZendeskOrgSearchControllerTests {
         }
     }
 
-    @testSetup static void setup() {
-        Zendesk_API__c config = new Zendesk_API__c(Subdomain__c='s', Username__c='u', Password_or_Token__c='pwd', Authentication_Type__c='Password');
-        insert config;
-    }
-
-    private @isTest static void testSearch() {
+    @isTest
+    static void testSearch() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();
@@ -33,7 +29,8 @@ public class ZendeskOrgSearchControllerTests {
         System.assertNotEquals(null, con.ui_orgs[0].domains);
     }
 
-    private @isTest static void testPaging() {
+    @isTest
+    static void testPaging() {
         Test.setMock(HttpCalloutMock.class, new MockAPIResponse());
 
         Test.startTest();

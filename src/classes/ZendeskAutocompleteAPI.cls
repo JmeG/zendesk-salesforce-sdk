@@ -15,7 +15,11 @@ global class ZendeskAutocompleteAPI extends ZendeskResourceBase {
 
         if (additionalParams == null) { additionalParams = new Map<String, Object>(); }
         additionalParams.put('name', urlEncode(name));
-        HttpRequest req = zconn.createRequest('GET', '/autocomplete/tags.json', additionalParams);
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/autocomplete/tags.json',
+            additionalParams
+        );
         return (ZendeskTagsAPI.TagsWrapper)JSON.deserialize(zconn.sendRequest(req), ZendeskTagsAPI.TagsWrapper.class);
     }
 }

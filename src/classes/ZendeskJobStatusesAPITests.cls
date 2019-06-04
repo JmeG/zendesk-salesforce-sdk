@@ -105,7 +105,8 @@ private class ZendeskJobStatusesAPITests {
         }
     }
 
-    @isTest static void testGetStatus() {
+    @isTest
+    static void testGetStatus() {
         Test.setMock(HttpCalloutMock.class, new MockStatusResponse());
 
         Test.startTest();
@@ -124,7 +125,8 @@ private class ZendeskJobStatusesAPITests {
         System.assertEquals('Name:  is too short', jstatus.results[0].errors);
     }
 
-    @isTest static void testGetStatuses() {
+    @isTest
+    static void testGetStatuses() {
         Test.setMock(HttpCalloutMock.class, new MockStatusesResponse());
 
         Test.startTest();
@@ -136,7 +138,8 @@ private class ZendeskJobStatusesAPITests {
         System.assertEquals(4, jobStatusMap.size());
     }
 
-    @isTest static void testDeserialize() {
+    @isTest
+    static void testDeserialize() {
         String jsonStr = STATUS_STR_1;
 
         // ZendeskTypes.ZJobStatus jstatus = (ZendeskTypes.ZJobStatus)JSON.deserialize(jsonStr, ZendeskTypes.ZJobStatus.class);
@@ -168,7 +171,8 @@ private class ZendeskJobStatusesAPITests {
         }
     }
 
-    @isTest static void testDeserializeMultipleJobs() {
+    @isTest
+    static void testDeserializeMultipleJobs() {
         String jsonStr = STATUS_STR_2;
 
         ZendeskJobStatusWrapper jstatus = ZendeskJobStatusWrapper.parse(jsonStr);

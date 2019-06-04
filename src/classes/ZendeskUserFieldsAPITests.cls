@@ -31,7 +31,8 @@ public class ZendeskUserFieldsAPITests {
         }
     }
 
-    @isTest static void testGetFieldById() {
+    @isTest
+    static void testGetFieldById() {
         Test.setMock(HttpCalloutMock.class, new MockUserFieldResponse());
 
         Test.startTest();
@@ -44,7 +45,8 @@ public class ZendeskUserFieldsAPITests {
         Test.stopTest();
     }
 
-    @isTest static void testDeleteField() {
+    @isTest
+    static void testDeleteField() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -55,7 +57,8 @@ public class ZendeskUserFieldsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testCreateField() {
+    @isTest
+    static void testCreateField() {
         Test.setMock(HttpCalloutMock.class, new MockUserFieldResponse());
 
         Test.startTest();
@@ -69,7 +72,8 @@ public class ZendeskUserFieldsAPITests {
         System.assertNotEquals(null, fieldId);
     }
 
-    @isTest static void testUpdateField() {
+    @isTest
+    static void testUpdateField() {
         Test.setMock(HttpCalloutMock.class, new MockUserFieldResponse());
 
         Test.startTest();
@@ -83,7 +87,8 @@ public class ZendeskUserFieldsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testReorderFields() {
+    @isTest
+    static void testReorderFields() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         ZendeskConnection zconn = ZendeskConnection.createWithPassword('s','u','p');
@@ -96,7 +101,8 @@ public class ZendeskUserFieldsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testGetAllFields() {
+    @isTest
+    static void testGetAllFields() {
         Test.setMock(HttpCalloutMock.class, new MockUserFieldsResponse());
 
         Test.startTest();
@@ -107,7 +113,8 @@ public class ZendeskUserFieldsAPITests {
         System.assertNotEquals(null, fieldsMap.containsKey('Test'));
     }
 
-    @isTest static void testZUserField() {
+    @isTest
+    static void testZUserField() {
         ZendeskTypes.ZUserField zfield = new ZendeskTypes.ZUserField();
         //zfield.id = 0;
         zfield.type = '';

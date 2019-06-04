@@ -1,21 +1,25 @@
 <apex:component controller="ZendeskTicketSampleController">
-    <apex:attribute name="subdomainParam" description="Subdomain" type="String" required="required" assignTo="{!subdomain}"/>
-    <apex:attribute name="usernameParam" description="Username" type="String" required="required" assignTo="{!username}"/>
-    <apex:attribute name="pwdOrTokenParam" description="Password or Token" type="String" required="required" assignTo="{!pwdOrToken}"/>
-    <apex:attribute name="authTypeParam" description="Auth Type" type="String" required="required" assignTo="{!authType}"/>
-
     <apex:form >
         <apex:outputPanel id="ticketsPanel">
             <apex:pageBlock title="Tickets" mode="edit">
                 <apex:pageMessage summary="{!pageMessage}" severity="warning" strength="3" rendered="{!pageMessage!=''}" />
                 <apex:pageBlockButtons location="top">
                     <apex:commandButton action="{!getTickets}" value="Get Tickets" rerender="ticketsPanel" />
+                    <apex:commandButton action="{!getTicketById}" value="Get by ID" rerender="ticketsPanel" />
                     <apex:commandButton action="{!createTicket}" value="Create New Ticket" rerender="ticketsPanel" />
                 </apex:pageBlockButtons>
                 <apex:pageBlockSection title="Ticket Details" columns="1">
                     <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Ticket ID" />
+                        <apex:inputText value="{!ticketId}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
                         <apex:outputLabel value="Requester ID" />
                         <apex:inputText value="{!requesterId}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Assignee ID" />
+                        <apex:inputText value="{!assigneeId}" />
                     </apex:pageBlockSectionItem>
                     <apex:pageBlockSectionItem >
                         <apex:outputLabel value="Subject" />
@@ -39,5 +43,4 @@
             </apex:pageBlock>
         </apex:outputPanel>
     </apex:form>
-
 </apex:component>

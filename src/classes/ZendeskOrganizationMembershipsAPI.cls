@@ -19,7 +19,10 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
     global OrganizationMembershipWrapper getMembership(Long membershipId) {
         if (membershipId == null) { throw new ZendeskException('membershipId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/organization_memberships/'+membershipId+'.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/organization_memberships/'+membershipId+'.json'
+        );
         return (OrganizationMembershipWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationMembershipWrapper.class);
     }
 
@@ -28,7 +31,10 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
         if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
         if (membershipId == null) { throw new ZendeskException('membershipId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/users/'+userId+'/organization_memberships/'+membershipId+'.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/users/'+userId+'/organization_memberships/'+membershipId+'.json'
+        );
         return (OrganizationMembershipWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationMembershipWrapper.class);
     }
 
@@ -37,7 +43,11 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
         return getMemberships(null);
     }
     global OrganizationMembershipsWrapper getMemberships(Map<String, Object> queryParams) {
-        return getMembershipsInternal(zconn.createRequest('GET', '/organization_memberships.json', queryParams));
+        return getMembershipsInternal(zconn.createRequest(
+            HTTP_GET,
+            '/organization_memberships.json',
+            queryParams
+        ));
     }
 
     // GET /api/v2/users/{user_id}/organization_memberships.json
@@ -45,7 +55,11 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
         return getMembershipsByUser(userId, null);
     }
     global OrganizationMembershipsWrapper getMembershipsByUser(Long userId, Map<String, Object> queryParams) {
-        return getMembershipsInternal(zconn.createRequest('GET', '/users/'+userId+'/organization_memberships.json', queryParams));
+        return getMembershipsInternal(zconn.createRequest(
+            HTTP_GET,
+            '/users/'+userId+'/organization_memberships.json',
+            queryParams
+        ));
     }
 
     // GET /api/v2/organizations/{organization_id}/memberships.json
@@ -53,7 +67,11 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
         return getMembershipsByOrganization(organizationId, null);
     }
     global OrganizationMembershipsWrapper getMembershipsByOrganization(Long organizationId, Map<String, Object> queryParams) {
-        return getMembershipsInternal(zconn.createRequest('GET', '/organizations/'+organizationId+'/memberships.json', queryParams));
+        return getMembershipsInternal(zconn.createRequest(
+            HTTP_GET,
+            '/organizations/'+organizationId+'/memberships.json',
+            queryParams
+        ));
     }
 
     // GET /api/v2/organization_memberships/assignable.json
@@ -61,7 +79,11 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
         return getAssignableMemberships(null);
     }
     global OrganizationMembershipsWrapper getAssignableMemberships(Map<String, Object> queryParams) {
-        return getMembershipsInternal(zconn.createRequest('GET', '/organization_memberships/assignable.json', queryParams));
+        return getMembershipsInternal(zconn.createRequest(
+            HTTP_GET,
+            '/organization_memberships/assignable.json',
+            queryParams
+        ));
     }
 
     // GET /api/v2/organizations/{organization_id}/memberships/assignable.json
@@ -69,7 +91,11 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
         return getAssignableMembershipsByOrganization(organizationId, null);
     }
     global OrganizationMembershipsWrapper getAssignableMembershipsByOrganization(Long organizationId, Map<String, Object> queryParams) {
-        return getMembershipsInternal(zconn.createRequest('GET', '/organizations/'+organizationId+'/memberships/assignable.json', queryParams));
+        return getMembershipsInternal(zconn.createRequest(
+            HTTP_GET,
+            '/organizations/'+organizationId+'/memberships/assignable.json',
+            queryParams
+        ));
     }
 
     // Private helper method to retrieve multiple organization memberships
@@ -86,8 +112,11 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
         gm.user_id = userId;
         gm.organization_id = organizationId;
 
-        HttpRequest req = zconn.createRequest('POST', '/users/'+userId+'/organization_memberships.json');
-        req.setBody(unreplaceReservedWords(JSON.serialize(new OrganizationMembershipWrapper(gm), true)));
+        HttpRequest req = zconn.createRequest(
+            HTTP_POST,
+            '/users/'+userId+'/organization_memberships.json',
+            JSON.serialize(new OrganizationMembershipWrapper(gm), true)
+        );
         OrganizationMembershipWrapper resultWrapper = (OrganizationMembershipWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationMembershipWrapper.class);
         return ((resultWrapper==null || resultWrapper.organization_membership == null) ? null : resultWrapper.organization_membership.id);
     }
@@ -95,8 +124,11 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
     global Long createMembership(ZOrganizationMembership organizationMembership) {
         if (organizationMembership == null) { throw new ZendeskException('organizationMembership parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/organization_memberships.json');
-        req.setBody(unreplaceReservedWords(JSON.serialize(new OrganizationMembershipWrapper(organizationMembership), true)));
+        HttpRequest req = zconn.createRequest(
+            HTTP_POST,
+            '/organization_memberships.json',
+            JSON.serialize(new OrganizationMembershipWrapper(organizationMembership), true)
+        );
         OrganizationMembershipWrapper resultWrapper = (OrganizationMembershipWrapper)JSON.deserialize(replaceReservedWords(zconn.sendRequest(req)), OrganizationMembershipWrapper.class);
         return ((resultWrapper==null || resultWrapper.organization_membership == null) ? null : resultWrapper.organization_membership.id);
     }
@@ -106,7 +138,11 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
         if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
         if (membershipId == null) { throw new ZendeskException('membershipId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('PUT', '/users/'+userId+'/organization_memberships/'+membershipId+'/make_default.json', '{}');
+        HttpRequest req = zconn.createRequest(
+            HTTP_PUT,
+            '/users/'+userId+'/organization_memberships/'+membershipId+'/make_default.json',
+            '{}'
+        );
         zconn.sendRequest(req);
     }
 
@@ -115,22 +151,31 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
         if (userId == null) { throw new ZendeskException('userId parameter cannot be null'); }
         if (membershipId == null) { throw new ZendeskException('membershipId parameter cannot be null'); }
 
-        zconn.sendRequest(zconn.createRequest('DELETE', '/users/'+userId+'/organization_memberships/'+membershipId+'.json'));
+        zconn.sendRequest(zconn.createRequest(
+            HTTP_DELETE,
+            '/users/'+userId+'/organization_memberships/'+membershipId+'.json'
+        ));
     }
 
     // DELETE /api/v2/organization_memberships/{id}.json
     global void deleteMembership(Long membershipId) {
         if (membershipId == null) { throw new ZendeskException('membershipId parameter cannot be null'); }
 
-        zconn.sendRequest(zconn.createRequest('DELETE', '/organization_memberships/'+membershipId+'.json'));
+        zconn.sendRequest(zconn.createRequest(
+            HTTP_DELETE,
+            '/organization_memberships/'+membershipId+'.json'
+        ));
     }
 
     // POST /api/v2/organization_memberships/create_many.json
     global ZJobStatus createMemberships(List<ZOrganizationMembership> memberships) {
         if (memberships == null || memberships.isEmpty()) { throw new ZendeskException('memberships parameter cannot be null or empty'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/organization_memberships/create_many.json');
-        req.setBody(JSON.serialize(new OrganizationMembershipsWrapper(memberships), true));
+        HttpRequest req = zconn.createRequest(
+            HTTP_POST,
+            '/organization_memberships/create_many.json',
+            JSON.serialize(new OrganizationMembershipsWrapper(memberships), true)
+        );
         ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
         return wrapper.job_status;
     }
@@ -139,22 +184,12 @@ global class ZendeskOrganizationMembershipsAPI extends ZendeskResourceBase {
     global ZJobStatus deleteMemberships(Set<Long> membershipIds) {
         if (membershipIds == null || membershipIds.isEmpty()) { throw new ZendeskException('membershipIds parameter cannot be null or empty'); }
 
-        HttpRequest req = zconn.createRequest('DELETE', '/organization_memberships/destroy_many.json', new Map<String, Object>{'ids'=>toCSV(membershipIds)});
+        HttpRequest req = zconn.createRequest(
+            HTTP_DELETE,
+            '/organization_memberships/destroy_many.json',
+            new Map<String, Object>{'ids'=>toCSV(membershipIds)}
+        );
         ZendeskJobStatusWrapper wrapper = ZendeskJobStatusWrapper.parse(zconn.sendRequest(req));
         return wrapper.job_status;
-    }
-
-    // replace reserved keywords in the JSON string and map them to field names prefixed with "x_"
-    // Use when calling deserialize()
-    private String replaceReservedWords(String str) {
-        str = str.replaceAll('"default"\\s*:', '"x_default":');
-        return str;
-    }
-
-    // un-replace reserved keywords in the JSON string
-    // Use when calling serialize()
-    private String unreplaceReservedWords(String str) {
-        str = str.replaceAll('"x_default"\\s*:', '"default":');
-        return str;
     }
 }

@@ -1,10 +1,5 @@
 public class ZendeskTicketFieldsSampleController {
 
-    public String subdomain { get; set; }
-    public String username { get; set; }
-    public String pwdOrToken { get; set; }
-    public String authType { get; set; }
-
     public String pageMessage { get; set; }
     public Long ticketFieldId { get; set; }
     public Map<Long, ZendeskTypes.ZTicketField> fieldsMap { get; set; }
@@ -14,7 +9,7 @@ public class ZendeskTicketFieldsSampleController {
     public PageReference getFields() {
         pageMessage = '';
         try {
-            ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
+            ZendeskConnection zconn = ZendeskControllerSettings.getConnection();
             ZendeskTicketFieldsAPI zfields = new ZendeskTicketFieldsAPI(zconn);
 
             fieldsMap = zfields.getAllFields();
@@ -28,7 +23,7 @@ public class ZendeskTicketFieldsSampleController {
     public PageReference getFieldByID() {
         pageMessage = '';
         try {
-            ZendeskConnection zconn = (authType=='Password') ? ZendeskConnection.createWithPassword(subdomain, username, pwdOrToken) : ZendeskConnection.createWithAPIToken(subdomain, username, pwdOrToken);
+            ZendeskConnection zconn = ZendeskControllerSettings.getConnection();
             ZendeskTicketFieldsAPI zfields = new ZendeskTicketFieldsAPI(zconn);
 
             fieldsMap = new Map<Long, ZendeskTypes.ZTicketField>();

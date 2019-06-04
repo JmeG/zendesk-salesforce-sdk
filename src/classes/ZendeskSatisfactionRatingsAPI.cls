@@ -19,7 +19,10 @@ global class ZendeskSatisfactionRatingsAPI extends ZendeskResourceBase {
     global SatisfactionRatingWrapper getSatisfactionRating(Long satRatingId) {
         if (satRatingId == null) { throw new ZendeskException('satRatingId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('GET', '/satisfaction_ratings/'+satRatingId+'.json');
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/satisfaction_ratings/'+satRatingId+'.json'
+        );
         return (SatisfactionRatingWrapper)JSON.deserialize(zconn.sendRequest(req), SatisfactionRatingWrapper.class);
     }
 
@@ -35,7 +38,11 @@ global class ZendeskSatisfactionRatingsAPI extends ZendeskResourceBase {
         return getSatisfactionRatings(null);
     }
     global SatisfactionRatingsWrapper getSatisfactionRatings(Map<String, Object> queryParams) {
-        HttpRequest req = zconn.createRequest('GET', '/satisfaction_ratings.json', queryParams);
+        HttpRequest req = zconn.createRequest(
+            HTTP_GET,
+            '/satisfaction_ratings.json',
+            queryParams
+        );
         return (SatisfactionRatingsWrapper)JSON.deserialize(zconn.sendRequest(req), SatisfactionRatingsWrapper.class);
     }
 
@@ -44,8 +51,11 @@ global class ZendeskSatisfactionRatingsAPI extends ZendeskResourceBase {
         if (satRating == null) { throw new ZendeskException('satRating parameter cannot be null'); }
         if (ticketId == null) { throw new ZendeskException('ticketId parameter cannot be null'); }
 
-        HttpRequest req = zconn.createRequest('POST', '/tickets/'+ticketId+'/satisfaction_rating.json');
-        req.setBody(JSON.serialize(new SatisfactionRatingWrapper(satRating)));
+        HttpRequest req = zconn.createRequest(
+            HTTP_POST,
+            '/tickets/'+ticketId+'/satisfaction_rating.json',
+            JSON.serialize(new SatisfactionRatingWrapper(satRating))
+        );
         zconn.sendRequest(req);
     }
 }

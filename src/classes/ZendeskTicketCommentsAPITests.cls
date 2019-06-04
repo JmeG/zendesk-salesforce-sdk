@@ -21,7 +21,8 @@ private class ZendeskTicketCommentsAPITests {
         }
     }
 
-    @isTest static void testGetTicketComments() {
+    @isTest
+    static void testGetTicketComments() {
         Test.setMock(HttpCalloutMock.class, new MockTicketCommentsResponse());
 
         Test.startTest();
@@ -34,7 +35,8 @@ private class ZendeskTicketCommentsAPITests {
         System.assertEquals(1, wrapper.comments.size());
     }
 
-    @isTest static void testRedactStringInComment() {
+    @isTest
+    static void testRedactStringInComment() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -45,7 +47,8 @@ private class ZendeskTicketCommentsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testMakeCommentPrivate() {
+    @isTest
+    static void testMakeCommentPrivate() {
         Test.setMock(HttpCalloutMock.class, new MockOKResponse());
 
         Test.startTest();
@@ -56,7 +59,8 @@ private class ZendeskTicketCommentsAPITests {
         System.assert(true);
     }
 
-    @isTest static void testZTicketComment() {
+    @isTest
+    static void testZTicketComment() {
         ZendeskTypes.ZTicketComment zcomment = new ZendeskTypes.ZTicketComment();
         zcomment.type = '';
         zcomment.body = '';
