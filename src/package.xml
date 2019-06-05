@@ -21,10 +21,6 @@
         <name>CustomApplication</name>
     </types>
     <types>
-        <members>Zendesk_API__c</members>
-        <name>CustomObject</name>
-    </types>
-    <types>
         <members>Zendesk_Samples</members>
         <members>Zendesk_OrgSearch</members>
         <members>Zendesk_Search</members>
