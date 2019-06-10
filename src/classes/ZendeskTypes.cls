@@ -494,11 +494,18 @@ global abstract class ZendeskTypes {
 
     global class ZTicketCustomField {
         global Long id {get;set;}
-        global List<String> value {get;set;}
+
+        // Handle scenarios where the value is either a single string or an array
+        // "id": 80973768, "value": []
+        // "id": 24744223, "value": null
+        // "id": 24805666, "value": "foo"
+        // "id": 25323646, "value": ["aaa", "bbb"]
+        // "id": 24744183, "value": true
+        global Object value {get;set;}
 
         global ZTicketCustomField() {}
-        global ZTicketCustomField(Long id, String value) { this.id = id; this.value = new List<String>{ value }; }
-        global ZTicketCustomField(Long id, List<String> value) { this.id = id; this.value = value; }
+        global ZTicketCustomField(Long id, String value) { this.id = id; this.value = value; }
+        global ZTicketCustomField(Long id, List<String> value) { this.id = id; this.value = value;  }
 
         global ZTicketCustomField(JSONParser parser) {
             while (parser.nextToken() != JSONToken.END_OBJECT) {
@@ -508,19 +515,14 @@ global abstract class ZendeskTypes {
                         if (text == 'id') {
                             id = parser.getLongValue();
                         } else if (text == 'value') {
-                            value = new List<String>();
-                            // Handle scenarios where the value is either a single string or an array
-                            // "id": 80973768, "value": []
-                            // "id": 24744223, "value": null
-                            // "id": 24805666, "value": "foo"
-                            // "id": 25323646, "value": ["aaa", "bbb"]
-                            // "id": 24744183, "value": true
                             if (parser.getCurrentToken() == JSONToken.START_ARRAY) {
+                                List<String> tmpArray = new List<String>();
                                 while (parser.nextToken() != JSONToken.END_ARRAY) {
-                                     value.add(parser.getText());
+                                    tmpArray.add(parser.getText());
                                 }
+                                value = tmpArray;
                             } else {
-                                value.add(parser.getText());
+                                value = parser.getText();
                             }
                         } else {
                             System.debug(LoggingLevel.WARN, 'ZTicketCustomField consuming unrecognized property: ' + text);
