@@ -421,9 +421,10 @@ public class ZendeskTicketsAPITests {
         System.assert(true);
     }
 
+    // Test a mix of custom_field values including array's and non-array's.
     @isTest
     static void testZTicket() {
-        String ticketJson = '{ "id": 35436, "url": "https://company.zendesk.com/api/v2/tickets/35436.json", "external_id": "ahg35h3jh", "created_at": "2009-07-20T22:55:29Z", "updated_at": "2011-05-05T10:38:52Z", "type": "incident", "subject": "Help, my printer is on fire!", "raw_subject": "{{dc.printer_on_fire}}", "description": "The fire is very colorful.", "priority": "high", "status": "open", "recipient": "support@company.com", "requester_id": 20978392, "submitter_id": 76872, "assignee_id": 235323, "organization_id": 509974, "group_id": 98738, "collaborator_ids": [35334, 234], "forum_topic_id": 72648221, "problem_id": 9873764, "has_incidents": false, "due_at": null, "tags": ["enterprise", "other_tag"], "via": { "channel": "web" }, "custom_fields": [ { "id": 27642, "value": "745" }, { "id": 27648, "value": "yes" } ], "satisfaction_rating": { "id": 1234, "score": "good", "comment": "Great support!" }, "sharing_agreement_ids": [84432] }';
+        String ticketJson = '{ "id": 35436, "url": "https://company.zendesk.com/api/v2/tickets/35436.json", "external_id": "ahg35h3jh", "created_at": "2009-07-20T22:55:29Z", "updated_at": "2011-05-05T10:38:52Z", "type": "incident", "subject": "Help, my printer is on fire!", "raw_subject": "{{dc.printer_on_fire}}", "description": "The fire is very colorful.", "priority": "high", "status": "open", "recipient": "support@company.com", "requester_id": 20978392, "submitter_id": 76872, "assignee_id": 235323, "organization_id": 509974, "group_id": 98738, "collaborator_ids": [35334, 234], "forum_topic_id": 72648221, "problem_id": 9873764, "has_incidents": false, "due_at": null, "tags": ["enterprise", "other_tag"], "via": { "channel": "web" }, "custom_fields": [ { "id": 27642, "value": "745" }, { "id": 27648, "value": 100 }, { "id": 27643, "value": ["one","two"] } ], "satisfaction_rating": { "id": 1234, "score": "good", "comment": "Great support!" }, "sharing_agreement_ids": [84432] }';
         ZendeskTypes.ZTicket zticket = new ZendeskTypes.ZTicket(System.JSON.createParser(ticketJson));
 
         System.assertEquals(35436, zticket.id);
@@ -448,9 +449,20 @@ public class ZendeskTicketsAPITests {
         System.assertNotEquals(null, zticket.tags);
         System.assertNotEquals(null, zticket.via);
         System.assertNotEquals(null, zticket.via.channel);
+
+        // "custom_fields": [ { "id": 27642, "value": "745" }, { "id": 27648, "value": 100 }, { "id": 27643, "value": ["one","two"] } ]
         System.assertNotEquals(null, zticket.custom_fields);
-        System.assertNotEquals(null, zticket.custom_fields[0].id);
-        System.assertNotEquals(null, zticket.custom_fields[0].value);
+        System.assertEquals(3, zticket.custom_fields.size());
+        // Custom Field 1
+        System.assertEquals(27642, zticket.custom_fields[0].id);
+        System.assertEquals('745', zticket.custom_fields[0].value);
+        // Custom Field 2
+        System.assertEquals(27648, zticket.custom_fields[1].id);
+        System.assertEquals('100', zticket.custom_fields[1].value);
+        // Custom Field 3
+        System.assertEquals(27643, zticket.custom_fields[2].id);
+        System.assertEquals(new List<String> { 'one', 'two'}, zticket.custom_fields[2].value);
+
         System.assertNotEquals(null, zticket.satisfaction_rating);
         System.assertNotEquals(null, zticket.satisfaction_rating.id);
         System.assertNotEquals(null, zticket.satisfaction_rating.score);
@@ -468,5 +480,6 @@ public class ZendeskTicketsAPITests {
         tr.name = 'Name';
         tr.email = 'email@test.com';
     }
+
 
 }

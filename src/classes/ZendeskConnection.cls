@@ -238,6 +238,7 @@ global class ZendeskConnection {
     global String sendRequest(HttpRequest req) {
         if (debugAll || debugRequest) {
             addDebugLog(Logginglevel.INFO, '**REQUEST=' + req);
+            addDebugLog(Logginglevel.INFO, '**REQUEST_BODY=' + req.getBody());
         }
 
         // Send it
