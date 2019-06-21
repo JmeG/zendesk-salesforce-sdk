@@ -55,6 +55,7 @@ global abstract class ZendeskTypes {
     global class ZAttachment {
         global Long id {get; protected set;}
         global String name {get;set;}
+        global String file_name {get;set;}
         global String content_url {get;set;}
         global String content_type {get;set;}
         //global List<Object> thumbnails {get;set;}
@@ -557,7 +558,7 @@ global abstract class ZendeskTypes {
         global String email {get;set;}
         global String phone {get;set;}
         global Boolean shared_phone_number {get;set;}
-        global String photo {get;set;}
+        global ZAttachment photo {get;set;}
         global String external_id {get;set;}
         global String alias {get;set;}
         global Boolean verified {get;set;}
